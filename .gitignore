@@ -236,3 +236,6 @@ CSharp/SpaceVIL/SpaceVIL/Glm/vec4.cs
 CSharp/SpaceVIL/SpaceVIL/View/OpenGLLayerTest.cs
 CSharp/SpaceVIL/SpaceVIL/Items/OpenGLLayer.cs
 CSharp/SpaceVIL/SpaceVIL/View/OpenGLLayer.cs
+Java/SpaceVIL/spacevil/spacevil.iml
+Java/SpaceVIL/spacevil/.idea/modules/spacevil.test.iml
+Java/SpaceVIL/spacevil/.idea/modules/spacevil.main.iml

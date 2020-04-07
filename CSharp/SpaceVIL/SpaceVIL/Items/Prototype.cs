@@ -10,7 +10,7 @@ namespace SpaceVIL
     /// <summary>
     /// The Prototype is an abstract implementation of IBaseItem for complex interactive items.
     /// <para/> Contains all the necessary methods for rendering objects and interacting with them.
-    /// <para/> Exemples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc.
+    /// <para/> Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc.
     /// </summary>
     abstract public class Prototype : IBaseItem
     {
@@ -45,7 +45,6 @@ namespace SpaceVIL
         /// Event that is invoked when an item is destroyed (removed).
         /// </summary>
         public EventCommonMethodState EventDestroy;
-
         /// <summary>
         /// Event that is invoked when mouse cursor enters inside an item area.
         /// </summary>
@@ -137,7 +136,7 @@ namespace SpaceVIL
             _core.SetHandler(handler);
         }
         /// <summary>
-        /// Getting the window to which the item will belong.
+        /// Getting the window to which the item belongs.
         /// </summary>
         /// <returns>Window as SpaceVIL.CoreWindow.</returns>
         public CoreWindow GetHandler()
@@ -150,6 +149,8 @@ namespace SpaceVIL
         /// <para/> Tooltip is hint about an item that appears 
         /// when you hold the mouse cursor over an item long enough.
         /// </summary>
+        /// </summary>
+        /// <returns>Tooltip text.</returns>
         public String GetToolTip()
         {
             return _core.GetToolTip();
@@ -159,7 +160,7 @@ namespace SpaceVIL
         /// <para/> Tooltip is hint about an item that appears 
         /// when you hold the mouse cursor over an item long enough.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">Tooltip text.</param>
         public void SetToolTip(String text)
         {
             _core.SetToolTip(text);
@@ -293,10 +294,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting the border color of an item's shape in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetBorderFill(int r, int g, int b, int a = 255)
         {
             _core.SetBorderFill(r, g, b, a);
@@ -304,10 +305,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting the border color of an item's shape in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetBorderFill(float r, float g, float b, float a = 1.0f)
         {
             _core.SetBorderFill(r, g, b, a);
@@ -401,9 +402,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item's shape in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b)
         {
             _core.SetBackground(r, g, b);
@@ -411,10 +412,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b, int a)
         {
             _core.SetBackground(r, g, b, a);
@@ -422,9 +423,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b)
         {
             _core.SetBackground(r, g, b);
@@ -432,10 +433,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b, float a)
         {
             _core.SetBackground(r, g, b, a);
@@ -695,8 +696,8 @@ namespace SpaceVIL
         /// <summary>
         /// Setting item position.
         /// </summary>
-        /// <param name="x"> X position of the left top corner. </param>
-        /// <param name="y"> Y position of the left top corner. </param>
+        /// <param name="x"> X position of the left-top corner. </param>
+        /// <param name="y"> Y position of the left-top corner. </param>
         public virtual void SetPosition(int x, int y)
         {
             _core.SetX(x);
@@ -736,7 +737,7 @@ namespace SpaceVIL
         }
         /// <summary>
         /// Setting the confines of the item relative to its parent's size and position.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
         /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         public virtual void SetConfines()
@@ -745,7 +746,7 @@ namespace SpaceVIL
         }
         /// <summary>
         /// Setting the confines of the item relative to specified bounds.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
         /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         /// <param name="x0">Left X begin position.</param>
@@ -835,7 +836,8 @@ namespace SpaceVIL
         /// <summary>
         /// Getting the values of shadow extensions in pixels.
         /// </summary>
-        /// <returns>The values of shadow extensions.</returns>
+        /// <returns>The values of shadow extensions. 
+        /// 0 - width extension, 1 - height extension.</returns>
         public int[] GetShadowExtension()
         {
             return _core.GetShadowExtension();
@@ -911,7 +913,8 @@ namespace SpaceVIL
 
         /// <summary>
         /// Inserting item to the container (this). 
-        /// If the count of container elements is less than the index, then the element is added to the end of the list.
+        /// If the count of container elements is less than the index, 
+        /// then the element is added to the end of the list.
         /// </summary>
         /// <param name="item">Child as SpaceVIL.Core.IBaseItem.</param>
         /// <param name="index">Index of insertion.</param>
@@ -1021,9 +1024,23 @@ namespace SpaceVIL
         /// False: If this item do not pass the specified type of input events.</returns>
         public bool IsPassEvents(InputEventType e)
         {
-            if (_core.GetPassEvents().HasFlag(e))
-                return false;
-            return true;
+            return _core.IsPassEvents(e);
+        }
+        /// <summary>
+        /// Getting all allowed input events.
+        /// </summary>
+        /// <returns>Allowed input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
+        public List<InputEventType> GetPassEvents()
+        {
+            return _core.GetPassEvents();
+        }
+        /// <summary>
+        /// Getting all blocked input events.
+        /// </summary>
+        /// <returns>Blocked input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
+        public List<InputEventType> GetBlockedEvents()
+        {
+            return _core.GetBlockedEvents();
         }
 
         /// <summary>
@@ -1043,7 +1060,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="value">True: if you want this item can pass further the specified type of input events.
         /// False: if you want this item connot pass further the specified type of input events.</param>
-        /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
+        /// <param name="event">Type of input events as SpaceVIL.Core.InputEventType.</param>
         public void SetPassEvents(bool value, InputEventType e)
         {
             _core.SetPassEvents(value, e);
@@ -1054,14 +1071,14 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="value">True: if you want this item can pass further the specified types of input events.
         /// False: if you want this item connot pass further the specified types of input events.</param>
-        /// <param name="e">Sequence of input event types as SpaceVIL.Core.InputEventType.</param>
-        public void SetPassEvents(bool value, params InputEventType[] e)
+        /// <param name="events">Sequence of input event types as SpaceVIL.Core.InputEventType.</param>
+        public void SetPassEvents(bool value, params InputEventType[] events)
         {
-            _core.SetPassEvents(value, e);
+            _core.SetPassEvents(value, events);
         }
 
         /// <summary>
-        ///  Returns True if this item is disabled (non-interactive) otherwise returns False.
+        /// Returns True if this item is disabled (non-interactive) otherwise returns False.
         /// </summary>
         /// <returns>True: this item is disabled. False: this item is enabled.</returns>
         public virtual bool IsDisabled()
@@ -1157,8 +1174,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting list of the Prototype's inner items (children).
         /// </summary>
-        /// <returns>List of children as 
-        /// System.Collections.Generic.List&lt;SpaceVIL.Core.IBaseItem&gt;</returns>
+        /// <returns>List of children as List&lt;SpaceVIL.Core.IBaseItem&gt;</returns>
         public virtual List<IBaseItem> GetItems()
         {
             return _core.GetItems();
@@ -1191,9 +1207,6 @@ namespace SpaceVIL
             _core.RemoveEventListener(type, listener);
         }
 
-        /// <summary>
-        /// Prototype confines
-        /// </summary>
         protected internal int[] GetConfines()
         {
             return _core.GetConfines();
@@ -1213,7 +1226,7 @@ namespace SpaceVIL
         /// Setting content for this item.
         /// <para/> Note: this method is only for sorting children 
         /// i.e. Prototype.GetItems() contains equal set of children 
-        /// as input argument: List&lt;IBaseItem&gt; content.
+        /// as input argument: List&lt;SpaceVIL.Core.IBaseItem&gt; content.
         /// If content is different this method do nothing.
         /// </summary>
         /// <param name="content">Sorted (in any way) content of this item.</param>
@@ -1254,9 +1267,9 @@ namespace SpaceVIL
 
         /// <summary>
         /// Getting the hovering rule of this item.
-        /// <para/> Can be ItemHoverRule.Lazy or ItemHoverRule.Strict (see ItemHoverRuleItemHoverRule).
+        /// <para/> Can be ItemHoverRule.Lazy or ItemHoverRule.Strict (see SpaceVIL.Core.ItemHoverRule).
         /// </summary>
-        /// <returns>Hovering rule as ItemHoverRuleItemHoverRule.</returns>
+        /// <returns>Hovering rule as SpaceVIL.Core.ItemHoverRule.</returns>
         public ItemHoverRule GetHoverRule()
         {
             return _core.HoverRule;
@@ -1264,7 +1277,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting the hovering rule for this item.
         /// </summary>
-        /// <param name="rule">Hovering rule as ItemHoverRuleItemHoverRule.</param>
+        /// <param name="rule">Hovering rule as SpaceVIL.Core.ItemHoverRule.</param>
         public void SetHoverRule(ItemHoverRule rule)
         {
             _core.HoverRule = rule;

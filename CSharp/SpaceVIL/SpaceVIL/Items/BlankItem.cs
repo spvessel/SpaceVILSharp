@@ -2,7 +2,8 @@ namespace SpaceVIL
 {
     /// <summary>
     /// BlankItem is pure subclass of Prototype without any extensions.
-    /// Example: used as cheap version of ButtonCore (ButtonCore contains text 
+    /// <para/> Example: used as cheap version of SpaceVIL.ButtonCore 
+    /// (SpaceVIL.ButtonCore contains text 
     /// and additional methods extensions).
     /// </summary>
     public class BlankItem : Prototype

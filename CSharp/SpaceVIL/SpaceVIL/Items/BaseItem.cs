@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -14,10 +13,10 @@ namespace SpaceVIL
     /// </summary>
     abstract public class BaseItem : IBaseItem
     {
-        internal int _confines_x_0 = 0;
-        internal int _confines_x_1 = 0;
-        internal int _confines_y_0 = 0;
-        internal int _confines_y_1 = 0;
+        internal int _confinesX0 = 0;
+        internal int _confinesX1 = 0;
+        internal int _confinesY0 = 0;
+        internal int _confinesY1 = 0;
 
         private CoreWindow _handler;
 
@@ -108,6 +107,8 @@ namespace SpaceVIL
 
         /// <summary>
         /// Initializing children if this BaseItem is container (SpaceVIL.Prototype).
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public virtual void InitElements() { }
 
@@ -185,9 +186,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item's shape in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b));
@@ -195,10 +196,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b, int a)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
@@ -206,9 +207,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b));
@@ -216,10 +217,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting background color of an item in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b, float a)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
@@ -507,8 +508,8 @@ namespace SpaceVIL
         /// Setting the size policy of an item's shape. 
         /// Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).
         /// </summary>
-        /// <param name="width">Width policy of an item's shape.</param>
-        /// <param name="height">Height policy of an item's shape.</param>
+        /// <param name="width">Width policy of an item's shape as SpaceVIL.Core.SizePolicy.</param>
+        /// <param name="height">Height policy of an item's shape as SpaceVIL.Core.SizePolicy.</param>
         public void SetSizePolicy(SizePolicy width, SizePolicy height)
         {
             SetWidthPolicy(width);
@@ -652,6 +653,10 @@ namespace SpaceVIL
         /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public abstract Style GetCoreStyle();
 
+        /// <summary>
+        /// Hovering rule propetry of this item. 
+        /// <para/> Can be ItemHoverRule.Lazy or ItemHoverRule.Strict (see SpaceVIL.Core.ItemHoverRule).
+        /// </summary>
         public ItemHoverRule HoverRule = ItemHoverRule.Lazy;
 
         //shadow
@@ -682,7 +687,7 @@ namespace SpaceVIL
         /// Setting the specified blur radius of the shadow.
         /// <para/>Default: 0.
         /// </summary>
-        /// <param name="radius">Blur radius of the shadow.</param>
+        /// <param name="radius">The blur radius of the shadow.</param>
         public void SetShadowRadius(int radius)
         {
             _shadowRadius = radius;
@@ -725,7 +730,8 @@ namespace SpaceVIL
         /// <summary>
         /// Getting the values of shadow extensions in pixels.
         /// </summary>
-        /// <returns>The values of shadow extensions.</returns>
+        /// <returns>The values of shadow extensions. 
+        /// 0 - width extension, 1 - height extension.</returns>
         public int[] GetShadowExtension()
         {
             return new int[] { _xExtension, _yExtension };
@@ -771,7 +777,7 @@ namespace SpaceVIL
         //update
         /// <summary>
         /// Setting the confines of the item relative to its parent's size and position.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
         /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         public virtual void SetConfines()
@@ -779,15 +785,16 @@ namespace SpaceVIL
             Prototype parent = GetParent();
             if (parent == null)
                 return;
-            _confines_x_0 = parent.GetX() + parent.GetPadding().Left;
-            _confines_x_1 = parent.GetX() + parent.GetWidth() - parent.GetPadding().Right;
-            _confines_y_0 = parent.GetY() + parent.GetPadding().Top;
-            _confines_y_1 = parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom;
+            _confinesX0 = parent.GetX() + parent.GetPadding().Left;
+            _confinesX1 = parent.GetX() + parent.GetWidth() - parent.GetPadding().Right;
+            _confinesY0 = parent.GetY() + parent.GetPadding().Top;
+            _confinesY1 = parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom;
         }
         /// <summary>
         /// Setting the confines of the item relative to specified bounds.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
-        /// in which case the part that is outside the container should not be visible and should not interact with the user.
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// in which case the part that is outside the container should not be visible and should not 
+        /// interact with the user.
         /// </summary>
         /// <param name="x0">Left X begin position.</param>
         /// <param name="x1">Right X end position.</param>
@@ -795,14 +802,14 @@ namespace SpaceVIL
         /// <param name="y1">Bottom Y end position.</param>
         public void SetConfines(int x0, int x1, int y0, int y1)
         {
-            _confines_x_0 = x0;
-            _confines_x_1 = x1;
-            _confines_y_0 = y0;
-            _confines_y_1 = y1;
+            _confinesX0 = x0;
+            _confinesX1 = x1;
+            _confinesY0 = y0;
+            _confinesY1 = y1;
         }
         protected internal int[] GetConfines()
         {
-            return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
+            return new int[] { _confinesX0, _confinesX1, _confinesY0, _confinesY1 };
         }
         /// <summary>
         /// Method to describe disposing item's resources if the item was removed.

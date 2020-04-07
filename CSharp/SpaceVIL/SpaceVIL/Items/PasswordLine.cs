@@ -142,7 +142,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a PasswordLine.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textEncrypt.SetForeground(color);
@@ -150,9 +150,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a PasswordLine in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             _textEncrypt.SetForeground(r, g, b);
@@ -160,10 +160,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a PasswordLine in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             _textEncrypt.SetForeground(r, g, b, a);
@@ -171,9 +171,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a PasswordLine in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             _textEncrypt.SetForeground(r, g, b);
@@ -181,10 +181,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a PasswordLine in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             _textEncrypt.SetForeground(r, g, b, a);
@@ -332,7 +332,7 @@ namespace SpaceVIL
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Substrate text color as System.Drawing.Color.</param>
         public void SetSubstrateForeground(Color foreground)
         {
             _textEncrypt.SetSubstrateForeground(foreground);
@@ -341,9 +341,9 @@ namespace SpaceVIL
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetSubstrateForeground(int r, int g, int b)
         {
             _textEncrypt.SetSubstrateForeground(r, g, b);
@@ -352,10 +352,10 @@ namespace SpaceVIL
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SeSubstratetForeground(int r, int g, int b, int a)
         {
             _textEncrypt.SetSubstrateForeground(r, g, b, a);
@@ -364,9 +364,9 @@ namespace SpaceVIL
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible)color of a PasswordLine in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetSubstrateForeground(float r, float g, float b)
         {
             _textEncrypt.SetSubstrateForeground(r, g, b);
@@ -375,10 +375,10 @@ namespace SpaceVIL
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible)color of a PasswordLine in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetSubstrateForeground(float r, float g, float b, float a)
         {
             _textEncrypt.SetSubstrateForeground(r, g, b, a);
@@ -388,7 +388,7 @@ namespace SpaceVIL
         /// typing substrate becomes invisible) color.
         /// </summary>
         /// <returns>Text color as System.Drawing.Color.</returns>
-        public Color getSubstrateForeground()
+        public Color GetSubstrateForeground()
         {
             return _textEncrypt.GetSubstrateForeground();
         }
@@ -397,7 +397,7 @@ namespace SpaceVIL
         /// (hint under main text, when you start typing substrate becomes invisible).
         /// </summary>
         /// <returns>Substrate text.</returns>
-        public String getSubstrateText()
+        public String GetSubstrateText()
         {
             return _textEncrypt.GetSubstrateText();
         }

@@ -8,7 +8,8 @@ namespace SpaceVIL
 {
     /// <summary>
     /// CheckBox is the basic implementation of a user interface check box with 
-    /// the ability to be checked or be unchecked. Contains text and indicator. 
+    /// the ability to be checked or be unchecked. 
+    /// <para/> Contains text and indicator. 
     /// <para/> Supports all events except drag and drop.
     /// </summary>
     public class CheckBox : Prototype
@@ -57,7 +58,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a CheckBox with the specified text.
         /// </summary>
-        /// <param name="text">CheckBox text as System.Text.</param>
+        /// <param name="text">CheckBox text as System.String.</param>
         public CheckBox(String text) : this()
         {
             SetText(text);
@@ -89,11 +90,8 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            //events
             _indicator.GetIndicatorMarker().EventToggle = null;
             EventMouseClick += (sender, args) => _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());
-
-            //adding
             AddItems(_indicator, _textObject);
         }
 
@@ -235,7 +233,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a CheckBox.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textObject.SetForeground(color);
@@ -243,9 +241,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a CheckBox in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             _textObject.SetForeground(r, g, b);
@@ -253,10 +251,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a CheckBox in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             _textObject.SetForeground(r, g, b, a);
@@ -264,9 +262,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a CheckBox in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             _textObject.SetForeground(r, g, b);
@@ -274,10 +272,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a CheckBox in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             _textObject.SetForeground(r, g, b, a);

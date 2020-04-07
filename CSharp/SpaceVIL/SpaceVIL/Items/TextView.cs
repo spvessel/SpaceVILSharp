@@ -539,7 +539,6 @@ namespace SpaceVIL
             return _textureStorage.GetLineSpacer();
         }
 
-
         internal void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes for yet
@@ -590,7 +589,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextView.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textureStorage.SetForeground(color);
@@ -598,9 +597,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextView in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
@@ -608,10 +607,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextView in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
@@ -619,9 +618,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextView in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
@@ -629,10 +628,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextView in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));

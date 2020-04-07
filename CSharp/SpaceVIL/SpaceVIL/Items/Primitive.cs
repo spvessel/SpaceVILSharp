@@ -4,7 +4,7 @@ namespace SpaceVIL
 {
     /// <summary>
     /// The Primitive is an abstract extension of BaseItem for primitive non-interactive items.
-    /// <para/> Exemples of subclasses: SpaceVIL.Ellipse, SpaceVIL.Rectangle, SpaceVIL.Triangle and etc.
+    /// <para/> Examples of subclasses: SpaceVIL.Ellipse, SpaceVIL.Rectangle, SpaceVIL.Triangle and etc.
     /// </summary>
     abstract public class Primitive : BaseItem
     {

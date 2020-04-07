@@ -133,9 +133,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting window background color.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b)
         {
             windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
@@ -144,10 +144,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting window background color.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b, int a)
         {
             windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));

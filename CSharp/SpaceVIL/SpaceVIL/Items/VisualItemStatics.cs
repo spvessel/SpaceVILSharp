@@ -174,17 +174,17 @@ namespace SpaceVIL
             float miny = item.GetY();
             float maxy = item.GetY() + item.GetHeight();
 
-            if (item._confines_x_0 > minx)
-                minx = item._confines_x_0;
+            if (item._confinesX0 > minx)
+                minx = item._confinesX0;
 
-            if (item._confines_x_1 < maxx)
-                maxx = item._confines_x_1;
+            if (item._confinesX1 < maxx)
+                maxx = item._confinesX1;
 
-            if (item._confines_y_0 > miny)
-                miny = item._confines_y_0;
+            if (item._confinesY0 > miny)
+                miny = item._confinesY0;
 
-            if (item._confines_y_1 < maxy)
-                maxy = item._confines_y_1;
+            if (item._confinesY1 < maxy)
+                maxy = item._confinesY1;
 
             if (xpos > minx && xpos < maxx && ypos > miny && ypos < maxy)
             {

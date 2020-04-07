@@ -8,7 +8,8 @@ namespace SpaceVIL
 {
     /// <summary>
     /// ButtonToggle is the basic implementation of a user interface button with 
-    /// the ability to be enabled or be disabled. Contains text. 
+    /// the ability to be enabled or be disabled. 
+    /// <para/> Contains text. 
     /// <para/> Supports all events except drag and drop.
     /// </summary>
     public class ButtonToggle : Prototype
@@ -35,7 +36,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a ButtonToggle with the specified text.
         /// </summary>
-        /// <param name="text">Button text as System.Text.</param>
+        /// <param name="text">Button text as System.String.</param>
         public ButtonToggle(String text) : this()
         {
             SetText(text);
@@ -76,7 +77,7 @@ namespace SpaceVIL
         /// </summary>
         public EventMouseMethodState EventToggle;
         /// <summary>
-        /// Disposing buttons's resources if the item was removed.
+        /// Disposing ButtonToggle resources if the item was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
         /// this method if necessary and no need to call it manually.
         /// </summary>
@@ -86,7 +87,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Setting alignment of a button's text. 
+        /// Setting alignment of a ButtonToggle text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
         /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
@@ -95,7 +96,7 @@ namespace SpaceVIL
             _textObject.SetTextAlignment(alignment);
         }
         /// <summary>
-        /// Setting alignment of a button's text. 
+        /// Setting alignment of a ButtonToggle text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
         /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
@@ -205,7 +206,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a ButtonToggle.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textObject.SetForeground(color);
@@ -213,9 +214,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a ButtonToggle in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             _textObject.SetForeground(r, g, b);
@@ -223,10 +224,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a ButtonToggle in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             _textObject.SetForeground(r, g, b, a);
@@ -234,9 +235,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a ButtonToggle in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             _textObject.SetForeground(r, g, b);
@@ -244,10 +245,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a ButtonToggle in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             _textObject.SetForeground(r, g, b, a);
