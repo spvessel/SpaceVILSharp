@@ -71,9 +71,7 @@ public class HistoryRecordItem extends Prototype {
         removeBtn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
         removeBtn.addItemState(ItemStateType.HOVERED, new ItemState(new Color(232, 120, 120)));
 
-        removeBtn.eventMouseClick.add((sender, args) -> {
-            remove();
-        });
+        removeBtn.eventMouseClick.add((sender, args) -> remove());
 
         addItem(layout);
         layout.addItems(nameLabel, dateLabel, removeBtn);

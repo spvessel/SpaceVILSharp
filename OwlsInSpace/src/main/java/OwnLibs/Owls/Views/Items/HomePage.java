@@ -63,7 +63,7 @@ public class HomePage extends HorizontalStack {
         newFolderLabel.setDescription(
                 "Opens a dialog for entering a name and creates a new folder in the workspace directory");
         importFileLabel.setDescription(
-                "Opens a dialog for select an exsisting file and creates a copy in the workspace directory");
+                "Opens a dialog for select an existing file and creates a copy in the workspace directory");
         settingsLabel.setDescription("Opens a settings window");
         quickTipsLabel.setDescription("Opens a window with keyboard shortcuts");
 

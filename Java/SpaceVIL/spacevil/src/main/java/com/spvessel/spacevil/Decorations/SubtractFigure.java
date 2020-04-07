@@ -117,15 +117,15 @@ public class SubtractFigure implements InterfaceSubtractFigure, InterfaceEffect 
             alignmentList.remove(ItemAlignment.BOTTOM);
         }
         if (_hcenter != null) {
-            if (alignmentList.contains(ItemAlignment.LEFT))
+//            if (alignmentList.contains(ItemAlignment.LEFT))
                 alignmentList.remove(ItemAlignment.LEFT);
-            if (alignmentList.contains(ItemAlignment.RIGHT))
+//            if (alignmentList.contains(ItemAlignment.RIGHT))
                 alignmentList.remove(ItemAlignment.RIGHT);
         }
         if (_vcenter != null) {
-            if (alignmentList.contains(ItemAlignment.TOP))
+//            if (alignmentList.contains(ItemAlignment.TOP))
                 alignmentList.remove(ItemAlignment.TOP);
-            if (alignmentList.contains(ItemAlignment.BOTTOM))
+//            if (alignmentList.contains(ItemAlignment.BOTTOM))
                 alignmentList.remove(ItemAlignment.BOTTOM);
         }
 
