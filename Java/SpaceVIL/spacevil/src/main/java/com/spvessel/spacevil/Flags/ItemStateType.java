@@ -2,7 +2,7 @@ package com.spvessel.spacevil.Flags;
 
 /**
  * Item state types enum.
- * <p> Values: Base, Hovered, Pressed, Toggled, Focused, Disabled.
+ * <p> Values: BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
  */
 public enum ItemStateType {
     /**

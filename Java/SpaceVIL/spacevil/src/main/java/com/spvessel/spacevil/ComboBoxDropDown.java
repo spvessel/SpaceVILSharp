@@ -7,7 +7,6 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
-import com.spvessel.spacevil.Core.InputEventArgs;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.InterfaceItem;

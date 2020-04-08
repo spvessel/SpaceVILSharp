@@ -13,11 +13,17 @@ namespace SpaceVIL.Decorations
     public class ItemState
     {
         public bool Value = true;
+
+        /// <summary>
+        /// Getting backgroud color of the item of current state as System.Drawing.Color.
+        /// </summary>
         public Color Background; // = Color.LightGray;
+
         // public Color Foreground = Color.Black;
         // public string Text = null;
         // public string ImageUri = null;
         // public bool IsVisible = true;
+
         /// <summary>
         /// Getting border of the item of current state as SpaceVIL.Decorations.Border.
         /// </summary>

@@ -7,13 +7,33 @@ import com.spvessel.spacevil.Flags.InputState;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
 
-public final class MouseArgs extends InputEventArgs {
+/**
+ * A class that describes mouse inputs.
+ */
+public final class MouseArgs implements InterfaceInputEventArgs {
+    /**
+     * Mouse button as com.spvessel.spacevil.Flags.MouseButton.
+     */
     public MouseButton button;
+
+    /**
+     * State of input as com.spvessel.spacevil.Flags.InputState. Values: RELEASE, PRESS, REPEAT.
+     */
     public InputState state;
+
+    /**
+     * Used modifiers while mouse input.
+     */
     public List<KeyMods> mods;
+
+    /**
+     * Mouse cursor position.
+     */
     public Position position = new Position();
 
-    @Override
+    /**
+     * Clearing MouseArgs
+     */
     public void clear() {
         button = MouseButton.UNKNOWN;
         state = InputState.RELEASE;

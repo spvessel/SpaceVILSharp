@@ -10,12 +10,7 @@ import java.util.Map;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedImage;
-import com.spvessel.spacevil.Flags.EmbeddedImageSize;
-import com.spvessel.spacevil.Flags.FileSystemEntryType;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.VisibilityPolicy;
+import com.spvessel.spacevil.Flags.*;
 
 public class OpenEntryDialog extends OpenDialog {
     private String _result = null;
@@ -53,9 +48,9 @@ public class OpenEntryDialog extends OpenDialog {
         _addressLine.setText(path);
     }
 
-    public enum OpenDialogType {
-        OPEN, SAVE
-    }
+//    public enum OpenDialogType {
+//        OPEN, SAVE
+//    }
 
     private FileSystemEntryType _entryType = FileSystemEntryType.FILE;
     private OpenDialogType _dialogType = OpenDialogType.OPEN;

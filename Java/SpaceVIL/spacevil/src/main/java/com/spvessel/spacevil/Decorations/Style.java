@@ -16,49 +16,199 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * Style is a class that describes the appearance of an element. Can contains Styles for inner items.
+ */
 public class Style implements Cloneable {
-    /**
-     * A class that describes style settings of the object
-     */
-    private Map<String, Style> _inner_styles = new HashMap<>();
+    private Map<String, Style> _innerStyles = new HashMap<>();
 
-    // defaults values
+    /**
+     * Background color of an item's shape. Attention: this property is required.
+     * <p> This property is java.awt.Color.
+     */
     public Color background;
+
+    /**
+     * Color of an item's text. Can be used only if the item contains text and in this case 
+     * this property is required.
+     * <p> This property is java.awt.Color.
+     */
     public Color foreground;
+
+    /**
+     * Font of an item's text. Can be used only if the item contains text and in this case 
+     * this property is required.
+     * <p> This property is java.awt.Font
+     */
     public Font font = null;
+
+    /**
+     * Width policy of an item's shape. Can be Fixed (shape not changes its size) or 
+     * Expand (shape is stretched to all available space). Attention: this property is required.
+     * <p> This property is com.spvessel.spacevil.Flags.SizePolicy.
+     */
     public SizePolicy widthPolicy;
+
+    /**
+     * Height policy of an item's shape. Can be Fixed (shape not changes its size) or 
+     * Expand (shape is stretched to all available space). Attention: this property is required.
+     * <p> This property is com.spvessel.spacevil.Flags.SizePolicy.
+     */
     public SizePolicy heightPolicy;
+
+    /**
+     * Width of an item's shape.
+     */
     public int width;
+
+    /**
+     * Minimum width of an item's shape (shape cannot be smaller this value).
+     * <p> Default: 0.
+     */
     public int minWidth;
+
+    /**
+     * Maximum width of an item's shape (shape cannot be bigger this value).
+     * <p> Default: 32767.
+     */
     public int maxWidth;
+
+    /**
+     * Height of an item's shape.
+     */
     public int height;
+
+    /**
+     * Minimum height of an item's shape (shape cannot be smaller this value).
+     * <p> Default: 0.
+     */
     public int minHeight;
+
+    /**
+     * Maximum height of an item's shape (shape cannot be bigget this value).
+     * <p> Default: 32767.
+     */
     public int maxHeight;
+
+    /**
+     * Alignment of an item's shape relative to its container. 
+     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
+     * Attention: this property is required.
+     * <p> This property is com.spvessel.spacevil.Flags.ItemAlignment.
+     */
     public List<ItemAlignment> alignment;
+
+    /**
+     * Alignment of an item's text. 
+     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
+     * Can be used only if the item contains text and in this case this property is required.
+     * <p> This property is com.spvessel.spacevil.Flags.ItemAlignment.
+     */
     public List<ItemAlignment> textAlignment;
+
+    /**
+     * X axis position of left-top cornet of an item's shape. This property itself is mostly ignored. 
+     * Used only when creating container-type items or with com.spvessel.spacevil.FreeArea.
+     */
     public int x;
+
+    /**
+     * Y axis position of left-top cornet of an item's shape. This property itself is mostly ignored. 
+     * Used only when creating container-type items or with com.spvessel.spacevil.FreeArea.
+     */
     public int y;
 
-    private Map<ItemStateType, ItemState> _item_states = new HashMap<>();
+    private Map<ItemStateType, ItemState> _itemStates = new HashMap<>();
 
+    /**
+     * Indents of an item to offset its children. Attention: this property is required.
+     * <p> This property is com.spvessel.spacevil.Decorations.Indents.
+     */
     public Indents padding = new Indents();
+
+    /**
+     * Indents between children of a container type item. It is used mainly in containers.
+     * <p> This property is com.spvessel.spacevil.Decorations.Spacing.
+     */
     public Spacing spacing = new Spacing();
+
+    /**
+     * Indents of an item to offset itself relative to its container. Attention: this property is required.
+     * <p> This property is com.spvessel.spacevil.Decorations.Indents.
+     */
     public Indents margin = new Indents();
+
+    /**
+     * Radiuses to round the rectangular shape of the item.
+     */
     public CornerRadius borderRadius = new CornerRadius();
+
+    /**
+     * Thickness of an item's border. 
+     * <p> Default: 0.
+     */
     public int borderThickness = 0;
+
+    /**
+     * Color of an item's border. 
+     * <p> This property is java.awt.Color.
+     */
     public Color borderFill = new Color(0, 0, 0, 0);
+
+    /**
+     * A form of an item's shape. If not assigned, the shape is rectangular.
+     * <p> Format: java.util.List&lt;float[]&gt;.
+     */
     public List<float[]> shape;// = new List<float[]>();
-    public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
-    public int shadowRadius;
-    public int shadowXOffset;
-    public int shadowYOffset;
-    public boolean isShadowDrop = false;
-    public Color shadowColor;
+
+    /**
+     * A flag that determines if the shape of an item can be changed or not.
+     * <p> True: if shape can not be resized. False: if shape can be resised. Default: False.
+     */
     public boolean isFixedShape = false;
+
+    /**
+     * A storage of shapes for future use. Note: not supported in the current version!
+     * <p> Format: java.util.List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
+     */
+    public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
+
+    /**
+     * Blur radius of a shadow.
+     * <p> Min value: 0. Max value: 10. Default: 0.
+     */
+    public int shadowRadius;
+
+    /**
+     * X shift of a shadow.
+     */
+    public int shadowXOffset;
+
+    /**
+     * Y shift of a shadow.
+     */
+    public int shadowYOffset;
+
+    /**
+     * Drop shadow flag. True: allow shadow dropping. False: not allow shadow dropping.
+     * <p> Default: False.
+     */
+    public boolean isShadowDrop = false;
+
+    /**
+     * Color of a shadow.
+     * <p> This property is java.awt.Color.
+     */
+    public Color shadowColor;
+
+    /**
+     * A flag that determines if an item is visible or not.
+     * <p> True: if visible. False: if not visible. Default: True.
+     */
     public boolean isVisible;
 
     /**
-     * Constructs a default Style
+     * Constructs a default Style.
      */
     public Style()// default
     {
@@ -69,15 +219,19 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Sets objects style
+     * Setting this style for all items in sequence.
+     * @param items A sequence of items that are com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void setStyle(InterfaceBaseItem... items) {
-        for (InterfaceBaseItem item : items)
+        for (InterfaceBaseItem item : items) {
             item.setStyle(this);
+        }
     }
 
     /**
-     * Sets object size (width and height)
+     * Setting size of an item's shape.
+     * @param width Width of a shape.
+     * @param height Height of a shape.
      */
     public void setSize(int width, int height) {
         this.width = width;
@@ -85,7 +239,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Sets object minimum size (width and height)
+     * Setting minimum size of an item's shape (shape can not be smaller than specified width and height).
+     * @param width Minimum width of a shape.
+     * @param height Minimum height of a shape.
      */
     public void setMinSize(int width, int height) {
         minWidth = width;
@@ -93,7 +249,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Sets object maximum size (width and height)
+     * Setting maximim size of an item's shape (shape can not be bigger than specified width and height).
+     * @param width Maximim width of a shape.
+     * @param height Maximim height of a shape.
      */
     public void setMaxSize(int width, int height) {
         maxWidth = width;
@@ -101,78 +259,114 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Sets object size policy (fixed or expand) for width and height
+     * Setting the size policy of an item's shape. 
+     * Can be FIXED (shape not changes its size) or EXPAND (shape is stretched to all available space).
+     * @param widthPolicy
+     * @param heightPolicy
      */
-    public void setSizePolicy(SizePolicy width_policy, SizePolicy height_policy) {
-        widthPolicy = width_policy;
-        heightPolicy = height_policy;
+    public void setSizePolicy(SizePolicy widthPolicy, SizePolicy heightPolicy) {
+        this.widthPolicy = widthPolicy;
+        this.heightPolicy = heightPolicy;
     }
 
     /**
-     * Sets background color of the object
+     * Setting background color of an item's shape in byte RGB format.
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
      */
     public void setBackground(int r, int g, int b) {
         background = GraphicsMathService.colorTransform(r, g, b);
     }
 
     /**
-     * Sets background color of the object
+     * Setting background color of an item's shape in byte RGBA format.
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
      */
     public void setBackground(int r, int g, int b, int a) {
         background = GraphicsMathService.colorTransform(r, g, b, a);
     }
 
     /**
-     * Sets background color of the object
+     * Setting background color of an item's shape in float RGB format.
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
      */
     public void setBackground(float r, float g, float b) {
         background = GraphicsMathService.colorTransform(r, g, b);
     }
 
     /**
-     * Sets background color of the object
+     * Setting background color of an item's shape in float RGBA format.
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
      */
     public void setBackground(float r, float g, float b, float a) {
         background = GraphicsMathService.colorTransform(r, g, b, a);
     }
 
     /**
-     * Sets text color of the object
+     * Setting text color of an item in byte RGB format.
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
      */
     public void setForeground(int r, int g, int b) {
         foreground = GraphicsMathService.colorTransform(r, g, b);
     }
 
     /**
-     * Sets text color of the object
+     * Setting text color of an item in byte RGBA format.
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
      */
     public void setForeground(int r, int g, int b, int a) {
         foreground = GraphicsMathService.colorTransform(r, g, b, a);
     }
 
     /**
-     * Sets text color of the object
+     * Setting text color of an item in float RGB format.
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
      */
     public void setForeground(float r, float g, float b) {
         foreground = GraphicsMathService.colorTransform(r, g, b);
     }
 
     /**
-     * Sets text color of the object
+     * Setting text color of an item in float RGBA format.
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
      */
     public void setForeground(float r, float g, float b, float a) {
         foreground = GraphicsMathService.colorTransform(r, g, b, a);
     }
 
     /**
-     * Padding of the object
+     * Setting indents of an item to offset its children.
+     * @param padding Padding indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setPadding(Indents padding) {
         this.padding = padding;
     }
 
     /**
-     * Padding of the object
+     * Setting indents of an item to offset its children.
+     * @param left Indent on the left.
+     * @param top Indent on the top.
+     * @param right Indent on the right.
+     * @param bottom Indent on the bottom.
      */
     public void setPadding(int left, int top, int right, int bottom) {
         padding.left = left;
@@ -182,14 +376,19 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Margin of the object
+     * Setting indents of an item to offset itself relative to its container.
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setMargin(Indents margin) {
         this.margin = margin;
     }
 
     /**
-     * Margin of the object
+     * Setting indents of an item to offset itself relative to its container.
+     * @param left Indent on the left.
+     * @param top Indent on the top.
+     * @param right Indent on the right.
+     * @param bottom Indent on the bottom.
      */
     public void setMargin(int left, int top, int right, int bottom) {
         margin.left = left;
@@ -199,14 +398,17 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Spacing of the object
+     * Setting indents between children of a container type item.
+     * @param spacing Spacing as com.spvessel.spacevil.Decorations.Spacing.
      */
     public void setSpacing(Spacing spacing) {
         this.spacing = spacing;
     }
 
     /**
-     * Spacing of the object
+     * Setting indents between children of a container type item.
+     * @param horizontal Horizontal indent.
+     * @param vertical Vertical indent.
      */
     public void setSpacing(int horizontal, int vertical) {
         spacing.horizontal = horizontal;
@@ -214,7 +416,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Set border of the object
+     * Setting border of an item's shape. Border consist of corner radiuses, thickness and color.
+     * @param border Border as com.spvessel.spacevil.Decorations.Border.
      */
     public void setBorder(Border border) {
         borderFill = border.getFill();
@@ -223,11 +426,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Set border of the object
-     * 
-     * @param fill      border color
-     * @param radius    radius of the border corners
-     * @param thickness border thickness
+     * Setting border for an item's shape. Border consist of corner radiuses, thickness and color.
+     * @param fill Border color as java.awt.Color.
+     * @param radius Radiuses of an border corners as com.spvessel.spacevil.Decorations.CornerRadius.
+     * @param thickness Border thickness.
      */
     public void setBorder(Color fill, CornerRadius radius, int thickness) {
         borderFill = fill;
@@ -235,6 +437,10 @@ public class Style implements Cloneable {
         borderThickness = thickness;
     }
 
+    /**
+     * Setting shadow for an item's shape. 
+     * @param shadow Shadow as com.spvessel.spacevil.Decorations.Shadow.
+     */
     public void setShadow(Shadow shadow) {
         shadowColor = shadow.getColor();// GraphicsMathService.cloneColor(shadow.getColor());
         shadowRadius = shadow.getRadius();
@@ -243,167 +449,216 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Set object alignment
+     * Setting an Alignment of an item's shape relative to its container. 
+     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
+     * Attention: this property is required.
+     * @param alignment Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list =
-        // Arrays.stream(alignment).collect(Collectors.toList());
-        // this.alignment = list;
         this.alignment = Arrays.asList(alignment);
     }
 
     /**
-     * Set text alignment in the object
+     * Alignment of an item's text. 
+     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
+     * Can be used only if the item contains text and in this case this property is required.
+     * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list =
-        // Arrays.stream(alignment).collect(Collectors.toList());
-        // this.textAlignment = list;
         this.textAlignment = Arrays.asList(alignment);
     }
 
     ////////////////////////////////////////////////////////////////
 
     /**
-     * Add inner primitives to the object (as decorations only) note: not supported
-     * in the current version
+     * Add inner primitives to the object (as decorations only). 
+     * Note: not supported in the current version!
      */
     public void addInnerShape(InterfaceBaseItem shape) {
-        if (innerShapes == null)
+        if (innerShapes == null) {
             innerShapes = new LinkedList<>();
+        }
         innerShapes.add(shape);
     }
 
     /**
-     * Set style for the child of the object
+     * Assigning a style for an item's child by key name.
+     * @param keyName Key name of a child.
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void addInnerStyle(String item_name, Style style) {
-        if (_inner_styles.containsKey(item_name))
-            _inner_styles.replace(item_name, style);
-        else
-            _inner_styles.put(item_name, style);
-    }
-
-    /**
-     * Returns style of the object's child by name
-     */
-    public Style getInnerStyle(String item_name) {
-        if (_inner_styles.containsKey(item_name))
-            return _inner_styles.get(item_name);
-
-        return null;
-    }
-
-    /**
-     * Object changes its state according to the ItemState when ItemStateType
-     * happens
-     */
-    public void addItemState(ItemStateType type, ItemState state) {
-        if (_item_states.containsKey(type)) {
-            state.value = true;
-            _item_states.replace(type, state);
+    public void addInnerStyle(String keyName, Style style) {
+        if (_innerStyles.containsKey(keyName)) {
+            _innerStyles.replace(keyName, style);
         } else {
-            _item_states.put(type, state);
+            _innerStyles.put(keyName, style);
         }
     }
 
     /**
-     * Returns ItemState of the object by ItemStateType name
+     * Getting a child’s style by key name.
+     * @param keyName Key name of a child.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
-    public ItemState getState(ItemStateType type) {
-        if (_item_states.containsKey(type))
-            return _item_states.get(type);
+    public Style getInnerStyle(String keyName) {
+        if (_innerStyles.containsKey(keyName)) {
+            return _innerStyles.get(keyName);
+        }
+
         return null;
     }
 
     /**
-     * @return Map of the ItemStateTypes and its ItemStates
+     * Removing a child's style by its key name.
+     * @param keyName Key name of a child.
+     */
+    public void removeInnerStyle(String keyName) {
+        if (_innerStyles.containsKey(keyName)) {
+            _innerStyles.remove(keyName);
+        }
+    }
+
+    /**
+     * Adding visual state for an item. 
+     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
+     * @param state Visual state as com.spvessel.spacevil.Decorations.ItemState.
+     */
+    public void addItemState(ItemStateType type, ItemState state) {
+        if (_itemStates.containsKey(type)) {
+            state.value = true;
+            _itemStates.replace(type, state);
+        } else {
+            _itemStates.put(type, state);
+        }
+    }
+
+    /**
+     * Getting visual state of an item by type. 
+     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
+     * @return Visual state as com.spvessel.spacevil.Decorations.ItemState.
+     */
+    public ItemState getState(ItemStateType type) {
+        if (_itemStates.containsKey(type)) {
+            return _itemStates.get(type);
+        }
+        return null;
+    }
+
+    /**
+     * Getting all presented in the current style visual states of an item.
+     * @return Map of an ItemStateTypes and its ItemStates.
      */
     public Map<ItemStateType, ItemState> getAllStates() {
-        return _item_states;
+        return _itemStates;
     }
 
     /**
-     * Remove ItemState by the ItemStateType
+     * Removing visual state of an item by type.
+     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
      */
     public void removeItemState(ItemStateType type) {
-        if (type == ItemStateType.BASE)
+        if (type == ItemStateType.BASE) {
             return;
-        if (_item_states.containsKey(type))
-            _item_states.remove(type);
+        }
+        if (_itemStates.containsKey(type)) {
+            _itemStates.remove(type);
+        }
     }
 
     /**
-     * Remove the object's child style by name of the child
+     * Cloning the current style and returning a new deep copy of Style.
+     * @return Deep copy of current style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void removeInnerStyle(String item_name) {
-        if (_inner_styles.containsKey(item_name))
-            _inner_styles.remove(item_name);
-        else
-            return;
-    }
-
     public Style clone() {
         Style style = new Style();
 
-        if (background != null)
+        if (background != null) {
             style.background = new Color(background.getRed(), background.getGreen(), background.getBlue(),
                     background.getAlpha());
-        if (foreground != null)
+        }
+        if (foreground != null) {
             style.foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(),
                     foreground.getAlpha());
-        if (font != null)
+        }
+        if (font != null) {
             style.font = font.deriveFont(font.getStyle());
-        else
+        } else {
             style.font = DefaultsService.getDefaultFont();
+        }
+
         style.setSizePolicy(widthPolicy, heightPolicy);
         style.setSize(width, height);
         style.setMaxSize(maxWidth, maxHeight);
         style.setMinSize(minWidth, minHeight);
+
         if (alignment != null) {
             ItemAlignment[] list = new ItemAlignment[alignment.size()];
             alignment.toArray(list);
             style.setAlignment(list);
         }
+
         if (textAlignment != null) {
             ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
             textAlignment.toArray(textlist);
             style.setTextAlignment(textlist);
         }
-        if (padding != null)
-            style.setPadding(padding.left, padding.top, padding.right, padding.bottom);
-        if (margin != null)
-            style.setMargin(margin.left, margin.top, margin.right, margin.bottom);
-        if (spacing != null)
-            style.setSpacing(spacing.horizontal, spacing.vertical);
 
-        if (borderFill != null)
+        if (padding != null) {
+            style.setPadding(padding.left, padding.top, padding.right, padding.bottom);
+        }
+
+        if (margin != null) {
+            style.setMargin(margin.left, margin.top, margin.right, margin.bottom);
+        }
+
+        if (spacing != null) {
+            style.setSpacing(spacing.horizontal, spacing.vertical);
+        }
+
+        if (borderFill != null) {
             style.borderFill = new Color(borderFill.getRed(), borderFill.getGreen(), borderFill.getBlue(),
                     borderFill.getAlpha());
+        }
+
         style.borderThickness = borderThickness;
-        if (borderRadius != null)
+
+        if (borderRadius != null) {
             style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
                     borderRadius.rightBottom);
+        }
 
-        if (shadowColor != null)
+        if (shadowColor != null) {
             style.shadowColor = new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(),
                     shadowColor.getAlpha());
+        }
+
         style.shadowRadius = shadowRadius;
         style.shadowXOffset = shadowXOffset;
         style.shadowYOffset = shadowYOffset;
         style.isShadowDrop = isShadowDrop;
 
-        if (shape != null)
+        if (shape != null) {
             style.shape = new LinkedList<>(shape);
-        if (innerShapes != null)
+        }
+
+        if (innerShapes != null) {
             style.innerShapes = new LinkedList<>(innerShapes);
+        }
+
         style.isFixedShape = isFixedShape;
         style.isVisible = isVisible;
-        style._item_states = new HashMap<>(_item_states);
+        style._itemStates = new HashMap<>(_itemStates);
 
         return style;
     }
 
+    /**
+     * Getting a default common style. Properly filled in all the necessary properties.
+     * <p> Use this method to create instance of Style class instead of  using pure constructor (new Style()).
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getDefaultCommonStyle() {
         Style style = new Style();
 
@@ -424,13 +679,14 @@ public class Style implements Cloneable {
 
     // get default styles
     /**
-     * @return default style for ButtonCore objects
+     * Getting default style for a ButtonCore item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getButtonCoreStyle() {
         Style style = new Style();
+
         style.background = new Color(13, 176, 255);
         style.foreground = new Color(32, 32, 32);
-
         style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
@@ -459,7 +715,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for ButtonToggle objects
+     * Getting default style for a ButtonToggle item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getButtonToggleStyle() {
         Style style = new Style();
@@ -490,7 +747,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for CheckBox objects
+     * Getting default style for a CheckBox item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "indicator", "text".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getCheckBoxStyle() {
         Style style = new Style();
@@ -506,23 +765,26 @@ public class Style implements Cloneable {
         style.minWidth = 20;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style indicator_style = getIndicatorStyle();
-        style.addInnerStyle("indicator", indicator_style);
+        Style indicatorStyle = getIndicatorStyle();
+        style.addInnerStyle("indicator", indicatorStyle);
 
-        Style textline_style = getLabelStyle();
-        textline_style.foreground = new Color(210, 210, 210);
-        textline_style.widthPolicy = SizePolicy.EXPAND;
-        textline_style.heightPolicy = SizePolicy.EXPAND;
-        textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
-        style.addInnerStyle("text", textline_style);
+        Style textlineStyle = getLabelStyle();
+        textlineStyle.foreground = new Color(210, 210, 210);
+        textlineStyle.widthPolicy = SizePolicy.EXPAND;
+        textlineStyle.heightPolicy = SizePolicy.EXPAND;
+        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
+        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textlineStyle.margin = new Indents(10 + indicatorStyle.width, 0, 0, 0);
+        style.addInnerStyle("text", textlineStyle);
 
         return style;
     }
 
     /**
-     * @return default style for Indicator objects
+     * Getting default style for a Indicator item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "marker".
+     * <p> This is part of CheckBox item style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getIndicatorStyle() {
         Style style = new Style();
@@ -537,30 +799,31 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(4, 4, 4, 4);
 
-        Style marker_style = new Style();
-        marker_style.background = new Color(32, 32, 32);
-        marker_style.foreground = new Color(70, 70, 70);
-        marker_style.font = DefaultsService.getDefaultFont();
-        marker_style.widthPolicy = SizePolicy.EXPAND;
-        marker_style.heightPolicy = SizePolicy.EXPAND;
-        marker_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        marker_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        Style markerStyle = new Style();
+        markerStyle.background = new Color(32, 32, 32);
+        markerStyle.foreground = new Color(70, 70, 70);
+        markerStyle.font = DefaultsService.getDefaultFont();
+        markerStyle.widthPolicy = SizePolicy.EXPAND;
+        markerStyle.heightPolicy = SizePolicy.EXPAND;
+        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
-        marker_style.addItemState(ItemStateType.HOVERED, hovered);
+        markerStyle.addItemState(ItemStateType.HOVERED, hovered);
 
         ItemState toggled = new ItemState();
         toggled.background = new Color(255, 181, 111);
-        marker_style.addItemState(ItemStateType.TOGGLED, toggled);
+        markerStyle.addItemState(ItemStateType.TOGGLED, toggled);
 
-        style.addInnerStyle("marker", marker_style);
+        style.addInnerStyle("marker", markerStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TextLine objects
+     * Getting default style for a text type item. Attention: not all the necessary properties properly filled.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextLineStyle() {
         Style style = new Style();
@@ -574,7 +837,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for ComboBox objects
+     * Getting default style for a ComboBox item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "selection", "dropdownbutton", "dropdownarea", "arrow".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getComboBoxStyle() {
         Style style = new Style();
@@ -589,50 +854,54 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style selection_style = new Style();
-        selection_style.background = new Color(0, 0, 0, 0);
-        selection_style.foreground = new Color(70, 70, 70);
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(0, 0, 0, 0);
+        selectionStyle.foreground = new Color(70, 70, 70);
 
-        selection_style.font = DefaultsService.getDefaultFont(14);
-        selection_style.widthPolicy = SizePolicy.EXPAND;
-        selection_style.heightPolicy = SizePolicy.EXPAND;
-        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        selection_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        selection_style.padding = new Indents(10, 0, 0, 0);
-        selection_style.margin = new Indents(0, 0, 20, 0);
-        style.addInnerStyle("selection", selection_style);
+        selectionStyle.font = DefaultsService.getDefaultFont(14);
+        selectionStyle.widthPolicy = SizePolicy.EXPAND;
+        selectionStyle.heightPolicy = SizePolicy.EXPAND;
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        selectionStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        selectionStyle.padding = new Indents(10, 0, 0, 0);
+        selectionStyle.margin = new Indents(0, 0, 20, 0);
+        style.addInnerStyle("selection", selectionStyle);
 
-        Style dropdownbutton_style = getButtonCoreStyle();
-        dropdownbutton_style.borderRadius = new CornerRadius();
-        dropdownbutton_style.width = 20;
-        dropdownbutton_style.widthPolicy = SizePolicy.FIXED;
-        dropdownbutton_style.heightPolicy = SizePolicy.EXPAND;
-        dropdownbutton_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
-        dropdownbutton_style.background = new Color(255, 181, 111);
+        Style dropdownbuttonStyle = getButtonCoreStyle();
+        dropdownbuttonStyle.borderRadius = new CornerRadius();
+        dropdownbuttonStyle.width = 20;
+        dropdownbuttonStyle.widthPolicy = SizePolicy.FIXED;
+        dropdownbuttonStyle.heightPolicy = SizePolicy.EXPAND;
+        dropdownbuttonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        dropdownbuttonStyle.background = new Color(255, 181, 111);
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        dropdownbutton_style.addItemState(ItemStateType.HOVERED, hovered);
+        dropdownbuttonStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("dropdownbutton", dropdownbutton_style);
+        style.addInnerStyle("dropdownbutton", dropdownbuttonStyle);
 
         style.addInnerStyle("dropdownarea", getComboBoxDropDownStyle());
 
-        Style arrow_style = new Style();
-        arrow_style.width = 14;
-        arrow_style.height = 6;
-        arrow_style.widthPolicy = SizePolicy.FIXED;
-        arrow_style.heightPolicy = SizePolicy.FIXED;
-        arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        arrow_style.background = new Color(50, 50, 50);
-        arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
-        style.addInnerStyle("arrow", arrow_style);
+        Style arrowStyle = new Style();
+        arrowStyle.width = 14;
+        arrowStyle.height = 6;
+        arrowStyle.widthPolicy = SizePolicy.FIXED;
+        arrowStyle.heightPolicy = SizePolicy.FIXED;
+        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        arrowStyle.background = new Color(50, 50, 50);
+        arrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
+        style.addInnerStyle("arrow", arrowStyle);
 
         return style;
     }
 
     /**
-     * @return default style for ComboBoxDropDown objects
+     * Getting default style for a ComboBoxDropDown item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "itemlist".
+     * <p> Inner styles for "itemlist": "vscrollbar", "hscrollbar", "menu".
+     * <p> This is part of ComboBox item style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getComboBoxDropDownStyle() {
         Style style = new Style();
@@ -642,38 +911,40 @@ public class Style implements Cloneable {
         style.padding = new Indents(0, 0, 0, 0);
         style.isVisible = false;
 
-        Style itemlist_style = getListBoxStyle();
-        itemlist_style.background = new Color(0, 0, 0, 0);
-        itemlist_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.addInnerStyle("itemlist", itemlist_style);
+        Style itemlistStyle = getListBoxStyle();
+        itemlistStyle.background = new Color(0, 0, 0, 0);
+        itemlistStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.addInnerStyle("itemlist", itemlistStyle);
 
-        Style itemlistarea_style = itemlist_style.getInnerStyle("area");
-        if (itemlistarea_style != null) {
-            itemlist_style.setPadding(0, 0, 0, 0);
+        Style itemlistareaStyle = itemlistStyle.getInnerStyle("area");
+        if (itemlistareaStyle != null) {
+            itemlistStyle.setPadding(0, 0, 0, 0);
         }
 
-        Style vsb_style = getSimpleVerticalScrollBarStyle();
-        vsb_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
-        itemlist_style.addInnerStyle("vscrollbar", vsb_style);
+        Style vsbStyle = getSimpleVerticalScrollBarStyle();
+        vsbStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
+        itemlistStyle.addInnerStyle("vscrollbar", vsbStyle);
 
-        Style hsb_style = getHorizontalScrollBarStyle();
-        hsb_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
-        itemlist_style.addInnerStyle("hscrollbar", hsb_style);
+        Style hsbStyle = getHorizontalScrollBarStyle();
+        hsbStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        itemlistStyle.addInnerStyle("hscrollbar", hsbStyle);
 
-        Style menu_style = new Style();
-        menu_style.background = new Color(50, 50, 50);
-        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
-        itemlist_style.addInnerStyle("menu", menu_style);
+        Style menuStyle = new Style();
+        menuStyle.background = new Color(50, 50, 50);
+        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        itemlistStyle.addInnerStyle("menu", menuStyle);
 
-        Style area_style = getListAreaStyle();
-        style.addInnerStyle("listarea", area_style);
+        Style areaStyle = getListAreaStyle();
+        style.addInnerStyle("listarea", areaStyle);
 
         return style;
     }
 
     /**
-     * @return default style for MenuItem objects
+     * Getting default style for a MenuItem item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "text", "arrow".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getMenuItemStyle() {
         Style style = new Style();
@@ -689,45 +960,48 @@ public class Style implements Cloneable {
         style.padding = new Indents(10, 0, 10, 0);
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(200, 200, 200)));
 
-        Style text_style = new Style();
-        text_style.setMargin(0, 0, 0, 0);
-        style.addInnerStyle("text", text_style);
+        Style textStyle = new Style();
+        textStyle.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("text", textStyle);
 
-        Style arrow_style = new Style();
-        arrow_style.width = 6;
-        arrow_style.height = 10;
-        arrow_style.widthPolicy = SizePolicy.FIXED;
-        arrow_style.heightPolicy = SizePolicy.FIXED;
-        arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
-        arrow_style.background = new Color(80, 80, 80);
-        arrow_style.margin = new Indents(10, 0, 0, 0);
-        arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
-        style.addInnerStyle("arrow", arrow_style);
+        Style arrowStyle = new Style();
+        arrowStyle.width = 6;
+        arrowStyle.height = 10;
+        arrowStyle.widthPolicy = SizePolicy.FIXED;
+        arrowStyle.heightPolicy = SizePolicy.FIXED;
+        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        arrowStyle.background = new Color(80, 80, 80);
+        arrowStyle.margin = new Indents(10, 0, 0, 0);
+        arrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
+        style.addInnerStyle("arrow", arrowStyle);
 
         return style;
     }
 
     /**
-     * @return default style for ContextMenu objects
+     * Getting default style for a ContextMenu item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "itemlist".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getContextMenuStyle() {
         Style style = getDefaultCommonStyle();
         style.background = new Color(210, 210, 210);
         style.isVisible = false;
 
-        Style itemlist_style = getListBoxStyle();
-        itemlist_style.background = new Color(0, 0, 0, 0);
-        itemlist_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.addInnerStyle("itemlist", itemlist_style);
+        Style itemlistStyle = getListBoxStyle();
+        itemlistStyle.background = new Color(0, 0, 0, 0);
+        itemlistStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.addInnerStyle("itemlist", itemlistStyle);
 
-        Style area_style = itemlist_style.getInnerStyle("area");
-        area_style.setPadding(0, 0, 0, 0);
+        Style areaStyle = itemlistStyle.getInnerStyle("area");
+        areaStyle.setPadding(0, 0, 0, 0);
 
         return style;
     }
 
     /**
-     * @return default style for FreeArea objects
+     * Getting default style for a FreeArea item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getFreeAreaStyle() {
         Style style = new Style();
@@ -744,7 +1018,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for Frame objects
+     * Getting default style for a Frame item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getFrameStyle() {
         Style style = new Style();
@@ -759,7 +1034,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for Grid objects
+     * Getting default style for a Grid item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getGridStyle() {
         Style style = new Style();
@@ -773,7 +1049,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for HorizontalScrollBar objects
+     * Getting default style for a HorizontalScrollBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "uparrow", "downarrow", "slider".
+     * <p> Inner styles for "slider": "track", "handler".
+     * <p> This is part of many items style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalScrollBarStyle() {
         Style style = new Style();
@@ -784,65 +1064,68 @@ public class Style implements Cloneable {
         style.height = 16;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = getButtonCoreStyle();
-        uparrow_style.widthPolicy = SizePolicy.FIXED;
-        uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(100, 100, 100, 255);
-        uparrow_style.width = 16;
-        uparrow_style.height = 16;
-        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        uparrow_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, -90);
-        uparrow_style.isFixedShape = true;
+        Style uparrowStyle = getButtonCoreStyle();
+        uparrowStyle.widthPolicy = SizePolicy.FIXED;
+        uparrowStyle.heightPolicy = SizePolicy.FIXED;
+        uparrowStyle.background = new Color(100, 100, 100, 255);
+        uparrowStyle.width = 16;
+        uparrowStyle.height = 16;
+        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrowStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, -90);
+        uparrowStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("uparrow", uparrow_style);
+        style.addInnerStyle("uparrow", uparrowStyle);
 
-        Style downarrow_style = getButtonCoreStyle();
-        downarrow_style.widthPolicy = SizePolicy.FIXED;
-        downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(100, 100, 100, 255);
-        downarrow_style.width = 16;
-        downarrow_style.height = 16;
-        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
-        downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 90);
-        downarrow_style.isFixedShape = true;
-        downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
+        Style downarrowStyle = getButtonCoreStyle();
+        downarrowStyle.widthPolicy = SizePolicy.FIXED;
+        downarrowStyle.heightPolicy = SizePolicy.FIXED;
+        downarrowStyle.background = new Color(100, 100, 100, 255);
+        downarrowStyle.width = 16;
+        downarrowStyle.height = 16;
+        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        downarrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 90);
+        downarrowStyle.isFixedShape = true;
+        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("downarrow", downarrow_style);
+        style.addInnerStyle("downarrow", downarrowStyle);
 
-        Style slider_style = new Style();
-        slider_style.widthPolicy = SizePolicy.EXPAND;
-        slider_style.heightPolicy = SizePolicy.EXPAND;
-        slider_style.background = new Color(0, 0, 0, 0);
-        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        style.addInnerStyle("slider", slider_style);
+        Style sliderStyle = new Style();
+        sliderStyle.widthPolicy = SizePolicy.EXPAND;
+        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.background = new Color(0, 0, 0, 0);
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", sliderStyle);
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.EXPAND;
-        track_style.heightPolicy = SizePolicy.EXPAND;
-        track_style.background = new Color(0, 0, 0, 0);
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        slider_style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.EXPAND;
+        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.background = new Color(0, 0, 0, 0);
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        sliderStyle.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.FIXED;
-        handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(100, 100, 100, 255);
-        handler_style.margin = new Indents(0, 3, 0, 3);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        handler_style.addItemState(ItemStateType.HOVERED, hovered);
-        handler_style.minWidth = 15;
-        slider_style.addInnerStyle("handler", handler_style);
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.FIXED;
+        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.background = new Color(100, 100, 100, 255);
+        handlerStyle.margin = new Indents(0, 3, 0, 3);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.minWidth = 15;
+        sliderStyle.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default simple style for HorizontalScrollBar objects
+     * Getting simplified style for a SimpleHorizontalScrollBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "uparrow", "downarrow", "slider".
+     * <p> Inner styles for "slider": "track", "handler".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSimpleHorizontalScrollBarStyle() {
         Style style = new Style();
@@ -854,43 +1137,47 @@ public class Style implements Cloneable {
         style.height = 16;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = getButtonCoreStyle();
-        uparrow_style.isVisible = false;
-        style.addInnerStyle("uparrow", uparrow_style);
+        Style uparrowStyle = getButtonCoreStyle();
+        uparrowStyle.isVisible = false;
+        style.addInnerStyle("uparrow", uparrowStyle);
 
-        Style downarrow_style = getButtonCoreStyle();
-        downarrow_style.isVisible = false;
-        style.addInnerStyle("downarrow", downarrow_style);
+        Style downarrowStyle = getButtonCoreStyle();
+        downarrowStyle.isVisible = false;
+        style.addInnerStyle("downarrow", downarrowStyle);
 
-        Style slider_style = new Style();
-        slider_style.widthPolicy = SizePolicy.EXPAND;
-        slider_style.heightPolicy = SizePolicy.EXPAND;
-        slider_style.background = new Color(0, 0, 0, 0);
-        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        style.addInnerStyle("slider", slider_style);
+        Style sliderStyle = new Style();
+        sliderStyle.widthPolicy = SizePolicy.EXPAND;
+        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.background = new Color(0, 0, 0, 0);
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", sliderStyle);
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.EXPAND;
-        track_style.heightPolicy = SizePolicy.EXPAND;
-        track_style.background = new Color(0, 0, 0, 0);
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        slider_style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.EXPAND;
+        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.background = new Color(0, 0, 0, 0);
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        sliderStyle.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.FIXED;
-        handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(120, 120, 120, 255);
-        handler_style.margin = new Indents(0, 5, 0, 5);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        handler_style.borderRadius = new CornerRadius(3);
-        handler_style.minWidth = 15;
-        slider_style.addInnerStyle("handler", handler_style);
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.FIXED;
+        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.background = new Color(120, 120, 120, 255);
+        handlerStyle.margin = new Indents(0, 5, 0, 5);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        handlerStyle.borderRadius = new CornerRadius(3);
+        handlerStyle.minWidth = 15;
+        sliderStyle.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default style for VerticalScrollBar objects
+     * Getting default style for a VerticalScrollBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "uparrow", "downarrow", "slider".
+     * <p> Inner styles for "slider": "track", "handler".
+     * <p> This is part of many items style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalScrollBarStyle() {
         Style style = new Style();
@@ -901,63 +1188,66 @@ public class Style implements Cloneable {
         style.width = 16;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = getButtonCoreStyle();
-        uparrow_style.widthPolicy = SizePolicy.FIXED;
-        uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(100, 100, 100, 255);
-        uparrow_style.width = 16;
-        uparrow_style.height = 16;
-        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
-        uparrow_style.isFixedShape = true;
+        Style uparrowStyle = getButtonCoreStyle();
+        uparrowStyle.widthPolicy = SizePolicy.FIXED;
+        uparrowStyle.heightPolicy = SizePolicy.FIXED;
+        uparrowStyle.background = new Color(100, 100, 100, 255);
+        uparrowStyle.width = 16;
+        uparrowStyle.height = 16;
+        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
+        uparrowStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("uparrow", uparrow_style);
+        style.addInnerStyle("uparrow", uparrowStyle);
 
-        Style downarrow_style = getButtonCoreStyle();
-        downarrow_style.widthPolicy = SizePolicy.FIXED;
-        downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(100, 100, 100, 255);
-        downarrow_style.width = 16;
-        downarrow_style.height = 16;
-        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
-        downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
-        downarrow_style.isFixedShape = true;
-        downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
-        style.addInnerStyle("downarrow", downarrow_style);
+        Style downarrowStyle = getButtonCoreStyle();
+        downarrowStyle.widthPolicy = SizePolicy.FIXED;
+        downarrowStyle.heightPolicy = SizePolicy.FIXED;
+        downarrowStyle.background = new Color(100, 100, 100, 255);
+        downarrowStyle.width = 16;
+        downarrowStyle.height = 16;
+        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
+        downarrowStyle.isFixedShape = true;
+        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        style.addInnerStyle("downarrow", downarrowStyle);
 
-        Style slider_style = new Style();
-        slider_style.widthPolicy = SizePolicy.EXPAND;
-        slider_style.heightPolicy = SizePolicy.EXPAND;
-        slider_style.background = new Color(0, 0, 0, 0);
-        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        style.addInnerStyle("slider", slider_style);
+        Style sliderStyle = new Style();
+        sliderStyle.widthPolicy = SizePolicy.EXPAND;
+        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.background = new Color(0, 0, 0, 0);
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", sliderStyle);
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.EXPAND;
-        track_style.heightPolicy = SizePolicy.EXPAND;
-        track_style.background = new Color(0, 0, 0, 0);
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        slider_style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.EXPAND;
+        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.background = new Color(0, 0, 0, 0);
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        sliderStyle.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.EXPAND;
-        handler_style.heightPolicy = SizePolicy.FIXED;
-        handler_style.background = new Color(100, 100, 100, 255);
-        handler_style.margin = new Indents(3, 0, 3, 0);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        handler_style.minHeight = 15;
-        handler_style.addItemState(ItemStateType.HOVERED, hovered);
-        slider_style.addInnerStyle("handler", handler_style);
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.EXPAND;
+        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.background = new Color(100, 100, 100, 255);
+        handlerStyle.margin = new Indents(3, 0, 3, 0);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handlerStyle.minHeight = 15;
+        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        sliderStyle.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default simple style for VerticalScrollBar objects
+     * Getting simplified style for a SimpleVerticalScrollBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "uparrow", "downarrow", "slider".
+     * <p> Inner styles for "slider": "track", "handler".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSimpleVerticalScrollBarStyle() {
         Style style = new Style();
@@ -969,43 +1259,45 @@ public class Style implements Cloneable {
         style.width = 16;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = getButtonCoreStyle();
-        uparrow_style.isVisible = false;
-        style.addInnerStyle("uparrow", uparrow_style);
+        Style uparrowStyle = getButtonCoreStyle();
+        uparrowStyle.isVisible = false;
+        style.addInnerStyle("uparrow", uparrowStyle);
 
-        Style downarrow_style = getButtonCoreStyle();
-        downarrow_style.isVisible = false;
-        style.addInnerStyle("downarrow", downarrow_style);
+        Style downarrowStyle = getButtonCoreStyle();
+        downarrowStyle.isVisible = false;
+        style.addInnerStyle("downarrow", downarrowStyle);
 
-        Style slider_style = new Style();
-        slider_style.widthPolicy = SizePolicy.EXPAND;
-        slider_style.heightPolicy = SizePolicy.EXPAND;
-        slider_style.background = new Color(0, 0, 0, 0);
-        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        style.addInnerStyle("slider", slider_style);
+        Style sliderStyle = new Style();
+        sliderStyle.widthPolicy = SizePolicy.EXPAND;
+        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.background = new Color(0, 0, 0, 0);
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", sliderStyle);
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.EXPAND;
-        track_style.heightPolicy = SizePolicy.EXPAND;
-        track_style.background = new Color(0, 0, 0, 0);
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        slider_style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.EXPAND;
+        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.background = new Color(0, 0, 0, 0);
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        sliderStyle.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.EXPAND;
-        handler_style.heightPolicy = SizePolicy.FIXED;
-        handler_style.background = new Color(120, 120, 120, 255);
-        handler_style.margin = new Indents(5, 0, 5, 0);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        handler_style.borderRadius = new CornerRadius(3);
-        handler_style.minHeight = 15;
-        slider_style.addInnerStyle("handler", handler_style);
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.EXPAND;
+        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.background = new Color(120, 120, 120, 255);
+        handlerStyle.margin = new Indents(5, 0, 5, 0);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handlerStyle.borderRadius = new CornerRadius(3);
+        handlerStyle.minHeight = 15;
+        sliderStyle.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default style for HorizontalSlider objects
+     * Getting default style for a HorizontalSlider item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "track", "handler".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalSliderStyle() {
         Style style = new Style();
@@ -1016,32 +1308,34 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.height = 25;
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.EXPAND;
-        track_style.heightPolicy = SizePolicy.FIXED;
-        track_style.height = 5;
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        track_style.background = new Color(100, 100, 100);
-        style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.EXPAND;
+        trackStyle.heightPolicy = SizePolicy.FIXED;
+        trackStyle.height = 5;
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
+        trackStyle.background = new Color(100, 100, 100);
+        style.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.FIXED;
-        handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.width = 10;
-        handler_style.background = new Color(255, 181, 111);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT));
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.FIXED;
+        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.width = 10;
+        handlerStyle.background = new Color(255, 181, 111);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        handler_style.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("handler", handler_style);
+        style.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default style for VerticalSlider objects
+     * Getting default style for a VerticalSlider item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "track", "handler".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalSliderStyle() {
         Style style = new Style();
@@ -1052,30 +1346,31 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.width = 25;
 
-        Style track_style = new Style();
-        track_style.widthPolicy = SizePolicy.FIXED;
-        track_style.heightPolicy = SizePolicy.EXPAND;
-        track_style.width = 5;
-        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER));
-        track_style.background = new Color(100, 100, 100);
-        style.addInnerStyle("track", track_style);
+        Style trackStyle = new Style();
+        trackStyle.widthPolicy = SizePolicy.FIXED;
+        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.width = 5;
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER));
+        trackStyle.background = new Color(100, 100, 100);
+        style.addInnerStyle("track", trackStyle);
 
-        Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.EXPAND;
-        handler_style.heightPolicy = SizePolicy.FIXED;
-        handler_style.height = 10;
-        handler_style.background = new Color(255, 181, 111);
-        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP));
+        Style handlerStyle = new Style();
+        handlerStyle.widthPolicy = SizePolicy.EXPAND;
+        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.height = 10;
+        handlerStyle.background = new Color(255, 181, 111);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP));
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        handler_style.addItemState(ItemStateType.HOVERED, hovered);
-        style.addInnerStyle("handler", handler_style);
+        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        style.addInnerStyle("handler", handlerStyle);
 
         return style;
     }
 
     /**
-     * @return default style for HorizontalStack objects
+     * Getting default style for a HorizontalStack item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalStackStyle() {
         Style style = new Style();
@@ -1092,7 +1387,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for VerticalStack objects
+     * Getting default style for a VerticalStack item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalStackStyle() {
         Style style = new Style();
@@ -1107,7 +1403,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for HorizontalSplitArea objects
+     * Getting default style for a HorizontalSplitArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "splitholder".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalSplitAreaStyle() {
         Style style = new Style();
@@ -1117,16 +1415,18 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style splitter_style = new Style();
-        splitter_style.background = new Color(42, 42, 42);
-        splitter_style.width = 6;
-        style.addInnerStyle("splitholder", splitter_style);
+        Style splitterStyle = new Style();
+        splitterStyle.background = new Color(42, 42, 42);
+        splitterStyle.width = 6;
+        style.addInnerStyle("splitholder", splitterStyle);
 
         return style;
     }
 
     /**
-     * @return default style for VerticalSplitArea objects
+     * Getting default style for a VerticalSplitArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "splitholder".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalSplitAreaStyle() {
         Style style = new Style();
@@ -1136,16 +1436,17 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style splitter_style = new Style();
-        splitter_style.background = new Color(42, 42, 42);
-        splitter_style.height = 6;
-        style.addInnerStyle("splitholder", splitter_style);
+        Style splitterStyle = new Style();
+        splitterStyle.background = new Color(42, 42, 42);
+        splitterStyle.height = 6;
+        style.addInnerStyle("splitholder", splitterStyle);
 
         return style;
     }
 
     /**
-     * @return default style for Label objects
+     * Getting default style for a Label item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getLabelStyle() {
         Style style = new Style();
@@ -1162,7 +1463,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for ListArea objects
+     * Getting default style for a ListArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "selection".
+     * <p> This is part of many items style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getListAreaStyle() {
         Style style = new Style();
@@ -1174,14 +1478,16 @@ public class Style implements Cloneable {
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 4);
 
-        Style selection_style = getSelectionItemStyle();
-        style.addInnerStyle("selection", selection_style);
+        Style selectionStyle = getSelectionItemStyle();
+        style.addInnerStyle("selection", selectionStyle);
 
         return style;
     }
 
     /**
-     * @return default style for ListBox objects
+     * Getting default style for a ListBox item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getListBoxStyle() {
         Style style = new Style();
@@ -1191,29 +1497,29 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style vsb_style = getVerticalScrollBarStyle();
-        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
-        style.addInnerStyle("vscrollbar", vsb_style);
+        Style vsbStyle = getVerticalScrollBarStyle();
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        style.addInnerStyle("vscrollbar", vsbStyle);
 
-        Style hsb_style = getHorizontalScrollBarStyle();
-        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
-        style.addInnerStyle("hscrollbar", hsb_style);
+        Style hsbStyle = getHorizontalScrollBarStyle();
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        style.addInnerStyle("hscrollbar", hsbStyle);
 
-        Style menu_style = new Style();
-        menu_style.background = new Color(50, 50, 50);
-        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
-        style.addInnerStyle("menu", menu_style);
+        Style menuStyle = new Style();
+        menuStyle.background = new Color(50, 50, 50);
+        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        style.addInnerStyle("menu", menuStyle);
 
-        Style area_style = getListAreaStyle();
-        style.addInnerStyle("area", area_style);
+        Style areaStyle = getListAreaStyle();
+        style.addInnerStyle("area", areaStyle);
 
         return style;
     }
 
     /**
-     * @return default style for WContainer objects note: not supported in current
-     *         version
+     * Note: not supported in current version.
+     * @return default style for WContainer objects.
      */
     public static Style getWContainerStyle()// нужен ли?
     {
@@ -1222,7 +1528,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for RadioButton objects
+     * Getting default style for a RadioButton item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "indicator", "text".
+     * <p> Inner styles of "indicator": "marker".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getRadioButtonStyle() {
         Style style = new Style();
@@ -1238,29 +1547,31 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.borderRadius = new CornerRadius(10);
 
-        Style indicator_style = getIndicatorStyle();
-        indicator_style.shape = GraphicsMathService.getRoundSquare(20, 20, 10, 0, 0);
-        indicator_style.isFixedShape = true;
-        style.addInnerStyle("indicator", indicator_style);
+        Style indicatorStyle = getIndicatorStyle();
+        indicatorStyle.shape = GraphicsMathService.getRoundSquare(20, 20, 10, 0, 0);
+        indicatorStyle.isFixedShape = true;
+        style.addInnerStyle("indicator", indicatorStyle);
 
-        Style marker_style = indicator_style.getInnerStyle("marker");
-        marker_style.shape = GraphicsMathService.getEllipse(100, 16);
-        indicator_style.addInnerStyle("marker", marker_style);
+        Style markerStyle = indicatorStyle.getInnerStyle("marker");
+        markerStyle.shape = GraphicsMathService.getEllipse(100, 16);
+        indicatorStyle.addInnerStyle("marker", markerStyle);
 
-        Style textline_style = getLabelStyle();
-        textline_style.foreground = new Color(210, 210, 210);
-        textline_style.widthPolicy = SizePolicy.EXPAND;
-        textline_style.heightPolicy = SizePolicy.EXPAND;
-        textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
-        style.addInnerStyle("text", textline_style);
+        Style textlineStyle = getLabelStyle();
+        textlineStyle.foreground = new Color(210, 210, 210);
+        textlineStyle.widthPolicy = SizePolicy.EXPAND;
+        textlineStyle.heightPolicy = SizePolicy.EXPAND;
+        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
+        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textlineStyle.margin = new Indents(10 + indicatorStyle.width, 0, 0, 0);
+        style.addInnerStyle("text", textlineStyle);
 
         return style;
     }
 
     /**
-     * @return default style for PasswordLine objects
+     * Getting default style for a PasswordLine item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "showmarker", "textedit".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getPasswordLineStyle() {
         Style style = new Style();
@@ -1276,20 +1587,20 @@ public class Style implements Cloneable {
         // hovered.background = new Color(255, 255, 255, 30);
         // style.addItemState(ItemStateType.HOVERED, hovered);
 
-        Style marker_style = getIndicatorStyle().getInnerStyle("marker");
-        marker_style.background = new Color(100, 100, 100, 0);
-        marker_style.setSize(20, 20);
-        marker_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        marker_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        marker_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        Style markerStyle = getIndicatorStyle().getInnerStyle("marker");
+        markerStyle.background = new Color(100, 100, 100, 0);
+        markerStyle.setSize(20, 20);
+        markerStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         // marker_style.borderRadius = new CornerRadius(5);
-        marker_style.removeItemState(ItemStateType.HOVERED);
+        markerStyle.removeItemState(ItemStateType.HOVERED);
         // ItemState toggled = new ItemState();
         // toggled.background = new Color(40, 40, 40, 255);
         // marker_style.addItemState(ItemStateType.TOGGLED, toggled);
         // marker_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255,
         // 255, 255, 50)));
-        style.addInnerStyle("showmarker", marker_style);
+        style.addInnerStyle("showmarker", markerStyle);
         style.addInnerStyle("textedit", getTextEncryptStyle());
 
         return style;
@@ -1305,31 +1616,34 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
 
-        Style cursor_style = new Style();
-        cursor_style.background = new Color(60, 60, 60);
-        cursor_style.width = 2;
-        cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursor_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        cursor_style.margin = new Indents(0, 5, 0, 5);
-        cursor_style.isVisible = false;
-        style.addInnerStyle("cursor", cursor_style);
+        Style cursorStyle = new Style();
+        cursorStyle.background = new Color(60, 60, 60);
+        cursorStyle.width = 2;
+        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.margin = new Indents(0, 5, 0, 5);
+        cursorStyle.isVisible = false;
+        style.addInnerStyle("cursor", cursorStyle);
 
-        Style selection_style = new Style();
-        selection_style.background = new Color(111, 181, 255);
-        selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        style.addInnerStyle("selection", selection_style);
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(111, 181, 255);
+        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        style.addInnerStyle("selection", selectionStyle);
 
-        Style substrate_style = new Style();
-        substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
-        substrate_style.foreground = new Color(150, 150, 150);
-        style.addInnerStyle("substrate", substrate_style);
+        Style substrateStyle = new Style();
+        substrateStyle.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
+        substrateStyle.foreground = new Color(150, 150, 150);
+        style.addInnerStyle("substrate", substrateStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TextEdit objects
+     * Getting default style for a TextEdit item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "text".
+     * <p> Inner styles for "text": "cursor", "selection", "substrate".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextEditStyle() {
         Style style = new Style();
@@ -1339,42 +1653,45 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
 
-        Style text_style = new Style();
-        text_style.background = new Color(0, 0, 0, 0);
-        text_style.foreground = new Color(70, 70, 70);
-        text_style.font = DefaultsService.getDefaultFont(16);
-        text_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        text_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        text_style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-        text_style.padding = new Indents(5, 0, 5, 0);
-        style.addInnerStyle("text", text_style);
+        Style textStyle = new Style();
+        textStyle.background = new Color(0, 0, 0, 0);
+        textStyle.foreground = new Color(70, 70, 70);
+        textStyle.font = DefaultsService.getDefaultFont(16);
+        textStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        textStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        textStyle.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        textStyle.padding = new Indents(5, 0, 5, 0);
+        style.addInnerStyle("text", textStyle);
 
-        Style cursor_style = new Style();
-        cursor_style.background = new Color(60, 60, 60);
-        cursor_style.width = 2;
-        cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursor_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        cursor_style.margin = new Indents(0, 5, 0, 5);
-        cursor_style.isVisible = false;
-        text_style.addInnerStyle("cursor", cursor_style);
+        Style cursorStyle = new Style();
+        cursorStyle.background = new Color(60, 60, 60);
+        cursorStyle.width = 2;
+        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.margin = new Indents(0, 5, 0, 5);
+        cursorStyle.isVisible = false;
+        textStyle.addInnerStyle("cursor", cursorStyle);
 
-        Style selection_style = new Style();
-        selection_style.background = new Color(111, 181, 255);
-        selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        selection_style.margin = new Indents(0, 5, 0, 5);
-        text_style.addInnerStyle("selection", selection_style);
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(111, 181, 255);
+        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selectionStyle.margin = new Indents(0, 5, 0, 5);
+        textStyle.addInnerStyle("selection", selectionStyle);
 
-        Style substrate_style = new Style();
-        substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
-        substrate_style.foreground = new Color(150, 150, 150);
-        text_style.addInnerStyle("substrate", substrate_style);
+        Style substrateStyle = new Style();
+        substrateStyle.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
+        substrateStyle.foreground = new Color(150, 150, 150);
+        textStyle.addInnerStyle("substrate", substrateStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TextBlock objects
+     * Getting default style for a sealed TextBlock item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "cursor", "selection".
+     * <p> This is part of TextArea item style as "textedit".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextBlockStyle() {
         Style style = new Style();
@@ -1387,25 +1704,27 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.padding = new Indents(5, 5, 5, 5);
 
-        Style cursor_style = new Style();
-        cursor_style.background = new Color(60, 60, 60);
-        cursor_style.width = 2;
-        cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        cursor_style.isVisible = false;
-        style.addInnerStyle("cursor", cursor_style);
+        Style cursorStyle = new Style();
+        cursorStyle.background = new Color(60, 60, 60);
+        cursorStyle.width = 2;
+        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        cursorStyle.isVisible = false;
+        style.addInnerStyle("cursor", cursorStyle);
 
-        Style selection_style = new Style();
-        selection_style.background = new Color(111, 181, 255);
-        selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        selection_style.alignment = new LinkedList<ItemAlignment>(
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(111, 181, 255);
+        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        selectionStyle.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        style.addInnerStyle("selection", selection_style);
+        style.addInnerStyle("selection", selectionStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TextArea objects
+     * Getting default style for a TextArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "textedit", "vscrollbar", "hscrollbar", "menu".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextAreaStyle() {
         Style style = new Style();
@@ -1416,26 +1735,31 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style text_style = getTextBlockStyle();
-        style.addInnerStyle("textedit", text_style);
+        Style textStyle = getTextBlockStyle();
+        style.addInnerStyle("textedit", textStyle);
 
-        Style vsb_style = getVerticalScrollBarStyle();
-        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
-        style.addInnerStyle("vscrollbar", vsb_style);
+        Style vsbStyle = getVerticalScrollBarStyle();
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        style.addInnerStyle("vscrollbar", vsbStyle);
 
-        Style hsb_style = getHorizontalScrollBarStyle();
-        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
-        style.addInnerStyle("hscrollbar", hsb_style);
+        Style hsbStyle = getHorizontalScrollBarStyle();
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        style.addInnerStyle("hscrollbar", hsbStyle);
 
-        Style menu_style = new Style();
-        menu_style.background = new Color(50, 50, 50);
-        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
-        style.addInnerStyle("menu", menu_style);
+        Style menuStyle = new Style();
+        menuStyle.background = new Color(50, 50, 50);
+        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        style.addInnerStyle("menu", menuStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a TextView item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "selection".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getTextViewStyle() {
         Style style = new Style();
         style.background = new Color(0, 0, 0, 0);
@@ -1455,7 +1779,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for PopUpMessage objects
+     * Getting default style for a PopUpMessage item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "closebutton".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getPopUpMessageStyle() {
         Style style = new Style();
@@ -1475,25 +1801,27 @@ public class Style implements Cloneable {
         hovered.background = new Color(255, 255, 255, 3);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
-        Style close_style = getButtonCoreStyle();
-        close_style.background = new Color(100, 100, 100);
-        close_style.foreground = new Color(210, 210, 210);
-        close_style.setSize(10, 10);
-        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
-        close_style.margin = new Indents(0, 5, 0, 5);
+        Style closeStyle = getButtonCoreStyle();
+        closeStyle.background = new Color(100, 100, 100);
+        closeStyle.foreground = new Color(210, 210, 210);
+        closeStyle.setSize(10, 10);
+        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
+        closeStyle.margin = new Indents(0, 5, 0, 5);
         ItemState close_hovered = new ItemState();
         close_hovered.background = new Color(255, 255, 255, 60);
-        close_style.addItemState(ItemStateType.HOVERED, close_hovered);
-        close_style.shape = GraphicsMathService.getCross(10, 10, 3, 45);
-        close_style.isFixedShape = false;
-        style.addInnerStyle("closebutton", close_style);
+        closeStyle.addItemState(ItemStateType.HOVERED, close_hovered);
+        closeStyle.shape = GraphicsMathService.getCross(10, 10, 3, 45);
+        closeStyle.isFixedShape = false;
+        style.addInnerStyle("closebutton", closeStyle);
 
         return style;
     }
 
     /**
-     * @return default style for ProgressBar objects
+     * Getting default style for a ProgressBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "progressbar".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getProgressBarStyle() {
         Style style = new Style();
@@ -1507,17 +1835,19 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
 
-        Style pgbar_style = new Style();
-        pgbar_style.background = new Color(0, 191, 255);
-        pgbar_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        pgbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        style.addInnerStyle("progressbar", pgbar_style);
+        Style pgbarStyle = new Style();
+        pgbarStyle.background = new Color(0, 191, 255);
+        pgbarStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        pgbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        style.addInnerStyle("progressbar", pgbarStyle);
 
         return style;
     }
 
     /**
-     * @return default style for ToolTip objects
+     * Getting default style for a ToolTip item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "text".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getToolTipStyle() {
         Style style = new Style();
@@ -1534,19 +1864,21 @@ public class Style implements Cloneable {
         style.padding = new Indents(5, 5, 5, 5);
         style.borderRadius = new CornerRadius(4);
 
-        Style text_style = new Style();
-        text_style.background = new Color(0, 0, 0, 0);
-        text_style.widthPolicy = SizePolicy.EXPAND;
-        text_style.heightPolicy = SizePolicy.EXPAND;
-        text_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        text_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        style.addInnerStyle("text", text_style);
+        Style textStyle = new Style();
+        textStyle.background = new Color(0, 0, 0, 0);
+        textStyle.widthPolicy = SizePolicy.EXPAND;
+        textStyle.heightPolicy = SizePolicy.EXPAND;
+        textStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        textStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.addInnerStyle("text", textStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TitleBar objects
+     * Getting default style for a TitleBar item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "closebutton", "minimizebutton", "maximizebutton", "title".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTitleBarStyle() {
         Style style = new Style();
@@ -1562,71 +1894,73 @@ public class Style implements Cloneable {
         style.padding = new Indents(10, 0, 5, 0);
         style.spacing = new Spacing(5, 0);
 
-        Style close_style = new Style();
-        close_style.font = DefaultsService.getDefaultFont();
-        close_style.background = new Color(100, 100, 100);
-        close_style.foreground = new Color(0, 0, 0, 0);
-        close_style.setSize(15, 15);
-        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        close_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        ItemState close_hovered = new ItemState();
-        close_hovered.background = new Color(186, 95, 97, 255);
-        close_style.addItemState(ItemStateType.HOVERED, close_hovered);
+        Style closeStyle = new Style();
+        closeStyle.font = DefaultsService.getDefaultFont();
+        closeStyle.background = new Color(100, 100, 100);
+        closeStyle.foreground = new Color(0, 0, 0, 0);
+        closeStyle.setSize(15, 15);
+        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        ItemState closeHovered = new ItemState();
+        closeHovered.background = new Color(186, 95, 97, 255);
+        closeStyle.addItemState(ItemStateType.HOVERED, closeHovered);
 
-        close_style.shape = GraphicsMathService.getCross(15, 15, 2, 45);
-        close_style.isFixedShape = true;
-        style.addInnerStyle("closebutton", close_style);
+        closeStyle.shape = GraphicsMathService.getCross(15, 15, 2, 45);
+        closeStyle.isFixedShape = true;
+        style.addInnerStyle("closebutton", closeStyle);
 
-        Style minimize_style = new Style();
-        minimize_style.font = DefaultsService.getDefaultFont();
-        minimize_style.background = new Color(100, 100, 100);
-        minimize_style.foreground = new Color(0, 0, 0, 0);
-        minimize_style.setSize(12, 15);
-        minimize_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        minimize_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        minimize_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        minimize_style.margin = new Indents(0, 0, 5, 9);
+        Style minimizeStyle = new Style();
+        minimizeStyle.font = DefaultsService.getDefaultFont();
+        minimizeStyle.background = new Color(100, 100, 100);
+        minimizeStyle.foreground = new Color(0, 0, 0, 0);
+        minimizeStyle.setSize(12, 15);
+        minimizeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        minimizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
+        minimizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        minimizeStyle.margin = new Indents(0, 0, 5, 9);
 
-        ItemState minimize_hovered = new ItemState();
-        minimize_hovered.background = new Color(255, 255, 255, 80);
-        minimize_style.addItemState(ItemStateType.HOVERED, minimize_hovered);
+        ItemState minimizeHovered = new ItemState();
+        minimizeHovered.background = new Color(255, 255, 255, 80);
+        minimizeStyle.addItemState(ItemStateType.HOVERED, minimizeHovered);
 
-        minimize_style.shape = GraphicsMathService.getRectangle(15, 2, 0, 13);
-        minimize_style.isFixedShape = true;
-        style.addInnerStyle("minimizebutton", minimize_style);
+        minimizeStyle.shape = GraphicsMathService.getRectangle(15, 2, 0, 13);
+        minimizeStyle.isFixedShape = true;
+        style.addInnerStyle("minimizebutton", minimizeStyle);
 
-        Style maximize_style = new Style();
-        maximize_style.font = DefaultsService.getDefaultFont();
-        maximize_style.background = new Color(0, 0, 0, 0);
+        Style maximizeStyle = new Style();
+        maximizeStyle.font = DefaultsService.getDefaultFont();
+        maximizeStyle.background = new Color(0, 0, 0, 0);
 
-        maximize_style.borderThickness = 2;
-        maximize_style.borderFill = new Color(100, 100, 100);
+        maximizeStyle.borderThickness = 2;
+        maximizeStyle.borderFill = new Color(100, 100, 100);
 
-        maximize_style.foreground = new Color(0, 0, 0, 0);
-        maximize_style.setSize(12, 12);
-        maximize_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        maximize_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        maximize_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        maximize_style.margin = new Indents(0, 0, 0, 9);
-        maximize_style.padding = new Indents(0, 0, 0, 0);
+        maximizeStyle.foreground = new Color(0, 0, 0, 0);
+        maximizeStyle.setSize(12, 12);
+        maximizeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        maximizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
+        maximizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        maximizeStyle.margin = new Indents(0, 0, 0, 9);
+        maximizeStyle.padding = new Indents(0, 0, 0, 0);
 
-        ItemState maximize_hovered = new ItemState();
-        maximize_hovered.background = new Color(0, 0, 0, 0);
-        maximize_hovered.border.setFill(new Color(84, 124, 94));
+        ItemState maximizeHovered = new ItemState();
+        maximizeHovered.background = new Color(0, 0, 0, 0);
+        maximizeHovered.border.setFill(new Color(84, 124, 94));
 
-        maximize_style.addItemState(ItemStateType.HOVERED, maximize_hovered);
-        style.addInnerStyle("maximizebutton", maximize_style);
+        maximizeStyle.addItemState(ItemStateType.HOVERED, maximizeHovered);
+        style.addInnerStyle("maximizebutton", maximizeStyle);
 
-        Style title_style = new Style();
-        title_style.margin = new Indents(10, 0, 0, 0);
-        style.addInnerStyle("title", title_style);
+        Style titleStyle = new Style();
+        titleStyle.margin = new Indents(10, 0, 0, 0);
+        style.addInnerStyle("title", titleStyle);
 
         return style;
     }
 
     /**
-     * @return default style for TreeView objects
+     * Getting default style for a TreeView item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTreeViewStyle() {
         Style style = getListBoxStyle();
@@ -1634,7 +1968,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for TreeItem objects
+     * Getting default style for a TreeItem item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "indicator", "branchicon", "leaficon".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTreeItemStyle() {
         Style style = new Style();
@@ -1652,44 +1988,46 @@ public class Style implements Cloneable {
         hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
-        Style indicator_style = new Style();
-        indicator_style.background = new Color(32, 32, 32);
-        indicator_style.foreground = new Color(210, 210, 210);
-        indicator_style.font = DefaultsService.getDefaultFont();
-        indicator_style.setSize(15, 15);
-        indicator_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        indicator_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        indicator_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        indicator_style.shape = GraphicsMathService.getTriangle(10, 8, 0, 3, 90);
-        indicator_style.isFixedShape = true;
+        Style indicatorStyle = new Style();
+        indicatorStyle.background = new Color(32, 32, 32);
+        indicatorStyle.foreground = new Color(210, 210, 210);
+        indicatorStyle.font = DefaultsService.getDefaultFont();
+        indicatorStyle.setSize(15, 15);
+        indicatorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        indicatorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        indicatorStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        indicatorStyle.shape = GraphicsMathService.getTriangle(10, 8, 0, 3, 90);
+        indicatorStyle.isFixedShape = true;
         ItemState toggled = new ItemState();
         toggled.background = new Color(160, 160, 160);
         toggled.shape = new Figure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
-        indicator_style.addItemState(ItemStateType.TOGGLED, toggled);
-        style.addInnerStyle("indicator", indicator_style);
+        indicatorStyle.addItemState(ItemStateType.TOGGLED, toggled);
+        style.addInnerStyle("indicator", indicatorStyle);
 
-        Style branch_icon_style = new Style();
-        branch_icon_style.background = new Color(106, 185, 255);
-        branch_icon_style.setSize(14, 9);
-        branch_icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        branch_icon_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        branch_icon_style.shape = GraphicsMathService.getFolderIconShape(20, 15, 0, 0);
-        style.addInnerStyle("branchicon", branch_icon_style);
+        Style branchIconStyle = new Style();
+        branchIconStyle.background = new Color(106, 185, 255);
+        branchIconStyle.setSize(14, 9);
+        branchIconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        branchIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        branchIconStyle.shape = GraphicsMathService.getFolderIconShape(20, 15, 0, 0);
+        style.addInnerStyle("branchicon", branchIconStyle);
 
-        Style leaf_icon_style = new Style();
-        leaf_icon_style.background = new Color(129, 187, 133);
-        leaf_icon_style.setSize(6, 6);
-        leaf_icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        leaf_icon_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        leaf_icon_style.shape = GraphicsMathService.getEllipse(3, 16);
-        leaf_icon_style.margin = new Indents(2, 0, 0, 0);
-        style.addInnerStyle("leaficon", leaf_icon_style);
+        Style leafIconStyle = new Style();
+        leafIconStyle.background = new Color(129, 187, 133);
+        leafIconStyle.setSize(6, 6);
+        leafIconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        leafIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        leafIconStyle.shape = GraphicsMathService.getEllipse(3, 16);
+        leafIconStyle.margin = new Indents(2, 0, 0, 0);
+        style.addInnerStyle("leaficon", leafIconStyle);
 
         return style;
     }
 
     /**
-     * @return default style for SpinItem objects
+     * Getting default style for a SpinItem item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "uparrow", "downarrow", "buttonsarea", "textedit".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSpinItemStyle() {
         Style style = new Style();
@@ -1701,48 +2039,54 @@ public class Style implements Cloneable {
         style.minHeight = 10;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style uparrow_style = getButtonCoreStyle();
-        uparrow_style.widthPolicy = SizePolicy.EXPAND;
-        uparrow_style.heightPolicy = SizePolicy.EXPAND;
-        uparrow_style.setMargin(4, 4, 4, 5);
-        uparrow_style.background = new Color(50, 50, 50, 255);
-        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        uparrow_style.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 0);
-        uparrow_style.isFixedShape = true;
+        Style uparrowStyle = getButtonCoreStyle();
+        uparrowStyle.widthPolicy = SizePolicy.EXPAND;
+        uparrowStyle.heightPolicy = SizePolicy.EXPAND;
+        uparrowStyle.setMargin(4, 4, 4, 5);
+        uparrowStyle.background = new Color(50, 50, 50, 255);
+        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrowStyle.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 0);
+        uparrowStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("uparrow", uparrow_style);
+        style.addInnerStyle("uparrow", uparrowStyle);
 
-        Style downarrow_style = getButtonCoreStyle();
-        downarrow_style.widthPolicy = SizePolicy.EXPAND;
-        downarrow_style.heightPolicy = SizePolicy.EXPAND;
-        downarrow_style.setMargin(4, 5, 4, 4);
-        downarrow_style.background = new Color(50, 50, 50, 255);
-        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
-        downarrow_style.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 180);
-        downarrow_style.isFixedShape = true;
-        downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
-        style.addInnerStyle("downarrow", downarrow_style);
+        Style downarrowStyle = getButtonCoreStyle();
+        downarrowStyle.widthPolicy = SizePolicy.EXPAND;
+        downarrowStyle.heightPolicy = SizePolicy.EXPAND;
+        downarrowStyle.setMargin(4, 5, 4, 4);
+        downarrowStyle.background = new Color(50, 50, 50, 255);
+        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrowStyle.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 180);
+        downarrowStyle.isFixedShape = true;
+        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        style.addInnerStyle("downarrow", downarrowStyle);
 
-        Style btns_area = getVerticalStackStyle();
-        btns_area.widthPolicy = SizePolicy.FIXED;
-        btns_area.heightPolicy = SizePolicy.EXPAND;
-        btns_area.width = 20;
-        btns_area.background = new Color(255, 181, 111);
-        btns_area.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        style.addInnerStyle("buttonsarea", btns_area);
+        Style btnsArea = getVerticalStackStyle();
+        btnsArea.widthPolicy = SizePolicy.FIXED;
+        btnsArea.heightPolicy = SizePolicy.EXPAND;
+        btnsArea.width = 20;
+        btnsArea.background = new Color(255, 181, 111);
+        btnsArea.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        style.addInnerStyle("buttonsarea", btnsArea);
 
-        Style text_input = getTextEditStyle();
-        text_input.heightPolicy = SizePolicy.EXPAND;
-        text_input.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
-        style.addInnerStyle("textedit", text_input);
+        Style textInput = getTextEditStyle();
+        textInput.heightPolicy = SizePolicy.EXPAND;
+        textInput.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
+        style.addInnerStyle("textedit", textInput);
 
         return style;
     }
 
+    /**
+     * Getting default style for a DialogItem item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "window".
+     * <p> This is part of OpenEntryDialog item style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getDialogItemStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -1753,21 +2097,26 @@ public class Style implements Cloneable {
         style.margin = new Indents();
         style.spacing = new Spacing();
 
-        Style window_style = getFrameStyle();
-        window_style.setSize(300, 150);
-        window_style.setMinSize(300, 150);
-        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        window_style.setPadding(2, 2, 2, 2);
-        window_style.setBackground(45, 45, 45);
-        window_style.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
-        window_style.isShadowDrop = true;
+        Style windowStyle = getFrameStyle();
+        windowStyle.setSize(300, 150);
+        windowStyle.setMinSize(300, 150);
+        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setPadding(2, 2, 2, 2);
+        windowStyle.setBackground(45, 45, 45);
+        windowStyle.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
+        windowStyle.isShadowDrop = true;
 
-        style.addInnerStyle("window", window_style);
+        style.addInnerStyle("window", windowStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a MessageItem item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "window", "button", "toolbar", "userbar", "message", "layout".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getMessageItemStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -1778,14 +2127,14 @@ public class Style implements Cloneable {
         style.margin = new Indents();
         style.spacing = new Spacing();
 
-        Style window_style = getFrameStyle();
-        window_style.setSize(300, 150);
-        window_style.setMinSize(300, 150);
-        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        window_style.setPadding(2, 2, 2, 2);
-        window_style.setBackground(45, 45, 45);
-        style.addInnerStyle("window", window_style);
+        Style windowStyle = getFrameStyle();
+        windowStyle.setSize(300, 150);
+        windowStyle.setMinSize(300, 150);
+        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setPadding(2, 2, 2, 2);
+        windowStyle.setBackground(45, 45, 45);
+        style.addInnerStyle("window", windowStyle);
 
         Style btnStyle = getButtonCoreStyle();
         btnStyle.setBackground(100, 255, 150);
@@ -1795,38 +2144,42 @@ public class Style implements Cloneable {
         btnStyle.isShadowDrop = true;
         style.addInnerStyle("button", btnStyle);
 
-        Style toolbar_style = getHorizontalStackStyle();
-        toolbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        toolbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        toolbar_style.setSpacing(10, 0);
-        toolbar_style.setPadding(0, 0, 0, 0);
-        toolbar_style.setMargin(0, 0, 0, 0);
-        style.addInnerStyle("toolbar", toolbar_style);
+        Style toolbarStyle = getHorizontalStackStyle();
+        toolbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        toolbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbarStyle.setSpacing(10, 0);
+        toolbarStyle.setPadding(0, 0, 0, 0);
+        toolbarStyle.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("toolbar", toolbarStyle);
 
-        Style userbar_style = getHorizontalStackStyle();
-        userbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        userbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        userbar_style.setSpacing(10, 0);
-        userbar_style.setPadding(0, 0, 0, 0);
-        userbar_style.setMargin(0, 0, 0, 0);
-        style.addInnerStyle("userbar", userbar_style);
+        Style userbarStyle = getHorizontalStackStyle();
+        userbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        userbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        userbarStyle.setSpacing(10, 0);
+        userbarStyle.setPadding(0, 0, 0, 0);
+        userbarStyle.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("userbar", userbarStyle);
 
-        Style msg_style = getLabelStyle();
-        msg_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        msg_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        msg_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        msg_style.setMargin(10, 0, 10, 40);
-        style.addInnerStyle("message", msg_style);
+        Style msgStyle = getLabelStyle();
+        msgStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        msgStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        msgStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        msgStyle.setMargin(10, 0, 10, 40);
+        style.addInnerStyle("message", msgStyle);
 
-        Style layout_style = getFrameStyle();
-        layout_style.setMargin(0, 30, 0, 0);
-        layout_style.setPadding(6, 6, 6, 15);
-        layout_style.setBackground(255, 255, 255, 20);
-        style.addInnerStyle("layout", layout_style);
+        Style layoutStyle = getFrameStyle();
+        layoutStyle.setMargin(0, 30, 0, 0);
+        layoutStyle.setPadding(6, 6, 6, 15);
+        layoutStyle.setBackground(255, 255, 255, 20);
+        style.addInnerStyle("layout", layoutStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a window itself. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getWindowContainerStyle() {
         Style style = new Style();
 
@@ -1840,6 +2193,11 @@ public class Style implements Cloneable {
         return style;
     }
 
+    /**
+     * Getting default style for a FileSystemEntry item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "icon", "text".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getFileSystemEntryStyle() {
         Style style = new Style();
         style.height = 25;
@@ -1852,20 +2210,27 @@ public class Style implements Cloneable {
         style.setPadding(10, 0, 0, 0);
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 30)));
 
-        Style icon_style = getFrameStyle();
-        icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        icon_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        Style iconStyle = getFrameStyle();
+        iconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        iconStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
 
-        style.addInnerStyle("icon", icon_style);
+        style.addInnerStyle("icon", iconStyle);
 
-        Style text_style = new Style();
-        text_style.setMargin(24, 0, 0, 0);
+        Style textStyle = new Style();
+        textStyle.setMargin(24, 0, 0, 0);
 
-        style.addInnerStyle("text", text_style);
+        style.addInnerStyle("text", textStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a OpenEntryDialog item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "window", "layout", "toolbar", "toolbarbutton", 
+     * "addressline", "filenameline", "list", "controlpanel", "okbutton", 
+     * "cancelbutton", "filter", "filtertext", "divider".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getOpenEntryDialogStyle() {
         // common
         Style style = new Style();
@@ -1878,112 +2243,117 @@ public class Style implements Cloneable {
         style.spacing = new Spacing();
 
         // window
-        Style window_style = getDialogItemStyle().getInnerStyle("window");
-        window_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        window_style.setMargin(150, 20, 150, 20);
-        style.addInnerStyle("window", window_style);
+        Style windowStyle = getDialogItemStyle().getInnerStyle("window");
+        windowStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        windowStyle.setMargin(150, 20, 150, 20);
+        style.addInnerStyle("window", windowStyle);
         // layout
-        Style layout_style = getVerticalStackStyle();
-        layout_style.setMargin(0, 30, 0, 0);
-        layout_style.setPadding(6, 6, 6, 6);
-        layout_style.setSpacing(0, 2);
-        layout_style.setBackground(255, 255, 255, 20);
-        style.addInnerStyle("layout", layout_style);
+        Style layoutStyle = getVerticalStackStyle();
+        layoutStyle.setMargin(0, 30, 0, 0);
+        layoutStyle.setPadding(6, 6, 6, 6);
+        layoutStyle.setSpacing(0, 2);
+        layoutStyle.setBackground(255, 255, 255, 20);
+        style.addInnerStyle("layout", layoutStyle);
         // toolbar
-        Style toolbar_style = getHorizontalStackStyle();
-        toolbar_style.heightPolicy = SizePolicy.FIXED;
-        toolbar_style.height = 30;
-        toolbar_style.setBackground(40, 40, 40);
-        toolbar_style.setSpacing(3, 0);
-        toolbar_style.setPadding(6, 0, 0, 0);
-        style.addInnerStyle("toolbar", toolbar_style);
+        Style toolbarStyle = getHorizontalStackStyle();
+        toolbarStyle.heightPolicy = SizePolicy.FIXED;
+        toolbarStyle.height = 30;
+        toolbarStyle.setBackground(40, 40, 40);
+        toolbarStyle.setSpacing(3, 0);
+        toolbarStyle.setPadding(6, 0, 0, 0);
+        style.addInnerStyle("toolbar", toolbarStyle);
         // toolbarbutton
-        Style toolbarbutton_style = Style.getButtonCoreStyle();
-        toolbarbutton_style.setSize(24, 30);
-        toolbarbutton_style.background = toolbar_style.background;
-        toolbarbutton_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
-        toolbarbutton_style.addItemState(ItemStateType.PRESSED, new ItemState(new Color(255, 255, 255, 30)));
-        toolbarbutton_style.borderRadius = new CornerRadius();
-        toolbarbutton_style.setPadding(3, 6, 3, 6);
-        style.addInnerStyle("toolbarbutton", toolbarbutton_style);
+        Style toolbarbuttonStyle = Style.getButtonCoreStyle();
+        toolbarbuttonStyle.setSize(24, 30);
+        toolbarbuttonStyle.background = toolbarStyle.background;
+        toolbarbuttonStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
+        toolbarbuttonStyle.addItemState(ItemStateType.PRESSED, new ItemState(new Color(255, 255, 255, 30)));
+        toolbarbuttonStyle.borderRadius = new CornerRadius();
+        toolbarbuttonStyle.setPadding(3, 6, 3, 6);
+        style.addInnerStyle("toolbarbutton", toolbarbuttonStyle);
         // buttonhidden
-        Style buttonhidden_style = getButtonToggleStyle();
-        buttonhidden_style.setSize(24, 30);
-        buttonhidden_style.borderRadius = new CornerRadius();
-        buttonhidden_style.background = toolbar_style.background;
-        buttonhidden_style.setPadding(4, 6, 4, 6);
-        buttonhidden_style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
-        style.addInnerStyle("buttonhidden", buttonhidden_style);
+        Style buttonhiddenStyle = getButtonToggleStyle();
+        buttonhiddenStyle.setSize(24, 30);
+        buttonhiddenStyle.borderRadius = new CornerRadius();
+        buttonhiddenStyle.background = toolbarStyle.background;
+        buttonhiddenStyle.setPadding(4, 6, 4, 6);
+        buttonhiddenStyle.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
+        style.addInnerStyle("buttonhidden", buttonhiddenStyle);
         // addressline
-        Style addressline_style = getTextEditStyle();
-        addressline_style.font = DefaultsService.getDefaultFont(12);
-        addressline_style.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
-        addressline_style.getInnerStyle("text").setForeground(210, 210, 210);
-        addressline_style.setBackground(50, 50, 50);
-        addressline_style.height = 24;
-        addressline_style.setMargin(0, 5, 0, 0);
-        style.addInnerStyle("addressline", addressline_style);
+        Style addresslineStyle = getTextEditStyle();
+        addresslineStyle.font = DefaultsService.getDefaultFont(12);
+        addresslineStyle.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
+        addresslineStyle.getInnerStyle("text").setForeground(210, 210, 210);
+        addresslineStyle.setBackground(50, 50, 50);
+        addresslineStyle.height = 24;
+        addresslineStyle.setMargin(0, 5, 0, 0);
+        style.addInnerStyle("addressline", addresslineStyle);
         // filenameline
-        Style filenameline_style = getTextEditStyle();
-        filenameline_style.font = DefaultsService.getDefaultFont(12);
-        filenameline_style.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
-        filenameline_style.getInnerStyle("text").setForeground(210, 210, 210);
-        filenameline_style.setBackground(50, 50, 50);
-        filenameline_style.height = 24;
-        filenameline_style.setMargin(0, 2, 0, 0);
-        style.addInnerStyle("filenameline", filenameline_style);
+        Style filenamelineStyle = getTextEditStyle();
+        filenamelineStyle.font = DefaultsService.getDefaultFont(12);
+        filenamelineStyle.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
+        filenamelineStyle.getInnerStyle("text").setForeground(210, 210, 210);
+        filenamelineStyle.setBackground(50, 50, 50);
+        filenamelineStyle.height = 24;
+        filenamelineStyle.setMargin(0, 2, 0, 0);
+        style.addInnerStyle("filenameline", filenamelineStyle);
         // list
-        Style list_style = getListBoxStyle();
-        style.addInnerStyle("list", list_style);
+        Style listStyle = getListBoxStyle();
+        style.addInnerStyle("list", listStyle);
         // controlpanel
-        Style controlpanel_style = getFrameStyle();
-        controlpanel_style.heightPolicy = SizePolicy.FIXED;
-        controlpanel_style.height = 45;
-        controlpanel_style.setBackground(45, 45, 45);
-        controlpanel_style.setPadding(6, 6, 6, 6);
-        style.addInnerStyle("controlpanel", controlpanel_style);
+        Style controlpanelStyle = getFrameStyle();
+        controlpanelStyle.heightPolicy = SizePolicy.FIXED;
+        controlpanelStyle.height = 45;
+        controlpanelStyle.setBackground(45, 45, 45);
+        controlpanelStyle.setPadding(6, 6, 6, 6);
+        style.addInnerStyle("controlpanel", controlpanelStyle);
         // button
-        Style okbutton_style = getButtonCoreStyle();
-        okbutton_style.setSize(100, 30);
-        okbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        okbutton_style.setMargin(0, 0, 110, 0);
-        okbutton_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
-        okbutton_style.isShadowDrop = true;
-        style.addInnerStyle("okbutton", okbutton_style);
+        Style okbuttonStyle = getButtonCoreStyle();
+        okbuttonStyle.setSize(100, 30);
+        okbuttonStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        okbuttonStyle.setMargin(0, 0, 110, 0);
+        okbuttonStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
+        okbuttonStyle.isShadowDrop = true;
+        style.addInnerStyle("okbutton", okbuttonStyle);
 
-        Style cancelbutton_style = getButtonCoreStyle();
-        cancelbutton_style.setSize(100, 30);
-        cancelbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        cancelbutton_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
-        cancelbutton_style.isShadowDrop = true;
-        style.addInnerStyle("cancelbutton", cancelbutton_style);
+        Style cancelbuttonStyle = getButtonCoreStyle();
+        cancelbuttonStyle.setSize(100, 30);
+        cancelbuttonStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        cancelbuttonStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
+        cancelbuttonStyle.isShadowDrop = true;
+        style.addInnerStyle("cancelbutton", cancelbuttonStyle);
 
-        Style filter_style = getButtonCoreStyle();
-        filter_style.setSize(24, 30);
-        filter_style.setBackground(35, 35, 35);
-        filter_style.setPadding(4, 6, 4, 6);
-        filter_style.setMargin(5, 0, 0, 0);
-        style.addInnerStyle("filter", filter_style);
+        Style filterStyle = getButtonCoreStyle();
+        filterStyle.setSize(24, 30);
+        filterStyle.setBackground(35, 35, 35);
+        filterStyle.setPadding(4, 6, 4, 6);
+        filterStyle.setMargin(5, 0, 0, 0);
+        style.addInnerStyle("filter", filterStyle);
 
-        Style filtertext_style = getLabelStyle();
-        filtertext_style.widthPolicy = SizePolicy.FIXED;
-        filtertext_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        filtertext_style.setPadding(10, 2, 10, 0);
-        filtertext_style.setMargin(-3, 0, 0, 0);
-        filtertext_style.setBackground(55, 55, 55);
-        filtertext_style.font = DefaultsService.getDefaultFont();
-        style.addInnerStyle("filtertext", filtertext_style);
+        Style filtertextStyle = getLabelStyle();
+        filtertextStyle.widthPolicy = SizePolicy.FIXED;
+        filtertextStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        filtertextStyle.setPadding(10, 2, 10, 0);
+        filtertextStyle.setMargin(-3, 0, 0, 0);
+        filtertextStyle.setBackground(55, 55, 55);
+        filtertextStyle.font = DefaultsService.getDefaultFont();
+        style.addInnerStyle("filtertext", filtertextStyle);
 
-        Style divider_style = getFrameStyle();
-        divider_style.widthPolicy = SizePolicy.FIXED;
-        divider_style.width = 1;
-        divider_style.setBackground(55, 55, 55);
-        divider_style.setMargin(0, 3, 0, 3);
-        style.addInnerStyle("divider", divider_style);
+        Style dividerStyle = getFrameStyle();
+        dividerStyle.widthPolicy = SizePolicy.FIXED;
+        dividerStyle.width = 1;
+        dividerStyle.setBackground(55, 55, 55);
+        dividerStyle.setMargin(0, 3, 0, 3);
+        style.addInnerStyle("divider", dividerStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a InputDialog item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "window", "button", "textedit", "layout", "toolbar".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getInputDialogStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -1994,49 +2364,53 @@ public class Style implements Cloneable {
         style.margin = new Indents();
         style.spacing = new Spacing();
 
-        Style window_style = getFrameStyle();
-        window_style.setSize(300, 150);
-        window_style.setMinSize(300, 150);
-        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        window_style.setPadding(2, 2, 2, 2);
-        window_style.setBackground(45, 45, 45);
-        style.addInnerStyle("window", window_style);
+        Style windowStyle = getFrameStyle();
+        windowStyle.setSize(300, 150);
+        windowStyle.setMinSize(300, 150);
+        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setPadding(2, 2, 2, 2);
+        windowStyle.setBackground(45, 45, 45);
+        style.addInnerStyle("window", windowStyle);
 
-        Style ok_style = getButtonCoreStyle();
-        ok_style.setBackground(100, 255, 150);
-        ok_style.foreground = Color.black;
-        ok_style.setSize(100, 30);
-        ok_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
-        ok_style.setMargin(0, 0, 0, 0);
-        ok_style.borderRadius = new CornerRadius();
-        ok_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
-        ok_style.isShadowDrop = true;
-        ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
-        style.addInnerStyle("button", ok_style);
+        Style okStyle = getButtonCoreStyle();
+        okStyle.setBackground(100, 255, 150);
+        okStyle.foreground = Color.black;
+        okStyle.setSize(100, 30);
+        okStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        okStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        okStyle.setMargin(0, 0, 0, 0);
+        okStyle.borderRadius = new CornerRadius();
+        okStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
+        okStyle.isShadowDrop = true;
+        okStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+        style.addInnerStyle("button", okStyle);
 
-        Style text_style = getTextEditStyle();
-        text_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
-        text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        text_style.setMargin(0, 15, 0, 0);
-        style.addInnerStyle("textedit", text_style);
+        Style textStyle = getTextEditStyle();
+        textStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
+        textStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        textStyle.setMargin(0, 15, 0, 0);
+        style.addInnerStyle("textedit", textStyle);
 
-        Style layout_style = getFrameStyle();
-        layout_style.setMargin(0, 30, 0, 0);
-        layout_style.setPadding(6, 6, 6, 15);
-        layout_style.setBackground(255, 255, 255, 20);
-        style.addInnerStyle("layout", layout_style);
+        Style layoutStyle = getFrameStyle();
+        layoutStyle.setMargin(0, 30, 0, 0);
+        layoutStyle.setPadding(6, 6, 6, 15);
+        layoutStyle.setBackground(255, 255, 255, 20);
+        style.addInnerStyle("layout", layoutStyle);
 
-        Style toolbar_style = getHorizontalStackStyle();
-        toolbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        toolbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        toolbar_style.setSpacing(10, 0);
-        style.addInnerStyle("toolbar", toolbar_style);
+        Style toolbarStyle = getHorizontalStackStyle();
+        toolbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        toolbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbarStyle.setSpacing(10, 0);
+        style.addInnerStyle("toolbar", toolbarStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a SelectionItem item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getSelectionItemStyle() {
         Style style = new Style();
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
@@ -2047,6 +2421,12 @@ public class Style implements Cloneable {
         return style;
     }
 
+    /**
+     * Getting default style for a WrapArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "selection".
+     * <p> This is part of WrapGrid item style as "area".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getWrapAreaStyle() {
         Style style = new Style();
 
@@ -2057,13 +2437,18 @@ public class Style implements Cloneable {
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 5);
 
-        Style selection_style = getSelectionItemStyle();
-        // Style selection_style = DefaultsService.getDefaultStyle(SelectionItem.class);
-        style.addInnerStyle("selection", selection_style);
+        Style selectionStyle = getSelectionItemStyle();
+        style.addInnerStyle("selection", selectionStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a WrapGrid item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "area", "vscrollbar", "hscrollbar".
+     * <p> Inner styles for "area": see Style.getWrapAreaStyle().
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getWrapGridStyle() {
         Style style = new Style();
 
@@ -2072,20 +2457,25 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style vsb_style = getVerticalScrollBarStyle();
-        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
-        style.addInnerStyle("vscrollbar", vsb_style);
+        Style vsbStyle = getVerticalScrollBarStyle();
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        style.addInnerStyle("vscrollbar", vsbStyle);
 
-        Style hsb_style = getHorizontalScrollBarStyle();
-        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
-        style.addInnerStyle("hscrollbar", hsb_style);
+        Style hsbStyle = getHorizontalScrollBarStyle();
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        style.addInnerStyle("hscrollbar", hsbStyle);
 
-        Style area_style = getWrapAreaStyle();
-        style.addInnerStyle("area", area_style);
+        Style areaStyle = getWrapAreaStyle();
+        style.addInnerStyle("area", areaStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a SideArea item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "window", "closebutton".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getSideAreaStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -2096,32 +2486,36 @@ public class Style implements Cloneable {
         style.margin = new Indents();
         style.spacing = new Spacing();
 
-        Style window_style = getFrameStyle();
-        window_style.setPadding(2, 2, 2, 2);
-        window_style.setBackground(40, 40, 40);
-        window_style.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        style.addInnerStyle("window", window_style);
+        Style windowStyle = getFrameStyle();
+        windowStyle.setPadding(2, 2, 2, 2);
+        windowStyle.setBackground(40, 40, 40);
+        windowStyle.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        style.addInnerStyle("window", windowStyle);
 
-        Style close_style = new Style();
-        close_style.setMargin(0, 5, 0, 0);
-        close_style.font = DefaultsService.getDefaultFont();
-        close_style.background = new Color(100, 100, 100);
-        close_style.foreground = new Color(0, 0, 0, 0);
-        close_style.setSize(15, 15);
-        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
-        close_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        Style closeStyle = new Style();
+        closeStyle.setMargin(0, 5, 0, 0);
+        closeStyle.font = DefaultsService.getDefaultFont();
+        closeStyle.background = new Color(100, 100, 100);
+        closeStyle.foreground = new Color(0, 0, 0, 0);
+        closeStyle.setSize(15, 15);
+        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
+        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
         ItemState close_hovered = new ItemState();
         close_hovered.background = new Color(186, 95, 97, 255);
-        close_style.addItemState(ItemStateType.HOVERED, close_hovered);
+        closeStyle.addItemState(ItemStateType.HOVERED, close_hovered);
 
-        close_style.shape = GraphicsMathService.getCross(15, 15, 2, 45);
-        close_style.isFixedShape = true;
-        style.addInnerStyle("closebutton", close_style);
+        closeStyle.shape = GraphicsMathService.getCross(15, 15, 2, 45);
+        closeStyle.isFixedShape = true;
+        style.addInnerStyle("closebutton", closeStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a ImageItem item. Properly filled in all the necessary properties.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getImageItemStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -2130,25 +2524,36 @@ public class Style implements Cloneable {
         return style;
     }
 
+    /**
+     * Getting default style for a LoadingScreen item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "text", "image".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getLoadingScreenStyle() {
         Style style = new Style();
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         style.setBackground(0, 0, 0, 150);
 
-        Style text_style = getLabelStyle();
-        text_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        text_style.font = DefaultsService.getDefaultFont(Font.BOLD, 14);
-        style.addInnerStyle("text", text_style);
+        Style textStyle = getLabelStyle();
+        textStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        textStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        textStyle.font = DefaultsService.getDefaultFont(Font.BOLD, 14);
+        style.addInnerStyle("text", textStyle);
 
-        Style image_style = getImageItemStyle();
-        image_style.setMaxSize(64, 64);
-        style.addInnerStyle("image", image_style);
+        Style imageStyle = getImageItemStyle();
+        imageStyle.setMaxSize(64, 64);
+        style.addInnerStyle("image", imageStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a Tab item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "text", "closebutton", "view".
+     * <p> This is part of TabView item style as "tab".
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getTabStyle() {
         Style style = new Style();
         style.borderRadius = new CornerRadius(3, 3, 0, 0);
@@ -2172,26 +2577,31 @@ public class Style implements Cloneable {
         Style textStyle = getLabelStyle();
         style.addInnerStyle("text", textStyle);
 
-        Style close_style = new Style();
-        close_style.setBackground(100, 100, 100);
-        close_style.setSize(10, 10);
-        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        close_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        close_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 162, 232)));
-        close_style.shape = GraphicsMathService.getCross(10, 10, 2, 45);
-        close_style.isFixedShape = true;
-        style.addInnerStyle("closebutton", close_style);
+        Style closeStyle = new Style();
+        closeStyle.setBackground(100, 100, 100);
+        closeStyle.setSize(10, 10);
+        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        closeStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        closeStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 162, 232)));
+        closeStyle.shape = GraphicsMathService.getCross(10, 10, 2, 45);
+        closeStyle.isFixedShape = true;
+        style.addInnerStyle("closebutton", closeStyle);
 
-        Style view_style = new Style();
-        view_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        view_style.background = new Color(71, 71, 71);
-        view_style.isVisible = false;
-        view_style.padding = new Indents(2, 2, 2, 2);
-        style.addInnerStyle("view", view_style);
+        Style viewStyle = new Style();
+        viewStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        viewStyle.background = new Color(71, 71, 71);
+        viewStyle.isVisible = false;
+        viewStyle.padding = new Indents(2, 2, 2, 2);
+        style.addInnerStyle("view", viewStyle);
 
         return style;
     }
 
+    /**
+     * Getting default style for a TabBar item. Properly filled in all the necessary properties.
+     * <p> This is part of TabView item style.
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getTabBarStyle() {
         Style style = getHorizontalStackStyle();
         style.setSpacing(1, 0);
@@ -2199,7 +2609,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * @return default style for TabView objects
+     * Getting default style for a *** item. Properly filled in all the necessary properties.
+     * <p> Inner styles: "tabbar", "tab", "viewarea".
+     * <p> Inner styles for "tab": see Style.GetTabStyle().
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTabViewStyle() {
         Style style = getVerticalStackStyle();
@@ -2210,16 +2623,16 @@ public class Style implements Cloneable {
         tabBarStyle.height = 30;
         style.addInnerStyle("tabbar", tabBarStyle);
 
-        Style tab_style = getTabStyle();
-        style.addInnerStyle("tab", tab_style);
+        Style tabStyle = getTabStyle();
+        style.addInnerStyle("tab", tabStyle);
 
         // Style view_style = tab_style.getInnerStyle("view");
         // if (view_style != null)
         // style.addInnerStyle("view", view_style);
 
-        Style area_style = getFrameStyle();
-        area_style.setPadding(0, 0, 0, 0);
-        style.addInnerStyle("viewarea", area_style);
+        Style areaStyle = getFrameStyle();
+        areaStyle.setPadding(0, 0, 0, 0);
+        style.addInnerStyle("viewarea", areaStyle);
 
         return style;
     }

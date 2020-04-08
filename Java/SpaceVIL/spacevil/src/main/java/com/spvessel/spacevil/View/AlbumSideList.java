@@ -14,7 +14,6 @@ import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
-import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 
 public class AlbumSideList extends SideArea {
     private boolean _isInit = false;

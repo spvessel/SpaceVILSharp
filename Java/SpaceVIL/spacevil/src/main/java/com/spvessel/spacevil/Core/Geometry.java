@@ -2,10 +2,10 @@ package com.spvessel.spacevil.Core;
 
 import com.spvessel.spacevil.*;
 
+/**
+ * Class Geometry describes all geometry properties of the item.
+ */
 public class Geometry implements InterfaceSize {
-    /**
-     * Class Geometry describes all geometry properties of the item
-     */
 
     public Geometry() {
 
@@ -17,7 +17,9 @@ public class Geometry implements InterfaceSize {
     private int _maxWidth = SpaceVILConstants.sizeMaxValue;// Integer.MAX_VALUE;// glfw dont like Int32.MaxValue
 
     /**
-     * @param width width of the item
+     * Setting item width. If the value is greater/less than the maximum/minimum 
+     * value of the width, then the width becomes equal to the maximum/minimum value.
+     * @param width Width of the item.
      */
     public void setWidth(int width) {
         if (width < 0) {
@@ -25,23 +27,27 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (width < _minWidth)
+        if (width < _minWidth) {
             width = _minWidth;
-        if (width > _maxWidth)
+        }
+        if (width > _maxWidth) {
             width = _maxWidth;
+        }
 
         _width = width;
     }
 
     /**
-     * @return width of the item
+     * Getting item width.
+     * @return Width of the item.
      */
     public int getWidth() {
         return _width;
     }
 
     /**
-     * @param width minimum width of the item
+     * Setting the minimum width limit. Actual width cannot be less than this limit.
+     * @param width Minimum width limit of the item.
      */
     public void setMinWidth(int width) {
         if (width < 0) {
@@ -49,23 +55,27 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (width > _width)
+        if (width > _width) {
             _width = width;
-        if (width > _maxWidth)
+        }
+        if (width > _maxWidth) {
             _maxWidth = width;
+        }
 
         _minWidth = width;
     }
 
     /**
-     * @return minimum width of the item
+     * Getting the minimum width limit.
+     * @return Minimum width limit of the item.
      */
     public int getMinWidth() {
         return _minWidth;
     }
 
     /**
-     * @param width maximum width of the item
+     * Setting the maximum width limit. Actual width cannot be greater than this limit.
+     * @param width Maximum width limit of the item.
      */
     public void setMaxWidth(int width) {
         if (width < 0) {
@@ -73,16 +83,19 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (width < _width)
+        if (width < _width) {
             _width = width;
-        if (width < _minWidth)
+        }
+        if (width < _minWidth) {
             _minWidth = width;
+        }
 
         _maxWidth = width;
     }
 
     /**
-     * @return maximum width of the item
+     * Getting the maximum width limit.
+     * @return Maximum width limit of the item.
      */
     public int getMaxWidth() {
         return _maxWidth;
@@ -94,7 +107,9 @@ public class Geometry implements InterfaceSize {
     private int _maxHeight = SpaceVILConstants.sizeMaxValue;// glfw dont like Int32.MaxValue
 
     /**
-     * @param height height of the item
+     * Setting item height. If the value is greater/less than the maximum/minimum 
+     * value of the height, then the height becomes equal to the maximum/minimum value.
+     * @param height Height of the item.
      */
     public void setHeight(int height) {
         if (height < 0) {
@@ -102,23 +117,27 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (height < _minHeight)
+        if (height < _minHeight) {
             height = _minHeight;
-        if (height > _maxHeight)
+        }
+        if (height > _maxHeight) {
             height = _maxHeight;
+        }
 
         _height = height;
     }
 
     /**
-     * @return height of the item
+     * Getting item height.
+     * @return Height of the item.
      */
     public int getHeight() {
         return _height;
     }
 
     /**
-     * @param height minimum height of the item
+     * Setting the minimum height limit. Actual height cannot be less than this limit.
+     * @param height Minimum height limit of the item.
      */
     public void setMinHeight(int height) {
         if (height < 0) {
@@ -126,23 +145,27 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (height > _height)
+        if (height > _height) {
             _height = height;
-        if (height > _maxHeight)
+        }
+        if (height > _maxHeight) {
             _maxHeight = height;
+        }
 
         _minHeight = height;
     }
 
     /**
-     * @return minimum height of the item
+     * Getting the minimum height limit.
+     * @return Minimum height limit of the item.
      */
     public int getMinHeight() {
         return _minHeight;
     }
 
     /**
-     * @param height maximum height of the item
+     * Setting the maximum height limit. Actual height cannot be greater than this limit.
+     * @param height Maximum height limit of the item.
      */
     public void setMaxHeight(int height) {
         if (height < 0) {
@@ -150,16 +173,19 @@ public class Geometry implements InterfaceSize {
             return;
         }
 
-        if (height < _height)
+        if (height < _height) {
             _height = height;
-        if (height < _minHeight)
+        }
+        if (height < _minHeight) {
             _minHeight = height;
+        }
 
         _maxHeight = height;
     }
 
     /**
-     * @return maximum height of the item
+     * Getting the maximum height limit.
+     * @return Maximum height limit of the item.
      */
     public int getMaxHeight() {
         return _maxHeight;
@@ -167,9 +193,9 @@ public class Geometry implements InterfaceSize {
 
     // size
     /**
-     * Set size (width and height) of the item
-     * @param width width of the item
-     * @param height height of the item
+     * Setting item size (width and height).
+     * @param width Width of the item.
+     * @param height Height of the item.
      */
     public void setSize(int width, int height) {
         setWidth(width);
@@ -177,7 +203,8 @@ public class Geometry implements InterfaceSize {
     }
 
     /**
-     * @return width amd height of the item
+     * Getting current item size.
+     * @return Item size as com.spvessel.spacevil.Core.Size.
      */
     public Size getSize() {
         return new Size(_width, _height);

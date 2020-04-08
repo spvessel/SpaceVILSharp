@@ -2,7 +2,7 @@ package com.spvessel.spacevil.Flags;
 
 /**
  * Item hovering rule types enum.
- * <p> Values: Lazy, Strict.
+ * <p> Values: LAZY, STRICT.
  */
 public enum ItemHoverRule {
     /**

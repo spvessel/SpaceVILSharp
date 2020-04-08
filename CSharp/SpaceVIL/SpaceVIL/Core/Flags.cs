@@ -458,11 +458,6 @@ namespace SpaceVIL.Core
         Branch
     }
 
-    // public enum InputRestriction
-    // {
-    //     IntNumbers, DoubleNumbers, Letters, All
-    // }
-
     /// <summary>
     /// Enum of SpaceVIL embedded images.
     /// </summary>
@@ -471,6 +466,7 @@ namespace SpaceVIL.Core
         Add, ArrowLeft, ArrowUp, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
         Eraser, Home, User, Drive, Filter, LoadCircle
     }
+
     /// <summary>
     /// Enum of SpaceVIL embedded images sizes.
     /// </summary>
@@ -478,6 +474,7 @@ namespace SpaceVIL.Core
     {
         Size32x32, Size64x64
     }
+
     /// <summary>
     /// Enum of file system entry types.
     /// <para/> Values: File, Directory.
@@ -486,6 +483,7 @@ namespace SpaceVIL.Core
     {
         File, Directory//, Network, Drive
     }
+
     /// <summary>
     /// Enum of open dialog types.
     /// <para/> Values: Open, Save.
@@ -495,6 +493,7 @@ namespace SpaceVIL.Core
         Open, 
         Save
     }
+
     /// <summary>
     /// Enum of types of sides.
     /// <para/> Values: Left, Top, Right, Bottom.
@@ -506,6 +505,7 @@ namespace SpaceVIL.Core
         Right = 0x04,
         Bottom = 0x08,
     }
+
     /// <summary>
     /// Enum of types of frequencies for redraw.
     /// <para/> Values: VeryLow, Low, Medium, High, Ultra.
@@ -514,6 +514,7 @@ namespace SpaceVIL.Core
     {
         VeryLow, Low, Medium, High, Ultra
     }
+
     /// <summary>
     /// Enum of types of embedded mouse cursors.
     /// <para/> Values: Arrow, IBeam, Crosshair, Hand, ResizeX, ResizeY, ResizeXY.
@@ -528,6 +529,7 @@ namespace SpaceVIL.Core
         ResizeY = 0x00036006,
         ResizeXY = 0x00036007
     }
+
     /// <summary>
     /// Enum of types render.
     /// <para/> Values: IfNeeded, Periodic, Always.
@@ -539,11 +541,13 @@ namespace SpaceVIL.Core
         /// keyboard key press, window resizing and etc.).
         /// </summary>
         IfNeeded,
+
         /// <summary>
         /// The scene is redrawn according to the current render frequency type 
         /// (See SetRenderFrequency(type)) in idle and every time when any input event occurs.
         /// </summary>
         Periodic,
+        
         /// <summary>
         /// The scene is constantly being redrawn.
         /// </summary>

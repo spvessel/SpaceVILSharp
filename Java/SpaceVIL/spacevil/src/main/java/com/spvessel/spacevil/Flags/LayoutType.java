@@ -2,21 +2,21 @@ package com.spvessel.spacevil.Flags;
 
 /**
  * Enum of items types.
- * <p> Values: Static, Floating, Dialog.
+ * <p> Values: STATIC, FLOATING, DIALOG.
  */
 public enum LayoutType {
     /**
-     * Items whose parent LayoutType is Static.
+     * Items whose parent LayoutType is STATIC.
      */
     STATIC,
     
     /**
-     * Items whose root parent LayoutType is Floating.
+     * Items whose root parent LayoutType is FLOATING.
      */
     FLOATING,
     
     /**
-     * Items whose root parent LayoutType is Dialog.
+     * Items whose root parent LayoutType is DIALOG.
      */
     DIALOG
 }

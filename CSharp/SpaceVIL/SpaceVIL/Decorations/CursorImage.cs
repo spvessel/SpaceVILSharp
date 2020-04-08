@@ -7,17 +7,20 @@ using System.Runtime.InteropServices;
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// Class CursorImage provides features for creating custom cursors. It can also be used with several standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
+    /// Class CursorImage provides features for creating custom cursors. It can also 
+    /// be used with several standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
     /// </summary>
     public sealed class CursorImage
     {
         private Glfw3.Glfw.Cursor _cursor;
+
         internal Glfw3.Glfw.Cursor GetCursor()
         {
             return _cursor;
         }
 
         private byte[] _bitmap;
+
         /// <summary>
         /// Constructor for creating cursor with standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
         /// </summary>
@@ -48,9 +51,11 @@ namespace SpaceVIL.Decorations
                     _cursor = CommonService.CursorArrow;
                     break;
             }
+
             _imageHeight = 25;
             _imageWidth = 25;
         }
+
         /// <summary>
         /// Constructor for creating cursor with custom bitmap image.
         /// </summary>
@@ -58,11 +63,14 @@ namespace SpaceVIL.Decorations
         public CursorImage(Bitmap bitmap)
         {
             if (bitmap == null)
+            {
                 return;
+            }
 
             _bitmap = GetImagePixels(bitmap);
             CreateCursor(bitmap);
         }
+
         /// <summary>
         /// Constructor for creating cursor with custom bitmap image with the specified size.
         /// </summary>
@@ -72,7 +80,9 @@ namespace SpaceVIL.Decorations
         public CursorImage(Bitmap bitmap, int width, int height)
         {
             if (bitmap == null)
+            {
                 return;
+            }
             Bitmap scaled = GraphicsMathService.ScaleBitmap(bitmap, width, height);
             _bitmap = GetImagePixels(scaled);
             CreateCursor(scaled);
@@ -90,6 +100,7 @@ namespace SpaceVIL.Decorations
 
         private int _imageWidth;
         private int _imageHeight;
+
         /// <summary>
         /// Getting cursor image width.
         /// </summary>
@@ -98,6 +109,7 @@ namespace SpaceVIL.Decorations
         {
             return _imageWidth;
         }
+
         /// <summary>
         /// Getting cursor image height.
         /// </summary>
@@ -106,6 +118,7 @@ namespace SpaceVIL.Decorations
         {
             return _imageHeight;
         }
+
         /// <summary>
         /// Setting new image for cursor.
         /// </summary>
@@ -113,7 +126,9 @@ namespace SpaceVIL.Decorations
         public void SetImage(Bitmap image)
         {
             if (image == null)
+            {
                 return;
+            }
             _bitmap = GetImagePixels(image);
             CreateCursor(image);
         }

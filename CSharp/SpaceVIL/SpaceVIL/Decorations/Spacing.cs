@@ -12,6 +12,16 @@ namespace SpaceVIL.Decorations
     public struct Spacing
     {
         /// <summary>
+        /// Horizontal indent between items.
+        /// </summary>
+        public int Horizontal;
+        
+        /// <summary>
+        /// Vertical indent between items.
+        /// </summary>
+        public int Vertical;
+
+        /// <summary>
         /// Constructs a Spacing with strict horizontal and vertical spacing values.
         /// <para/> Default Spacing values is zeros.
         /// </summary>
@@ -22,13 +32,5 @@ namespace SpaceVIL.Decorations
             Horizontal = horizontal;
             Vertical = vertical;
         }
-        /// <summary>
-        /// Horizontal indent between items.
-        /// </summary>
-        public int Horizontal;
-        /// <summary>
-        /// Vertical indent between items.
-        /// </summary>
-        public int Vertical;
     }
 }

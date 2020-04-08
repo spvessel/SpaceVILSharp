@@ -1,12 +1,12 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceLine;
+import com.spvessel.spacevil.Core.InterfaceLines;
 
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Color;
 
-public class LinesContainer extends Primitive implements InterfaceLine {
+public class LinesContainer extends Primitive implements InterfaceLines {
     private static int count = 0;
 
     /**

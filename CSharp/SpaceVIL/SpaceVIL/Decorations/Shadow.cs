@@ -10,6 +10,7 @@ namespace SpaceVIL.Decorations
     {
         private int _radius = 0;
         private int _maxAvailableRadius = 10;
+
         /// <summary>
         /// Setting the specified blur radius of the shadow.
         /// <para/>Default: 0.
@@ -18,9 +19,12 @@ namespace SpaceVIL.Decorations
         public void SetRadius(int value)
         {
             if (value < 0 || value > _maxAvailableRadius)
+            {
                 return;
+            }
             _radius = value;
         }
+
         /// <summary>
         /// Getting the shadow blur raduis.
         /// </summary>
@@ -31,6 +35,7 @@ namespace SpaceVIL.Decorations
         }
 
         private int _x = 0;
+
         /// <summary>
         /// Setting X shift of the shadow.
         /// </summary>
@@ -39,6 +44,7 @@ namespace SpaceVIL.Decorations
         {
             _x = value;
         }
+
         /// <summary>
         /// Getting X shift of the shadow.
         /// </summary>
@@ -49,6 +55,7 @@ namespace SpaceVIL.Decorations
         }
 
         private int _y = 0;
+
         /// <summary>
         /// Setting Y shift of the shadow.
         /// </summary>
@@ -57,6 +64,7 @@ namespace SpaceVIL.Decorations
         {
             _y = value;
         }
+        
         /// <summary>
         /// Setting Y shift of the shadow.
         /// </summary>
@@ -67,6 +75,7 @@ namespace SpaceVIL.Decorations
         }
 
         private Color _color = Color.Black;
+
         /// <summary>
         /// Setting shadow color.
         /// </summary>
@@ -75,6 +84,7 @@ namespace SpaceVIL.Decorations
         {
             _color = Color.FromArgb(color.A, color.R, color.G, color.B);
         }
+
         /// <summary>
         /// Setting shadow color in RGB format.
         /// </summary>
@@ -85,6 +95,7 @@ namespace SpaceVIL.Decorations
         {
             _color = GraphicsMathService.ColorTransform(r, g, b);
         }
+
         /// <summary>
         /// Setting shadow color in byte RGBA format.
         /// </summary>
@@ -96,6 +107,7 @@ namespace SpaceVIL.Decorations
         {
             _color = GraphicsMathService.ColorTransform(r, g, b, a);
         }
+
         /// <summary>
         /// Setting shadow color in float RGB format.
         /// </summary>
@@ -106,6 +118,7 @@ namespace SpaceVIL.Decorations
         {
             _color = GraphicsMathService.ColorTransform(r, g, b);
         }
+
         /// <summary>
         /// Setting shadow color in float RGBA format.
         /// </summary>
@@ -117,6 +130,7 @@ namespace SpaceVIL.Decorations
         {
             _color = GraphicsMathService.ColorTransform(r, g, b, a);
         }
+
         /// <summary>
         /// Getting shadow color.
         /// </summary>
@@ -127,6 +141,7 @@ namespace SpaceVIL.Decorations
         }
 
         private bool _isDrop;
+
         /// <summary>
         /// Setting drop shadow flag.
         /// </summary>
@@ -135,6 +150,7 @@ namespace SpaceVIL.Decorations
         {
             _isDrop = value;
         }
+
         /// <summary>
         /// Getting shadow drop flag.
         /// </summary>
@@ -143,6 +159,7 @@ namespace SpaceVIL.Decorations
         {
             return _isDrop;
         }
+
         /// <summary>
         /// Default Shadow class constructor. Allow shadow dropping.
         /// </summary>
@@ -150,6 +167,7 @@ namespace SpaceVIL.Decorations
         {
             _isDrop = true;
         }
+        
         /// <summary>
         /// Shadow class constructor with specified blur radius, axis shifts, shadow color. Allow shadow dropping.
         /// </summary>

@@ -31,9 +31,13 @@ namespace SpaceVIL.Core
             }
 
             if (width < _minWidth)
+            {
                 width = _minWidth;
+            }
             if (width > _maxWidth)
+            {
                 width = _maxWidth;
+            }
 
             _width = width;
         }
@@ -60,9 +64,13 @@ namespace SpaceVIL.Core
             }
 
             if (width > _width)
+            {
                 _width = width;
+            }
             if (width > _maxWidth)
+            {
                 _maxWidth = width;
+            }
 
             _minWidth = width;
         }
@@ -89,9 +97,13 @@ namespace SpaceVIL.Core
             }
 
             if (width < _width)
+            {
                 _width = width;
+            }
             if (width < _minWidth)
+            {
                 _minWidth = width;
+            }
 
             _maxWidth = width;
         }
@@ -124,9 +136,13 @@ namespace SpaceVIL.Core
             }
 
             if (height < _minHeight)
+            {
                 height = _minHeight;
+            }
             if (height > _maxHeight)
+            {
                 height = _maxHeight;
+            }
 
             _height = height;
         }
@@ -153,9 +169,13 @@ namespace SpaceVIL.Core
             }
 
             if (height > _height)
+            {
                 _height = height;
+            }
             if (height > _maxHeight)
+            {
                 _maxHeight = height;
+            }
 
             _minHeight = height;
         }
@@ -182,9 +202,13 @@ namespace SpaceVIL.Core
             }
 
             if (height < _height)
+            {
                 _height = height;
+            }
             if (height < _minHeight)
+            {
                 _minHeight = height;
+            }
 
             _maxHeight = height;
         }

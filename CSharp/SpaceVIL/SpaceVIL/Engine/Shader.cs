@@ -15,65 +15,66 @@ namespace SpaceVIL
         const uint Compute = 0x91B9;
 
 
-        private uint _program_id;
+        private uint _programId;
         internal uint GetProgramID()
         {
-            return _program_id;
+            return _programId;
         }
 
-        private uint _shader_vertex;
-        private String _code_vertex;
+        private uint _shaderVertex;
+        private String _codeVertex;
 
-        private uint _shader_fragment;
-        private String _code_fragment;
+        private uint _shaderFragment;
+        private String _codeFragment;
 
-        private uint _shader_geometry;
-        private String _code_geometry;
+        private uint _shaderGeometry;
+        private String _codeGeometry;
 
-        private uint _shader_compute;
-        private String _code_compute;
+        private uint _shaderCompute;
+        private String _codeCompute;
 
-        internal String GetCode(uint shader_type)
+        internal String GetCode(uint shaderType)
         {
-            switch (shader_type)
+            switch (shaderType)
             {
                 case Vertex:
-                    return _code_vertex;
+                    return _codeVertex;
 
                 case Fragment:
-                    return _code_fragment;
+                    return _codeFragment;
 
                 case Geometry:
-                    return _code_geometry;
+                    return _codeGeometry;
 
                 case Compute:
-                    return _code_compute;
+                    return _codeCompute;
 
                 default:
                     break;
             }
             return String.Empty;
         }
-        internal void SetShaderPath(uint shader_type, String path)
+
+        internal void SetShaderPath(uint shaderType, String path)
         {
             String code = ReadSource(path);
 
-            switch (shader_type)
+            switch (shaderType)
             {
                 case Vertex:
-                    _code_vertex = code.ToString();
+                    _codeVertex = code.ToString();
                     break;
 
                 case Fragment:
-                    _code_fragment = code.ToString();
+                    _codeFragment = code.ToString();
                     break;
 
                 case Geometry:
-                    _code_geometry = code.ToString();
+                    _codeGeometry = code.ToString();
                     break;
 
                 case Compute:
-                    _code_compute = code.ToString();
+                    _codeCompute = code.ToString();
                     break;
 
                 default:
@@ -86,49 +87,55 @@ namespace SpaceVIL
         {
             return _name;
         }
+
         internal Shader(String designation)
         {
             _name = designation;
             InitDefaults();
         }
-        internal Shader(String vertex_code, String fragmend_code, String designation)
+
+        internal Shader(String vertexCode, String fragmendCode, String designation)
         {
             _name = designation;
 
-            _code_vertex = vertex_code;
-            _code_fragment = fragmend_code;
+            _codeVertex = vertexCode;
+            _codeFragment = fragmendCode;
 
             //defaults
-            _code_geometry = String.Empty;
-            _code_compute = String.Empty;
+            _codeGeometry = String.Empty;
+            _codeCompute = String.Empty;
         }
-        internal Shader(Stream vertex_code, Stream fragmend_code, String designation)
+
+        internal Shader(Stream vertexCode, Stream fragmendCode, String designation)
         {
             _name = designation;
-            _code_vertex = ReadSource(vertex_code);
-            _code_fragment = ReadSource(fragmend_code);
+            _codeVertex = ReadSource(vertexCode);
+            _codeFragment = ReadSource(fragmendCode);
 
             //defaults
-            _code_geometry = String.Empty;
-            _code_compute = String.Empty;
+            _codeGeometry = String.Empty;
+            _codeCompute = String.Empty;
         }
-        internal Shader(Stream vertex_code, Stream geometry_code, Stream fragmend_code, String designation)
+
+        internal Shader(Stream vertexCode, Stream geometryCode, Stream fragmendCode, String designation)
         {
             _name = designation;
-            _code_vertex = ReadSource(vertex_code);
-            _code_geometry = ReadSource(geometry_code);
-            _code_fragment = ReadSource(fragmend_code);
+            _codeVertex = ReadSource(vertexCode);
+            _codeGeometry = ReadSource(geometryCode);
+            _codeFragment = ReadSource(fragmendCode);
 
             //defaults
-            _code_compute = String.Empty;
+            _codeCompute = String.Empty;
         }
+
         private void InitDefaults()
         {
-            _code_vertex = String.Empty;
-            _code_fragment = String.Empty;
-            _code_geometry = String.Empty;
-            _code_compute = String.Empty;
+            _codeVertex = String.Empty;
+            _codeFragment = String.Empty;
+            _codeGeometry = String.Empty;
+            _codeCompute = String.Empty;
         }
+
         private String ReadSource(Stream source)
         {
             StringBuilder code = new StringBuilder();
@@ -147,6 +154,7 @@ namespace SpaceVIL
             }
             return code.ToString();
         }
+
         private String ReadSource(String source)
         {
             StringBuilder code = new StringBuilder();
@@ -168,67 +176,69 @@ namespace SpaceVIL
 
         internal void Compile()
         {
-            _program_id = glCreateProgram();
+            _programId = glCreateProgram();
             //compiling
-            if (!_code_vertex.Equals(String.Empty))
+            if (!_codeVertex.Equals(String.Empty))
             {
-                _shader_vertex = CompileShader(Vertex, _code_vertex);
-                glAttachShader(_program_id, _shader_vertex);
+                _shaderVertex = CompileShader(Vertex, _codeVertex);
+                glAttachShader(_programId, _shaderVertex);
             }
 
-            if (!_code_fragment.Equals(String.Empty))
+            if (!_codeFragment.Equals(String.Empty))
             {
-                _shader_fragment = CompileShader(Fragment, _code_fragment);
-                glAttachShader(_program_id, _shader_fragment);
+                _shaderFragment = CompileShader(Fragment, _codeFragment);
+                glAttachShader(_programId, _shaderFragment);
             }
 
-            if (!_code_geometry.Equals(String.Empty))
+            if (!_codeGeometry.Equals(String.Empty))
             {
-                _shader_geometry = CompileShader(Geometry, _code_geometry);
-                glAttachShader(_program_id, _shader_geometry);
+                _shaderGeometry = CompileShader(Geometry, _codeGeometry);
+                glAttachShader(_programId, _shaderGeometry);
             }
 
-            if (!_code_compute.Equals(String.Empty))
+            if (!_codeCompute.Equals(String.Empty))
             {
-                _shader_compute = CompileShader(Compute, _code_compute);
-                glAttachShader(_program_id, _shader_compute);
+                _shaderCompute = CompileShader(Compute, _codeCompute);
+                glAttachShader(_programId, _shaderCompute);
             }
             //linking
-            glLinkProgram(_program_id);
-            
+            glLinkProgram(_programId);    
         }
-        private uint CompileShader(uint shader_type, String code)
+
+        private uint CompileShader(uint shaderType, String code)
         {
-            uint shader_id = glCreateShader((uint)shader_type);
-            glShaderSource(shader_id, 1, new[] { code }, new[] { code.Length });
-            glCompileShader(shader_id);
-            return shader_id;
+            uint shaderId = glCreateShader((uint)shaderType);
+            glShaderSource(shaderId, 1, new[] { code }, new[] { code.Length });
+            glCompileShader(shaderId);
+            return shaderId;
         }
 
         internal void UseShader()
         {
-            glUseProgram(_program_id);
+            glUseProgram(_programId);
         }
 
         internal void DeleteShader()
         {
             DetachShadersCode();
             DeleteShadersID();
-            glDeleteProgram(_program_id);
+            glDeleteProgram(_programId);
         }
+
         private void DetachShadersCode()
         {
-            glDetachShader(_program_id, _shader_vertex);
-            glDetachShader(_program_id, _shader_fragment);
-            glDetachShader(_program_id, _shader_geometry);
-            glDetachShader(_program_id, _shader_compute);
+            glDetachShader(_programId, _shaderVertex);
+            glDetachShader(_programId, _shaderFragment);
+            glDetachShader(_programId, _shaderGeometry);
+            glDetachShader(_programId, _shaderCompute);
         }
+
         private void DeleteShadersID()
         {
-            glDeleteShader(_shader_vertex);
-            glDeleteShader(_shader_fragment);
-            glDeleteShader(_shader_geometry);
-            glDeleteShader(_shader_compute);
+            glDeleteShader(_shaderVertex);
+            glDeleteShader(_shaderFragment);
+            glDeleteShader(_shaderGeometry);
+            glDeleteShader(_shaderCompute);
         }
     }
 }

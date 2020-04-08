@@ -12,10 +12,12 @@ namespace SpaceVIL.Core
         /// Character code.
         /// </summary>
         public UInt32 Character;
+
         /// <summary>
         /// Used modifiers while typing.
         /// </summary>
         public KeyMods Mods;
+        
         /// <summary>
         /// Clearing TextInputArgs.
         /// </summary>

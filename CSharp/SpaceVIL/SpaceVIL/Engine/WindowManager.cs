@@ -70,10 +70,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-        /// <summary>
-        /// Getting the current render frequency interval between two frames.
-        /// </summary>
-        /// <returns>The current frequency interval as float value.</returns>
+        
         private static float GetCurrentFrequency()
         {
             Monitor.Enter(_lock);
@@ -92,6 +89,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
+
         /// <summary>
         /// Getting the current render frequency.
         /// </summary>
@@ -128,9 +126,12 @@ namespace SpaceVIL
         public static void EnableVSync(int value)
         {
             if (_isRunning)
+            {
                 return;
+            }
             _vsync = value;
         }
+
         /// <summary>
         /// Getting the current vsync value. If value is 0 - vsync is OFF, if other value - vsync is ON. 
         /// The total amount of FPS calculated by the formula: 1.0 / Math.Abs(value) * DisplayRefreshRate, 
@@ -142,6 +143,7 @@ namespace SpaceVIL
         {
             return _vsync;
         }
+
         /// <summary>
         /// Setting the common render type. Default: SpaceVIL.Core.RenderType.Periodic.
         /// <para/>Can be:
@@ -245,6 +247,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
+
         /// <summary>
         /// Closing the specified window if it exist in render queue.
         /// </summary>
@@ -270,14 +273,18 @@ namespace SpaceVIL
         }
 
         private static EventCommonMethod waitfunc;
-        internal static void Run()
+
+        private static void Run()
         {
             foreach (CoreWindow wnd in _windows)
             {
                 InitWindow(wnd);
             }
+
             if (waitfunc == null)
+            {
                 waitfunc += () => Glfw.WaitEventsTimeout(GetCurrentFrequency());
+            }
 
             _isRunning = true;
             while (!_isEmpty)
@@ -347,6 +354,7 @@ namespace SpaceVIL
             }
             Run();
         }
+
         /// <summary>
         /// Exiting the current application. All windows will be closed and all their EventClose will be executed.
         /// </summary>
@@ -364,6 +372,7 @@ namespace SpaceVIL
         }
 
         private static CoreWindow _currentContextedWindow = null;
+        
         internal static void SetContextCurrent(CoreWindow window)
         {
             Monitor.Enter(_lock);

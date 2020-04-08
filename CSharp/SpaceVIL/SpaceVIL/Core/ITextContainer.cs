@@ -12,6 +12,7 @@ namespace SpaceVIL.Core
         /// </summary>
         /// <returns>Texture as SpaceVIL.Core.ITextImage.</returns>
         ITextImage GetTexture();
+        
         /// <summary>
         /// Method for getting text color.
         /// </summary>

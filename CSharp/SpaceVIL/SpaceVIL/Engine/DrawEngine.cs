@@ -569,7 +569,7 @@ namespace SpaceVIL
             if (!root.IsVisible() || !root.IsDrawable())
                 return;
 
-            ILine linesRoot = root as ILine;
+            ILines linesRoot = root as ILines;
             IPoints pointsRoot = root as IPoints;
             ITextContainer textRoot = root as ITextContainer;
             IImageItem imageRoot = root as IImageItem;
@@ -894,7 +894,7 @@ namespace SpaceVIL
             }
         }
 
-        void DrawLines(ILine item)
+        void DrawLines(ILines item)
         {
             if (item.GetLineColor().A == 0)
                 return;
