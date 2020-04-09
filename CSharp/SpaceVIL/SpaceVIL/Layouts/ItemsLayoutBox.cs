@@ -21,6 +21,7 @@ namespace SpaceVIL
             // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
             return layouts[id].Items;
         }
+        
         /// <summary>
         /// Getting existing float items in specified window by its GUID. 
         /// Floating items are independent items that do not have a parent, or their root parent is a floating item. 
@@ -56,7 +57,7 @@ namespace SpaceVIL
         /// <param name="window">Any CoreWindow instance.</param>
         /// <param name="item">Any IBaseItem instance.</param>
         /// <param name="type">Type of an item: SpaceVIL.Core.LayoutType.Static 
-        /// or SpaceVIL.Core.LayoutType.Floating</param>
+        /// or SpaceVIL.Core.LayoutType.Floating.</param>
         public static void AddItem(CoreWindow window, IBaseItem item, LayoutType type)
         {
             switch (type)
@@ -78,6 +79,7 @@ namespace SpaceVIL
                     break;
             }
         }
+
         /// <summary>
         /// Removing an item from global item storage (ItemsLayoutBox). 
         /// In usual situation you do not need to use this function only if you create your own implementation of IBaseItem or 
@@ -125,6 +127,7 @@ namespace SpaceVIL
             item.SetParent(null);
             item.GetHandler().GetLayout().GetContainer().RemoveEventListener(type, item);
         }
+
         /// <summary>
         /// Getting the list of names of existing items in the specified window.
         /// </summary>
@@ -135,6 +138,7 @@ namespace SpaceVIL
 
         internal static string[] GetListOfItemsColors(CoreWindow layout) => 
             layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetBackground().ToString()).ToArray();
+        
         /// <summary>
         /// Printing all existing items in the specified window.
         /// </summary>

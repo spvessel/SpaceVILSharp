@@ -37,6 +37,7 @@ namespace SpaceVIL.Common
 
         //dpi
         static Scale _displayScale = new Scale();
+
         /// <summary>
         /// Getting the current display scale.
         /// </summary>
@@ -49,10 +50,12 @@ namespace SpaceVIL.Common
             // return new Scale(x, y);
             return new Scale(_displayScale.GetXScale(), _displayScale.GetYScale());
         }
+
         internal static void SetDisplayScale(float x, float y)
         {
             _displayScale.SetScale(x, y);
         }
+        
         /// <summary>
         /// Getting the current window scale.
         /// </summary>

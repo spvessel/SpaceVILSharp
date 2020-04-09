@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-public enum GradientType {
+enum GradientType {
     Linear,
     Radial
 }

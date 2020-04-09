@@ -6,19 +6,22 @@ import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.Orientation;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
+/**
+ * SplitHolder is part of SpaceVIL.HorizontalSplitArea and
+ * com.spvessel.spacevil.VerticalSplitArea. SplitHolder is responsible for 
+ * handler dragging.
+ * <p> Supports all events including drag and drop.
+ */
 public class SplitHolder extends Prototype implements InterfaceDraggable {
     private static int count = 0;
     private Orientation _orientation;
+    private int _spacerSize = 6;
 
     /**
-     * @return Orientation of the SplitHolder (HORIZONTAL or VERTICAL)
-     */
-    public Orientation getOrientation() {
-        return _orientation;
-    }
-
-    /**
-     * Constructs a SplitHolder with orientation (HORIZONTAL or VERTICAL)
+     * Constructs a SplitHolder with the specified orientation.
+     * <p> Orientation can be Orientation.HORIZONTAL 
+     * or Orientation.VERTICAL.
+     * @param orientation Orientation of SplitHolder.
      */
     public SplitHolder(Orientation orientation) {
         _orientation = orientation;
@@ -28,11 +31,9 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
         makeHolderShape();
     }
 
-    private int _spacerSize = 6;
-
     /**
-     * SplitHolder size (height for the HORIZONTAL orientation,
-     * width for the VERTICAL orientation)
+     * Setting thickness of SplitHolder divider.
+     * @param thickness Thickness of SplitHolder divider.
      */
     public void setDividerSize(int thickness) {
         if (_spacerSize != thickness) {
@@ -40,6 +41,11 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
             makeHolderShape();
         }
     }
+
+    /**
+     * Getting thickness of SplitHolder divider.
+     * @return Thickness of SplitHolder divider.
+     */
     public int getDividerSize() {
         return _spacerSize;
     }
@@ -63,12 +69,24 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
     }
 
     /**
-     * Set style of the SplitHolder
+     * Getting SplitHolder orientation.
+     * <p> Orientation can be Orientation.HORIZONTAL 
+     * or Orientation.VERTICAL.
+     * @return Current SplitHolder orientation.
+     */
+    public Orientation getOrientation() {
+        return _orientation;
+    }
+
+    /**
+     * Set style of the SplitHolder.
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         setBackground(style.background);
     }
 }

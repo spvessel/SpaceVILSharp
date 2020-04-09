@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class Gradient {
+class Gradient {
     private List<Color> colors;
     private List<Integer> positions;
     private double angle = 0;

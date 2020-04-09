@@ -42,6 +42,7 @@ namespace SpaceVIL
                 MakeHolderShape();
             }
         }
+
         /// <summary>
         /// Getting thickness of SplitHolder divider.
         /// </summary>
@@ -81,6 +82,7 @@ namespace SpaceVIL
         {
             return _orientation;
         }
+
         /// <summary>
         /// Setting style of the SplitHolder.
         /// </summary>
@@ -88,7 +90,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             SetBackground(style.Background);
         }
     }
