@@ -10,6 +10,17 @@ import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
+/**
+ * HorizontalSplitArea is a container with two divided areas (on top and on
+ * bottom). HorizontalSplitArea implements
+ * com.spvessel.spacevil.Core.InterfaceVLayout.
+ * <p>
+ * Contains com.spvessel.spacevil.SplitHolder.
+ * <p>
+ * By default ability to get focus is disabled.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     private static int count = 0;
     private InterfaceBaseItem _topBlock;
@@ -21,7 +32,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     private int _bMin = 0;
 
     /**
-     * Sets position of the SplitHolder
+     * Setting position of the split holder.
+     * 
+     * @param position Position of the split holder.
      */
     public void setSplitPosition(int position) {
         if (_init) {
@@ -34,17 +47,21 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
             _topHeight = position;
     }
 
+    /**
+     * Setting split holder color.
+     * 
+     * @param color Split holder color as java.awt.Color.
+     */
     public void setSplitColor(Color color) {
         _splitHolder.setBackground(color);
     }
 
     /**
-     * Constructs a HorizontalSplitArea
+     * Defaults HorizontalSplitArea constructor.
      */
     public HorizontalSplitArea() {
         setItemName("HSplitArea_" + count);
         count++;
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalSplitArea"));
         setStyle(DefaultsService.getDefaultStyle(HorizontalSplitArea.class));
         isFocusable = false;
         _splitHolder.eventMousePress.add(this::onMousePress);
@@ -63,7 +80,10 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     private boolean _init = false;
 
     /**
-     * Initialization and adding of all elements in the HorizontalSplitArea
+     * Initializing all elements in the HorizontalSplitArea.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -77,7 +97,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Assign item on the top of the HorizontalSplitArea
+     * Assign item on the top area of the HorizontalSplitArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void assignTopItem(InterfaceBaseItem item) {
         addItem(item);
@@ -87,7 +109,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Assign item on the bottom of the HorizontalSplitArea
+     * Assign item on the bottom area of the HorizontalSplitArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void assignBottomItem(InterfaceBaseItem item) {
         addItem(item);
@@ -97,7 +121,11 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Set height of the HorizontalSplitArea
+     * Setting HorizontalSplitArea height. If the value is greater/less than the
+     * maximum/minimum value of the height, then the height becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param height Height of the HorizontalSplitArea.
      */
     @Override
     public void setHeight(int height) {
@@ -120,7 +148,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Set Y position of the HorizontalSplitArea
+     * Setting Y coordinate of the left-top corner of the HorizontalSplitArea.
+     * 
+     * @param y Y position of the left-top corner.
      */
     @Override
     public void setY(int y) {
@@ -130,7 +160,8 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Update all children and HSplitArea sizes and positions according to confines
+     * Updating all children positions (implementation of
+     * com.spvessel.spacevil.Core.InterfaceVLayout).
      */
     public void updateLayout() {
         _splitHolder.setWidth(getWidth());
@@ -160,14 +191,20 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Set height of the SplitHolder
+     * Setting thickness of SplitHolder divider.
+     * 
+     * @param spHeight
      */
     public void setSplitThickness(int spHeight) {
         _splitHolder.setDividerSize(spHeight);
     }
 
     /**
-     * Set style of the HorizontalSplitArea
+     * Setting style of the ButtonCore.
+     * <p>
+     * Inner styles: "splitholder".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

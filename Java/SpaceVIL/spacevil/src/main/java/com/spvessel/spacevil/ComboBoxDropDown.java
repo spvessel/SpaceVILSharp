@@ -7,7 +7,6 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
-import com.spvessel.spacevil.Core.InputEventArgs;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.InterfaceItem;
@@ -21,11 +20,11 @@ import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 /**
- * ComboBoxDropDown is drop-down list implementation for ComboBox (see SpaceVIL.ComboBox). 
+ * ComboBoxDropDown is drop-down list implementation for ComboBox (see com.spvessel.spacevil.ComboBox). 
  * ComboBox do not contains ComboBoxDropDown in usual way (ComboBox.GetItems() does not 
  * return ComboBoxDropDown), they just connected with each other. Used for selecting 
- * option from the list. ComboBoxDropDown is a floating item (see SpaceVIL.Core.IFloating 
- * and  enum SpaceVIL.Core.LayoutType) and closes when mouse click outside the 
+ * option from the list. ComboBoxDropDown is a floating item (see com.spvessel.spacevil.Core.InterfaceFloating 
+ * and  enum com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside the 
  * ComboBoxDropDown area.
  * <p> Contains ListBox. 
  * <p> Supports all events except drag and drop.
@@ -42,6 +41,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Disposing ComboBoxDropDown resources if it was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void release() {
@@ -91,7 +93,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private static int count = 0;
 
     /**
-     * You can specify mouse button (see SpaceVIL.Core.MouseButton) 
+     * You can specify mouse button (see com.spvessel.spacevil.Flags.MouseButton) 
      * that is used to open ComboBoxDropDown.
      * <p> Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_LEFT.
      */

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
@@ -53,7 +50,7 @@ namespace SpaceVIL
             //text
             _textObject = new TextLine();
             // _text_object.IsFocusable = false;
-            _textObject.SetItemName(GetItemName() + "_text_object");
+            _textObject.SetItemName(GetItemName() + "_textObject");
 
             //indicator
             _indicator = new CustomIndicator();
@@ -61,6 +58,11 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.RadioButton)));
         }
+        
+        /// <summary>
+        /// Constructs a RadioButton with the specified text.
+        /// </summary>
+        /// <param name="text">RadioButton text as System.String.</param>
         public RadioButton(String text) : this()
         {
             SetText(text);

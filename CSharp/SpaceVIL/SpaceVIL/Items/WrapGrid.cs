@@ -17,6 +17,7 @@ namespace SpaceVIL
     public class WrapGrid : Prototype
     {
         static int count = 0;
+
         /// <summary>
         /// Returns True if internal SpaceVIL.WrapArea allocates all available space between cells 
         /// to achieve smooth streching, otherwise returns False.
@@ -27,6 +28,7 @@ namespace SpaceVIL
         {
             return _area.IsStretch();
         }
+
         /// <summary>
         /// Setting strech mode for internal SpaceVIL.WrapArea. 
         /// SpaceVIL.WrapArea can allocates all available 
@@ -39,6 +41,7 @@ namespace SpaceVIL
         {
             _area.SetStretch(value);
         }
+
         /// <summary>
         /// Getting current row count.
         /// </summary>
@@ -47,14 +50,16 @@ namespace SpaceVIL
         {
             return _area.Rows;
         }
+
         /// <summary>
         /// Getting current column count.
         /// </summary>
-        /// <returns>Row column.</returns>
+        /// <returns>Column count.</returns>
         public int GetColumnCount()
         {
             return _area.Columns;
         }
+
         /// <summary>
         /// Getting current cell width.
         /// </summary>
@@ -63,6 +68,7 @@ namespace SpaceVIL
         {
             return _area.CellWidth;
         }
+
         /// <summary>
         /// Getting current cell height.
         /// </summary>
@@ -71,6 +77,7 @@ namespace SpaceVIL
         {
             return _area.CellHeight;
         }
+
         /// <summary>
         /// Setting cell width.
         /// </summary>
@@ -81,6 +88,7 @@ namespace SpaceVIL
             _area.UpdateLayout();
             UpdateSlider();
         }
+
         /// <summary>
         /// Setting cell height.
         /// </summary>
@@ -91,6 +99,7 @@ namespace SpaceVIL
             _area.UpdateLayout();
             UpdateSlider();
         }
+
         /// <summary>
         /// Setting cell size.
         /// </summary>
@@ -101,6 +110,7 @@ namespace SpaceVIL
             _area.SetCellSize(cellWidth, cellHeight);
             UpdateSlider();
         }
+
         /// <summary>
         /// Setting scroll movement step.
         /// </summary>
@@ -109,6 +119,7 @@ namespace SpaceVIL
         {
             _area.SetStep(step);
         }
+
         /// <summary>
         /// Getting scroll movement step.
         /// </summary>
@@ -153,6 +164,7 @@ namespace SpaceVIL
         {
             _area.SetSelectionVisible(value);
         }
+
         /// <summary>
         /// Returns True if selection ability of SpaceVIL.WrapArea is enabled otherwise returns False.
         /// </summary>
@@ -170,20 +182,24 @@ namespace SpaceVIL
         /// <summary>
         /// Getting list area of WrapGrid.
         /// </summary>
-        /// <returns>List area as SpaceVIL.SpaceVIL.WrapArea.</returns>
+        /// <returns>List area as SpaceVIL.WrapArea.</returns>
         public WrapArea GetArea()
         {
             return _area;
         }
+
         /// <summary>
         /// Vertical scroll bar of WrapGrid.
         /// </summary>
         public VerticalScrollBar VScrollBar;
+
         /// <summary>
         /// Horizontal scroll bar of WrapGrid.
         /// </summary>
         public HorizontalScrollBar HScrollBar;
+
         private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AsNeeded;
+
         /// <summary>
         /// Getting internal SpaceVIL.WrapArea orientation.
         /// <para/> Orientation can be Orientation.Horizontal 
@@ -203,6 +219,7 @@ namespace SpaceVIL
         {
             return _scrollBarPolicy;
         }
+
         /// <summary>
         /// Setting scroll bar visibility policy.
         /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
@@ -526,6 +543,7 @@ namespace SpaceVIL
             UpdateSlider();
             return b;
         }
+
         /// <summary>
         /// Removing all items from the list area of WrapGrid.
         /// </summary>
@@ -586,8 +604,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting content of the list area of WrapGrid.
         /// </summary>
-        /// <returns>Content of the list area as 
-        /// System.Collections.Generic.List&lt;IBaseItem&gt;</returns>
+        /// <returns>Content of the list area as List&lt;IBaseItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
@@ -604,13 +621,13 @@ namespace SpaceVIL
         /// <summary>
         /// Adding all elements in the list area of WrapGrid from the given list.
         /// </summary>
-        /// <param name="content">List of items as 
-        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
+        /// <param name="content">List of items as List&lt;IBaseItem&gt;</param>
         public virtual void SetListContent(List<IBaseItem> content)
         {
             _area.SetListContent(content);
             // UpdateSlider();
         }
+
         /// <summary>
         /// Getting wrapper of item.
         /// </summary>
@@ -625,9 +642,9 @@ namespace SpaceVIL
         /// Getting selected item.
         /// </summary>
         /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
-        public IBaseItem GetSelectionItem()
+        public IBaseItem GetSelectedItem()
         {
-            return _area.GetSelectionItem();
+            return _area.GetSelectedItem();
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace SpaceVIL.Core
     /// An interface that discribes such type of items 
     /// that are adjacent points are considered lines (for drawing graphs).
     /// </summary>
-    public interface ILine : IPosition
+    public interface ILines : IPosition
     {
         /// <summary>
         /// Setting thickness of lines.

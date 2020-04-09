@@ -74,10 +74,13 @@ public class Program {
         // WindowManager.enableVSync(0);
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
+        DragWindow dw = new DragWindow();
+
         Calendar tmpDate = Calendar.getInstance();
         System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
 
         WindowManager.startWith(
+            // dw
             mw
         //, mw2
         // st

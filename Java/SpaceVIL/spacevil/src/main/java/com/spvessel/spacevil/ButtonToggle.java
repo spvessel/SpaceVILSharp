@@ -29,6 +29,9 @@ public class ButtonToggle extends Prototype {
 
     /**
      * Disposing ButtonToggle resources if the item was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void release() {

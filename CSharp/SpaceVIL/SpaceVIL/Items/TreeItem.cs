@@ -21,6 +21,7 @@ namespace SpaceVIL
         private Object Locker = new Object();
 
         private List<TreeItem> _listInners;
+
         /// <summary>
         /// Getting all contained nodes in this TreeItem.
         /// </summary>
@@ -29,6 +30,7 @@ namespace SpaceVIL
         {
             return _listInners;
         }
+
         /// <summary>
         /// Removing the specified node from TreeItem.
         /// </summary>
@@ -42,6 +44,7 @@ namespace SpaceVIL
                 _treeViewContainer.RemoveItem(child);
             }
         }
+
         /// <summary>
         /// Removing all contained nodes in this TreeItem.
         /// </summary>
@@ -69,6 +72,7 @@ namespace SpaceVIL
         }
 
         private TreeItem _parentBranch;
+
         /// <summary>
         /// Getting the parent branch node that contains this TreeItem.
         /// </summary>
@@ -81,6 +85,7 @@ namespace SpaceVIL
         internal TreeView _treeViewContainer;
         internal int _nestingLevel = 0;
         private int _indentSize = 20;
+
         /// <summary>
         /// Getting indent size (X axis) of the current 
         /// TreeItem relative to its parent branch.
@@ -90,6 +95,7 @@ namespace SpaceVIL
         {
             return _indentSize;
         }
+
         /// <summary>
         /// Setting indent size (X axis) for the current 
         /// TreeItem relative to its parent branch.
@@ -100,12 +106,14 @@ namespace SpaceVIL
             _indentSize = size;
             ResetIndents();
         }
+
         private bool _isRoot = false;
+
         /// <summary>
         /// Returns True if this TreeItem is root (head) otherwise returns False.
         /// </summary>
         /// <returns>True: if this TreeItem is root (head).
-        /// False: if this TreeItem is not root (head)</returns>
+        /// False: if this TreeItem is not root (head).</returns>
         public bool IsRoot()
         {
             return _isRoot;
@@ -115,7 +123,8 @@ namespace SpaceVIL
             _isRoot = value;
         }
         internal UInt32 Index = 0;
-        private TreeItemType _itemType;
+        private TreeItemType _nodeType;
+
         /// <summary>
         /// Getting node type.
         /// <para/> Can be TreeItemType.Leaf or TreeItemType.Brunch.
@@ -123,27 +132,33 @@ namespace SpaceVIL
         /// <returns>Node type as SpaceVIL.Core.TreeItemType.</returns>
         public TreeItemType GetItemType()
         {
-            return _itemType;
+            return _nodeType;
         }
+
         static int count = 0;
+
         private Label _textLabel;
+
         private ButtonToggle _indicator;
+
         /// <summary>
         /// Getting the branch node indicator of TreeItem.
         /// </summary>
-        /// <returns>Branch node indicator</returns>
+        /// <returns>Branch node indicator.</returns>
         public ButtonToggle GetIndicator()
         {
             return _indicator;
         }
+
         private CustomShape _iconShape;
+
         /// <summary>
         /// Constructs TreeItem with specified type of node.
         /// </summary>
         /// <param name="type">Node type as SpaceVIL.Core.TreeItemType.</param>
         public TreeItem(TreeItemType type)
         {
-            _itemType = type;
+            _nodeType = type;
             SetItemName(type.ToString().ToLower() + "_v" + count);
             count++;
 
@@ -157,12 +172,12 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
             EventKeyPress += OnKeyPress;
         }
+
         /// <summary>
         /// Constructs TreeItem with specified type of node and text.
         /// </summary>
         /// <param name="type">Node type as SpaceVIL.Core.TreeItemType.</param>
         /// <param name="text">Text of TreeItem.</param>
-        /// <returns></returns>
         public TreeItem(TreeItemType type, String text = "") : this(type)
         {
             SetText(text);
@@ -215,6 +230,7 @@ namespace SpaceVIL
             SetMinWidth(newMinWidth);
             _treeViewContainer.GetWrapper(this).SetMinWidth(newMinWidth);
         }
+
         /// <summary>
         /// Initializing all elements in the TreeItem. 
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -223,7 +239,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             _textLabel.IsFocusable = false;
-            switch (_itemType)
+            switch (_nodeType)
             {
                 case TreeItemType.Leaf:
                     _iconShape.SetMargin(2, 0, 0, 0);
@@ -302,6 +318,7 @@ namespace SpaceVIL
 
             // OnToggleHide(true);
         }
+
         /// <summary>
         /// Adding item into the TreeItem.
         /// </summary>
@@ -314,6 +331,7 @@ namespace SpaceVIL
             else
                 base.AddItem(item);
         }
+
         /// <summary>
         /// Setting item width. If the value is greater/less than the maximum/minimum 
         /// value of the width, then the width becomes equal to the maximum/minimum value.
@@ -324,6 +342,7 @@ namespace SpaceVIL
             base.SetWidth(width);
             UpdateLayout();
         }
+
         /// <summary>
         /// Setting X coordinate of the left-top corner of the TreeItem.
         /// </summary>
@@ -351,6 +370,7 @@ namespace SpaceVIL
                 offset += child.GetWidth() + GetSpacing().Horizontal;
             }
         }
+
         /// <summary>
         /// Setting alignment of TreeItem text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -360,6 +380,7 @@ namespace SpaceVIL
         {
             _textLabel.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting alignment of TreeItem text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -369,6 +390,7 @@ namespace SpaceVIL
         {
             _textLabel.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to TreeItem.
         /// </summary>
@@ -377,6 +399,7 @@ namespace SpaceVIL
         {
             _textLabel.SetMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to TreeItem.
         /// </summary>
@@ -388,6 +411,7 @@ namespace SpaceVIL
         {
             _textLabel.SetMargin(left, top, right, bottom);
         }
+
         /// <summary>
         /// Getting indents of the text.
         /// </summary>
@@ -396,6 +420,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetMargin();
         }
+
         /// <summary>
         /// Setting font of the text.
         /// </summary>
@@ -404,6 +429,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text.
         /// </summary>
@@ -412,6 +438,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the text.
         /// </summary>
@@ -420,6 +447,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontStyle(style);
         }
+
         /// <summary>
         /// Setting new font family of the text.
         /// </summary>
@@ -428,6 +456,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontFamily(fontFamily);
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -436,6 +465,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetFont();
         }
+
         /// <summary>
         /// Setting the text.
         /// </summary>
@@ -445,6 +475,7 @@ namespace SpaceVIL
             _textLabel.SetText(text);
             UpdateLayout();
         }
+
         /// <summary>
         /// Getting the current text of the TreeItem.
         /// </summary>
@@ -453,6 +484,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetText();
         }
+
         /// <summary>
         /// Getting the text width (useful when you need resize TreeItem by text width).
         /// </summary>
@@ -461,6 +493,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetWidth();
         }
+
         /// <summary>
         /// Getting the text height (useful when you need resize TreeItem by text height).
         /// </summary>
@@ -469,6 +502,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetHeight();
         }
+
         /// <summary>
         /// Setting text color of a TreeItem.
         /// </summary>
@@ -477,6 +511,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a TreeItem in byte RGB format.
         /// </summary>
@@ -487,6 +522,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of a TreeItem in byte RGBA format.
         /// </summary>
@@ -498,6 +534,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Setting text color of a TreeItem in float RGB format.
         /// </summary>
@@ -508,6 +545,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of a TreeItem in float RGBA format.
         /// </summary>
@@ -519,6 +557,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>
@@ -527,11 +566,12 @@ namespace SpaceVIL
         {
             return _textLabel.GetForeground();
         }
+
         /// <summary>
-        /// Initializing all elements in the TreeItem.
-        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
-        /// this method if necessary and no need to call it manually.
+        /// Setting style of the TreeItem.
+        /// <para/> Inner styles: "indicator", "branchicon", "leaficon".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -542,21 +582,22 @@ namespace SpaceVIL
             SetTextAlignment(style.TextAlignment);
 
             //additional
-            Style inner_style = style.GetInnerStyle("indicator");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("indicator");
+            if (innerStyle != null)
             {
-                _indicator.SetStyle(inner_style);
+                _indicator.SetStyle(innerStyle);
             }
-            if (_itemType == TreeItemType.Branch)
-                inner_style = style.GetInnerStyle("branchicon");
+            if (_nodeType == TreeItemType.Branch)
+                innerStyle = style.GetInnerStyle("branchicon");
             else
-                inner_style = style.GetInnerStyle("leaficon");
+                innerStyle = style.GetInnerStyle("leaficon");
 
-            if (inner_style != null)
+            if (innerStyle != null)
             {
-                _iconShape.SetStyle(inner_style);
+                _iconShape.SetStyle(innerStyle);
             }
         }
+
         /// <summary>
         /// Shows or hides content (contained nodes) of this TreeItem.
         /// </summary>
@@ -564,7 +605,7 @@ namespace SpaceVIL
         /// False: if you want to hide content.</param>
         public void SetExpanded(bool value)
         {
-            if (_itemType.Equals(TreeItemType.Branch))
+            if (_nodeType.Equals(TreeItemType.Branch))
             {
                 _indicator.SetToggled(value);
                 OnToggleHide(value);

@@ -18,7 +18,7 @@ import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
-import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
+import com.spvessel.spacevil.Flags.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -496,7 +496,7 @@ public class FlowTest extends ActiveWindow {
         // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
         // graph_points.getPointThickness()));
         //
-        graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
+        graph_points.setPointShape(GraphicsMathService.getCross(graph_points.getPointThickness(),
                 graph_points.getPointThickness(), 1, 45));
 
         // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),

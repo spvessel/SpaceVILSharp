@@ -20,10 +20,11 @@ import java.util.Queue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.Timer;
+
 /**
- * ToolTipItem is sealed class representing basic user unterface tooltip. 
- * You cannot work with this class directly.
- * Use com.spvessel.spacevil.ToolTip instead.
+ * ToolTipItem is sealed class representing basic user unterface tooltip. You
+ * cannot work with this class directly. Use com.spvessel.spacevil.ToolTip
+ * instead.
  */
 public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
@@ -46,7 +47,7 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
     // private static ToolTip _instance = null;
 
-    protected ToolTipItem() {
+    ToolTipItem() {
         setVisible(false);
         _textObject = new Label();
         setItemName("ToolTipItem");

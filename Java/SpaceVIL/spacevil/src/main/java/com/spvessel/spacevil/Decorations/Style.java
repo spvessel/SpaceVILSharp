@@ -733,7 +733,7 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         // style.background = new Color(0,0,0,0);
-        style.background = new Color(255, 70, 70, 70);
+        style.background = new Color(70, 70, 70, 255);
 
         style.padding = new Indents(2, 2, 2, 2);
         style.widthPolicy = SizePolicy.EXPAND;

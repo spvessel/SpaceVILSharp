@@ -19,6 +19,12 @@ namespace SpaceVIL
         /// Event that is invoked when tree view need to sort content.
         /// </summary>
         public EventCommonMethod EventSortTree;
+
+        /// <summary>
+        /// Disposing TreeView resources if it was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             EventSortTree = null;
@@ -27,6 +33,7 @@ namespace SpaceVIL
         internal int MaxWrapperWidth = 0;
 
         internal TreeItem _root; //nesting level = 0
+
         /// <summary>
         /// Setting the root (head) SpaceVIl.TreeItem is visible or invisible.
         /// </summary>
@@ -51,6 +58,7 @@ namespace SpaceVIL
             }
             UpdateElements();
         }
+
         /// <summary>
         /// Returns True if root (head) SpaceVIl.TreeItem is visible otherwise returns False.
         /// </summary>
@@ -62,6 +70,7 @@ namespace SpaceVIL
                 return false;
             return _root.IsVisible();
         }
+
         /// <summary>
         /// Setting text to root (head) SpaceVIl.TreeItem of TreeView.
         /// </summary>
@@ -72,6 +81,7 @@ namespace SpaceVIL
                 return;
             _root.SetText(text);
         }
+
         /// <summary>
         /// Getting text of root (head) SpaceVIl.TreeItem of TreeView.
         /// </summary>
@@ -82,6 +92,7 @@ namespace SpaceVIL
                 return "";
             return _root.GetText();
         }
+
         /// <summary>
         /// Getting root (head) SpaceVIl.TreeItem of TreeView.
         /// </summary>
@@ -90,6 +101,7 @@ namespace SpaceVIL
         {
             return _root;
         }
+
         /// <summary>
         /// Setting new root (head) SpaceVIl.TreeItem for TreeView.
         /// </summary>
@@ -102,6 +114,7 @@ namespace SpaceVIL
         }
 
         private static int count = 0;
+
         /// <summary>
         /// Default TreeView constructor.
         /// </summary>
@@ -117,6 +130,7 @@ namespace SpaceVIL
 
             SetHScrollBarPolicy(VisibilityPolicy.AsNeeded);
         }
+
         /// <summary>
         /// Initializing all elements in the TreeView. 
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -159,11 +173,11 @@ namespace SpaceVIL
             // item.OnToggleHide(true);
             UpdateElements();
         }
+
         /// <summary>
         /// Adding all elements in the list area of TreeView from the given list.
         /// </summary>
-        /// <param name="content">List of items as 
-        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
+        /// <param name="content">List of items as IEnumerable&lt;IBaseItem&gt;</param>
         public override void SetListContent(IEnumerable<IBaseItem> content)
         {
             GetArea().Clear();
@@ -172,6 +186,7 @@ namespace SpaceVIL
                 AddItem(item);
             }
         }
+
         /// <summary>
         /// Updating all TreeView inner items.
         /// </summary>
@@ -236,10 +251,11 @@ namespace SpaceVIL
 
             return ti1.GetText().ToLower().CompareTo(ti2.GetText().ToLower());
         }
+
         /// <summary>
-        /// 
+        /// Adding a node to the TreeView.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Node as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             if (_root == null)
@@ -261,6 +277,7 @@ namespace SpaceVIL
             else
                 _root.AddItem(item);
         }
+
         /// <summary>
         /// Setting style of the TreeView. 
         /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
@@ -273,6 +290,7 @@ namespace SpaceVIL
             base.SetStyle(style);
             //additional
         }
+
         /// <summary>
         /// Removing all items from the list area of TreeView.
         /// </summary>
@@ -285,6 +303,7 @@ namespace SpaceVIL
             MaxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
         }
+
         /// <summary>
         /// Removing the specified item from the list area of TreeView.
         /// </summary>
@@ -302,6 +321,7 @@ namespace SpaceVIL
             }
             return base.RemoveItem(item);
         }
+
         /// <summary>
         /// Sorting TreeView nodes in internal list area starting with root (head).
         /// </summary>
@@ -309,6 +329,7 @@ namespace SpaceVIL
         {
             SortBrunch(_root);
         }
+
         /// <summary>
         /// Sorting part of TreeView content starting with specified branch node.
         /// </summary>

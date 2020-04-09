@@ -6,27 +6,35 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.LinkedList;
 
+/**
+ * Grid is a class that represents a grid type container. Each element is in a
+ * specific grid cell.
+ * <p>
+ * Cells size based on items margins, sizes and size policies.
+ * <p>
+ * Grid cannot receive any events, so Grid is always in the
+ * com.spvessel.spacevil.Flags.ItemStateType.BASE state.
+ */
 public class Grid extends Prototype implements InterfaceFreeLayout {
     private static int count = 0;
 
     /**
-     * Constructs a Grid
+     * Default Grid constructor.
      */
     private Grid() {
         setItemName("Grid_" + count);
         count++;
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Grid"));
         setStyle(DefaultsService.getDefaultStyle(Grid.class));
         isFocusable = false;
     }
 
     /**
-     * Constructs a Grid with the given rows and columns
+     * Constructs a Grid with the given number of rows and number of columns.
+     * 
+     * @param rows    Number of rows.
+     * @param columns Number of columns.
      */
     public Grid(int rows, int columns) {
         this();
@@ -35,7 +43,6 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         initCells();
     }
 
-    // rows and counts
     private List<Cell> _cells;
 
     void initCells() {
@@ -47,6 +54,13 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         }
     }
 
+    /**
+     * Setting a new grid format with the given number of rows and number of
+     * columns.
+     * 
+     * @param rows    Number of rows.
+     * @param columns Number of columns.
+     */
     public void setFormat(int rows, int columns) {
         if (rows == _rowCount && columns == _columnCount)
             return;
@@ -79,7 +93,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     private int _rowCount = 1;
 
     /**
-     * Set count of the rows
+     * Setting a new count of the rows.
+     * 
+     * @param value Number of rows.
      */
     public void setRowCount(int value) {
         if (value != _rowCount)
@@ -87,6 +103,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         rearrangeCells();
     }
 
+    /**
+     * Getting current rows count in grid.
+     * 
+     * @return Current rows count.
+     */
     public int getRowCount() {
         return _rowCount;
     }
@@ -94,7 +115,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     private int _columnCount = 1;
 
     /**
-     * Set count of the columns
+     * Setting a new count of the columns.
+     * 
+     * @param value Number of columns.
      */
     public void setColumnCount(int value) {
         if (value != _columnCount)
@@ -103,12 +126,21 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         rearrangeCells();
     }
 
+    /**
+     * Getting current columns count in grid.
+     * 
+     * @return Current columns count.
+     */
     public int getColumnCount() {
         return _columnCount;
     }
 
     /**
-     * Returns the cell by row and column number
+     * Returns the cell by row and column number.
+     * 
+     * @param row    Number of cell row.
+     * @param column Number of cell column.
+     * @return Cell of the Grid as com.spvessel.spacevil.Cell.
      */
     public Cell getCell(int row, int column) {
         Cell cell = null;
@@ -122,20 +154,25 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Returns all cells list
+     * Getting all cells as list.
+     * 
+     * @return Cells as List&lt;com.spvessel.spacevil.Cell&gt;
      */
     public List<Cell> getAllCells() {
         return _cells;
     }
 
-    // overrides
     @Override
     protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 
     /**
-     * Remove the item from the Grid by the link
+     * Removing item from the Grid. if the removal was successful Cell becomes free.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -146,11 +183,17 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
             }
         }
         // UpdateLayout();
-        return superBool; //Предполагается, что в super и cells добавляется одновременно
+        return superBool; // Предполагается, что в super и cells добавляется одновременно
     }
 
     /**
-     * Remove the item from the Grid by row and column number
+     * Removing item from the Grid by number of row and number of column. if the
+     * removal was successful Cell becomes free.
+     * 
+     * @param row    Index of row.
+     * @param column Index of column.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     public boolean removeItem(int row, int column) {
         if (row >= _rowCount || column >= _columnCount)
@@ -166,6 +209,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         return false;
     }
 
+    /**
+     * Remove all items in the Grid.
+     */
     @Override
     public void clear() {
         List<InterfaceBaseItem> list = getItems();
@@ -176,7 +222,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Add item to the Grid
+     * Adding item to the Grid.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -193,18 +241,16 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Insert item to the Grid by row and column number
+     * Inserting item into the Cell by row and column index.
+     * 
+     * @param item   Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param row    Row index.
+     * @param column Column index.
      */
     public void insertItem(InterfaceBaseItem item, int row, int column) {
         if (row == _rowCount || column == _columnCount)
             return;
         super.addItem(item);
-        // _cells[row + column * _row_count].setItem(item);
-
-        //        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
-        //        if (ibi != null) {
-        //            removeItem(ibi);
-        //        }
 
         removeItem(row, column);
 
@@ -212,6 +258,12 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         updateLayout();
     }
 
+    /**
+     * Inserting item into the Cell by cell index.
+     * 
+     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param index Cell index.
+     */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
         if (_columnCount == 0)
@@ -223,7 +275,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set width of the Grid
+     * Setting Grid width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the Grid.
      */
     @Override
     public void setWidth(int width) {
@@ -232,7 +288,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set X position of the Grid
+     * Setting X coordinate of the left-top corner of the Grid.
+     * 
+     * @param x X position of the left-top corner.
      */
     @Override
     public void setX(int x) {
@@ -241,7 +299,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set height of the Grid
+     * Setting Grid height. If the value is greater/less than the maximum/minimum
+     * value of the height, then the height becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param height Height of the Grid.
      */
     @Override
     public void setHeight(int height) {
@@ -250,7 +312,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set Y position of the Grid
+     * Setting Y coordinate of the left-top corner of the Grid.
+     * 
+     * @param y Y position of the left-top corner.
      */
     @Override
     public void setY(int y) {
@@ -273,9 +337,9 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     private boolean _isUpdating = false;
 
     /**
-     * Update all children and grid sizes and positions according to confines
+     * Updating all children positions (implementation of
+     * com.spvessel.spacevil.Core.InterfaceFreeLayout).
      */
-    // update Layout
     public void updateLayout() {
 
         List<InterfaceBaseItem> list = getItems();

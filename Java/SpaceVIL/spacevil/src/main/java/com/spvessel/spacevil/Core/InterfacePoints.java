@@ -12,11 +12,11 @@ public interface InterfacePoints {
 
     public Color getPointColor();
 
-    public void setShapePointer(List<float[]> shape);
+    public void setPointShape(List<float[]> shape);
 
-    public List<float[]> getShapePointer();
+    public List<float[]> getPointShape();
 
     public List<float[]> getPoints();
 
-    public void setPointsCoord(List<float[]> coord);
+    public void setPoints(List<float[]> coord);
 }

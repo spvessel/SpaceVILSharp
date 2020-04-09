@@ -28,7 +28,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting ACTION button for appearance customizing or assigning new actions.
         /// </summary>
-        /// <returns>MessageItem's OK button as SpaceVIL.ButtonCore.</returns>
+        /// <returns>InputDialog's OK button as SpaceVIL.ButtonCore.</returns>
         public ButtonCore GetActionButton()
         {
             return _action;
@@ -36,7 +36,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting CANCEL button for appearance customizing or assigning new actions.
         /// </summary>
-        /// <returns>MessageItem's CANCEL button as SpaceVIL.ButtonCore.</returns>
+        /// <returns>InputDialog's CANCEL button as SpaceVIL.ButtonCore.</returns>
         public ButtonCore GetCancelButton()
         {
             return _cancel;
@@ -46,7 +46,7 @@ namespace SpaceVIL
         /// Setting CANCEL button visible of invisible.
         /// </summary>
         /// <param name="value">True: if you want CANCEL button to be visible. 
-        /// False:if you want CANCEL button to be invisible.</param>
+        /// False: if you want CANCEL button to be invisible.</param>
         public void SetCancelVisible(bool value)
         {
             _cancel.SetVisible(value);
@@ -91,7 +91,7 @@ namespace SpaceVIL
         /// title and name of ACTION button.
         /// </summary>
         /// <param name="title">Title of InputDialog as System.String.</param>
-        /// <param name="actionName">Message to a user as System.String.</param>
+        /// <param name="actionName">Name of ACTION button as System.String.</param>
         public InputDialog(String title, String actionName) 
             : this(title, actionName, String.Empty) { }
 
@@ -173,17 +173,17 @@ namespace SpaceVIL
             base.Close();
         }
         /// <summary>
-        /// Sellect all text in the text field.
+        /// Select all text in the text field.
         /// </summary>
         public void SelectAll()
         {
             _input.SelectAll();
         }
         /// <summary>
-        /// Setting a style for entire MessageBox.
+        /// Setting a style for entire InputDialog.
         /// <para/> Inner styles: "textedit", "layout", "toolbar", "button".
         /// </summary>
-        /// <param name="style">A style for MessageBox as SpaceVIL.Decorations.Style.</param>
+        /// <param name="style">A style for InputDialog as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

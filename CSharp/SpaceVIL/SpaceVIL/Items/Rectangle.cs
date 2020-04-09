@@ -4,12 +4,13 @@ namespace SpaceVIL
 {
     /// <summary>
     /// Rectangle is a subclass that extends from SpaceVIL.Primitive 
-    /// for rendering an rectangle shape.
+    /// for rendering a rectangle shape.
     /// </summary>
     public class Rectangle : Primitive
     {
         static int count = 0;
         private CornerRadius _borderКadius = new CornerRadius();
+
         /// <summary>
         /// Setting the same radius values for each corner of the rectangle object.
         /// </summary>
@@ -21,6 +22,7 @@ namespace SpaceVIL
             _borderКadius.LeftBottom = radius;
             _borderКadius.RightBottom = radius;
         }
+
         /// <summary>
         ///  Setting the radii of corners.
         /// </summary>
@@ -38,6 +40,7 @@ namespace SpaceVIL
         {
             count++;
         }
+
         /// <summary>
         /// Constructs an Rectangle with specified corner radii.
         /// </summary>

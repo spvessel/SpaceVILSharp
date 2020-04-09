@@ -14,18 +14,19 @@ namespace SpaceVIL
     public class VerticalSlider : Prototype
     {
         static int count = 0;
+
         /// <summary>
         /// Slider track.
         /// </summary>
         public Rectangle Track = new Rectangle();
+
         /// <summary>
         /// Slider handler.
         /// </summary>
         public ScrollHandler Handler = new ScrollHandler();
 
-        #region Values definition
-        //Values
         private float _step = 1.0f;
+
         /// <summary>
         /// Setting slider movement step.
         /// </summary>
@@ -34,6 +35,7 @@ namespace SpaceVIL
         {
             _step = value;
         }
+
         /// <summary>
         /// Getting slider movement step.
         /// </summary>
@@ -42,10 +44,12 @@ namespace SpaceVIL
         {
             return _step;
         }
+
         /// <summary>
         /// Event that is invoked when value of the slider is changed.
         /// </summary>
         public EventCommonMethodState EventValueChanged;
+
         /// <summary>
         /// Disposing all resources if the item was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -59,6 +63,7 @@ namespace SpaceVIL
         private float _currentValue = 0;
 
         bool _ignoreStep = true;
+
         /// <summary>
         /// Ignoring slider step (affects only on animation). 
         /// Set False if you want the slider to move strictly in steps.
@@ -70,6 +75,7 @@ namespace SpaceVIL
         {
             _ignoreStep = value;
         }
+
         /// <summary>
         /// Returns True if slider movement ignore steps otherwise returns False.
         /// </summary>
@@ -79,11 +85,12 @@ namespace SpaceVIL
         {
             return _ignoreStep;
         }
+
         /// <summary>
         /// Setting the current slider value. If the value is greater/less than the maximum/minimum 
         /// slider value, then the slider value becomes equal to the maximum/minimum value.
         /// </summary>
-        /// <param name="value">Slider value</param>
+        /// <param name="value">Slider value.</param>
         public void SetCurrentValue(float value)
         {
             _currentValue = value;
@@ -116,6 +123,7 @@ namespace SpaceVIL
                     / (_maxValue - _minValue) * (_currentValue - _minValue);
             Handler.SetOffset((int)offset + GetPadding().Top + Handler.GetMargin().Top);
         }
+
         /// <summary>
         /// Getting the current slider value.
         /// </summary>
@@ -126,6 +134,7 @@ namespace SpaceVIL
         }
 
         private float _minValue = 0;
+
         /// <summary>
         /// Setting the minimum slider value limit. 
         /// Slider value cannot be less than this limit.
@@ -135,6 +144,7 @@ namespace SpaceVIL
         {
             _minValue = value;
         }
+
         /// <summary>
         /// Getting the current minimum slider value limit.
         /// </summary>
@@ -145,6 +155,7 @@ namespace SpaceVIL
         }
 
         private float _maxValue = 100;
+
         /// <summary>
         /// Setting the maximum slider value limit. 
         /// Slider value cannot be greater than this limit.
@@ -154,6 +165,7 @@ namespace SpaceVIL
         {
             _maxValue = value;
         }
+
         /// <summary>
         /// Getting the current maximum slider value limit.
         /// </summary>
@@ -162,7 +174,7 @@ namespace SpaceVIL
         {
             return _maxValue;
         }
-        #endregion///////////
+
         /// <summary>
         /// Default VerticalSlider constructor.
         /// </summary>
@@ -177,6 +189,7 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalSlider)));
         }
+
         /// <summary>
         /// Initializing all elements in the VerticalSlider.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -214,6 +227,7 @@ namespace SpaceVIL
                         / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight()));
             _dragging = false;
         }
+
         /// <summary>
         /// Setting X coordinate of the left-top corner of the VerticalSlider.
         /// </summary>
@@ -223,6 +237,7 @@ namespace SpaceVIL
             base.SetY(y);
             UpdateHandler();
         }
+
         /// <summary>
         /// Seting style of the VerticalSlider.
         /// <para/> Inner styles: "track", "handler".

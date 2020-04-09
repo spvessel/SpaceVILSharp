@@ -580,8 +580,8 @@ final class DrawEngine {
         if (!root.isVisible() || !root.isDrawable())
             return;
 
-        if (root instanceof InterfaceLine) {
-            drawLines((InterfaceLine) root);
+        if (root instanceof InterfaceLines) {
+            drawLines((InterfaceLines) root);
             return;
         }
         if (root instanceof InterfacePoints) {
@@ -823,7 +823,7 @@ final class DrawEngine {
             if (points == null)
                 return;
 
-            List<float[]> shape = item.getShapePointer();
+            List<float[]> shape = item.getPointShape();
             float centerOffset = item.getPointThickness() / 2.0f;
             float[] result = new float[shape.size() * points.size() * 2];
             int skew = 0;
@@ -845,7 +845,7 @@ final class DrawEngine {
         }
     }
 
-    private void drawLines(InterfaceLine item) {
+    private void drawLines(InterfaceLines item) {
         if (item.getLineColor().getAlpha() == 0)
             return;
 

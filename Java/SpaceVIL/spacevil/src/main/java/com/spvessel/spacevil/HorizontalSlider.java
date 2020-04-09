@@ -8,31 +8,59 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
+/**
+ * HorizontalSlider is the basic implementation of a user interface slider
+ * (horizontal version).
+ * <p>
+ * Contains track, handler.
+ * <p>
+ * Supports all events including drag and drop (internal handler
+ * (com.spvessel.spacevil.ScrollHandler) supports drag and drop events).
+ */
 public class HorizontalSlider extends Prototype {
-    /**
-     * Part of HorizontalScrollBar
-     */
-    static int count = 0;
 
+    static int count = 0;
+    /**
+     * Slider track.
+     */
     public Rectangle track = new Rectangle();
+    /**
+     * Slider handler.
+     */
     public ScrollHandler handler = new ScrollHandler();
 
     // Values
     private float _step = 1.0f;
 
     /**
-     * HorizontalSlider moving step when HorizontalScrollBar arrows pressed
+     * Setting slider movement step.
+     * 
+     * @param value Slider step.
      */
     public void setStep(float value) {
         _step = value;
     }
 
+    /**
+     * Getting slider movement step.
+     * 
+     * @return Slider step.
+     */
     public float getStep() {
         return _step;
     }
 
+    /**
+     * Event that is invoked when value of the slider is changed.
+     */
     public EventCommonMethodState eventValueChanged = new EventCommonMethodState();
 
+    /**
+     * Disposing all resources if the item was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         eventValueChanged.clear();
@@ -42,21 +70,40 @@ public class HorizontalSlider extends Prototype {
 
     boolean _ignoreStep = true;
 
+    /**
+     * Ignoring slider step (affects only on animation). Set False if you want the
+     * slider to move strictly in steps.
+     * <p>
+     * Default: True.
+     * 
+     * @param value True: if you want to ignore step. False: if you do not want to
+     *              ignore step.
+     */
     public void setIgnoreStep(boolean value) {
         _ignoreStep = value;
     }
 
+    /**
+     * Returns True if slider movement ignore steps otherwise returns False.
+     * 
+     * @return True: if movement step is ignored. False: if movement step is not
+     *         ignored.
+     */
     public boolean isIgnoreStep() {
         return _ignoreStep;
     }
 
     /**
-     * Position value of the HorizontalSlider
+     * Setting the current slider value. If the value is greater/less than the
+     * maximum/minimum slider value, then the slider value becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param value Slider value.
      */
     public void setCurrentValue(float value) {
 
         _currentValue = value;
-        
+
         if (!_ignoreStep)
             _currentValue = (float) Math.round(_currentValue / _step) * _step;
 
@@ -71,6 +118,11 @@ public class HorizontalSlider extends Prototype {
             eventValueChanged.execute(this);
     }
 
+    /**
+     * Getting the current slider value.
+     * 
+     * @return Slider value.
+     */
     public float getCurrentValue() {
         return _currentValue;
     }
@@ -84,20 +136,28 @@ public class HorizontalSlider extends Prototype {
     }
 
     void updateHandler() {
-        float offset = ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth())
-                / (_maxValue - _minValue) * (_currentValue - _minValue);
+        float offset = ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()) / (_maxValue - _minValue)
+                * (_currentValue - _minValue);
         handler.setOffset((int) offset + getPadding().left + handler.getMargin().left);
     }
 
     private float _minValue = 0;
 
     /**
-     * Minimum value of the HorizontalSlider
+     * Setting the minimum slider value limit. Slider value cannot be less than this
+     * limit.
+     * 
+     * @param value Minimum slider value limit.
      */
     public void setMinValue(float value) {
         _minValue = value;
     }
 
+    /**
+     * Getting the current minimum slider value limit.
+     * 
+     * @return Minimum slider value limit.
+     */
     public float getMinValue() {
         return _minValue;
     }
@@ -105,32 +165,42 @@ public class HorizontalSlider extends Prototype {
     private float _maxValue = 100;
 
     /**
-     * Maximum value of the HorizontalSlider
+     * Setting the maximum slider value limit. Slider value cannot be greater than
+     * this limit.
+     * 
+     * @param value Maximum slider value limit.
      */
     public void setMaxValue(float value) {
         _maxValue = value;
     }
 
+    /**
+     * Getting the current maximum slider value limit.
+     * 
+     * @return Maximum slider value limit.
+     */
     public float getMaxValue() {
         return _maxValue;
     }
 
     /**
-     * Constructs a HorizontalSlider
+     * Default HorizontalSlider constructor.
      */
     public HorizontalSlider() {
         setItemName("HorizontalSlider_" + count);
         eventMouseClick.add(this::onTrackClick);
         count++;
 
-        handler.direction = Orientation.HORIZONTAL;
+        handler.orientation = Orientation.HORIZONTAL;
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalSlider"));
         setStyle(DefaultsService.getDefaultStyle(HorizontalSlider.class));
     }
 
     /**
-     * Initialization and adding of all elements in the HorizontalSlider
+     * Initializing all elements in the HorizontalSlider.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -163,7 +233,9 @@ public class HorizontalSlider extends Prototype {
     }
 
     /**
-     * Set X position of the HorizontalSlider
+     * Setting X coordinate of the left-top corner of the HorizontalSlider.
+     * 
+     * @param x X position of the left-top corner.
      */
     @Override
     public void setX(int x) {
@@ -172,7 +244,11 @@ public class HorizontalSlider extends Prototype {
     }
 
     /**
-     * Set style of the HorizontalSlider
+     * Setting style of the ButtonCore.
+     * <p>
+     * Inner styles: "track", "handler".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

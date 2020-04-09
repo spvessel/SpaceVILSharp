@@ -15,6 +15,7 @@ namespace SpaceVIL
     public class ResizableItem : Prototype, IDraggable
     {
         private List<Side> _sidesExclude = new List<Side>();
+
         /// <summary>
         /// Specify which sides will be excluded, and these sides 
         /// can no longer be dragged to resize the ResizableItem.
@@ -28,6 +29,7 @@ namespace SpaceVIL
                     _sidesExclude.Add(side);
             }
         }
+        
         /// <summary>
         /// Getting exclused sides. These sides cannot be dragged 
         /// to resize the ResizableItem.
@@ -37,6 +39,7 @@ namespace SpaceVIL
         {
             return _sidesExclude;
         }
+
         /// <summary>
         /// Removing all exclused sides. After that all sides 
         /// can be dragged to resize the ResizableItem.
@@ -47,14 +50,17 @@ namespace SpaceVIL
         }
 
         internal Side _sides = 0;
+
         /// <summary>
         /// Event that is invoked when ResizableItem moves.
         /// </summary>
         public EventCommonMethod PositionChanged;
+
         /// <summary>
         /// Event that is invoked when ResizableItem resizes.
         /// </summary>
         public EventCommonMethod SizeChanged;
+
         /// <summary>
         ///  Disposing all resources if the item was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -65,39 +71,42 @@ namespace SpaceVIL
             PositionChanged = null;
             SizeChanged = null;
         }
+
         /// <summary>
         /// Property to lock ResizableItem movement and resizing.
         /// <para/> True: to lock. False: to unlock.
         /// <para/> Default: False.
         /// </summary>
         public bool IsLocked = false;
+
         /// <summary>
         /// Property to lock ResizableItem resizing by X axis.
         /// <para/> True: to unlock. False: to lock.
         /// <para/> Default: True.
         /// </summary>
         public bool IsXResizable = true;
+
         /// <summary>
         /// Property to lock ResizableItem resizing by Y axis.
         /// <para/> True: to unlock. False: to lock.
         /// <para/> Default: True.
         /// </summary>
         public bool IsYResizable = true;
+
         /// <summary>
         /// Property to lock ResizableItem movement by X axis.
         /// <para/> True: to unlock. False: to lock.
         /// <para/> Default: True.
         /// </summary>
         public bool IsXFloating = true;
+
         /// <summary>
         /// Property to lock ResizableItem movement by Y axis.
         /// <para/> True: to unlock. False: to lock.
         /// <para/> Default: True.
         /// </summary>
         public bool IsYFloating = true;
-
         private bool _isMoved;
-
         static int count = 0;
         private int _pressedX = 0;
         private int _pressedY = 0;
@@ -122,7 +131,7 @@ namespace SpaceVIL
             EventMouseHover += OnHover;
             count++;
         }
-        // private RedrawFrequency _renderFreq;
+
         protected virtual void OnHover(IItem sender, MouseArgs args)
         {
             if (IsLocked)
@@ -147,12 +156,12 @@ namespace SpaceVIL
             else
                 SetCursor(DefaultsService.GetDefaultCursor());
         }
+
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
             if (IsLocked)
                 return;
-            // _renderFreq = GetHandler().GetRenderFrequency();
-            // GetHandler().SetRenderFrequency(RedrawFrequency.Ultra);
+
             _globalX = GetX();
             _globalY = GetY();
             _pressedX = args.Position.GetX();
@@ -172,11 +181,6 @@ namespace SpaceVIL
             {
                 _isMoved = false;
             }
-        }
-
-        protected virtual void OnMouseRelease(IItem sender, MouseArgs args)
-        {
-            // GetHandler().SetRenderFrequency(_renderFreq);
         }
 
         protected virtual void OnDragging(IItem sender, MouseArgs args)

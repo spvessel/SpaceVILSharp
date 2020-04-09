@@ -1,11 +1,20 @@
 package com.spvessel.spacevil;
 
+/**
+ * Ellipse is a subclass that extends from com.spvessel.spacevil.Primitive for
+ * rendering an ellipse shape.
+ */
 public class Ellipse extends Primitive {
     private static int count = 0;
+    /**
+     * Property to specify number of edges in an ellipse shape.
+     * <p>
+     * Default: 16.
+     */
     public int quality = 16;
 
     /**
-     * Constructs an Ellipse
+     * Default Ellipse constructor.
      */
     public Ellipse() {
         setItemName("Ellipse_" + count);
@@ -13,9 +22,9 @@ public class Ellipse extends Primitive {
     }
 
     /**
-     * Constructs an Ellipse
+     * Constructs an Ellipse with specified number of edges in an ellipse shape.
      * 
-     * @param quality Ellipse quality (points count)
+     * @param quality Number of edges.
      */
     public Ellipse(int quality) {
         this();
@@ -23,11 +32,14 @@ public class Ellipse extends Primitive {
     }
 
     /**
-     * Make shape with triangles and convert to GL coordinates
+     * Overridden method for stretching the ellipse shape relative to the current
+     * size. Use in conjunction with getTriangles() and setTriangles() methods.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void makeShape() {
         setTriangles(GraphicsMathService.getEllipse(getWidth(), getHeight(), 0, 0, quality));
-        // return getTriangles();
     }
 }

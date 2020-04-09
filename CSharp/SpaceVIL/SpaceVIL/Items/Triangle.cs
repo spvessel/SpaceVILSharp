@@ -8,6 +8,7 @@ namespace SpaceVIL
     public class Triangle : Primitive
     {
         static int count = 0;
+
         /// <summary>
         /// Default Triangle constructor.
         /// </summary>
@@ -16,6 +17,7 @@ namespace SpaceVIL
         {
             count++;
         }
+
         /// <summary>
         /// Constructs an Triangle with specified rotation angle of an triangle shape.
         /// </summary>
@@ -24,10 +26,13 @@ namespace SpaceVIL
         {
             RotationAngle = angle;
         }
+
         /// <summary>
-        /// Rotation angle in degrees of an triangle shape. Default: 0.
+        /// Rotation angle in degrees of an triangle shape. 
+        /// <para/> Default: 0.
         /// </summary>
         public int RotationAngle = 0;
+
         /// <summary>
         /// Overridden method for stretching the triangle shape relative to the current size. 
         /// Use in conjunction with GetTriangles() and SetTriangles() methods.

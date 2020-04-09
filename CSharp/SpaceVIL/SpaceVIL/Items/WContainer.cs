@@ -8,9 +8,6 @@ namespace SpaceVIL
 {
     internal sealed class WContainer : Prototype//, IWindow
     {
-        /// <summary>
-        /// Event that is invoked when drag and drop files and folders.
-        /// </summary>
         internal EventWindowDropMethod EventDrop;
 
         public override void Release()

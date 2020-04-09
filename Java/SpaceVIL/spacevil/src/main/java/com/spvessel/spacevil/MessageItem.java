@@ -11,21 +11,38 @@ import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 
+/**
+ * MessageItem - an imitation of modal window for displaying any messages with
+ * ability to reply to them. It supports custom toolbar to make user's reply
+ * flexible.
+ * <p>
+ * Contains ok button, cancel button, titlebar, toolbar.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class MessageItem extends DialogItem {
     static int count = 0;
 
     private boolean _result = false;
 
     /**
-     * Get MessageItem boolean result
+     * Getting MessageItem result.
+     * 
+     * @return True: OK button was clicked. False: any button other than OK was
+     *         pressed.
      */
     public boolean getResult() {
         return _result;
     }
 
-    Map<ButtonCore, Integer> _userMap = new HashMap<>();
-    ButtonCore _userButtonResult = null;
+    private Map<ButtonCore, Integer> _userMap = new HashMap<>();
+    private ButtonCore _userButtonResult = null;
 
+    /**
+     * Getting result from custom toolbar (if it was created).
+     * 
+     * @return Id of clicked button (see addUserButton(ButtonCore button, int id)).
+     */
     public int getUserButtonResult() {
         if (_userButtonResult != null && _userMap.containsKey(_userButtonResult))
             return _userMap.get(_userButtonResult);
@@ -37,21 +54,41 @@ public class MessageItem extends DialogItem {
     private Label _msgLabel;
     private ButtonCore _okButton;
 
+    /**
+     * Getting OK button for appearance customizing or assigning new actions.
+     * 
+     * @return MessageItem's OK button as com.spvessel.spacevil.ButtonCore.
+     */
     public ButtonCore getOkButton() {
         return _okButton;
     }
 
-    private ButtonCore _cancel;
+    private ButtonCore _cancelButton;
 
+    /**
+     * Getting CANCEL button for appearance customizing or assigning new actions.
+     * 
+     * @return MessageItem's CANCEL button as com.spvessel.spacevil.ButtonCore.
+     */
     public ButtonCore getCancelButton() {
-        return _cancel;
+        return _cancelButton;
+    }
+
+    /**
+     * Setting CANCEL button visible of invisible.
+     * 
+     * @param value True: if you want CANCEL button to be visible. False:if you want
+     *              CANCEL button to be invisible.
+     */
+    public void setCancelVisible(boolean value) {
+        _cancelButton.setVisible(value);
     }
 
     private HorizontalStack _toolbar;
     private HorizontalStack _userbar;
 
     /**
-     * Constructs a MessageItem
+     * Default MessageItem constructor.
      */
     public MessageItem() {
         setItemName("MessageItem_" + count);
@@ -61,7 +98,7 @@ public class MessageItem extends DialogItem {
         _msgLayout = new Frame();
         _msgLabel = new Label();
         _okButton = getButton("OK");
-        _cancel = getButton("Cancel");
+        _cancelButton = getButton("Cancel");
 
         _toolbar = new HorizontalStack();
         _userbar = new HorizontalStack();
@@ -76,7 +113,10 @@ public class MessageItem extends DialogItem {
     }
 
     /**
-     * Constructs a MessageItem with message and title
+     * Constructs a MessageItem with specified message and title.
+     * 
+     * @param message Message to a user.
+     * @param title   Title of MessageItem.
      */
     public MessageItem(String message, String title) {
         this();
@@ -86,24 +126,47 @@ public class MessageItem extends DialogItem {
     }
 
     /**
-     * MessageItem text
+     * Setting a text of message of MessageItem.
+     * 
+     * @param text Text of message.
      */
     public void setMessageText(String text) {
         _msgLabel.setText(text);
     }
 
+    /**
+     * Getting the current text of message of MessageItem.
+     * 
+     * @return The current text of message.
+     */
     public String getMessageText() {
         return _msgLabel.getText();
     }
 
+    /**
+     * Setting a text of title of MessageItem.
+     * 
+     * @param title Text of title.
+     */
     public void setTitle(String title) {
         _titleBar.setText(title);
     }
 
+    /**
+     * Getting the current text of title of MessageItem.
+     * 
+     * @return The current text of title.
+     */
     public String getTitle() {
         return _titleBar.getText();
     }
 
+    /**
+     * Initializing all elements in the MessageItem.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void initElements() {
         // important!
@@ -116,7 +179,7 @@ public class MessageItem extends DialogItem {
 
         // toolbar size
         int w = _okButton.getWidth() + _okButton.getMargin().left + _okButton.getMargin().right;
-        if (_cancel.isVisible())
+        if (_cancelButton.isVisible())
             w = w * 2 + 10;
         _toolbar.setSize(w, _okButton.getHeight() + _okButton.getMargin().top + _okButton.getMargin().bottom);
         w_global += w;
@@ -160,10 +223,10 @@ public class MessageItem extends DialogItem {
                 _userbar.addItem(btn);
             }
         }
-        _toolbar.addItems(_okButton, _cancel);
+        _toolbar.addItems(_okButton, _cancelButton);
         _userMap.put(_okButton, 1);
         _userMap.put(_titleBar.getCloseButton(), 0);
-        _userMap.put(_cancel, -1);
+        _userMap.put(_cancelButton, -1);
         // buttons
         _okButton.setItemName("OK");
         _okButton.eventMouseClick.add((sender, args) -> {
@@ -171,9 +234,9 @@ public class MessageItem extends DialogItem {
             _result = true;
             close();
         });
-        _cancel.setItemName("Cancel");
-        _cancel.eventMouseClick.add((sender, args) -> {
-            _userButtonResult = _cancel;
+        _cancelButton.setItemName("Cancel");
+        _cancelButton.eventMouseClick.add((sender, args) -> {
+            _userButtonResult = _cancelButton;
             close();
         });
 
@@ -184,12 +247,22 @@ public class MessageItem extends DialogItem {
         });
     }
 
+    /**
+     * Shows MessageItem and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow).
+     * 
+     * @param handler Window for attaching MessageItem.
+     */
     @Override
     public void show(CoreWindow handler) {
         _result = false;
         super.show(handler);
     }
 
+    /**
+     * Closes MessageItem.
+     */
     @Override
     public void close() {
         if (onCloseDialog != null)
@@ -200,6 +273,12 @@ public class MessageItem extends DialogItem {
 
     private List<ButtonCore> _queue = new LinkedList<>();
 
+    /**
+     * Adding a custom user button to toolbal with the specified ID.
+     * 
+     * @param button User button as com.spvessel.spacevil.ButtonCore.
+     * @param id     Button's ID as integer.
+     */
     public void addUserButton(ButtonCore button, int id) {
         if (id == -1 || id == 0 || id == 1)
             return;
@@ -220,14 +299,36 @@ public class MessageItem extends DialogItem {
 
     private Style _btnStyle = null;
 
+    /**
+     * Getting the current style of a custom user button (that placed into user's
+     * toolbar).
+     * 
+     * @return The current style of custom user buttons as
+     *         com.spvessel.spacevil.Decorations.Style.
+     */
     public Style getDialogButtonStyle() {
         return _btnStyle;
     }
 
+    /**
+     * Setting a style for a custom user button (that placed into user's toolbar).
+     * 
+     * @param style A style for custom user buttons as
+     *              com.spvessel.spacevil.Decorations.Style.
+     */
     public void setDialogButtonStyle(Style style) {
         _btnStyle = style;
     }
 
+    /**
+     * Setting style of the MessageItem.
+     * 
+     * <p>
+     * Inner styles: "message", "layout", "toolbar", "userbar" (custom toolbar),
+     * "button".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -254,7 +355,7 @@ public class MessageItem extends DialogItem {
         if (inner_style != null) {
             _btnStyle = inner_style.clone();
             _okButton.setStyle(inner_style);
-            _cancel.setStyle(inner_style);
+            _cancelButton.setStyle(inner_style);
         }
     }
 }

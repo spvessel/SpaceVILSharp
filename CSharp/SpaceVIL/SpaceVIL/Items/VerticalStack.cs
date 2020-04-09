@@ -8,19 +8,21 @@ namespace SpaceVIL
     /// VerticalStack is a class that represents a line type container (vertical version). 
     /// VerticalStack groups items one after another using content alignment, margins, paddings, 
     /// sizes and size policies.
-    /// VerticalStack implements SpaceVIL.Core.IHLayout.
+    /// VerticalStack implements SpaceVIL.Core.IVLayout.
     /// By default ability to get focus is disabled.
     /// <para/> VerticalStack cannot receive any events, 
-    /// so VerticalStack is always in the ItemState.Base state.
+    /// so VerticalStack is always in the SpaceVIL.Core.ItemStateType.Base state.
     /// </summary>
     public class VerticalStack : Prototype, IVLayout
     {
         static int count = 0;
 
         private ItemAlignment _contentAlignment = ItemAlignment.Top;
+
         /// <summary>
-        /// Setting content alignment within VerticalStack area. Default: ItemAlignment.Left.
-        /// <para/> Supports only: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// Setting content alignment within VerticalStack area. 
+        /// <para/> Supports only: ItemAlignment.Top, ItemAlignment.VCenter, ItemAlignment.Bottom.
+        /// <para/> Default: ItemAlignment.Top.
         /// </summary>
         /// <param name="alignment">Content alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetContentAlignment(ItemAlignment alignment)
@@ -28,15 +30,17 @@ namespace SpaceVIL
             if (alignment == ItemAlignment.Top || alignment == ItemAlignment.VCenter || alignment == ItemAlignment.Bottom)
                 _contentAlignment = alignment;
         }
+
         /// <summary>
         /// Getting current content alignment.
-        /// <para/> Can be: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// <para/> Can be: ItemAlignment.Top, ItemAlignment.VCenter, ItemAlignment.Bottom.
         /// </summary>
         /// <returns>Content alignment as SpaceVIL.Core.ItemAlignment.</returns>
         public ItemAlignment GetContentAlignment()
         {
             return _contentAlignment;
         }
+
         /// <summary>
         /// Default VerticalStack constructor.
         /// </summary>
@@ -53,6 +57,7 @@ namespace SpaceVIL
         {
             return false;
         }
+        
         /// <summary>
         /// Adding item to the VerticalStack. 
         /// </summary>
@@ -62,6 +67,7 @@ namespace SpaceVIL
             base.AddItem(item);
             UpdateLayout();
         }
+
         /// <summary>
         /// Inserting item to the VerticalStack container. 
         /// If the number of container elements is less than the index, 
@@ -74,6 +80,7 @@ namespace SpaceVIL
             base.InsertItem(item, index);
             UpdateLayout();
         }
+
         /// <summary>
         /// Removing the specified item from the VerticalStack container.
         /// </summary>
@@ -87,6 +94,7 @@ namespace SpaceVIL
                 UpdateLayout();
             return result;
         }
+
         /// <summary>
         /// Setting VerticalStack height. If the value is greater/less than the maximum/minimum 
         /// value of the height, then the height becomes equal to the maximum/minimum value.
@@ -97,6 +105,7 @@ namespace SpaceVIL
             base.SetHeight(height);
             UpdateLayout();
         }
+
         /// <summary>
         /// Setting Y coordinate of the left-top corner of the VerticalStack.
         /// </summary>
@@ -106,8 +115,9 @@ namespace SpaceVIL
             base.SetY(y);
             UpdateLayout();
         }
+        
         /// <summary>
-        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
+        /// Updating all children positions (implementation of SpaceVIL.Core.IVLayout).
         /// </summary>
         public void UpdateLayout()
         {

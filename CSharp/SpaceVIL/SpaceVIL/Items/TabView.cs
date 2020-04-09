@@ -9,11 +9,12 @@ namespace SpaceVIL
     /// <summary>
     /// TabView is a special container designed to group items within specific tab page.
     /// <para/> TabView cannot receive any events, 
-    /// so TabView is always in the ItemState.Base state.
+    /// so TabView is always in the SpaceVIL.Core.ItemStateType.Base state.
     /// </summary>
     public class TabView : VerticalStack
     {
         static int count = 0;
+
         /// <summary>
         /// Setting the width policy of tabs. 
         /// Can be Fixed (tab shape not changes its size) or 
@@ -24,6 +25,7 @@ namespace SpaceVIL
         {
             _tabBar.SetContentPolicy(policy);
         }
+
         /// <summary>
         /// Getting the current width policy of tabs. 
         /// Can be Fixed (tab shape not changes its size) or 
@@ -37,6 +39,7 @@ namespace SpaceVIL
 
         private TabBar _tabBar;
         private Frame _viewArea;
+
         /// <summary>
         /// Getting all existing tabs in TabView.
         /// </summary>
@@ -45,7 +48,6 @@ namespace SpaceVIL
         {
             return _tabBar.GetTabs();
         }
-
 
         /// <summary>
         /// Default TabView constructor.
@@ -72,14 +74,16 @@ namespace SpaceVIL
         {
             AddItems(_tabBar, _viewArea);
         }
+
         /// <summary>
-        /// Selecting a tab by its SpaceVIL.Tab instance.
+        /// Selecting a tab by its Tab instance.
         /// </summary>
-        /// <param name="tab"></param>
+        /// <param name="tab">Tab to select.</param>
         public void SelectTab(Tab tab)
         {
             _tabBar.SelectTab(tab);
         }
+
         /// <summary>
         /// Selecting a tab by its index. 
         /// <para/> If index is out of range then this method does nothing.
@@ -89,6 +93,7 @@ namespace SpaceVIL
         {
             _tabBar.SelectTab(index);
         }
+
         /// <summary>
         /// Selecting a tab by its name. 
         /// <para/> Tab name is ID of UI element. Tab name is uniq but tab text is not.
@@ -100,6 +105,7 @@ namespace SpaceVIL
         {
             _tabBar.SelectTabByName(tabName);
         }
+
         /// <summary>
         /// Selecting a first-found tab by its text. 
         /// <para/> Tab name is ID of UI element. Tab name is uniq but tab text is not.
@@ -115,11 +121,12 @@ namespace SpaceVIL
         /// <summary>
         /// Getting the index of the current selected tab.
         /// </summary>
-        /// <returns>Index of the current selected tab</returns>
+        /// <returns>Index of the current selected tab.</returns>
         public int GetSelectedTabIndex()
         {
             return _tabBar.GetSelectedTabIndex();
         }
+
         /// <summary>
         /// Getting the current selected tab.
         /// </summary>
@@ -128,6 +135,7 @@ namespace SpaceVIL
         {
             return _tabBar.GetSelectedTab();
         }
+
         /// <summary>
         /// Getting a page of a tab. 
         /// </summary>
@@ -137,11 +145,12 @@ namespace SpaceVIL
         {
             return _tabBar.GetTabFrame(tab);
         }
+
         /// <summary>
-        /// Getting content of a page by its tab SpaceVIL.Tab instance.
+        /// Getting content of a page by its tab.
         /// </summary>
         /// <param name="tab">Tab as SpaceVIL.Tab.</param>
-        /// <returns>Page content as List&lt;SpaceVIL.Tab&gt;.</returns>
+        /// <returns>Page content as List&lt;SpaceVIL.IBaseItem&gt;.</returns>
         public List<IBaseItem> GetTabContent(Tab tab)
         {
             return _tabBar.GetTabContent(tab);
@@ -169,6 +178,7 @@ namespace SpaceVIL
                 UpdateLayout();
             };
         }
+
         /// <summary>
         ///  Adding new tabs to the TabView.
         /// </summary>
@@ -178,6 +188,7 @@ namespace SpaceVIL
             foreach (Tab tab in tabs)
                 AddTab(tab);
         }
+
         /// <summary>
         /// Removing the specified item from TabView.
         /// </summary>
@@ -215,6 +226,7 @@ namespace SpaceVIL
         {
             return _tabBar.RemoveTabByName(tabName);
         }
+
         /// <summary>
         /// Removing a first-found tab by its text.
         /// <para/> Tab name is ID of UI element. Tab name is uniq but tab text is not.
@@ -230,7 +242,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Removing a tab by its SpaceVIL.Tab instance.
+        /// Removing a tab.
         /// </summary>
         /// <param name="tab">Tab as SpaceVIL.Tab.</param>
         /// <returns>True: if the removal was successful. 
@@ -239,6 +251,7 @@ namespace SpaceVIL
         {
             return _tabBar.RemoveTab(tab);
         }
+
         /// <summary>
         /// Removing all existing tabs.
         /// </summary>
@@ -261,6 +274,7 @@ namespace SpaceVIL
         {
             _tabBar.AddItemToTabByName(tabName, item);
         }
+
         /// <summary>
         /// Adding an item to page by its tab text.
         /// <para/> Tab name is ID of UI element. Tab name is uniq but tab text is not.

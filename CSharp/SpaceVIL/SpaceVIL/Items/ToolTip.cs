@@ -14,6 +14,7 @@ namespace SpaceVIL
         {
             return window.GetLayout().GetToolTip();
         }
+
         /// <summary>
         /// Setting style for ToolTipItem of the specified window. 
         /// <para/> Every window has its own ToolTipItem.
@@ -27,6 +28,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetStyle(style);
         }
+
         /// <summary>
         /// Setting waiting time in milliseconds after which ToolTipItem appears.
         /// <para/> Every window has its own ToolTipItem.
@@ -41,10 +43,12 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetTimeOut(milliseconds);
         }
+
         /// <summary>
         /// Getting current waiting time in milliseconds after which ToolTipItem appears.
         /// <para/> Every window has its own ToolTipItem.
         /// </summary>
+        /// <param name="window">Window as SpaceVIL.CoreWindow.</param>
         /// <returns>Current waiting time in milliseconds.</returns>
         public static int GetTimeOut(CoreWindow window)
         {
@@ -53,6 +57,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             return toolTip.GetTimeOut();
         }
+
         /// <summary>
         /// Setting background color of ToolTipItem.
         /// <para/> Every window has its own ToolTipItem.
@@ -66,6 +71,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetBackground(color);
         }
+
         /// <summary>
         /// Setting text color of ToolTipItem.
         /// <para/> Every window has its own ToolTipItem.
@@ -79,6 +85,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text font of ToolTipItem.
         /// <para/> Every window has its own ToolTipItem.
@@ -92,6 +99,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetFont(font);
         }
+
         /// <summary>
         /// Setting border for ToolTipItem.
         /// <para/> Every window has its own ToolTipItem.
@@ -105,6 +113,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetBorder(border);
         }
+
         /// <summary>
         /// Setting shadow for ToolTipItem.
         /// <para/> Every window has its own ToolTipItem.
@@ -118,6 +127,7 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetShadow(shadow.GetRadius(), shadow.GetXOffset(), shadow.GetYOffset(), shadow.GetColor());
         }
+
         /// <summary>
         /// Setting ToolTipItem shadow visibility. 
         /// <para/> Every window has its own ToolTipItem.
@@ -133,12 +143,13 @@ namespace SpaceVIL
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetShadowDrop(value);
         }
+
         /// <summary>
         /// Adding item to the ToolTipItem for decoration or extension.
         /// <para/> Every window has its own ToolTipItem.
         /// </summary>
         /// <param name="window">Window as SpaceVIL.CoreWindow.</param>
-        /// <param name="items"></param>
+        /// <param name="items">Sequence of items as SpaceVIL.Core.IBaseItem.</param>
         public static void AddItems(CoreWindow window, params IBaseItem[] items)
         {
             if (window == null)

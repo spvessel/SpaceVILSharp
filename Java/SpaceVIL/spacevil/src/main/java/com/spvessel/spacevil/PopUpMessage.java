@@ -12,21 +12,44 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * PopUpMessage is designed to display short quick messages to the user.
+ * PopUpMessage disappears after a specified period of time (default: 2
+ * seconds), or you can prevent this by moving the cursor over PopUpMessage and
+ * closing it later manually.
+ * <p>
+ * Contains text, close button.
+ * <p>
+ * Supports all events except drag and drop.
+ * <p>
+ * By default PopUpMessage do not pass further any input events (mouse, keyboard
+ * and etc.).
+ */
 public class PopUpMessage extends Prototype {
     private static int count = 0;
-    private Label _text_object;
-    private ButtonCore _btn_close;
+    private Label _textObject;
+    private ButtonCore _btnClose;
     Timer _stop;
     private int _timeout = 2000;
     boolean _holded = false;
 
     /**
-     * PopUpMessage timeout in milliseconds
+     * Setting waiting time in milliseconds after which PopUpMessage will be closed.
+     * <p>
+     * Default: 2000 milliseconds (2 seconds).
+     * 
+     * @param milliseconds Waiting time in milliseconds.
      */
     public void setTimeOut(int milliseconds) {
         _timeout = milliseconds;
     }
 
+    /**
+     * Getting current waiting time in milliseconds after which PopUpMessage will be
+     * closed.
+     * 
+     * @return Current waiting time in milliseconds.
+     */
     public int getTimeOut() {
         return _timeout;
     }
@@ -38,113 +61,215 @@ public class PopUpMessage extends Prototype {
         setItemName("PopUpMessage_" + count);
         count++;
 
-        _btn_close = new ButtonCore();
-        _btn_close.setItemName("ClosePopUp");
-        _text_object = new Label();
-        _text_object.setText(message);
+        _btnClose = new ButtonCore();
+        _btnClose.setItemName("ClosePopUp");
+        _textObject = new Label();
+        _textObject.setText(message);
 
         setStyle(DefaultsService.getDefaultStyle(PopUpMessage.class));
         setPassEvents(false);
     }
 
-    // text init
     /**
-     * Text alignment in the PopUpMessage
+     * Setting alignment of a PopUpMessage text. Combines with alignment by
+     * vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
-    }
-
-    public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     /**
-     * Text margin in the PopUpMessage
+     * Setting alignment of a PopUpMessage text. Combines with alignment by
+     * vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as List of
+     *                  com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        _textObject.setTextAlignment(alignment);
+    }
+
+    /**
+     * Setting indents for the text to offset text relative to PopUpMessage.
+     * 
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
+        _textObject.setMargin(margin);
     }
 
     /**
-     * Text font parameters in the PopUpMessage
+     * Setting indents for the text to offset text relative to PopUpMessage.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
+     * @param bottom Indent on the bottom.
+     */
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textObject.setMargin(left, top, right, bottom);
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
+    public Indents getTextMargin() {
+        return _textObject.getMargin();
+    }
+
+    /**
+     * Setting font of the text.
+     * 
+     * @param font Font as java.awt.Font.
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
-    }
-
-    public void setFontSize(int size) {
-        _text_object.setFontSize(size);
-    }
-
-    public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
-    }
-
-    public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
-    }
-
-    public Font getFont() {
-        return _text_object.getFont();
+        _textObject.setFont(font);
     }
 
     /**
-     * Set text in the PopUpMessage
+     * Setting font size of the text.
+     * 
+     * @param size New size of the font.
+     */
+    public void setFontSize(int size) {
+        _textObject.setFontSize(size);
+    }
+
+    /**
+     * Setting font style of the text.
+     * 
+     * @param style New font style (from java.awt.Font package).
+     */
+    public void setFontStyle(int style) {
+        _textObject.setFontStyle(style);
+    }
+
+    /**
+     * Setting new font family of the text.
+     * 
+     * @param fontFamily New font family name.
+     */
+    public void setFontFamily(String fontFamily) {
+        _textObject.setFontFamily(fontFamily);
+    }
+
+    /**
+     * Getting the current font of the text.
+     * 
+     * @return Font as java.awt.Font.
+     */
+    public Font getFont() {
+        return _textObject.getFont();
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.String.
      */
     public void setText(String text) {
-        _text_object.setText(text);
+        _textObject.setText(text);
     }
 
     /**
-     * Get the PopUpMessage text
+     * Getting the current text of the PopUpMessage.
+     * 
+     * @return Text as java.lang.String.
      */
     public String getText() {
-        return _text_object.getText();
+        return _textObject.getText();
     }
 
     /**
-     * Text color in the PopUpMessage
+     * Setting text color of a PopUpMessage.
+     * 
+     * @param color Text color as java.awt.Color.
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
-    }
-
-    public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public Color getForeground() {
-        return _text_object.getForeground();
+        _textObject.setForeground(color);
     }
 
     /**
-     * Initialization and adding of all elements in the PopUpMessage
+     * Setting text color of a PopUpMessage in byte RGB format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b) {
+        _textObject.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting text color of an item in byte RGBA format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b, int a) {
+        _textObject.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Setting text color of a PopUpMessage in float RGB format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b) {
+        _textObject.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting text color of a PopUpMessage in float RGBA format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b, float a) {
+        _textObject.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Getting current text color.
+     * 
+     * @return Text color as as java.awt.Color.
+     */
+    public Color getForeground() {
+        return _textObject.getForeground();
+    }
+
+    /**
+     * Initializing all elements in the PopUpMessage.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
         InterfaceMouseMethodState click = (sender, args) -> removeSelf();
-        _btn_close.eventMouseClick.add(click);
+        _btnClose.eventMouseClick.add(click);
         // adding
-        addItems(_text_object, _btn_close);
+        addItems(_textObject, _btnClose);
     }
 
     private CoreWindow _handler = null;
 
     /**
-     * Show the PopUpMessage
+     * Shows PopUpMessage and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow).
+     * 
+     * @param handler Window for attaching PopUpMessage.
      */
     public void show(CoreWindow handler) {
         _handler = handler;
@@ -184,9 +309,12 @@ public class PopUpMessage extends Prototype {
     }
 
     /**
-     * Set style of the PopUpMessage
+     * Setting style of the PopUpMessage.
+     * <p>
+     * Inner styles: "closebutton".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
-    // style
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -198,7 +326,7 @@ public class PopUpMessage extends Prototype {
 
         Style inner_style = style.getInnerStyle("closebutton");
         if (inner_style != null) {
-            _btn_close.setStyle(inner_style);
+            _btnClose.setStyle(inner_style);
         }
     }
 }

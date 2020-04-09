@@ -10,18 +10,25 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * TextView is designed to display non-editable text with the ability to select
+ * and copy. TextView wraps contained text in the current width.
+ * <p>
+ * Supports all events including drag and drop.
+ */
 public class TextView extends Prototype implements InterfaceDraggable, InterfaceTextShortcuts, InterfaceTextWrap {
 
     private static int count = 0;
     private Point _cursorPosition = new Point(0, 0);
     private CustomSelector _selectedArea;
-
     private TextureStorage _textureStorage;
-
     private Point _selectFrom = new Point(-1, 0);
     private Point _selectTo = new Point(-1, 0);
     private boolean _isSelect = false;
 
+    /**
+     * Default TextView constructor.
+     */
     public TextView() {
         setItemName("TextView_" + count);
         count++;
@@ -32,7 +39,6 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
         eventMousePress.add(this::onMousePressed);
         eventMouseClick.add(this::onMouseClick);
-//        eventMouseDoubleClick.add(this::onDoubleClick);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);
@@ -45,7 +51,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     private Point _previousClickPos = new Point();
 
     private void onMousePressed(Object sender, MouseArgs args) {
-        //Set cursor and unselect only - common actions for click/double click
+        // Set cursor and unselect only - common actions for click/double click
         _textureStorage.textInputLock.lock();
         try {
             if (args.button == MouseButton.BUTTON_LEFT) {
@@ -64,16 +70,18 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         _textureStorage.textInputLock.lock();
         try {
             if (args.button == MouseButton.BUTTON_LEFT) {
-//                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-//                if (_isSelect) {
-//                    unselectText();
-//                }
-//
+                // replaceCursorAccordingCoord(new Point(args.position.getX(),
+                // args.position.getY()));
+                // if (_isSelect) {
+                // unselectText();
+                // }
+                //
                 Point savePos = new Point(_cursorPosition);
                 if (isPosSame()) {
                     if ((System.nanoTime() - _startTime) / 1000000 < 500) {
 
-                        if (_isDoubleClick) { // && (System.nanoTime() - _startTime) / 1000000 < 500) { //Select line on triple click
+                        if (_isDoubleClick) { // && (System.nanoTime() - _startTime) / 1000000 < 500) { //Select line on
+                                              // triple click
                             _isSelect = true;
                             _selectFrom = new Point(0, _cursorPosition.y);
                             _selectTo = new Point(getLettersCountInLine(_cursorPosition.y), _cursorPosition.y);
@@ -81,7 +89,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
                             makeSelectedArea();
 
                             _isDoubleClick = false;
-                        } else { //if double click
+                        } else { // if double click
                             int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
 
                             if (wordBounds[0] != wordBounds[1]) {
@@ -92,7 +100,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
                                 makeSelectedArea();
                             }
 
-//                            _startTime = System.nanoTime();
+                            // _startTime = System.nanoTime();
                             _isDoubleClick = true;
                         }
 
@@ -102,7 +110,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
                 } else {
                     _isDoubleClick = false;
-//                    _startTime = System.nanoTime();
+                    // _startTime = System.nanoTime();
                 }
 
                 _previousClickPos = savePos;
@@ -117,39 +125,40 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
     }
 
-//    private void onDoubleClick(Object sender, MouseArgs args) {
-//        _textureStorage.textInputLock.lock();
-//        try {
-//            if (args.button == MouseButton.BUTTON_LEFT) {
-////                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-////                if (_isSelect) {
-////                    unselectText();
-////                }
-////
-//                Point savePos = new Point(_cursorPosition);
-//                if (isPosSame()) {
-//                    int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
-//
-//                    if (wordBounds[0] != wordBounds[1]) {
-//                        _isSelect = true;
-//                        _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
-//                        _selectTo = new Point(wordBounds[1], _cursorPosition.y);
-//                        _cursorPosition = new Point(_selectTo);
-//                        makeSelectedArea();
-//                    }
-//
-//                    _startTime = System.nanoTime();
-//                    _isDoubleClick = true;
-//                }
-//                _previousClickPos = savePos;
-//
-//            } else {
-//                _isDoubleClick = false;
-//            }
-//        } finally {
-//            _textureStorage.textInputLock.unlock();
-//        }
-//    }
+    // private void onDoubleClick(Object sender, MouseArgs args) {
+    // _textureStorage.textInputLock.lock();
+    // try {
+    // if (args.button == MouseButton.BUTTON_LEFT) {
+    //// replaceCursorAccordingCoord(new Point(args.position.getX(),
+    // args.position.getY()));
+    //// if (_isSelect) {
+    //// unselectText();
+    //// }
+    ////
+    // Point savePos = new Point(_cursorPosition);
+    // if (isPosSame()) {
+    // int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
+    //
+    // if (wordBounds[0] != wordBounds[1]) {
+    // _isSelect = true;
+    // _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
+    // _selectTo = new Point(wordBounds[1], _cursorPosition.y);
+    // _cursorPosition = new Point(_selectTo);
+    // makeSelectedArea();
+    // }
+    //
+    // _startTime = System.nanoTime();
+    // _isDoubleClick = true;
+    // }
+    // _previousClickPos = savePos;
+    //
+    // } else {
+    // _isDoubleClick = false;
+    // }
+    // } finally {
+    // _textureStorage.textInputLock.unlock();
+    // }
+    // }
 
     private boolean isPosSame() {
         Point pos1 = new Point(_cursorPosition);
@@ -188,16 +197,26 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     private void onKeyPress(Object sender, KeyArgs args) {
-        TextShortcutProcessor.processShortcut(this, args); //ctrl + c & ctrl + a processor only
+        TextShortcutProcessor.processShortcut(this, args); // ctrl + c & ctrl + a processor only
         if (args.key == KeyCode.ESCAPE && _isSelect) {
             unselectText();
         }
     }
 
+    /**
+     * Getting the current text of the TextView.
+     * 
+     * @return Text as java.lang.String.
+     */
     public String getText() {
         return _textureStorage.getWholeText();
     }
 
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.String.
+     */
     public void setText(String text) {
         _textureStorage.textInputLock.lock();
         try {
@@ -216,10 +235,16 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         return _textureStorage.getTextHeight();
     }
 
+    /**
+     * Initializing all elements in the TextView.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void initElements() {
         addItems(_selectedArea, _textureStorage);
-        _textureStorage.initLines(2); //_cursor.getWidth());
+        _textureStorage.initLines(2); // _cursor.getWidth());
         if (isWrapText()) {
             reorganizeText();
         }
@@ -308,6 +333,11 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
     }
 
+    /**
+     * Getting the current selected text.
+     * 
+     * @return Current selected text.
+     */
     public String getSelectedText() {
         return privGetSelectedText();
     }
@@ -321,6 +351,9 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         makeSelectedArea(new Point(_cursorPosition), new Point(_cursorPosition));
     }
 
+    /**
+     * Selecting entire text of the TextView.
+     */
     public final void selectAll() {
         _textureStorage.textInputLock.lock();
         try {
@@ -336,6 +369,13 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
     }
 
+    /**
+     * Setting item width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the item.
+     */
     @Override
     public void setWidth(int width) {
         if (getWidth() == width) {
@@ -344,7 +384,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
         updateBlockWidth(width);
     }
-    
+
     private void updateBlockWidth(int width) {
         Point tmpCursor; // = new Point(_cursorPosition);
         Point fromTmp = new Point(_selectFrom);
@@ -357,7 +397,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
 
         super.setWidth(width);
-        _textureStorage.updateBlockWidth(2); //_cursor.getWidth());
+        _textureStorage.updateBlockWidth(2); // _cursor.getWidth());
         reorganizeText();
 
         _cursorPosition = _textureStorage.realCursorPosToWrap(tmpCursor);
@@ -372,6 +412,13 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         changeHeightAccordingToText();
     }
 
+    /**
+     * Setting item height. If the value is greater/less than the maximum/minimum
+     * value of the height, then the height becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param height Height of the item.
+     */
     @Override
     public void setHeight(int height) {
         if (getHeight() == height) {
@@ -392,13 +439,19 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         setHeight(textHeight);
     }
 
-    //Wrap Text Stuff---------------------------------------------------------------------------------------------------
+    // Wrap Text
+    // Stuff---------------------------------------------------------------------------------------------------
 
+    /**
+     * Always returns True. TextView always wraps contained text.
+     * <p>
+     * com.spvessel.spacevil.Core.InterfaceTextWrap implementation.
+     */
     public boolean isWrapText() {
         return true;
     }
 
-    //Something changed (text is always wrapped)
+    // Something changed (text is always wrapped)
     private void reorganizeText() {
         _textureStorage.textInputLock.lock();
         try {
@@ -408,65 +461,153 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
     }
 
-    //Decorations-------------------------------------------------------------------------------------------------------
+    // Decorations-------------------------------------------------------------------------------------------------------
 
+    /**
+     * Setting indent between lines in TextView.
+     * 
+     * @param lineSpacer Indent between lines.
+     */
     public void setLineSpacer(int lineSpacer) {
         _textureStorage.setLineSpacer(lineSpacer);
     }
 
+    /**
+     * Getting current indent between lines in TextView.
+     * 
+     * @return Indent between lines.
+     */
     public int getLineSpacer() {
         return _textureStorage.getLineSpacer();
     }
 
-    public void setTextAlignment(ItemAlignment... alignment) {
+    void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
     }
 
-    public void setTextAlignment(List<ItemAlignment> alignment) {
+    void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes for yet
     }
 
+    /**
+     * Setting indents for the text to offset text relative to this TextView.
+     * 
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
     public void setTextMargin(Indents margin) {
         _textureStorage.setTextMargin(margin);
     }
 
+    /**
+     * Setting indents for the text to offset text relative to TextView.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
+     * @param bottom Indent on the bottom.
+     */
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textureStorage.setTextMargin(new Indents(left, top, right, bottom));
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
     public Indents getTextMargin() {
         return _textureStorage.getTextMargin();
     }
 
+    /**
+     * Setting font of the text.
+     * 
+     * @param font Font as java.awt.Font.
+     */
     public void setFont(Font font) {
         _textureStorage.setFont(font);
     }
 
+    /**
+     * Setting font size of the text.
+     * 
+     * @param size New size of the font.
+     */
     public Font getFont() {
         return _textureStorage.getFont();
     }
 
+    /**
+     * Setting text color of a TextView.
+     * 
+     * @param color Text color as java.awt.Color.
+     */
     public void setForeground(Color color) {
         _textureStorage.setForeground(color);
     }
 
+    /**
+     * Setting text color of a TextView in byte RGB format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     */
     public void setForeground(int r, int g, int b) {
         setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
+    /**
+     * Setting background color of an item in byte RGBA format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
+     */
     public void setForeground(int r, int g, int b, int a) {
         setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
+    /**
+     * Setting text color of a TextView in float RGB format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     */
     public void setForeground(float r, float g, float b) {
         setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
+    /**
+     * Setting text color of a TextView in float RGBA format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
+     */
     public void setForeground(float r, float g, float b, float a) {
         setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
+    /**
+     * Getting current text color.
+     * 
+     * @return Text color as as java.awt.Color.
+     */
     public Color getForeground() {
         return _textureStorage.getForeground();
     }
 
-    //Style
+    /**
+     * Setting style of the TextView.
+     * <p>
+     * Inner styles: "selection".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null) {
@@ -483,22 +624,36 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
     }
 
-    //Shortcut methods disable------------------------------------------------------------------------------------------
+    // Shortcut methods
+    // disable------------------------------------------------------------------------------------------
+
+    /**
+     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     */
     @Override
     public void pasteText(String pasteStr) {
 
     }
 
+    /**
+     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     */
     @Override
     public String cutText() {
         return "";
     }
 
+    /**
+     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     */
     @Override
     public void undo() {
 
     }
 
+    /**
+     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     */
     @Override
     public void redo() {
 

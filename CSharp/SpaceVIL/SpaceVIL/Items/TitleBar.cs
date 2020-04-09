@@ -16,6 +16,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         private HorizontalStack _layout;
+
         /// <summary>
         /// Direction of title bar (in Mac OS is HorizontalDirection.FromRightToLeft, 
         /// in others OS HorizontalDirection.FromLeftToRight).
@@ -23,6 +24,7 @@ namespace SpaceVIL
         public HorizontalDirection Direction = HorizontalDirection.FromLeftToRight;
         private Label _textLabel;
         private ImageItem _icon;
+
         /// <summary>
         /// Getting icon of title bar.
         /// </summary>
@@ -31,7 +33,9 @@ namespace SpaceVIL
         {
             return _icon;
         }
+
         private ButtonCore _close;
+
         /// <summary>
         /// Getting close button of title bar. This button closes the current window.
         /// </summary>
@@ -40,7 +44,9 @@ namespace SpaceVIL
         {
             return _close;
         }
+
         private ButtonCore _minimize;
+
         /// <summary>
         /// Getting minimize button of title bar. This button minimizes the window to the taskbar.
         /// </summary>
@@ -49,7 +55,9 @@ namespace SpaceVIL
         {
             return _minimize;
         }
+
         private ButtonCore _maximize;
+
         /// <summary>
         /// Getting maximize button of title bar. This button maximizes/restores the 
         /// window to all available space of the current display 
@@ -60,6 +68,7 @@ namespace SpaceVIL
         {
             return _maximize;
         }
+
         /// <summary>
         /// Default TitleBar constructor.
         /// </summary>
@@ -87,14 +96,16 @@ namespace SpaceVIL
                 GetHandler().Maximize();
             };
         }
+
         /// <summary>
         /// Constructs TitleBar with the specified title text.
         /// </summary>
-        /// <param name="text">Еitle text</param>
+        /// <param name="text">Title text</param>
         public TitleBar(String text) : this()
         {
             SetText(text);
         }
+
         /// <summary>
         /// Setting image icon for title bar. The image is scaled to the specified width and height.
         /// </summary>
@@ -117,6 +128,7 @@ namespace SpaceVIL
         {
             _textLabel.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting alignment of a TitleBar text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -135,6 +147,7 @@ namespace SpaceVIL
         {
             _textLabel.SetMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to TitleBar.
         /// </summary>
@@ -146,6 +159,7 @@ namespace SpaceVIL
         {
             _textLabel.SetMargin(left, top, right, bottom);
         }
+
         /// <summary>
         /// Getting indents of the text.
         /// </summary>
@@ -163,6 +177,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text.
         /// </summary>
@@ -171,6 +186,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the text.
         /// </summary>
@@ -179,6 +195,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontStyle(style);
         }
+
         /// <summary>
         /// Setting new font family of the text.
         /// </summary>
@@ -187,6 +204,7 @@ namespace SpaceVIL
         {
             _textLabel.SetFontFamily(fontFamily);
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -204,6 +222,7 @@ namespace SpaceVIL
         {
             _textLabel.SetText(text);
         }
+
         /// <summary>
         /// Getting the current text of the TitleBar.
         /// </summary>
@@ -212,6 +231,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetText();
         }
+
         /// <summary>
         /// Getting the text width (useful when you need resize TitleBar by text width).
         /// </summary>
@@ -220,6 +240,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetWidth();
         }
+
         /// <summary>
         /// Getting the text height (useful when you need resize TitleBar by text height).
         /// </summary>
@@ -228,6 +249,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetHeight();
         }
+
         /// <summary>
         /// Setting text color of a TitleBar.
         /// </summary>
@@ -236,6 +258,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a TitleBar in byte RGB format.
         /// </summary>
@@ -246,6 +269,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of a TitleBar in byte RGBA format.
         /// </summary>
@@ -257,6 +281,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Setting text color of a TitleBar in float RGB format.
         /// </summary>
@@ -267,6 +292,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of a TitleBar in float RGBA format.
         /// </summary>
@@ -278,6 +304,7 @@ namespace SpaceVIL
         {
             _textLabel.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>
@@ -286,6 +313,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetForeground();
         }
+
         /// <summary>
         /// Initializing all elements in the TitleBar.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 

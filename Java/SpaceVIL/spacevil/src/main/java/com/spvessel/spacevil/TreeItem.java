@@ -21,16 +21,34 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+/**
+ * TreeItem is designed to be a node for com.spvessel.spacevil.TreeView
+ * (branch-leaf type of container).
+ * <p>
+ * Can be as leaf node or as branch node. Branch node can contains another
+ * branches and leafs. Leaf node cannot contains any nodes.
+ * <p>
+ * Contains text, icon, indicator (branch only).
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class TreeItem extends Prototype {
     private List<TreeItem> _list_inners;
 
     /**
-     * @return list of the TreeItem items
+     * Getting all contained nodes in this TreeItem.
+     * 
+     * @return Contained nodes as List&lt;com.spvessel.spacevil.TreeItem&gt;
      */
     public List<TreeItem> getChildren() {
         return _list_inners;
     }
 
+    /**
+     * Removing the specified node from TreeItem.
+     * 
+     * @param child Node as com.spvessel.spacevil.TreeItem.
+     */
     public void removeChild(TreeItem child) {
         if (_list_inners.contains(child)) {
             _list_inners.remove(child);
@@ -41,6 +59,9 @@ public class TreeItem extends Prototype {
 
     private Lock locker = new ReentrantLock();
 
+    /**
+     * Removing all contained nodes in this TreeItem.
+     */
     public void removeChildren() {
         locker.lock();
         try {
@@ -59,84 +80,118 @@ public class TreeItem extends Prototype {
 
     private TreeItem _parentBranch;
 
+    /**
+     * Getting the parent branch node that contains this TreeItem.
+     * 
+     * @return Parent branch node as com.spvessel.spacevil.TreeItem.
+     */
     public TreeItem getParentBranch() {
         return _parentBranch;
     }
 
     TreeView _treeViewContainer;
-    int _nesting_level = 0;
-    private int _indent_size = 20;
+
+    int _nestingLevel = 0;
+
+    private int _indentSize = 20;
 
     /**
-     * Indent size of the TreeItem
+     * Getting indent size (X axis) of the current TreeItem relative to its parent
+     * branch.
+     * 
+     * @return Indent size (X axis).
      */
     public int getIndentSize() {
-        return _indent_size;
+        return _indentSize;
     }
 
+    /**
+     * Setting indent size (X axis) for the current TreeItem relative to its parent
+     * branch.
+     * 
+     * @param size Indent size (X axis).
+     */
     public void setIndentSize(int size) {
-        _indent_size = size;
+        _indentSize = size;
         resetIndents();
     }
 
     private boolean _isRoot = false;
 
+    /**
+     * Returns True if this TreeItem is root (head) otherwise returns False.
+     * 
+     * @return True: if this TreeItem is root (head). False: if this TreeItem is not
+     *         root (head).
+     */
     public boolean isRoot() {
         return _isRoot;
     }
+
     void setRoot(boolean value) {
         _isRoot = value;
     }
 
     long index = 0;
-    private TreeItemType _item_type;
+
+    private TreeItemType _nodeType;
 
     /**
-     * @return TreeItem type (LEAF, BRANCH)
+     * Getting node type.
+     * <p>
+     * Can be TreeItemType.LEAF or TreeItemType.BRANCH.
+     * 
+     * @return Node type as com.spvessel.spacevil.Flags.TreeItemType.
      */
     public TreeItemType getItemType() {
-        return _item_type;
+        return _nodeType;
     }
 
     static int count = 0;
-    private Label _text_object;
+
+    private Label _textLabel;
+
     private ButtonToggle _indicator;
 
     /**
-     * @return TreeItem indicator ButtonToggle type for styling
+     * Getting the branch node indicator of TreeItem.
+     * 
+     * @return Branch node indicator.
      */
     public ButtonToggle getIndicator() {
         return _indicator;
     }
 
-    private CustomShape _icon_shape;
+    private CustomShape _iconShape;
 
     /**
-     * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
+     * Constructs TreeItem with specified type of node.
+     * 
+     * @param type Node type as com.spvessel.spacevil.Flags.TreeItemType.
      */
     public TreeItem(TreeItemType type) {
         if (type == null)
             type = TreeItemType.LEAF;
-        _item_type = type;
+        _nodeType = type;
         setItemName(type.toString().toLowerCase() + "_v" + count);
         count++;
 
         _list_inners = new LinkedList<>();
         _indicator = new ButtonToggle();
         _indicator.setItemName("Indicator_" + count);
-        _text_object = new Label();
-        _text_object.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        _icon_shape = new CustomShape();
+        _textLabel = new Label();
+        _textLabel.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        _iconShape = new CustomShape();
 
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
         eventKeyPress.add(this::onKeyPress);
     }
 
     /**
-     * Constructs a TreeItem
+     * Constructs TreeItem with specified type of node and text.
      *
-     * @param type item type (LEAF or BRUNCH)
-     * @param text item text
+     * @param type Node type as com.spvessel.spacevil.Flags.TreeItemType.
+     * @param text Text of TreeItem.
      */
     public TreeItem(TreeItemType type, String text) {
         this(type);
@@ -155,10 +210,10 @@ public class TreeItem extends Prototype {
     }
 
     void resetIndents() {
-        int level = _nesting_level;
+        int level = _nestingLevel;
         if (!_treeViewContainer._root.isVisible())
             level--;
-        setPadding(2 + _indent_size * level, 0, 0, 0);
+        setPadding(2 + _indentSize * level, 0, 0, 0);
         int width = getPadding().left;
         for (InterfaceBaseItem item : getItems()) {
             width += item.getWidth() + item.getMargin().left + item.getMargin().right + getSpacing().horizontal;
@@ -177,21 +232,24 @@ public class TreeItem extends Prototype {
     }
 
     /**
-     * Initialization and adding of all elements in the TreItem
+     * Initializing all elements in the TreeItem.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
-        switch (_item_type) {
+        switch (_nodeType) {
             case LEAF:
-                _icon_shape.setMargin(2, 0, 0, 0);
-                super.addItem(_icon_shape);
-                super.addItem(_text_object);
+                _iconShape.setMargin(2, 0, 0, 0);
+                super.addItem(_iconShape);
+                super.addItem(_textLabel);
                 break;
 
             case BRANCH:
                 super.addItem(_indicator);
-                super.addItem(_icon_shape);
-                super.addItem(_text_object);
+                super.addItem(_iconShape);
+                super.addItem(_textLabel);
 
                 _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
                 _indicator.isFocusable = false;
@@ -202,10 +260,10 @@ public class TreeItem extends Prototype {
                 break;
 
             default:
-                super.addItem(_text_object);
+                super.addItem(_textLabel);
                 break;
         }
-        _text_object.isFocusable = false;
+        _textLabel.isFocusable = false;
     }
 
     void onToggleHide(boolean value) // refactor
@@ -230,7 +288,7 @@ public class TreeItem extends Prototype {
     void addTreeItem(TreeItem item) {
         item._parentBranch = this;
         item._treeViewContainer = _treeViewContainer;
-        item._nesting_level = _nesting_level + 1;
+        item._nestingLevel = _nestingLevel + 1;
         // _indicator.setToggled(true);
         if (!_indicator.isToggled())
             item.setVisible(false);
@@ -270,7 +328,9 @@ public class TreeItem extends Prototype {
     // }
 
     /**
-     * Add item to the TreeItem
+     * Adding item into the TreeItem.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -281,7 +341,11 @@ public class TreeItem extends Prototype {
     }
 
     /**
-     * Set TreeItem width
+     * Setting item width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the item.
      */
     @Override
     public void setWidth(int width) {
@@ -290,7 +354,9 @@ public class TreeItem extends Prototype {
     }
 
     /**
-     * Set TreeItem X position
+     * Setting X coordinate of the left-top corner of the item.
+     * 
+     * @param x X position of the left-top corner.
      */
     @Override
     public void setX(int x) {
@@ -298,11 +364,8 @@ public class TreeItem extends Prototype {
         updateLayout();
     }
 
-    /**
-     * Update TreeItem states
-     */
-    public void updateLayout() {
-        _text_object.setWidth(_text_object.getTextWidth() + 5);
+    protected void updateLayout() {
+        _textLabel.setWidth(_textLabel.getTextWidth() + 5);
         // update self width
         int offset = 0;
         int startX = getX() + getPadding().left;
@@ -316,101 +379,209 @@ public class TreeItem extends Prototype {
         }
     }
 
-    // text init
+    /**
+     * Setting alignment of a TreeItem text. Combines with alignment by vertically
+     * (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _textLabel.setTextAlignment(alignment);
+    }
 
     /**
-     * Text alignment in the TreeItem
+     * Setting alignment of a TreeItem text. Combines with alignment by vertically
+     * (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as List of
+     *                  com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
-    }
-
-    public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textLabel.setTextAlignment(alignment);
     }
 
     /**
-     * Text margin in the TreeItem
+     * Setting indents for the text to offset text relative to TreeItem.
+     * 
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
-    }
-
-    public Indents getTextMargin() {
-        return _text_object.getMargin();
+        _textLabel.setMargin(margin);
     }
 
     /**
-     * Text font parameters in the TreeItem
+     * Setting indents for the text to offset text relative to TreeItem.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
+     * @param bottom Indent on the bottom.
+     */
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textLabel.setMargin(left, top, right, bottom);
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
+    public Indents getTextMargin() {
+        return _textLabel.getMargin();
+    }
+
+    /**
+     * Setting font of the text.
+     * 
+     * @param font Font as java.awt.Font.
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
-    }
-
-    public void setFontSize(int size) {
-        _text_object.setFontSize(size);
-    }
-
-    public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
-    }
-
-    public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
-    }
-
-    public Font getFont() {
-        return _text_object.getFont();
+        _textLabel.setFont(font);
     }
 
     /**
-     * TreeItem text
+     * Setting font size of the text.
+     * 
+     * @param size New size of the font.
+     */
+    public void setFontSize(int size) {
+        _textLabel.setFontSize(size);
+    }
+
+    /**
+     * Setting font style of the text.
+     * 
+     * @param style New font style (from java.awt.Font package).
+     */
+    public void setFontStyle(int style) {
+        _textLabel.setFontStyle(style);
+    }
+
+    /**
+     * Setting new font family of the text.
+     * 
+     * @param fontFamily New font family name.
+     */
+    public void setFontFamily(String fontFamily) {
+        _textLabel.setFontFamily(fontFamily);
+    }
+
+    /**
+     * Getting the current font of the text.
+     * 
+     * @return Font as java.awt.Font.
+     */
+    public Font getFont() {
+        return _textLabel.getFont();
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.String.
      */
     public void setText(String text) {
-        _text_object.setText(text);
-        updateLayout();
-    }
-
-    public String getText() {
-        return _text_object.getText();
+        _textLabel.setText(text);
     }
 
     /**
-     * @return TreeItem's text width
+     * Getting the current text of the TreeItem.
+     * 
+     * @return Text as java.lang.String.
+     */
+    public String getText() {
+        return _textLabel.getText();
+    }
+
+    /**
+     * Getting the text width (useful when you need resize TreeItem by text width).
+     * 
+     * @return Text width.
      */
     public int getTextWidth() {
-        return _text_object.getWidth();
+        return _textLabel.getWidth();
     }
 
     /**
-     * Text color in the TreeItem
+     * Getting the text height (useful when you need resize TreeItem by text
+     * height).
+     * 
+     * @return Text height.
+     */
+    public int getTextHeight() {
+        return _textLabel.getHeight();
+    }
+
+    /**
+     * Setting text color of a TreeItem.
+     * 
+     * @param color Text color as java.awt.Color.
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
-    }
-
-    public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public Color getForeground() {
-        return _text_object.getForeground();
+        _textLabel.setForeground(color);
     }
 
     /**
-     * Set style of the TreeItem
+     * Setting text color of a TreeItem in byte RGB format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b) {
+        _textLabel.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting background color of an item in byte RGBA format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b, int a) {
+        _textLabel.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Setting text color of a TreeItem in float RGB format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b) {
+        _textLabel.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting text color of a TreeItem in float RGBA format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b, float a) {
+        _textLabel.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Getting current text color.
+     * 
+     * @return Text color as as java.awt.Color.
+     */
+    public Color getForeground() {
+        return _textLabel.getForeground();
+    }
+
+    /**
+     * Setting style of the TreeItem.
+     * <p>
+     * Inner styles: "indicator", "branchicon", "leaficon".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -422,22 +593,28 @@ public class TreeItem extends Prototype {
         setTextAlignment(style.textAlignment);
 
         // additional
-        Style inner_style = style.getInnerStyle("indicator");
-        if (inner_style != null) {
-            _indicator.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("indicator");
+        if (innerStyle != null) {
+            _indicator.setStyle(innerStyle);
         }
-        if (_item_type == TreeItemType.BRANCH)
-            inner_style = style.getInnerStyle("branchicon");
+        if (_nodeType == TreeItemType.BRANCH)
+            innerStyle = style.getInnerStyle("branchicon");
         else
-            inner_style = style.getInnerStyle("leaficon");
+            innerStyle = style.getInnerStyle("leaficon");
 
-        if (inner_style != null) {
-            _icon_shape.setStyle(inner_style);
+        if (innerStyle != null) {
+            _iconShape.setStyle(innerStyle);
         }
     }
 
+    /**
+     * Shows or hides content (contained nodes) of this TreeItem.
+     * 
+     * @param value True: if you want to show content. False: if you want to hide
+     *              content.
+     */
     public void setExpanded(boolean value) {
-        if (_item_type.equals(TreeItemType.BRANCH)) {
+        if (_nodeType.equals(TreeItemType.BRANCH)) {
             _indicator.setToggled(value);
             onToggleHide(value);
         }

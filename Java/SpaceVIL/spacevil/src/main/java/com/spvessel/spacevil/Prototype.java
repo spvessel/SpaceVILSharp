@@ -1041,6 +1041,34 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
+     * Getting list of the Prototype's inner items (children).
+     * 
+     * @return List of children as
+     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     */
+    public List<InterfaceBaseItem> getItems() {
+        return _core.getItems();
+    }
+
+    /**
+     * Removing the specified item from container (this).
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
+     */
+    public boolean removeItem(InterfaceBaseItem item) {
+        return _core.removeItem(item);
+    }
+
+    /**
+     * Removing all children.
+     */
+    public void clear() {
+        _core.clear();
+    }
+
+    /**
      * Inserting item to the container (this). If the count of container elements is
      * less than the index, then the element is added to the end of the list.
      * 
@@ -1334,34 +1362,6 @@ abstract public class Prototype implements InterfaceBaseItem {
 
     protected boolean getHoverVerification(float xpos, float ypos) {
         return _core.getHoverVerification(xpos, ypos);
-    }
-
-    /**
-     * Getting list of the Prototype's inner items (children).
-     * 
-     * @return List of children as
-     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
-     */
-    public List<InterfaceBaseItem> getItems() {
-        return _core.getItems();
-    }
-
-    /**
-     * Removing the specified item from container (this).
-     * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
-     * @return True: if the removal was successful. False: if the removal was
-     *         unsuccessful.
-     */
-    public boolean removeItem(InterfaceBaseItem item) {
-        return _core.removeItem(item);
-    }
-
-    /**
-     * Removing all children.
-     */
-    public void clear() {
-        _core.clear();
     }
 
     void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {

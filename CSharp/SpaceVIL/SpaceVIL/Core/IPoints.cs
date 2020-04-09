@@ -33,12 +33,12 @@ namespace SpaceVIL.Core
         /// Setting custom shape for points (if one want to use other shape than circle).
         /// </summary>
         /// <param name="shape">Points list of the shape as List of float[2] array.</param>
-        void SetShapePointer(List<float[]> shape);
+        void SetPointShape(List<float[]> shape);
         /// <summary>
         /// Getting current shape of points. Default: circle shape.
         /// </summary>
         /// <returns>Points list of the shape as List of float[2] array.</returns>
-        List<float[]> GetShapePointer();
+        List<float[]> GetPointShape();
         /// <summary>
         /// Getting points coordinates.
         /// </summary>

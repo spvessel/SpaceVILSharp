@@ -40,7 +40,7 @@ namespace SpaceVIL.Core
         /// <summary>
         /// Method for getting bounds for an image (for example: to keep aspect ratio).
         /// </summary>
-        /// <returns>Bounds as SpaceVIL.Core.RectangleBounds.</returns>
+        /// <returns>Bounds as SpaceVIL.Core.Area.</returns>
         Area GetAreaBounds();
     }
 }

@@ -49,8 +49,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Constructs a FileSystemEntry with specified entry type and name.
+        /// Constructs a FileSystemEntry with specified entry type and text.
         /// </summary>
+        /// <param name="type">Type of entry as SpaceVIL.Core.FileSystemEntryType.</param>
+        /// <param name="text">Text of entry.</param>
         public FileSystemEntry(FileSystemEntryType type, String text)
         {
             SetItemName("FileSystemEntry_" + count);

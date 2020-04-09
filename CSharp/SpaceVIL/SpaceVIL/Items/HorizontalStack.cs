@@ -11,7 +11,7 @@ namespace SpaceVIL
     /// HorizontalStack implements SpaceVIL.Core.IHLayout.
     /// <para/> By default ability to get focus is disabled.
     /// <para/> HorizontalStack cannot receive any events, 
-    /// so HorizontalStack is always in the ItemState.Base state.
+    /// so HorizontalStack is always in the SpaceVIL.Core.ItemStateType.Base state.
     /// </summary>
     public class HorizontalStack : Prototype, IHLayout
     {
@@ -19,8 +19,9 @@ namespace SpaceVIL
 
         private ItemAlignment _contentAlignment = ItemAlignment.Left;
         /// <summary>
-        /// Setting content alignment within HorizontalStack area. Default: ItemAlignment.Left.
+        /// Setting content alignment within HorizontalStack area. 
         /// <para/> Supports only: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// <para/> Default: ItemAlignment.Left.
         /// </summary>
         /// <param name="alignment">Content alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetContentAlignment(ItemAlignment alignment)
@@ -111,7 +112,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
+        /// Updating all children positions (implementation of SpaceVIL.Core.IHLayout).
         /// </summary>
         public void UpdateLayout()
         {
@@ -133,7 +134,8 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        if (child.GetMaxWidth() < total_space) {
+                        if (child.GetMaxWidth() < total_space)
+                        {
                             maxWidthExpands.Add(child.GetMaxWidth() + child.GetMargin().Right + child.GetMargin().Left);
                         }
                         expanded_count++;
@@ -147,35 +149,42 @@ namespace SpaceVIL
             //     width_for_expanded = free_space / expanded_count;
             maxWidthExpands.Sort();
 
-            while (true) {
+            while (true)
+            {
                 if (expanded_count == 0)
                     break;
-    
+
                 if (free_space > expanded_count)
                     width_for_expanded = free_space / expanded_count;
-    
-                if (width_for_expanded <= 1 || maxWidthExpands.Count == 0) {
-//                    width_for_expanded = 1;
+
+                if (width_for_expanded <= 1 || maxWidthExpands.Count == 0)
+                {
+                    //                    width_for_expanded = 1;
                     break;
                 }
-    
-                if (width_for_expanded > maxWidthExpands[0]) {
-                    while (maxWidthExpands.Count > 0 && width_for_expanded > maxWidthExpands[0]) {
+
+                if (width_for_expanded > maxWidthExpands[0])
+                {
+                    while (maxWidthExpands.Count > 0 && width_for_expanded > maxWidthExpands[0])
+                    {
                         free_space -= maxWidthExpands[0];
                         maxWidthExpands.RemoveAt(0);
                         expanded_count--;
                     }
-                } else {
+                }
+                else
+                {
                     break;
                 }
-//                width_for_expanded = widthForExpand(free_space, expanded_count);
+                //                width_for_expanded = widthForExpand(free_space, expanded_count);
             }
 
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
             bool isFirstExpand = false;
             int diff = (free_space - width_for_expanded * expanded_count);
-            if (expanded_count != 0 && diff > 0) {
+            if (expanded_count != 0 && diff > 0)
+            {
                 isFirstExpand = true;
             }
 
@@ -203,12 +212,14 @@ namespace SpaceVIL
                                 child.SetWidth(child.GetMaxWidth());
                             }
 
-                            if (isFirstExpand) {
-                            if (child.GetWidth() + diff < child.GetMaxWidth()) {
-                                child.SetWidth(child.GetWidth() + diff);
-                                isFirstExpand = false;
+                            if (isFirstExpand)
+                            {
+                                if (child.GetWidth() + diff < child.GetMaxWidth())
+                                {
+                                    child.SetWidth(child.GetWidth() + diff);
+                                    isFirstExpand = false;
+                                }
                             }
-                        }
                         }
                         offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
                     }

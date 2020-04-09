@@ -15,7 +15,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting bounds for an image (for example: to keep aspect ratio).
         /// </summary>
-        /// <returns>Bounds as SpaceVIL.Core.RectangleBounds.</returns>
+        /// <returns>Bounds as SpaceVIL.Core.Area.</returns>
         public Area GetAreaBounds()
         {
             return Area;
@@ -24,9 +24,9 @@ namespace SpaceVIL
         static int count = 0;
         private Bitmap _image = null;
         /// <summary>
-        /// Getting a bitmap image in the form of System.Drawing.Bitmap.
+        /// Getting a bitmap image in the form as System.Drawing.Bitmap.
         /// </summary>
-        /// <returns>Image as System.Drawing.Bitmap</returns>
+        /// <returns>Image as System.Drawing.Bitmap.</returns>
         public Bitmap GetImage()
         {
             return _image;
@@ -52,8 +52,8 @@ namespace SpaceVIL
         }
         /// <summary>
         /// Property to enable or disable mouse events (hover, click, press, scroll).
-        /// <para/> True: Graph can receive mouse events. False: cannot receive mouse events.
-        /// Default: False.
+        /// <para/> True: ImageItem can receive mouse events. False: cannot receive mouse events.
+        /// <para/> Default: False.
         /// </summary>
         public bool IsHover = false;
 
@@ -89,16 +89,14 @@ namespace SpaceVIL
         /// with the ability to enable or disable mouse events.
         /// </summary>
         /// <param name="picture">Bitmap image as System.Drawing.Bitmap.</param>
-        /// <param name="hover">True: Graph can receive mouse events. 
+        /// <param name="hover">True: ImageItem can receive mouse events. 
         /// False: cannot receive mouse events.</param>
         public ImageItem(Bitmap picture, bool hover) : this(picture)
         {
             IsHover = hover;
         }
 
-        /// <summary>
-        /// Returns the image as byte array
-        /// </summary>
+
         // public byte[] GetPixMapImage()
         // {
         //     // return _bitmap;

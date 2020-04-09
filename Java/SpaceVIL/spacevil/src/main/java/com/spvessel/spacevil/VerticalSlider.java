@@ -8,34 +8,59 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
+/**
+ * VerticalSlider is the basic implementation of a user interface slider
+ * (vertical version).
+ * <p>
+ * Contains track, handler.
+ * <p>
+ * Supports all events including drag and drop (internal handler
+ * (com.spvessel.spacevil.ScrollHandler) supports drag and drop events).
+ */
 public class VerticalSlider extends Prototype {
     private static int count = 0;
 
     /**
-     * Path where slider moves. Can be styled
+     * Slider track.
      */
     public Rectangle track = new Rectangle();
+
     /**
-     * Slider itself
+     * Slider handler.
      */
     public ScrollHandler handler = new ScrollHandler();
 
-    // Values
     private float _step = 1.0f;
 
     /**
-     * VerticalSlider step
+     * Setting slider movement step.
+     * 
+     * @param value Slider step.
      */
     public void setStep(float value) {
         _step = value;
     }
 
+    /**
+     * Getting slider movement step.
+     * 
+     * @return Slider step.
+     */
     public float getStep() {
         return _step;
     }
 
+    /**
+     * Event that is invoked when value of the slider is changed.
+     */
     public EventCommonMethodState eventValueChanged = new EventCommonMethodState();
 
+    /**
+     * Disposing all resources if the item was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         eventValueChanged.clear();
@@ -45,16 +70,34 @@ public class VerticalSlider extends Prototype {
 
     boolean _ignoreStep = true;
 
+    /**
+     * Ignoring slider step (affects only on animation). Set False if you want the
+     * slider to move strictly in steps.
+     * <p>
+     * Default: True.
+     * 
+     * @param value
+     */
     public void setIgnoreStep(boolean value) {
         _ignoreStep = value;
     }
 
+    /**
+     * Returns True if slider movement ignore steps otherwise returns False.
+     * 
+     * @return True: if movement step is ignored. False: if movement step is not
+     *         ignored.
+     */
     public boolean isIgnoreStep() {
         return _ignoreStep;
     }
 
     /**
-     * Sets current value of the VerticalSlider
+     * Setting the current slider value. If the value is greater/less than the
+     * maximum/minimum slider value, then the slider value becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param value Slider value.
      */
     public void setCurrentValue(float value) {
         _currentValue = value;
@@ -62,10 +105,10 @@ public class VerticalSlider extends Prototype {
         if (!_ignoreStep)
             _currentValue = (float) Math.round(_currentValue / _step) * _step;
 
-        if (_currentValue < _min_value)
-            _currentValue = _min_value;
-        if (_currentValue > _max_value)
-            _currentValue = _max_value;
+        if (_currentValue < _minValue)
+            _currentValue = _minValue;
+        if (_currentValue > _maxValue)
+            _currentValue = _maxValue;
 
         updateHandler(); // refactor!!
 
@@ -82,46 +125,64 @@ public class VerticalSlider extends Prototype {
     }
 
     void updateHandler() {
-        float offset = ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight())
-                / (_max_value - _min_value) * (_currentValue - _min_value);
+        float offset = ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()) / (_maxValue - _minValue)
+                * (_currentValue - _minValue);
         handler.setOffset((int) offset + getPadding().top + handler.getMargin().top);
     }
 
     /**
-     * @return current value of the VerticalSlider
+     * Getting the current slider value.
+     * 
+     * @return Slider value.
      */
     public float getCurrentValue() {
         return _currentValue;
     }
 
-    private float _min_value = 0;
+    private float _minValue = 0;
 
     /**
-     * VerticalSlider's minimum value
+     * Setting the minimum slider value limit. Slider value cannot be less than this
+     * limit.
+     * 
+     * @param value Minimum slider value limit.
      */
     public void setMinValue(float value) {
-        _min_value = value;
+        _minValue = value;
     }
-
-    public float getMinValue() {
-        return _min_value;
-    }
-
-    private float _max_value = 100;
 
     /**
-     * VerticalSlider's maximum value
+     * Getting the current minimum slider value limit.
+     * 
+     * @return Minimum slider value limit.
+     */
+    public float getMinValue() {
+        return _minValue;
+    }
+
+    private float _maxValue = 100;
+
+    /**
+     * Setting the maximum slider value limit. Slider value cannot be greater than
+     * this limit.
+     * 
+     * @param value Maximum slider value limit.
      */
     public void setMaxValue(float value) {
-        _max_value = value;
-    }
-
-    public float getMaxValue() {
-        return _max_value;
+        _maxValue = value;
     }
 
     /**
-     * Constructs a VerticalSlider
+     * Getting the current maximum slider value limit.
+     * 
+     * @return Maximum slider value limit.
+     */
+    public float getMaxValue() {
+        return _maxValue;
+    }
+
+    /**
+     * Default VerticalSlider constructor.
      */
     public VerticalSlider() {
         setItemName("VerticalSlider_" + count);
@@ -129,12 +190,15 @@ public class VerticalSlider extends Prototype {
         count++;
 
         // Handler
-        handler.direction = Orientation.VERTICAL;
+        handler.orientation = Orientation.VERTICAL;
         setStyle(DefaultsService.getDefaultStyle(VerticalSlider.class));
     }
 
     /**
-     * Initialization and adding of all elements in the VerticalSlider
+     * Initializing all elements in the VerticalSlider.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -155,8 +219,8 @@ public class VerticalSlider extends Prototype {
     {
         _dragging = true;
         // иногда число NAN
-        float result = (float) (handler.getY() - getY()) * (_max_value - _min_value)
-                / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()) + _min_value;
+        float result = (float) (handler.getY() - getY()) * (_maxValue - _minValue)
+                / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()) + _minValue;
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }
@@ -167,14 +231,15 @@ public class VerticalSlider extends Prototype {
     protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
         if (!_dragging)
-            setCurrentValue(
-                    (float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_max_value - _min_value)
-                            / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()));
+            setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_maxValue - _minValue)
+                    / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()));
         _dragging = false;
     }
 
     /**
-     * Set Y position of the VerticalSlider
+     * Setting Y coordinate of the left-top corner of the VerticalSlider.
+     * 
+     * @param y Y position of the left-top corner.
      */
     @Override
     public void setY(int y) {
@@ -183,7 +248,11 @@ public class VerticalSlider extends Prototype {
     }
 
     /**
-     * Set style of the VerticalSlider
+     * Setting style of the VerticalSlider.
+     * <p>
+     * Inner styles: "track", "handler".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

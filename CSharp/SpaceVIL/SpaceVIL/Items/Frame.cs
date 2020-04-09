@@ -5,7 +5,7 @@ namespace SpaceVIL
     /// <summary>
     /// Frame is the basic container. 
     /// It groups items based on items alignment, margins, paddings, sizes and size policies.
-    /// <para/> Frame cannot receive any events, so Frame is always in the ItemState.Base state.
+    /// <para/> Frame cannot receive any events, so Frame is always in the SpaceVIL.Core.ItemStateType.Base state.
     /// </summary>
     public class Frame : Prototype
     {

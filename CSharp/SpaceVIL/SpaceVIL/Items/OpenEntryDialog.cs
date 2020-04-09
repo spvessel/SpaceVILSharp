@@ -51,6 +51,7 @@ namespace SpaceVIL
         private Stack<String> _filesTrack = new Stack<String>();
         private Bitmap _folder = null;
         private Bitmap _file = null;
+
         /// <summary>
         /// Setting the default path that will be opened when OpenEntryDialog is shown.
         /// </summary>
@@ -62,6 +63,7 @@ namespace SpaceVIL
 
         private FileSystemEntryType _entryType = FileSystemEntryType.File;
         private OpenDialogType _dialogType = OpenDialogType.Open;
+
         /// <summary>
         /// Constructs OpenEntryDialog with title text, entry type and dialog type. 
         /// <para/> Entry type can be FileSystemEntryType.File or FileSystemEntryType.Directory. 
@@ -414,7 +416,7 @@ namespace SpaceVIL
         /// <para/> Example 1: "Text files (*.txt) ; *.txt&quot;
         /// <para/> Example 2: "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg&quot;
         /// </summary>
-        /// <param name="exts"></param>
+        /// <param name="exts"> File filter extensions. </param>
         public void AddFilterExtensions(params String[] exts)
         {
             for (int i = 0; i < exts.Length; i++)
@@ -570,7 +572,7 @@ namespace SpaceVIL
         /// Shows OpenEntryDialog and attaches it to the specified window 
         /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
         /// </summary>
-        /// <param name="handler">Window for attaching InputDialog.</param>
+        /// <param name="handler">Window for attaching OpenEntryDialog.</param>
         public override void Show(CoreWindow handler)
         {
             base.Show(handler);
@@ -589,68 +591,68 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
             // toolbar
-            Style inner_style = style.GetInnerStyle("window");
-            if (inner_style != null)
-                Window.SetStyle(inner_style);
+            Style innerStyle = style.GetInnerStyle("window");
+            if (innerStyle != null)
+                Window.SetStyle(innerStyle);
             // layout
-            inner_style = style.GetInnerStyle("layout");
-            if (inner_style != null)
-                _layout.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("layout");
+            if (innerStyle != null)
+                _layout.SetStyle(innerStyle);
             // toolbar
-            inner_style = style.GetInnerStyle("toolbar");
-            if (inner_style != null)
-                _toolbar.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("toolbar");
+            if (innerStyle != null)
+                _toolbar.SetStyle(innerStyle);
             // buttoncore
-            inner_style = style.GetInnerStyle("toolbarbutton");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("toolbarbutton");
+            if (innerStyle != null)
             {
-                _btnBackward.SetStyle(inner_style);
-                _btnHome.SetStyle(inner_style);
-                _btnUser.SetStyle(inner_style);
-                _btnCreate.SetStyle(inner_style);
-                _btnRename.SetStyle(inner_style);
-                _btnRefresh.SetStyle(inner_style);
-                _btnUpward.SetStyle(inner_style);
+                _btnBackward.SetStyle(innerStyle);
+                _btnHome.SetStyle(innerStyle);
+                _btnUser.SetStyle(innerStyle);
+                _btnCreate.SetStyle(innerStyle);
+                _btnRename.SetStyle(innerStyle);
+                _btnRefresh.SetStyle(innerStyle);
+                _btnUpward.SetStyle(innerStyle);
             }
             // buttontogle
-            inner_style = style.GetInnerStyle("buttonhidden");
-            if (inner_style != null)
-                _btnShowHidden.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("buttonhidden");
+            if (innerStyle != null)
+                _btnShowHidden.SetStyle(innerStyle);
             // addressline
-            inner_style = style.GetInnerStyle("addressline");
-            if (inner_style != null)
-                _addressLine.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("addressline");
+            if (innerStyle != null)
+                _addressLine.SetStyle(innerStyle);
             // filename
-            inner_style = style.GetInnerStyle("filenameline");
-            if (inner_style != null)
-                _fileName.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("filenameline");
+            if (innerStyle != null)
+                _fileName.SetStyle(innerStyle);
             // listbox
-            inner_style = style.GetInnerStyle("list");
-            if (inner_style != null)
-                _fileList.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("list");
+            if (innerStyle != null)
+                _fileList.SetStyle(innerStyle);
             // controlpanel
-            inner_style = style.GetInnerStyle("controlpanel");
-            if (inner_style != null)
-                _controlPanel.SetStyle(inner_style);
+            innerStyle = style.GetInnerStyle("controlpanel");
+            if (innerStyle != null)
+                _controlPanel.SetStyle(innerStyle);
             // ok, cancel
-            inner_style = style.GetInnerStyle("okbutton");
-            if (inner_style != null)
-                _btnOpen.SetStyle(inner_style);
-            inner_style = style.GetInnerStyle("cancelbutton");
-            if (inner_style != null)
-                _btnCancel.SetStyle(inner_style);
-            inner_style = style.GetInnerStyle("filter");
-            if (inner_style != null)
-                _btnFilter.SetStyle(inner_style);
-            inner_style = style.GetInnerStyle("filtertext");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("okbutton");
+            if (innerStyle != null)
+                _btnOpen.SetStyle(innerStyle);
+            innerStyle = style.GetInnerStyle("cancelbutton");
+            if (innerStyle != null)
+                _btnCancel.SetStyle(innerStyle);
+            innerStyle = style.GetInnerStyle("filter");
+            if (innerStyle != null)
+                _btnFilter.SetStyle(innerStyle);
+            innerStyle = style.GetInnerStyle("filtertext");
+            if (innerStyle != null)
             {
-                _filterText.SetStyle(inner_style);
+                _filterText.SetStyle(innerStyle);
                 UpdateFilterText();
             }
-            inner_style = style.GetInnerStyle("divider");
-            if (inner_style != null)
-                _dividerStyle = inner_style;
+            innerStyle = style.GetInnerStyle("divider");
+            if (innerStyle != null)
+                _dividerStyle = innerStyle;
         }
     }
 }

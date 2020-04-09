@@ -20,12 +20,11 @@ namespace SpaceVIL
         private static int count = 0;
         private SpaceVIL.Core.Point _cursorPosition = new SpaceVIL.Core.Point(0, 0);
         private CustomSelector _selectedArea;
-
         private TextureStorage _textureStorage;
-
         private SpaceVIL.Core.Point _selectFrom = new SpaceVIL.Core.Point(-1, 0);
         private SpaceVIL.Core.Point _selectTo = new SpaceVIL.Core.Point(-1, 0);
         private bool _isSelect = false;
+
         /// <summary>
         /// Default TextView constructor.
         /// </summary>
@@ -230,6 +229,7 @@ namespace SpaceVIL
                 UnselectText();
             }
         }
+
         /// <summary>
         /// Getting the current text of the TextView.
         /// </summary>
@@ -238,6 +238,7 @@ namespace SpaceVIL
         {
             return _textureStorage.GetWholeText();
         }
+
         /// <summary>
         /// Setting the text.
         /// </summary>
@@ -265,6 +266,7 @@ namespace SpaceVIL
         {
             return _textureStorage.GetTextHeight();
         }
+
         /// <summary>
         /// Initializing all elements in the TextView.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -383,17 +385,16 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
+
         /// <summary>
         /// Getting the current selected text.
         /// </summary>
-        /// <returns>Current selected text</returns>
+        /// <returns>Current selected text.</returns>
         public string GetSelectedText()
         {
             return PrivGetSelectedText();
         }
-        /// <summary>
-        /// Unselects the current selected text.
-        /// </summary>
+
         private void UnselectText()
         {
             _isSelect = false;
@@ -403,6 +404,7 @@ namespace SpaceVIL
             _selectTo.Y = 0;
             MakeSelectedArea(new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y), new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y));
         }
+
         /// <summary>
         /// Selecting entire text of the TextView.
         /// </summary>
@@ -424,6 +426,7 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
+
         /// <summary>
         /// Setting item width. If the value is greater/less than the maximum/minimum 
         /// value of the width, then the width becomes equal to the maximum/minimum value.
@@ -468,6 +471,7 @@ namespace SpaceVIL
 
             ChangeHeightAccordingToText();
         }
+
         /// <summary>
         /// Setting item height. If the value is greater/less than the maximum/minimum 
         /// value of the height, then the height becomes equal to the maximum/minimum value.
@@ -530,8 +534,9 @@ namespace SpaceVIL
         {
             _textureStorage.SetLineSpacer(lineSpacer);
         }
+
         /// <summary>
-        /// Setting current indent between lines in TextView.
+        /// Getting current indent between lines in TextView.
         /// </summary>
         /// <returns>Indent between lines.</returns>
         public int GetLineSpacer()
@@ -543,6 +548,7 @@ namespace SpaceVIL
         {
             //Ignore all changes for yet
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to this TextView.
         /// </summary>
@@ -551,6 +557,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetTextMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to TextView.
         /// </summary>
@@ -562,6 +569,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetTextMargin(new Indents(left, top, right, bottom));
         }
+
         /// <summary>
         /// Getting indents of the text.
         /// </summary>
@@ -570,6 +578,7 @@ namespace SpaceVIL
         {
             return _textureStorage.GetTextMargin();
         }
+
         /// <summary>
         /// Setting font of the text.
         /// </summary>
@@ -578,6 +587,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetFont(font);
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -586,6 +596,7 @@ namespace SpaceVIL
         {
             return _textureStorage.GetFont();
         }
+
         /// <summary>
         /// Setting text color of a TextView.
         /// </summary>
@@ -594,6 +605,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a TextView in byte RGB format.
         /// </summary>
@@ -604,6 +616,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a TextView in byte RGBA format.
         /// </summary>
@@ -615,6 +628,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Setting text color of a TextView in float RGB format.
         /// </summary>
@@ -625,6 +639,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a TextView in float RGBA format.
         /// </summary>
@@ -636,6 +651,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>
@@ -675,6 +691,7 @@ namespace SpaceVIL
         {
 
         }
+
         /// <summary>
         /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
         /// </summary>
@@ -682,6 +699,7 @@ namespace SpaceVIL
         {
             return "";
         }
+
         /// <summary>
         /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
         /// </summary>
@@ -689,6 +707,7 @@ namespace SpaceVIL
         {
 
         }
+        
         /// <summary>
         /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
         /// </summary>

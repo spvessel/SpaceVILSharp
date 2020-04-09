@@ -20,19 +20,18 @@ namespace SpaceVIL
         {
             _visibility = value;
         }
-        /// <summary>
-        /// Default SelectionItem constructor.
-        /// </summary>
+
         private SelectionItem()
         {
             IsFocusable = false;
             SetItemName("SelectionItem_" + count);
             count++;
         }
+
         /// <summary>
         /// Constructs SelectionItem with given item for wrapping.
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">Item for wrapping as SpaceVIL.Core.IBaseItem.</param>
         public SelectionItem(IBaseItem content) : this()
         {
             _item = content;
@@ -52,6 +51,7 @@ namespace SpaceVIL
         {
             return _item;
         }
+
         /// <summary>
         /// Initializing all elements in the SelectionItem.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -89,7 +89,7 @@ namespace SpaceVIL
             SetMinHeight(_item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
         }
 
-        private bool _toggled = false;
+        private bool _isSelected = false;
 
         /// <summary>
         /// Returns True if SelectionItem is selected otherwise returns False.
@@ -98,8 +98,9 @@ namespace SpaceVIL
         /// False: SelectionItem is unselected.</returns>
         public bool IsSelected()
         {
-            return _toggled;
+            return _isSelected;
         }
+
         /// <summary>
         /// Setting SelectionItem selected or unselected.
         /// </summary>
@@ -107,7 +108,7 @@ namespace SpaceVIL
         /// False: if you want SelectionItem to be unselected.</param>
         public void SetSelected(bool value)
         {
-            _toggled = value;
+            _isSelected = value;
             if (value)
                 SetState(ItemStateType.Toggled);
             else
@@ -126,6 +127,7 @@ namespace SpaceVIL
                 }
             }
         }
+
         /// <summary>
         /// Removing the specified item from SelectionItem.
         /// </summary>
@@ -138,6 +140,7 @@ namespace SpaceVIL
                 return GetParent().RemoveItem(item);
             else return false;
         }
+
         /// <summary>
         /// Remove wrapped item from SelectionItem.
         /// </summary>
@@ -146,6 +149,7 @@ namespace SpaceVIL
             base.RemoveItem(_item);
             _item = null;
         }
+        
         /// <summary>
         /// Setting this item hovered (mouse cursor located within item's shape).
         /// </summary>

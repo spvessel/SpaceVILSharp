@@ -17,6 +17,7 @@ import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.Side;
 
 public class SideAreaTest extends ActiveWindow {
+
     @Override
     public void initWindow() {
         setParameters("SideAreaTest", "SideAreaTest", 1000, 800, false);
@@ -74,34 +75,34 @@ public class SideAreaTest extends ActiveWindow {
         int s1 = 100;
         int s2 = 70;
         switch (area.getAttachSide()) {
-        case LEFT:
-            btn.setSize(s1, s2);
-            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, -90)));
-            btn.setMargin(0, 0, offset, 0);
-            break;
+            case LEFT:
+                btn.setSize(s1, s2);
+                btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, -90)));
+                btn.setMargin(0, 0, offset, 0);
+                break;
 
-        case RIGHT:
-            btn.setSize(s1, s2);
-            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 90)));
-            btn.setMargin(offset, 0, 0, 0);
-            break;
+            case RIGHT:
+                btn.setSize(s1, s2);
+                btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 90)));
+                btn.setMargin(offset, 0, 0, 0);
+                break;
 
-        case TOP:
-            btn.setBackground(90, 210, 255);
-            btn.setSize(s2, s1);
-            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
-            btn.setMargin(0, 0, 0, offset);
-            break;
+            case TOP:
+                btn.setBackground(90, 210, 255);
+                btn.setSize(s2, s1);
+                btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+                btn.setMargin(0, 0, 0, offset);
+                break;
 
-        case BOTTOM:
-            btn.setBackground(1, 110, 190);
-            btn.setSize(s2, s1);
-            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
-            btn.setMargin(0, offset, 0, 0);
-            break;
+            case BOTTOM:
+                btn.setBackground(1, 110, 190);
+                btn.setSize(s2, s1);
+                btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+                btn.setMargin(0, offset, 0, 0);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         btn.eventMouseClick.add((s, a) -> {
             area.show();
@@ -125,34 +126,34 @@ public class SideAreaTest extends ActiveWindow {
         int s1 = 70;
         int s2 = 40;
         switch (side) {
-        case LEFT:
-            t.rotationAngle = 90;
-            t.setSize(s2, s1);
-            t.setMargin(0, 0, offset, 0);
-            break;
+            case LEFT:
+                t.rotationAngle = 90;
+                t.setSize(s2, s1);
+                t.setMargin(0, 0, offset, 0);
+                break;
 
-        case RIGHT:
-            t.rotationAngle = -90;
-            t.setSize(s2, s1);
-            t.setMargin(offset, 0, 0, 0);
-            break;
+            case RIGHT:
+                t.rotationAngle = -90;
+                t.setSize(s2, s1);
+                t.setMargin(offset, 0, 0, 0);
+                break;
 
-        case TOP:
-            t.setBackground(1, 95, 164);
-            t.rotationAngle = 180;
-            t.setSize(s1, s2);
-            t.setMargin(0, 0, 0, offset);
-            break;
+            case TOP:
+                t.setBackground(1, 95, 164);
+                t.rotationAngle = 180;
+                t.setSize(s1, s2);
+                t.setMargin(0, 0, 0, offset);
+                break;
 
-        case BOTTOM:
-            t.setBackground(85, 210, 255);
-            t.rotationAngle = 0;
-            t.setSize(s1, s2);
-            t.setMargin(0, offset, 0, 0);
-            break;
+            case BOTTOM:
+                t.setBackground(85, 210, 255);
+                t.rotationAngle = 0;
+                t.setSize(s1, s2);
+                t.setMargin(0, offset, 0, 0);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         return t;
     }
@@ -164,24 +165,24 @@ public class SideAreaTest extends ActiveWindow {
         t.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
         int offset = 160;
         switch (side) {
-        case LEFT:
-            t.setMargin(0, 0, offset, 0);
-            break;
+            case LEFT:
+                t.setMargin(0, 0, offset, 0);
+                break;
 
-        case RIGHT:
-            t.setMargin(offset, 0, 0, 0);
-            break;
+            case RIGHT:
+                t.setMargin(offset, 0, 0, 0);
+                break;
 
-        case TOP:
-            t.setMargin(0, 0, 0, offset);
-            break;
+            case TOP:
+                t.setMargin(0, 0, 0, offset);
+                break;
 
-        case BOTTOM:
-            t.setMargin(0, offset, 0, 0);
-            break;
+            case BOTTOM:
+                t.setMargin(0, offset, 0, 0);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         return t;
     }

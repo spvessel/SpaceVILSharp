@@ -7,30 +7,61 @@ import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
+/**
+ * FloatItem is a floating container for other items (see
+ * com.spvessel.spacevil.Core.InterfaceFloating). Can be moved using drag and
+ * drop events.
+ * <p>
+ * Supports all events including drag and drop.
+ * <p>
+ * Notice: All floating items render above all others items.
+ */
 public class FloatItem extends Prototype implements InterfaceFloating, InterfaceDraggable {
-    private int _stored_offset = 0;
-    public boolean IsFloating = true;
+    /**
+     * Property for enabling/disabling drag and drop.
+     * <p>
+     * True: Drag and drop is enabled. False: Drag and drop is disabled.
+     * <p>
+     * Default: True.
+     */
+    public boolean isFloating = true;
+    private int _storedOffset = 0;
     private boolean _init = false;
     private static int count = 0;
-    private int _diff_x = 0;
-    private int _diff_y = 0;
-
+    private int _diffX = 0;
+    private int _diffY = 0;
     private boolean _ouside = false;
 
     /**
-     * Close the FloatItem it mouse click is outside (true or false)
+     * Returns True if FloatItem (see com.spvessel.spacevil.Core.InterfaceFloating)
+     * should closes when mouse click outside the area of FloatItem otherwise
+     * returns False.
+     * 
+     * @return True: if FloatItem closes when mouse click outside the area. False:
+     *         if FloatItem stays opened when mouse click outside the area.
      */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
+    /**
+     * Setting boolean value of item's behavior when mouse click occurs outside the
+     * FloatItem.
+     * 
+     * @param value True: FloatItem should become invisible if mouse click occurs
+     *              outside the item. False: an item should stay visible if mouse
+     *              click occurs outside the item.
+     */
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
 
     /**
-     * Constructs a FloatItem
-     * @param handler parent window for the FloatItem
+     * Constructs a FloatItem and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow). FloatItem invisible by default.
+     * 
+     * @param handler Window for attaching FloatItem.
      */
     public FloatItem(CoreWindow handler) {
         ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
@@ -42,63 +73,78 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
     }
 
     /**
-     * Initialization and adding of all elements in the FloatItem
+     * Initializing FloatItem.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
-        // fake tests
         setConfines();
         _init = true;
     }
 
     /**
-     * Show the FloatItem
-     * @param sender the item from which the show request is sent
-     * @param args mouse click arguments (cursor position, mouse button,
-     *             mouse button press/release, etc.)
+     * Shows the FloatItem at the proper position.
+     * 
+     * @param sender The item from which the show request is sent.
+     * @param args   Mouse click arguments (cursor position, mouse button, mouse
+     *               button press/release, etc.).
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (!_init)
             initElements();
         if (getX() == -getWidth()) // refactor?
-            setX(_stored_offset);
-        setVisible(true);
-    }
-    public void show() {
-        if (!_init)
-            initElements();
-        if (getX() == -getWidth()) // refactor?
-            setX(_stored_offset);
+            setX(_storedOffset);
         setVisible(true);
     }
 
     /**
-     * Hide the FloatItem
+     * Shows the FloatItem at the position (0, 0).
+     */
+    public void show() {
+        if (!_init)
+            initElements();
+        if (getX() == -getWidth()) // refactor?
+            setX(_storedOffset);
+        setVisible(true);
+    }
+
+    /**
+     * Hides the FloatItem without destroying.
      */
     public void hide() {
-        _stored_offset = getX();
+        _storedOffset = getX();
         setX(-getWidth());
         setVisible(false);
     }
 
+    /**
+     * Hides the FloatItem without destroying.
+     * <p>
+     * This method do exactly as hide() method without arguments.
+     * 
+     * @param args Mouse click arguments (cursor position, mouse button, mouse
+     *             button press/release, etc.).
+     */
     public void hide(MouseArgs args) {
         hide();
     }
 
     private void onMousePress(InterfaceItem sender, MouseArgs args) {
-        _diff_x = args.position.getX() - getX();
-        _diff_y = args.position.getY() - getY();
+        _diffX = args.position.getX() - getX();
+        _diffY = args.position.getY() - getY();
     }
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
-        if (!IsFloating)
+        if (!isFloating)
             return;
 
         int offset_x;
         int offset_y;
 
-        offset_x = args.position.getX() - _diff_x;
-        offset_y = args.position.getY() - _diff_y;
+        offset_x = args.position.getX() - _diffX;
+        offset_y = args.position.getY() - _diffY;
 
         setX(offset_x);
         setY(offset_y);
@@ -106,7 +152,8 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
     }
 
     /**
-     * Set confines according to position and size of the FloatItem
+     * Overridden method for setting confines according to position and size of the
+     * FloatItem (see Prototype.setConfines()).
      */
     @Override
     public void setConfines() {

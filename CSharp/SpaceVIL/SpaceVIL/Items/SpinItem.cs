@@ -6,6 +6,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
+
     /// <summary>
     /// SpinItem is designed as a user interface element that 
     /// can increase and decrease the value by a specific step.
@@ -17,15 +18,17 @@ namespace SpaceVIL
         static int count = 0;
         private HorizontalStack _horzStack = new HorizontalStack();
         private VerticalStack _vertStack = new VerticalStack();
+        private TextEditRestricted textInput = new TextEditRestricted();
+
         /// <summary>
         /// Increment value button.
         /// </summary>
         public ButtonCore UpButton = new ButtonCore();
+
         /// <summary>
         /// Decrement value button.
         /// </summary>
         public ButtonCore DownButton = new ButtonCore();
-        private TextEditRestricted textInput = new TextEditRestricted();
 
         /// <summary>
         /// Default SpinItem constructor.
@@ -36,14 +39,11 @@ namespace SpaceVIL
             count++;
             _horzStack.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
             UpButton.IsFocusable = false;
             DownButton.IsFocusable = false;
-
             UpButton.EventMouseClick += OnUpClick;
             DownButton.EventMouseClick += OnDownClick;
-
             EventScrollUp = OnUpClick;
             EventScrollDown = OnDownClick;
         }
@@ -57,13 +57,16 @@ namespace SpaceVIL
         {
             textInput.DecreaseValue();
         }
+
         /// <summary>
         /// Getting current value of SpinItem.
         /// </summary>
+        /// <returns>Current value of SpinItem.</returns>
         public double GetValue()
         {
             return textInput.GetValue();
         }
+
         /// <summary>
         /// Setting integer value of SpinItem.
         /// </summary>
@@ -72,6 +75,7 @@ namespace SpaceVIL
         {
             textInput.SetValue(value);
         }
+
         /// <summary>
         /// Setting double floating piont value of SpinItem.
         /// </summary>
@@ -92,6 +96,7 @@ namespace SpaceVIL
         {
             textInput.SetParameters(currentValue, minValue, maxValue, step);
         }
+
         /// <summary>
         /// Setting double floating piont parameters of SpinItem.
         /// </summary>
@@ -107,6 +112,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting accuracy (decimal places) of SpinItem.
         /// </summary>
+        /// <param name="accuracy">Accuracy value.</param>
         public void SetAccuracy(int accuracy)
         {
             textInput.SetAccuracy(accuracy);
@@ -134,7 +140,6 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-
             Style innerStyle = style.GetInnerStyle("buttonsarea");
             if (innerStyle != null)
             {
@@ -166,6 +171,7 @@ namespace SpaceVIL
         {
             textInput.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting alignment of the text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -180,6 +186,7 @@ namespace SpaceVIL
             }
             textInput.SetTextAlignment(common);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to this SpinItem.
         /// </summary>
@@ -188,6 +195,7 @@ namespace SpaceVIL
         {
             textInput.SetMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to SpinItem.
         /// </summary>
@@ -199,6 +207,7 @@ namespace SpaceVIL
         {
             textInput.SetMargin(left, top, right, bottom);
         }
+
         /// <summary>
         /// Setting background color of an item's shape.
         /// </summary>
@@ -207,6 +216,7 @@ namespace SpaceVIL
         {
             textInput.SetBackground(color);
         }
+
         /// <summary>
         /// Setting background color of an item's shape in byte RGB format.
         /// </summary>
@@ -217,6 +227,7 @@ namespace SpaceVIL
         {
             textInput.SetBackground(r, g, b);
         }
+
         /// <summary>
         /// Setting background color of an item in byte RGBA format.
         /// </summary>
@@ -228,6 +239,7 @@ namespace SpaceVIL
         {
             textInput.SetBackground(r, g, b, a);
         }
+
         /// <summary>
         /// Setting background color of an item in float RGB format.
         /// </summary>
@@ -238,6 +250,7 @@ namespace SpaceVIL
         {
             textInput.SetBackground(r, g, b);
         }
+
         /// <summary>
         /// Setting background color of an item in float RGBA format.
         /// </summary>
@@ -249,6 +262,7 @@ namespace SpaceVIL
         {
             textInput.SetBackground(r, g, b, a);
         }
+
         /// <summary>
         /// Getting background color of an item.
         /// </summary>
@@ -257,6 +271,7 @@ namespace SpaceVIL
         {
             return textInput.GetBackground();
         }
+
         /// <summary>
         /// Setting font of the text.
         /// </summary>
@@ -265,6 +280,7 @@ namespace SpaceVIL
         {
             textInput.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text.
         /// </summary>
@@ -273,6 +289,7 @@ namespace SpaceVIL
         {
             textInput.SetFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the text.
         /// </summary>
@@ -281,6 +298,7 @@ namespace SpaceVIL
         {
             textInput.SetFontStyle(style);
         }
+
         /// <summary>
         /// Setting new font family of the text.
         /// </summary>
@@ -289,6 +307,7 @@ namespace SpaceVIL
         {
             textInput.SetFontFamily(font_family);
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -297,6 +316,7 @@ namespace SpaceVIL
         {
             return textInput.GetFont();
         }
+
         /// <summary>
         /// Setting text color of a SpinItem.
         /// </summary>
@@ -305,6 +325,7 @@ namespace SpaceVIL
         {
             textInput.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a SpinItem in byte RGB format.
         /// </summary>
@@ -315,6 +336,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a SpinItem in byte RGBA format.
         /// </summary>
@@ -326,6 +348,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Setting text color of a SpinItem in float RGB format.
         /// </summary>
@@ -336,6 +359,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a SpinItem in float RGBA format.
         /// </summary>
@@ -347,6 +371,7 @@ namespace SpaceVIL
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>

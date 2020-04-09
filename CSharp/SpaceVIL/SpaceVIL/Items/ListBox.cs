@@ -420,14 +420,6 @@ namespace SpaceVIL
             HScrollBar.Slider.SetCurrentValue(f);
         }
 
-        // internal void RefreshWrapperWidth()
-        // {
-        //     foreach (SelectionItem wrp in GetArea()._mapContent.Values)
-        //     {
-        //         wrp.SetMinWidth(_maxWrapperWidth);
-        //         wrp.GetContent().SetMinWidth(_maxWrapperWidth);
-        //     }
-        // }
 
         /// <summary>
         /// Setting item width. If the value is greater/less than the maximum/minimum 
@@ -594,7 +586,7 @@ namespace SpaceVIL
         /// Getting content of the list area of ListBox.
         /// </summary>
         /// <returns>Content of the list area as 
-        /// System.Collections.Generic.List&lt;IBaseItem&gt;</returns>
+        /// List&lt;SpaceVIL.Core.IBaseItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
@@ -612,7 +604,7 @@ namespace SpaceVIL
         /// Adding all elements in the list area of ListBox from the given list.
         /// </summary>
         /// <param name="content">List of items as 
-        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
+        /// IEnumerable&lt;SpaceVIL.Core.IBaseItem&gt;</param>
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             _area.SetListContent(content);

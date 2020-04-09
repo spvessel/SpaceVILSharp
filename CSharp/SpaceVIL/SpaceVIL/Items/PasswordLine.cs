@@ -252,7 +252,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Getting the text width (includes visible and invisible parts of the text).
+        /// Getting the text width (useful when you need resize PasswordLine by text width).
         /// </summary>
         /// <returns>Text width.</returns>
         public int GetTextWidth()

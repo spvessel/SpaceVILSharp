@@ -5,24 +5,36 @@ import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
+/**
+ * VerticalScrollBar is the basic implementation of a user interface scroll bar
+ * (vertical version).
+ * <p>
+ * Contains arrow buttons, slider.
+ * <p>
+ * By default ability to get focus is disabled.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class VerticalScrollBar extends VerticalStack {
     private static int count = 0;
 
     /**
-     * VerticalScrollBar's upArrow
+     * Button to scroll up.
      */
     public ButtonCore upArrow = new ButtonCore();
+
     /**
-     * VerticalScrollBar's downArrow
+     * Button to scroll down.
      */
     public ButtonCore downArrow = new ButtonCore();
+
     /**
-     * VerticalScrollBar's slider
+     * Slider for scrolling with mouse drag and drop ivents or mouse wheel.
      */
     public VerticalSlider slider = new VerticalSlider();
 
     /**
-     * Constructs a VerticalScrollBar
+     * Default VerticalScrollBar constructor.
      */
     public VerticalScrollBar() {
         isFocusable = false;
@@ -30,7 +42,7 @@ public class VerticalScrollBar extends VerticalStack {
         count++;
 
         // Slider
-        slider.handler.direction = Orientation.VERTICAL;
+        slider.handler.orientation = Orientation.VERTICAL;
 
         // Arrows
         InterfaceMouseMethodState up_click = (sender, args) -> {
@@ -53,12 +65,14 @@ public class VerticalScrollBar extends VerticalStack {
         downArrow.eventMouseClick.add(down_click);
         eventScrollDown.add(down_click);
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalScrollBar"));
         setStyle(DefaultsService.getDefaultStyle(VerticalScrollBar.class));
     }
 
     /**
-     * Initialization and adding of all elements in the VerticalScrollBar
+     * Initializing all elements in the VerticalScrollBar.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -70,7 +84,10 @@ public class VerticalScrollBar extends VerticalStack {
     }
 
     /**
-     * Is up and down arrows of the VerticalScrollBar visible
+     * Setting Up and Down arrow buttons visibility of the VerticalScrollBar.
+     * 
+     * @param value True: if you want buttons visible. False: if you want buttons
+     *              invisible.
      */
     public void setArrowsVisible(boolean value) {
         upArrow.setVisible(value);
@@ -78,7 +95,11 @@ public class VerticalScrollBar extends VerticalStack {
     }
 
     /**
-     * Set style of the VerticalScrollBar
+     * Seting style of the VerticalScrollBar.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "slider".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -86,17 +107,17 @@ public class VerticalScrollBar extends VerticalStack {
             return;
         super.setStyle(style);
 
-        Style inner_style = style.getInnerStyle("uparrow");
-        if (inner_style != null) {
-            upArrow.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("uparrow");
+        if (innerStyle != null) {
+            upArrow.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("downarrow");
-        if (inner_style != null) {
-            downArrow.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("downarrow");
+        if (innerStyle != null) {
+            downArrow.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("slider");
-        if (inner_style != null) {
-            slider.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("slider");
+        if (innerStyle != null) {
+            slider.setStyle(innerStyle);
         }
     }
 }

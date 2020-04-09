@@ -8,17 +8,17 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import java.util.List;
 
 /**
- * Cell is sealed class representing cell in SpaceVIL.Grid. 
+ * Cell is sealed class representing cell in com.spvessel.spacevil.Grid. 
  * You cannot create instances of Cell class, only to get it for proccessing 
- * from any instance of SpaceVIL.Grid class.
+ * from any instance of com.spvessel.spacevil.Grid class.
  */
 public final class Cell extends Geometry {
     private InterfaceFreeLayout _parent = null;
 
     /**
-     * Getting SpaceVIL.Core.IFreeLayout (usualy SpaceVIL.Grid) 
+     * Getting com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy com.spvessel.spacevil.Grid) 
      * instance to which this Cell belongs.
-     * @return Container with cells as com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy SpaceVIL.Grid).
+     * @return Container with cells as com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy com.spvessel.spacevil.Grid).
      */
     public InterfaceFreeLayout getParentGrid() {
         return _parent;

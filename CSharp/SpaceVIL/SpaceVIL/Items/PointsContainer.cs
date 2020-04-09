@@ -55,26 +55,26 @@ namespace SpaceVIL
         {
             return _color;
         }
-        private List<float[]> _shapePointer;
+        private List<float[]> _pointShape;
         /// <summary>
         /// Setting custom shape for points (if one want to use other shape than circle).
         /// </summary>
         /// <param name="shape">Points list of the shape as List of float[2] array.</param>
-        public void SetShapePointer(List<float[]> shape)
+        public void SetPointShape(List<float[]> shape)
         {
             if (shape == null)
                 return;
-            _shapePointer = shape;
+            _pointShape = shape;
         }
         /// <summary>
-        /// Getting points coordinates.
+        /// Getting current shape of points. Default: circle shape.
         /// </summary>
         /// <returns>Points list as List of float[2] array.</returns>
-        public List<float[]> GetShapePointer()
+        public List<float[]> GetPointShape()
         {
-            if (_shapePointer == null)
-                _shapePointer = GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f, 16);
-            return _shapePointer;
+            if (_pointShape == null)
+                _pointShape = GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f, 16);
+            return _pointShape;
         }
         /// <summary>
         /// Setting points coordinates.

@@ -205,7 +205,7 @@ public class ButtonCore extends Prototype {
     }
 
     /**
-     * Setting background color of an item in byte RGBA format.
+     * Setting text color of an item in byte RGBA format.
      * 
      * @param r Red color component. Range: (0 - 255)
      * @param g Green color component. Range: (0 - 255)
@@ -249,7 +249,7 @@ public class ButtonCore extends Prototype {
     }
 
     /**
-     * Initializing text in the ButtonCore.
+     * Initializing all elements in the ButtonCore.
      * <p>
      * Notice: This method is mainly for overriding only. SpaceVIL calls this method
      * if necessary and no need to call it manually.

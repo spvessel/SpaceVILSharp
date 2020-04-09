@@ -15,39 +15,6 @@ public class ThemeStyle {
      * Constructs a default ThemeStyle
      */
     public ThemeStyle() {
-        // if (ThemeStyle.applyEmbedded) {
-        //     defaultItemsStyle.put("SpaceVIL.ButtonCore", Style.getButtonCoreStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ButtonToggle", Style.getButtonToggleStyle());
-        //     defaultItemsStyle.put("SpaceVIL.CheckBox", Style.getCheckBoxStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ComboBox", Style.getComboBoxStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ComboBoxDropDown", Style.getComboBoxDropDownStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ContextMenu", Style.getContextMenuStyle());
-        //     defaultItemsStyle.put("SpaceVIL.FreeArea", Style.getFlowAreaStyle());
-        //     defaultItemsStyle.put("SpaceVIL.Frame", Style.getFrameStyle());
-        //     defaultItemsStyle.put("SpaceVIL.Grid", Style.getGridStyle());
-        //     defaultItemsStyle.put("SpaceVIL.HorizontalScrollBar", Style.getHorizontalScrollBarStyle());
-        //     defaultItemsStyle.put("SpaceVIL.HorizontalSlider", Style.getHorizontalSliderStyle());
-        //     defaultItemsStyle.put("SpaceVIL.HorizontalSplitArea", Style.getHorizontalSplitAreaStyle());
-        //     defaultItemsStyle.put("SpaceVIL.HorizontalStack", Style.getHorizontalStackStyle());
-        //     defaultItemsStyle.put("SpaceVIL.Label", Style.getLabelStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ListArea", Style.getListAreaStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ListBox", Style.getListBoxStyle());
-        //     defaultItemsStyle.put("SpaceVIL.MenuItem", Style.getMenuItemStyle());
-        //     defaultItemsStyle.put("SpaceVIL.Indicator", Style.getIndicatorStyle());
-        //     defaultItemsStyle.put("SpaceVIL.RadioButton", Style.getRadioButtonStyle());
-        //     defaultItemsStyle.put("SpaceVIL.PasswordLine", Style.getPasswordLineStyle());
-        //     defaultItemsStyle.put("SpaceVIL.TextEdit", Style.getTextEditStyle());
-        //     defaultItemsStyle.put("SpaceVIL.TextBlock", Style.getTextBlockStyle());
-        //     defaultItemsStyle.put("SpaceVIL.PopUpMessage", Style.getPopUpMessageStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ProgressBar", Style.getProgressBarStyle());
-        //     defaultItemsStyle.put("SpaceVIL.ToolTip", Style.getToolTipStyle());
-        //     defaultItemsStyle.put("SpaceVIL.TitleBar", Style.getTitleBarStyle());
-        //     defaultItemsStyle.put("SpaceVIL.VerticalScrollBar", Style.getVerticalScrollBarStyle());
-        //     defaultItemsStyle.put("SpaceVIL.VerticalSlider", Style.getVerticalSliderStyle());
-        //     defaultItemsStyle.put("SpaceVIL.VerticalSplitArea", Style.getVerticalSplitAreaStyle());
-        //     defaultItemsStyle.put("SpaceVIL.VerticalStack", Style.getVerticalStackStyle());
-        //     defaultItemsStyle.put("SpaceVIL.TabView", Style.getTabViewStyle());
-        // }
         if (ThemeStyle.applyEmbedded) {
             defaultItemsStyle.put(ButtonCore.class, Style.getButtonCoreStyle());
             defaultItemsStyle.put(ButtonToggle.class, Style.getButtonToggleStyle());

@@ -12,86 +12,176 @@ import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * WrapGrid is a container and manager of com.spvessel.spacevil.WrapArea
+ * (scrollable container for other elements with ability of selection, groups
+ * elements in cells of a certain size) and scroll bars. WrapGrid controls
+ * scrolling, resizing and other actions of com.spvessel.spacevil.WrapArea.
+ * <p>
+ * Contains list area, scroll bars, scroll menu.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class WrapGrid extends Prototype {
     static int count = 0;
 
+    /**
+     * Returns True if internal com.spvessel.spacevil.WrapArea allocates all
+     * available space between cells to achieve smooth streching, otherwise returns
+     * False.
+     * 
+     * @return True: if com.spvessel.spacevil.WrapArea allocates all available space
+     *         between cells. False: if space between cells is fixed.
+     */
     public boolean isStretch() {
         return _area.isStretch();
     }
 
+    /**
+     * Setting strech mode for internal com.spvessel.spacevil.WrapArea.
+     * com.spvessel.spacevil.WrapArea can allocates all available space between
+     * cells or uses fixed space between cells.
+     * 
+     * @param value True: if you want to com.spvessel.spacevil.WrapArea allocates
+     *              all available space between cells. False: if you want space
+     *              between cells to be fixed.
+     */
     public void setStretch(boolean value) {
         _area.setStretch(value);
     }
 
+    /**
+     * Getting current row count.
+     * 
+     * @return Row count.
+     */
     public int getRowCount() {
-        return _area._rows;
+        return _area.rows;
     }
 
+    /**
+     * Getting current column count.
+     * 
+     * @return Column count.
+     */
     public int getColumnCount() {
-        return _area._columns;
+        return _area.columns;
     }
 
+    /**
+     * Getting current cell width.
+     * 
+     * @return Cell width.
+     */
     public int getCellWidth() {
         return _area._cellWidth;
     }
 
+    /**
+     * Getting current cell height.
+     * 
+     * @return Cell height.
+     */
     public int getCellHeight() {
         return _area._cellHeight;
     }
 
+    /**
+     * Setting cell width.
+     * 
+     * @param cellWidth Cell width.
+     */
     public void setCellWidth(int cellWidth) {
         _area._cellWidth = cellWidth;
         _area.updateLayout();
         updateSlider();
     }
 
+    /**
+     * Setting cell height.
+     * 
+     * @param cellHeight Cell height.
+     */
     public void setCellHeight(int cellHeight) {
         _area._cellHeight = cellHeight;
         _area.updateLayout();
         updateSlider();
     }
 
+    /**
+     * Setting cell size.
+     * 
+     * @param cellWidth  Cell width.
+     * @param cellHeight Cell height.
+     */
     public void setCellSize(int cellWidth, int cellHeight) {
         _area.setCellSize(cellWidth, cellHeight);
         updateSlider();
     }
 
     /**
-     * ScrollBar moving step
+     * Setting scroll movement step.
+     * 
+     * @param value Scroll step.
      */
-    public void setScrollStep(int step) {
-        _area.setStep(step);
+    public void setScrollStep(int value) {
+        _area.setStep(value);
     }
 
+    /**
+     * Getting scroll movement step.
+     * 
+     * @return Scroll step.
+     */
     public int getScrollStep() {
         return _area.getStep();
     }
 
     /**
-     * Selection index
+     * Getting index of selected item.
+     * 
+     * @return Index of selected item.
      */
     public int getSelection() {
         return _area.getSelection();
     }
 
     /**
-     * Set selected item of the WrapGrid by index
+     * Select item by index.
+     * 
+     * @param index Index of selection.
      */
     public void setSelection(int index) {
         _area.setSelection(index);
     }
 
     /**
-     * Unselect all items
+     * Unselect selected item.
      */
     public void unselect() {
         _area.unselect();
     }
 
+    /**
+     * Enable or disable selection ability of com.spvessel.spacevil.WrapArea.
+     * 
+     * @param value True: if you want selection ability of
+     *              com.spvessel.spacevil.WrapArea to be enabled. False: if you want
+     *              selection ability of com.spvessel.spacevil.WrapArea to be
+     *              disabled.
+     */
     public void setSelectionVisible(boolean value) {
         _area.setSelectionVisible(value);
     }
 
+    /**
+     * Returns True if selection ability of com.spvessel.spacevil.WrapArea is
+     * enabled otherwise returns False.
+     * 
+     * @return True: selection ability of com.spvessel.spacevil.WrapArea is enabled.
+     *         False: selection ability of com.spvessel.spacevil.WrapArea is
+     *         disabled.
+     */
     public boolean isSelectionVisible() {
         return _area.isSelectionVisible();
     }
@@ -101,27 +191,53 @@ public class WrapGrid extends Prototype {
     private WrapArea _area;
 
     /**
-     * @return ListArea
+     * Getting list area of WrapGrid.
+     * 
+     * @return List area as com.spvessel.spacevil.WrapArea.
      */
     public WrapArea getArea() {
         return _area;
     }
 
+    /**
+     * Vertical scroll bar of WrapGrid.
+     */
     public VerticalScrollBar vScrollBar;
+
+    /**
+     * Horizontal scroll bar of WrapGrid.
+     */
     public HorizontalScrollBar hScrollBar;
+
     private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
+    /**
+     * Getting internal com.spvessel.spacevil.WrapArea orientation.
+     * <p>
+     * Orientation can be Orientation.HORIZONTAL or Orientation.VERTICAL.
+     * 
+     * @return Current com.spvessel.spacevil.WrapArea orientation.
+     */
     public Orientation getOrientation() {
-        return _area._orientation;
+        return _area.orientation;
     }
 
     /**
-     * Is vertical scroll bar visible
+     * Getting scroll bar visibility policy.
+     * 
+     * @return Visibility policy as com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public VisibilityPolicy getScrollBarPolicy() {
         return _scrollBarPolicy;
     }
 
+    /**
+     * Setting scroll bar visibility policy.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
+     * 
+     * @param policy
+     */
     public void setScrollBarPolicy(VisibilityPolicy policy) {
         _scrollBarPolicy = policy;
 
@@ -145,7 +261,7 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Constructs a WrapGrid
+     * Constructs a WrapGrid with specified cell width, height and orientation.
      */
     public WrapGrid(int cellWidth, int cellHeight, Orientation orientation) {
         setItemName("WrapGrid_" + count);
@@ -201,51 +317,51 @@ public class WrapGrid extends Prototype {
         long selection_X = selection.getX() + selection.getMargin().left;
 
         switch (args.key) {
-        case UP:
-            if (isOutsideArea(selection) || (selection_Y < startY)) {
-                _area.setScrollOffset(offset - (startY - selection_Y));
-                updateSlider();
-            }
-            break;
-        case DOWN:
-            if (isOutsideArea(selection)) {
-                _area.setScrollOffset(offset - (startY - selection_Y));
-                updateSlider();
+            case UP:
+                if (isOutsideArea(selection) || (selection_Y < startY)) {
+                    _area.setScrollOffset(offset - (startY - selection_Y));
+                    updateSlider();
+                }
                 break;
-            }
-            if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
-                    - getPadding().bottom) {
-                _area.setScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
-                        + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
-                updateSlider();
-            }
-            break;
-
-        case LEFT:
-            if (isOutsideArea(selection) || (selection_X < startX)) {
-                _area.setScrollOffset(offset - (startX - selection_X));
-                updateSlider();
-            }
-            break;
-        case RIGHT:
-            if (isOutsideArea(selection)) {
-                _area.setScrollOffset(offset - (startX - selection_X));
-                updateSlider();
+            case DOWN:
+                if (isOutsideArea(selection)) {
+                    _area.setScrollOffset(offset - (startY - selection_Y));
+                    updateSlider();
+                    break;
+                }
+                if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
+                        - getPadding().bottom) {
+                    _area.setScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
+                            + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
+                    updateSlider();
+                }
                 break;
-            }
-            if (selection_X + selection.getWidth() + selection.getMargin().right > getX() + getWidth()
-                    - getPadding().right) {
-                _area.setScrollOffset(offset + ((selection_X + selection.getWidth() + selection.getMargin().right
-                        + _area.getSpacing().horizontal) - (getX() + getWidth() - getPadding().right)));
-                updateSlider();
-            }
-            break;
 
-        case ESCAPE:
-            unselect();
-            break;
-        default:
-            break;
+            case LEFT:
+                if (isOutsideArea(selection) || (selection_X < startX)) {
+                    _area.setScrollOffset(offset - (startX - selection_X));
+                    updateSlider();
+                }
+                break;
+            case RIGHT:
+                if (isOutsideArea(selection)) {
+                    _area.setScrollOffset(offset - (startX - selection_X));
+                    updateSlider();
+                    break;
+                }
+                if (selection_X + selection.getWidth() + selection.getMargin().right > getX() + getWidth()
+                        - getPadding().right) {
+                    _area.setScrollOffset(offset + ((selection_X + selection.getWidth() + selection.getMargin().right
+                            + _area.getSpacing().horizontal) - (getX() + getWidth() - getPadding().right)));
+                    updateSlider();
+                }
+                break;
+
+            case ESCAPE:
+                unselect();
+                break;
+            default:
+                break;
         }
     }
 
@@ -273,7 +389,7 @@ public class WrapGrid extends Prototype {
             int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
             if (visible_area < 0)
                 visible_area = 0;
-            int total = (_area._cellHeight + _area.getSpacing().vertical) * _area._rows - _area.getSpacing().vertical;
+            int total = (_area._cellHeight + _area.getSpacing().vertical) * _area.rows - _area.getSpacing().vertical;
             if (total <= visible_area) {
                 vScrollBar.slider.handler.setDrawable(false);
                 vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
@@ -306,7 +422,7 @@ public class WrapGrid extends Prototype {
             int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
             if (visible_area < 0)
                 visible_area = 0;
-            int total = (_area._cellWidth + _area.getSpacing().horizontal) * _area._columns
+            int total = (_area._cellWidth + _area.getSpacing().horizontal) * _area.columns
                     - _area.getSpacing().horizontal;
             if (total <= visible_area) {
                 hScrollBar.slider.handler.setDrawable(false);
@@ -347,7 +463,11 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Set width of the ListBox
+     * Setting item width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the item.
      */
     @Override
     public void setWidth(int width) {
@@ -356,7 +476,11 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Set height of the ListBox
+     * Setting item height. If the value is greater/less than the maximum/minimum
+     * value of the height, then the height becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param height Height of the item.
      */
     @Override
     public void setHeight(int height) {
@@ -365,7 +489,9 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Add item to the ListBox
+     * Adding item to the list area of WrapGrid.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -374,7 +500,10 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Insert item to the ListBox by index
+     * Insert item into the list area of WrapGrid by index.
+     * 
+     * @param item  Child as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param index Index of insertion.
      */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
@@ -383,7 +512,11 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Remove item from the ListBox
+     * Removing the specified item from the list area of WrapGrid.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -396,13 +529,19 @@ public class WrapGrid extends Prototype {
         return b;
     }
 
+    /**
+     * Removing all items from the list area of WrapGrid.
+     */
     @Override
     public void clear() {
         _area.clear();
     }
 
     /**
-     * Update states of the all ListBox inner items
+     * Initializing all elements in the WrapGrid.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -437,7 +576,10 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * @return list of all ListBox items
+     * Getting content of the list area of WrapGrid.
+     * 
+     * @return Content of the list area as
+     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<>();
@@ -449,26 +591,42 @@ public class WrapGrid extends Prototype {
     }
 
     /**
-     * Set list of items
+     * Adding all elements in the list area of WrapGrid from the given list.
+     * 
+     * @param content List of items as
+     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
      */
     public void setListContent(List<InterfaceBaseItem> content) {
         _area.setListContent(content);
         // updateSlider();
     }
 
+    /**
+     * Getting wrapper of item.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return Wrapper of given item as com.spvessel.spacevil.SelectionItem.
+     */
     public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {
         return getArea()._mapContent.get(item);
     }
 
     /**
-     * @return selection item
+     * Getting selected item.
+     * 
+     * @return selection item Selected item as
+     *         com.spvessel.spacevil.Core.InterfaceBaseItem
      */
-    public InterfaceBaseItem getSelectionItem() {
-        return _area.getSelectionItem();
+    public InterfaceBaseItem getSelectedItem() {
+        return _area.getSelectedItem();
     }
 
     /**
-     * Set style of the ListBox
+     * Setting style of the CheckBox.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

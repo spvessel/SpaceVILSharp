@@ -109,20 +109,24 @@ namespace SpaceVIL
         }
 
         private int _size = 300;
+
         /// <summary>
         /// Getting actual size of SideArea.
-        /// <para/> If SideArea is attached to Side.Left or Side.Rigth, 
+        /// <para/> If SideArea is attached to Side.Left or Side.Right, 
         /// then this value is the width of the area, otherwise, the height.
+        /// <para/> Default: 300.
         /// </summary>
         /// <returns>Actual size of SideArea.</returns>
         public int GetAreaSize()
         {
             return _size;
         }
+
         /// <summary>
         /// Setting actual size of SideArea.
-        /// <para/> If SideArea is attached to Side.Left or Side.Rigth, 
+        /// <para/> If SideArea is attached to Side.Left or Side.Right, 
         /// then this value is the width of the area, otherwise, the height.
+        /// <para/> Default: 300.
         /// </summary>
         /// <param name="size">Actual size of SideArea.</param>
         public void SetAreaSize(int size)
@@ -163,6 +167,7 @@ namespace SpaceVIL
                     Hide();
             };
         }
+
         /// <summary>
         /// Initializing all elements in the SideArea.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -191,16 +196,18 @@ namespace SpaceVIL
         {
             Window.AddItem(item);
         }
+
         /// <summary>
         /// Inserting item to the SideArea. 
         /// If the count of container elements is less than the index, then the element is added to the end of the list.
         /// </summary>
-        /// <param name="item">Child as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, int index)
         {
             Window.InsertItem(item, index);
         }
+
         /// <summary>
         /// Removing the specified item from SideArea.
         /// </summary>
@@ -211,6 +218,7 @@ namespace SpaceVIL
         {
             return Window.RemoveItem(item);
         }
+
         /// <summary>
         /// Setting SideArea width. If the value is greater/less than the maximum/minimum 
         /// value of the width, then the width becomes equal to the maximum/minimum value.
@@ -220,6 +228,7 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
         }
+
         /// <summary>
         /// Setting SideArea height. If the value is greater/less than the maximum/minimum 
         /// value of the height, then the height becomes equal to the maximum/minimum value.
@@ -229,6 +238,7 @@ namespace SpaceVIL
         {
             base.SetHeight(height);
         }
+
         /// <summary>
         /// Shows the SideArea at the proper position.
         /// </summary>
@@ -239,6 +249,7 @@ namespace SpaceVIL
             SetVisible(true);
             SetFocus();
         }
+
         /// <summary>
         /// Shows the SideArea at the proper position. This method do exactly 
         /// as Show() method without arguments.
@@ -250,6 +261,7 @@ namespace SpaceVIL
         {
             Show();
         }
+
         /// <summary>
         /// Hide the SideArea without destroying.
         /// </summary>
@@ -257,6 +269,7 @@ namespace SpaceVIL
         {
             SetVisible(false);
         }
+
         /// <summary>
         /// Hide the SideArea without destroying with using specified mouse arguments.
         /// This method do exactly as Hide() method without arguments.
@@ -266,6 +279,7 @@ namespace SpaceVIL
         {
             Hide();
         }
+
         /// <summary>
         /// Setting style of the SideArea.
         /// <para/> Inner styles: "window", "closebutton".
@@ -289,9 +303,10 @@ namespace SpaceVIL
         }
 
         private bool _ouside = false;
+
         /// <summary>
         /// Returns True if SideArea (see SpaceVIL.Core.IFloating)
-        /// should closes when mouse click outside the area of SideArea otherwise returns False..
+        /// should closes when mouse click outside the area of SideArea otherwise returns False.
         /// </summary>
         /// <returns>True: if SideArea closes when mouse click outside the area.
         /// False: if SideArea stays opened when mouse click outside the area.</returns>
@@ -299,6 +314,7 @@ namespace SpaceVIL
         {
             return _ouside;
         }
+
         /// <summary>
         /// Setting boolean value of item's behavior when mouse click occurs outside the SideArea.
         /// </summary>

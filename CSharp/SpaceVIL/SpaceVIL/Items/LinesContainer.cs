@@ -7,7 +7,7 @@ namespace SpaceVIL
     /// <summary>
     /// LinesContainer is class for rendering lines in graph.
     /// </summary>
-    public class LinesContainer : Primitive, ILine
+    public class LinesContainer : Primitive, ILines
     {
         static int count = 0;
 
@@ -39,6 +39,7 @@ namespace SpaceVIL
         private Color _lineColor = Color.Blue;
         /// <summary>
         /// Setting lines color.
+        /// <pata/> Default: Blue.
         /// </summary>
         /// <param name="color">Line color.</param>
         public void SetLineColor(Color color)

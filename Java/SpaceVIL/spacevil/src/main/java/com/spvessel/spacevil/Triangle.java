@@ -1,16 +1,20 @@
 package com.spvessel.spacevil;
 
-import java.util.List;
-
+/**
+ * Triangle is a subclass that extends from com.spvessel.spacevil.Primitive for
+ * rendering an triangle shape.
+ */
 public class Triangle extends Primitive {
     private static int count = 0;
     /**
-     * Rotate triangle on rotationAngle (degrees)
+     * Rotation angle in degrees of an triangle shape.
+     * <p>
+     * Default: 0.
      */
     public int rotationAngle = 0;
 
     /**
-     * Constructs a Triangle
+     * Default Triangle constructor.
      */
     public Triangle() {
         setItemName("Triangle_" + count);
@@ -18,9 +22,9 @@ public class Triangle extends Primitive {
     }
 
     /**
-     * Constructs a Triangle
+     * Constructs an Triangle with specified rotation angle of an triangle shape.
      * 
-     * @param angle Triangle rotation angle (degrees)
+     * @param angle Rotation angle of an triangle shape.
      */
     public Triangle(int angle) {
         this();
@@ -28,7 +32,11 @@ public class Triangle extends Primitive {
     }
 
     /**
-     * Make Triangle shape as list of floats
+     * Overridden method for stretching the triangle shape relative to the current
+     * size. Use in conjunction with getTriangles() and setTriangles() methods.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void makeShape() {

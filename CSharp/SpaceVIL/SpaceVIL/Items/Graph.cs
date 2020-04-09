@@ -19,7 +19,7 @@ namespace SpaceVIL
         /// <summary>
         /// Property to enable or disable mouse events (hover, click, press, scroll).
         /// <para/> True: Graph can receive mouse events. False: cannot receive mouse events.
-        /// Default: False.
+        /// <para/> Default: False.
         /// </summary>
         public bool IsHover = false;
 
@@ -30,7 +30,7 @@ namespace SpaceVIL
             return false;
         }
         /// <summary>
-        /// Derfault Graph constructor. The ability to get focus is disabled by default.
+        /// Default Graph constructor. The ability to get focus is disabled by default.
         /// </summary>
         public Graph()
         {
@@ -99,17 +99,17 @@ namespace SpaceVIL
         /// Setting custom shape for points (if one want to use other shape than circle).
         /// </summary>
         /// <param name="shape">Points list of the shape as List of float[2] array.</param>
-        public void SetShapePointer(List<float[]> shape)
+        public void SetPointShape(List<float[]> shape)
         {
-            points.SetShapePointer(shape);
+            points.SetPointShape(shape);
         }
         /// <summary>
-        /// Getting Graph points coordinates.
+        /// Getting current shape of points. Default: circle shape.
         /// </summary>
         /// <returns>Points list as List of float[2] array.</returns>
-        public List<float[]> GetShapePointer()
+        public List<float[]> GetPointShape()
         {
-            return points.GetShapePointer();
+            return points.GetPointShape();
         }
         /// <summary>
         /// Setting Graph points coordinates.

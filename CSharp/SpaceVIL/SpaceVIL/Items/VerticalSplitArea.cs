@@ -23,6 +23,7 @@ namespace SpaceVIL
         private int _diff = 0;
         private int _lMin = 0;
         private int _rMin = 0;
+
         /// <summary>
         /// Setting position of the split holder.
         /// </summary>
@@ -40,6 +41,7 @@ namespace SpaceVIL
             else
                 _leftWidth = position;
         }
+
         /// <summary>
         /// Setting split holder color.
         /// </summary>
@@ -48,6 +50,7 @@ namespace SpaceVIL
         {
             _splitHolder.SetBackground(color);
         }
+
         /// <summary>
         /// Defaults VerticalSplitArea constructor.
         /// </summary>
@@ -72,6 +75,7 @@ namespace SpaceVIL
         }
 
         private bool _init = false;
+        
         /// <summary>
         /// Initializing all elements in the VerticalSplitArea. 
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -88,6 +92,7 @@ namespace SpaceVIL
             else
                 SetSplitPosition(_leftWidth);
         }
+
         /// <summary>
         /// Assign item on the left area of the VerticalSplitArea.
         /// </summary>
@@ -99,6 +104,7 @@ namespace SpaceVIL
             _lMin = _leftBlock.GetMinWidth();
             UpdateLayout();
         }
+
         /// <summary>
         /// Assign item on the right area of the VerticalSplitArea.
         /// </summary>
@@ -111,6 +117,7 @@ namespace SpaceVIL
             _rMin = _rightBlock.GetMinWidth();
             UpdateLayout();
         }
+
         /// <summary>
         /// Setting VerticalSplitArea width. If the value is greater/less than the maximum/minimum 
         /// value of the width, then the width becomes equal to the maximum/minimum value.
@@ -141,6 +148,7 @@ namespace SpaceVIL
                 }
             }
         }
+
         /// <summary>
         /// Setting X coordinate of the left-top corner of the VerticalSplitArea.
         /// </summary>
@@ -151,6 +159,7 @@ namespace SpaceVIL
             SetSplitPosition(_leftWidth);
             UpdateLayout();
         }
+
         /// <summary>
         /// Updating all children positions (implementation of SpaceVIL.Core.IHLayout).
         /// </summary>
@@ -183,6 +192,7 @@ namespace SpaceVIL
             foreach (var item in GetItems())
                 item.SetConfines();
         }
+
         /// <summary>
         /// Setting thickness of SplitHolder divider.
         /// </summary>
@@ -191,6 +201,7 @@ namespace SpaceVIL
         {
             _splitHolder.SetDividerSize(thickness);
         }
+
         /// <summary>
         /// Seting style of the VerticalSplitArea.
         /// <para/> Inner styles: "splitholder".

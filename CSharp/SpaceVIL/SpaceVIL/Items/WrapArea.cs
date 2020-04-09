@@ -16,17 +16,19 @@ namespace SpaceVIL
     public class WrapArea : Prototype, IFreeLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
-        private Object _lock = new Object();
+
         /// <summary>
         /// Event that is invoked when one of the element is selected.
         /// </summary>
         public EventCommonMethod SelectionChanged;
+
         /// <summary>
         /// Event that is invoked when one of the set of elements is changed.
         /// </summary>
         public EventCommonMethod ItemListChanged;
+
         /// <summary>
-        /// Disposing ComboBoxDropDown resources if it was removed.
+        /// Disposing WrapArea resources if it was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
         /// this method if necessary and no need to call it manually.
         /// </summary>
@@ -49,6 +51,7 @@ namespace SpaceVIL
         {
             _step = value;
         }
+
         /// <summary>
         /// Getting scroll movement step.
         /// </summary>
@@ -59,6 +62,7 @@ namespace SpaceVIL
         }
 
         private bool _isStretch = false;
+
         /// <summary>
         /// Returns True if WrapArea allocates all available space between cells 
         /// to achieve smooth streching, otherwise returns False.
@@ -69,6 +73,7 @@ namespace SpaceVIL
         {
             return _isStretch;
         }
+
         /// <summary>
         /// Setting strech mode for WrapArea. WrapArea can allocates all available 
         /// space between cells or uses fixed space between cells.
@@ -101,16 +106,18 @@ namespace SpaceVIL
         /// Getting selected item.
         /// </summary>
         /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
-        public IBaseItem GetSelectionItem()
+        public IBaseItem GetSelectedItem()
         {
             if (_selectionItem != null)
                 return _selectionItem.GetContent();
             return null;
         }
+
         internal SelectionItem GetTrueSelection()
         {
             return _selectionItem;
         }
+
         /// <summary>
         /// Select item by index.
         /// </summary>
@@ -142,6 +149,7 @@ namespace SpaceVIL
                 }
             }
         }
+
         /// <summary>
         /// Unselect selected item.
         /// </summary>
@@ -156,6 +164,7 @@ namespace SpaceVIL
         }
 
         private bool _isSelectionVisible = true;
+
         /// <summary>
         /// Enable or disable selection ability of WrapArea.
         /// </summary>
@@ -171,6 +180,7 @@ namespace SpaceVIL
                 item.SetToggleVisible(_isSelectionVisible);
             }
         }
+
         /// <summary>
         /// Returns True if selection ability of WrapArea is enabled otherwise returns False.
         /// </summary>
@@ -327,7 +337,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to the WrapArea.
+        /// Adding item to the WrapArea.
         /// </summary>
         /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
@@ -337,11 +347,11 @@ namespace SpaceVIL
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
+
         /// <summary>
         /// Adding all elements in the WrapArea from the given list.
         /// </summary>
-        /// <param name="content">List of items as 
-        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
+        /// <param name="content">List of items as IEnumerable&lt;IBaseItem&gt;</param>
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             RemoveAllItems();
@@ -402,6 +412,7 @@ namespace SpaceVIL
             ItemListChanged?.Invoke();
             return b;
         }
+
         /// <summary>
         /// Removing all items from the WrapArea.
         /// </summary>
@@ -455,9 +466,9 @@ namespace SpaceVIL
         private Int64 _xOffset = 0;
 
         /// <summary>
-        /// Getting vertical scroll offset in the WrapArea.
+        /// Getting scroll offset in the WrapArea.
         /// </summary>
-        /// <returns>Vertical scroll offset.</returns>
+        /// <returns>Scroll offset.</returns>
         public Int64 GetScrollOffset()
         {
             if (Orientation == Orientation.Horizontal)
@@ -465,10 +476,11 @@ namespace SpaceVIL
             else
                 return _xOffset;
         }
+
         /// <summary>
-        /// Setting vertical scroll offset of the WrapArea.
+        /// Setting scroll offset of the WrapArea.
         /// </summary>
-        /// <param name="value">Vertical scroll offset.</param>
+        /// <param name="value">Scroll offset.</param>
         public void SetScrollOffset(Int64 value)
         {
             if (Orientation == Orientation.Horizontal)
@@ -628,6 +640,7 @@ namespace SpaceVIL
         }
 
         private Style _selectedStyle;
+
         /// <summary>
         /// Setting style of the WrapArea. 
         /// <para/> Inner styles: "selection".

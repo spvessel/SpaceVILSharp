@@ -10,9 +10,20 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
+/**
+ * ImageItem is class for rendering loaded images.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class ImageItem extends Prototype implements InterfaceImageItem {
 
     private Area area = new Area();
+
+    /**
+     * Getting bounds for an image (for example: to keep aspect ratio).
+     * 
+     * @return Bounds as com.spvessel.spacevil.Core.Area.
+     */
 
     public Area getAreaBounds() {
         return area;
@@ -21,20 +32,44 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private static int count = 0;
     private BufferedImage _image = null;
 
+    /**
+     * Getting a bitmap image in the form as java.awt.image.BufferedImage.
+     * 
+     * @return Image as java.awt.image.BufferedImage.
+     */
     public BufferedImage getImage() {
         return _image;
     }
 
     private float _angleRotation = 0.0f;
 
+    /**
+     * Setting rotation angle for image.
+     * <p>
+     * Default: 0.
+     * 
+     * @param angle Rotation angle.
+     */
     public void setRotationAngle(float angle) {
         _angleRotation = angle * (float) Math.PI / 180.0f;
     }
 
+    /**
+     * Getting rotation angle for image.
+     * 
+     * @return Rotation angle.
+     */
     public float getRotationAngle() {
         return _angleRotation;
     }
 
+    /**
+     * Property to enable or disable mouse events (hover, click, press, scroll).
+     * <p>
+     * True: ImageItem can receive mouse events. False: cannot receive mouse events.
+     * <p>
+     * Default: False.
+     */
     public boolean isHover = false;
 
     @Override
@@ -45,7 +80,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     /**
-     * Constructs an ImageItem
+     * Default ImageItem constructor. Does not contains any image.
      */
     public ImageItem() {
         setItemName("Image_" + count);
@@ -54,7 +89,9 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     /**
-     * Constructs an ImageItem with an image
+     * Constructs an ImageItem with an bitmap image.
+     * 
+     * @param picture Bitmap image as java.awt.image.BufferedImage.
      */
     public ImageItem(BufferedImage picture) {
         this();
@@ -64,67 +101,75 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     /**
-     * Constructs an ImageItem with an image and hover attribute
+     * Constructs an ImageItem with an bitmap image with the ability to enable or
+     * disable mouse events.
+     * 
+     * @param picture Bitmap image as java.awt.image.BufferedImage.
+     * @param hover   True: ImageItem can receive mouse events. False: cannot
+     *                receive mouse events.
      */
     public ImageItem(BufferedImage picture, boolean hover) {
         this(picture);
         isHover = hover;
     }
 
-    /**
-     * Returns the image as byte array
-     */
     // public byte[] getPixMapImage() {
-    //     return _bitmap;
+    // return _bitmap;
     // }
 
     // protected byte[] createByteImage(BufferedImage picture) {
-    //     try {
-    //         _imageWidth = picture.getWidth();
-    //         _imageHeight = picture.getHeight();
-    //         List<Byte> bmp = new LinkedList<Byte>();
-    //         for (int j = picture.getHeight() - 1; j >= 0; j--) {
-    //             for (int i = 0; i < picture.getWidth(); i++) {
-    //                 byte[] bytes = ByteBuffer.allocate(4).putInt(picture.getRGB(i, j)).array();
-    //                 bmp.add(bytes[1]);
-    //                 bmp.add(bytes[2]);
-    //                 bmp.add(bytes[3]);
-    //                 bmp.add(bytes[0]);
-    //             }
-    //         }
-    //         byte[] result = new byte[bmp.size()];
-    //         int index = 0;
-    //         for (Byte var : bmp) {
-    //             result[index] = var;
-    //             index++;
-    //         }
-    //         return result;
-    //     } catch (Exception ex) {
-    //         System.out.println("Create byte image");
-    //         ex.printStackTrace();
-    //         return null;
-    //     }
+    // try {
+    // _imageWidth = picture.getWidth();
+    // _imageHeight = picture.getHeight();
+    // List<Byte> bmp = new LinkedList<Byte>();
+    // for (int j = picture.getHeight() - 1; j >= 0; j--) {
+    // for (int i = 0; i < picture.getWidth(); i++) {
+    // byte[] bytes = ByteBuffer.allocate(4).putInt(picture.getRGB(i, j)).array();
+    // bmp.add(bytes[1]);
+    // bmp.add(bytes[2]);
+    // bmp.add(bytes[3]);
+    // bmp.add(bytes[0]);
+    // }
+    // }
+    // byte[] result = new byte[bmp.size()];
+    // int index = 0;
+    // for (Byte var : bmp) {
+    // result[index] = var;
+    // index++;
+    // }
+    // return result;
+    // } catch (Exception ex) {
+    // System.out.println("Create byte image");
+    // ex.printStackTrace();
+    // return null;
+    // }
     // }
 
     private int _imageWidth;
     private int _imageHeight;
 
     /**
-     * @return width of the image in the ImageItem
+     * Getting an image width.
+     * 
+     * @return Image width.
      */
     public int getImageWidth() {
         return _imageWidth;
     }
 
     /**
-     * @return height of the image in the ImageItem
+     * Getting an image height.
+     * 
+     * @return Image height.
      */
     public int getImageHeight() {
         return _imageHeight;
     }
 
     /**
-     * set an image into the ImageItem
+     * Setting new bitmap image of ImageItem.
+     * 
+     * @param image New bitmap image as java.awt.image.BufferedImage.
      */
     public void setImage(BufferedImage image) {
         if (image == null)
@@ -140,44 +185,99 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private boolean _isOverlay = false;
     private Color _colorOverlay;
 
+    /**
+     * Getting color overlay (useful in images that have alpha channel).
+     * 
+     * @return Color overlay as java.awt.Color.
+     */
     public Color getColorOverlay() {
         return _colorOverlay;
     }
 
+    /**
+     * Setting color overlay (useful in images that have alpha channel).
+     * 
+     * @param color Color overlay as java.awt.Color.
+     */
     public void setColorOverlay(Color color) {
         _colorOverlay = color;
         _isOverlay = true;
     }
 
+    /**
+     * Setting color overlay (useful in images that have alpha channel) with ability
+     * to specify overlay status.
+     * 
+     * @param color   Color overlay as java.awt.Color.
+     * @param overlay True: if color overlay is using. False: if color overlay is
+     *                not using.
+     */
     public void setColorOverlay(Color color, boolean overlay) {
         _colorOverlay = color;
         _isOverlay = overlay;
     }
 
+    /**
+     * Setting color overlay status.
+     * 
+     * @param overlay True: if color overlay is using. False: if color overlay is
+     *                not using.
+     */
     public void setColorOverlay(boolean overlay) {
         _isOverlay = overlay;
     }
 
+    /**
+     * Getting color overlay status.
+     * 
+     * @return True: if color overlay is using. False: if color overlay is not
+     *         using.
+     */
     public boolean isColorOverlay() {
         return _isOverlay;
     }
 
     private boolean _isKeepAspectRatio = false;
 
+    /**
+     * Setting value to keep or not to keep еру aspect ratio of the image.
+     * 
+     * @param value True: to keep aspect ratio of the image. False: to not keep
+     *              aspect ratio of the image.
+     */
     public void keepAspectRatio(boolean value) {
         _isKeepAspectRatio = value;
     }
 
+    /**
+     * Returns True if aspect ratio of the image is kept otherwise returns False.
+     * 
+     * @return True: if aspect ratio of the image is kept. False: if aspect ratio of
+     *         the image is not kept.
+     */
     public boolean isAspectRatio() {
         return _isKeepAspectRatio;
     }
 
+    /**
+     * Setting ImageItem size (width and height).
+     * 
+     * @param width  Width of the ImageItem.
+     * @param height Height of the ImageItem.
+     */
     @Override
     public void setSize(int width, int height) {
         this.setWidth(width);
         this.setHeight(height);
     }
 
+    /**
+     * Setting ImageItem height. If the value is greater/less than the
+     * maximum/minimum value of the height, then the height becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param height Height of the ImageItem.
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
@@ -188,6 +288,13 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         UpdateLayout();
     }
 
+    /**
+     * Setting ImageItem width. If the value is greater/less than the
+     * maximum/minimum value of the width, then the width becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param width Width of the ImageItem.
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
@@ -198,12 +305,22 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         UpdateLayout();
     }
 
+    /**
+     * Setting X coordinate of the left-top corner of the ImageItem.
+     * 
+     * @param x X position of the left-top corner.
+     */
     @Override
     public void setX(int x) {
         super.setX(x);
         UpdateLayout();
     }
 
+    /**
+     * Setting Y coordinate of the left-top corner of the ImageItem.
+     * 
+     * @param y Y position of the left-top corner.
+     */
     @Override
     public void setY(int y) {
         super.setY(y);
@@ -255,6 +372,12 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         }
     }
 
+    /**
+     * Disposing bitmap resources if the item was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         if (_image != null)

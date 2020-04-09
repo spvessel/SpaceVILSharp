@@ -49,7 +49,7 @@ public class CheckBox extends Prototype {
 
         // text
         _textObject = new TextLine();
-        _textObject.setItemName(getItemName() + "_text_object");
+        _textObject.setItemName(getItemName() + "_textObject");
 
         // indicator
         _indicator = new CustomIndicator();
@@ -75,7 +75,7 @@ public class CheckBox extends Prototype {
     }
 
     /**
-     * Overrided Prototype.SetMouseHover(bool) method.
+     * Overrided Prototype.setMouseHover(bool) method.
      * <p>
      * Setting this item hovered (mouse cursor located within item's shape).
      * 
@@ -287,7 +287,7 @@ public class CheckBox extends Prototype {
     }
 
     /**
-     * Initializing indicator and text in the CheckBox.
+     * Initializing all elements in the CheckBox.
      * <p>
      * Notice: This method is mainly for overriding only. SpaceVIL calls this method
      * if necessary and no need to call it manually.

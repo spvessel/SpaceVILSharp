@@ -28,6 +28,8 @@ namespace SpaceVIL
 
         /// <summary>
         /// Disposing ComboBoxDropDown resources if it was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void Release()
         {

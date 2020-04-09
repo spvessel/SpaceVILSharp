@@ -412,29 +412,6 @@ namespace Glfw3
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwWaitEvents"), SuppressUnmanagedCodeSecurity]
         internal static extern void WaitEvents();
 
-        /// <summary>
-        /// <para>This function puts the calling thread to sleep until at least one event is
-        /// available in the event queue, or until the specified timeout is reached. Once one or
-        /// more events are available, it behaves exactly like <see cref="PollEvents"/>, i.e. the
-        /// events in the queue are processed and the function then returns immediately. Processing
-        /// events will cause the window and input callbacks associated with those events to be
-        /// called.</para>
-        /// <para>Since not all events are associated with callbacks, this function may return
-        /// without a callback having been called even if you are monitoring all callbacks.</para>
-        /// <para>On some platforms, a window move, resize or menu operation will cause event
-        /// processing to block. This is due to how event processing is designed on those platforms.
-        /// You can use the window refresh callback to redraw the contents of your window when
-        /// necessary during such operations.</para>
-        /// <para>On some platforms, certain callbacks may be called outside of a call to one of the
-        /// event processing functions.</para>
-        /// <para>If no windows exist, this function returns immediately. For synchronization of
-        /// threads in applications that do not create windows, use your threading library of
-        /// choice.</para>
-        /// <para>Event processing is not required for joystick input to work.</para>
-        /// </summary>
-        /// <param name="timeout">The maximum amount of time, in seconds, to wait.</param>
-        /// <seealso cref="PollEvents"/>
-        /// <seealso cref="WaitEvents"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwWaitEventsTimeout"), SuppressUnmanagedCodeSecurity]
         internal static extern void WaitEventsTimeout(double timeout);
 

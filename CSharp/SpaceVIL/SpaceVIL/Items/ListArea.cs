@@ -14,7 +14,6 @@ namespace SpaceVIL
     public class ListArea : Prototype, IVLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
-        private Object _lock = new Object();
         /// <summary>
         /// Event that is invoked when one of the element is selected.
         /// </summary>
@@ -127,6 +126,7 @@ namespace SpaceVIL
         }
 
         private bool _isSelectionVisible = true;
+
         /// <summary>
         /// Enable or disable selection ability of ListArea.
         /// </summary>
@@ -475,10 +475,10 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("selection");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("selection");
+            if (innerStyle != null)
             {
-                _selectedStyle = inner_style.Clone();
+                _selectedStyle = innerStyle.Clone();
                 List<IBaseItem> list = GetItems();
                 foreach (IBaseItem item in list)
                 {

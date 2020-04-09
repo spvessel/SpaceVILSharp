@@ -17,6 +17,7 @@ namespace SpaceVIL
         internal Frame View;
         private Label _textLabel;
         private ButtonCore _close;
+
         /// <summary>
         /// Getting close button.
         /// </summary>
@@ -27,6 +28,7 @@ namespace SpaceVIL
         }
 
         private bool _isClosable = false;
+
         /// <summary>
         /// Setting tab to support closing or not support closing.
         /// </summary>
@@ -40,6 +42,7 @@ namespace SpaceVIL
             _close.SetVisible(_isClosable);
             UpdateTabWidth();
         }
+
         /// <summary>
         /// Returns True if tab support closing otherwise returns False.
         /// </summary>
@@ -49,11 +52,13 @@ namespace SpaceVIL
         {
             return _isClosable;
         }
+
         /// <summary>
         /// Constructs Tab with the specified text.
         /// </summary>
         /// <param name="text">Text of Tab.</param>
         public Tab(String text) : this(text, text) { }
+
         /// <summary>
         /// Constructs Tab with specified text and name of the Tab.
         /// </summary>
@@ -64,6 +69,7 @@ namespace SpaceVIL
             SetItemName(name);
             SetText(text);
         }
+
         /// <summary>
         /// Default Tab constructor.
         /// </summary>
@@ -92,6 +98,7 @@ namespace SpaceVIL
         internal bool Dragging = false;
 
         private bool _isDraggable = true;
+
         /// <summary>
         /// Setting tab to support drag and drop or not.
         /// </summary>
@@ -158,6 +165,7 @@ namespace SpaceVIL
         {
             return _toggled;
         }
+
         /// <summary>
         /// Setting Tab selected or unselected.
         /// </summary>
@@ -171,18 +179,19 @@ namespace SpaceVIL
             else
                 SetState(ItemStateType.Base);
         }
+
         /// <summary>
         /// Event that is invoked when Tab become selected.
         /// </summary>
         public EventMouseMethodState EventOnSelect;
+
         /// <summary>
         /// Event that is invoked when Tab is closed.
         /// </summary>
         public EventCommonMethod EventOnClose;
-        /// <summary>
-        /// Event that is invoked when Tab is removed.
-        /// </summary>
+
         internal EventCommonMethod EventTabRemove;
+
         /// <summary>
         /// Disposing Tab resources if the Tab was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -408,6 +417,7 @@ namespace SpaceVIL
                 _textLabel.GetMargin().Bottom
                 );
         }
+
         /// <summary>
         /// Initializing all elements in the Tab.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -432,6 +442,7 @@ namespace SpaceVIL
                 RemoveTab();
             };
         }
+
         /// <summary>
         /// Removing Tab.
         /// </summary>
@@ -440,6 +451,7 @@ namespace SpaceVIL
             EventOnClose?.Invoke();
             EventTabRemove?.Invoke();
         }
+        
         /// <summary>
         /// Seting style of the Tab.
         /// <para/> Inner styles: "closebutton", "view", "text".

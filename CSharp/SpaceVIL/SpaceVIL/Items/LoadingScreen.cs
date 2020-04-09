@@ -50,6 +50,7 @@ namespace SpaceVIL
         }
 
         private CoreWindow _handler = null;
+        
         /// <summary>
         /// Default LoadingScreen constructor.
         /// </summary>

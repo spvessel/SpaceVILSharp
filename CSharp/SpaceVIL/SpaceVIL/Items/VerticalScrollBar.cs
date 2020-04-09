@@ -14,18 +14,22 @@ namespace SpaceVIL
     public class VerticalScrollBar : VerticalStack
     {
         private static int count = 0;
+
         /// <summary>
         /// Button to scroll up.
         /// </summary>
         public ButtonCore UpArrow = new ButtonCore();
+
         /// <summary>
         /// Button to scroll down.
         /// </summary>
         public ButtonCore DownArrow = new ButtonCore();
+
         /// <summary>
         /// Slider for scrolling with mouse drag and drop ivents or mouse wheel.
         /// </summary>
         public VerticalSlider Slider = new VerticalSlider();
+
         /// <summary>
         /// Default VerticalScrollBar constructor.
         /// </summary>
@@ -59,6 +63,7 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalScrollBar)));
         }
+
         /// <summary>
         /// Initializing all elements in the VerticalScrollBar.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -77,6 +82,7 @@ namespace SpaceVIL
             EventScrollUp += UpArrow.EventMouseClick.Invoke;
             EventScrollDown += DownArrow.EventMouseClick.Invoke;
         }
+
         /// <summary>
         /// Setting Up and Down arrow buttons visibility of the VerticalScrollBar.
         /// </summary>
@@ -87,6 +93,7 @@ namespace SpaceVIL
             UpArrow.SetVisible(value);
             DownArrow.SetVisible(value);
         }
+
         /// <summary>
         /// Seting style of the VerticalScrollBar.
         /// <para/> Inner styles: "uparrow", "downarrow", "slider".
@@ -98,20 +105,20 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("uparrow");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("uparrow");
+            if (innerStyle != null)
             {
-                UpArrow.SetStyle(inner_style);
+                UpArrow.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("downarrow");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("downarrow");
+            if (innerStyle != null)
             {
-                DownArrow.SetStyle(inner_style);
+                DownArrow.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("slider");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("slider");
+            if (innerStyle != null)
             {
-                Slider.SetStyle(inner_style);
+                Slider.SetStyle(innerStyle);
             }
         }
     }

@@ -578,7 +578,7 @@ namespace View
             // graph_points.SetX(200);
             // graph_points.SetY(200);
             // graph_points.SetShapePointer(GraphicsMathService.GetTriangle(graph_points.GetPointThickness(), graph_points.GetPointThickness()));
-            graph_points.SetShapePointer(GraphicsMathService.GetCross(graph_points.GetPointThickness(), graph_points.GetPointThickness(), 2, 45));
+            graph_points.SetPointShape(GraphicsMathService.GetCross(graph_points.GetPointThickness(), graph_points.GetPointThickness(), 2, 45));
             // graph_points.SetShapePointer(GraphicsMathService.GetStar(graph_points.GetPointThickness(), graph_points.GetPointThickness() / 2.0f));
             return graph_points;
         }

@@ -10,6 +10,17 @@ import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
+/**
+ * VerticalSplitArea is a container with two divided areas (on top and on
+ * bottom). VerticalSplitArea implements
+ * com.spvessel.spacevil.Core.InterfaceHLayout.
+ * <p>
+ * Contains com.spvessel.spacevil.SplitHolder.
+ * <p>
+ * By default ability to get focus is disabled.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     private static int count = 0;
     private InterfaceBaseItem _leftBlock;
@@ -21,7 +32,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     private int _rMin = 0;
 
     /**
-     * Sets position of the SplitHolder
+     * Setting position of the split holder.
+     * 
+     * @param position Position of the split holder.
      */
     public void setSplitPosition(int position) {
         if (_init) {
@@ -34,17 +47,21 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
             _leftWidth = position;
     }
 
+    /**
+     * Setting split holder color.
+     * 
+     * @param color Split holder color as java.awt.Color.
+     */
     public void setSplitColor(Color color) {
         _splitHolder.setBackground(color);
     }
 
     /**
-     * Constructs a VerticalSplitArea
+     * Defaults VerticalSplitArea constructor.
      */
     public VerticalSplitArea() {
         setItemName("VSplitArea_" + count);
         count++;
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSplitArea"));
         setStyle(DefaultsService.getDefaultStyle(VerticalSplitArea.class));
         isFocusable = false;
         _splitHolder.eventMousePress.add(this::onMousePress);
@@ -63,7 +80,10 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     private boolean _init = false;
 
     /**
-     * Initialization and adding of all elements in the VerticalSplitArea
+     * Initializing all elements in the VerticalSplitArea.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -77,7 +97,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Assign item on the left of the VerticalSplitArea
+     * Assign item on the left area of the VerticalSplitArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void assignLeftItem(InterfaceBaseItem item) {
         addItem(item);
@@ -87,7 +109,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Assign item on the right of the VerticalSplitArea
+     * Assign item on the right area of the VerticalSplitArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void assignRightItem(InterfaceBaseItem item) {
         addItem(item);
@@ -97,7 +121,11 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Set width of the VerticalSplitArea
+     * Setting VerticalSplitArea width. If the value is greater/less than the
+     * maximum/minimum value of the width, then the width becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param width Width of the VerticalSplitArea.
      */
     @Override
     public void setWidth(int width) {
@@ -120,7 +148,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Set X position of the VerticalSplitArea
+     * Setting X coordinate of the left-top corner of the VerticalSplitArea.
+     * 
+     * @param x X position of the left-top corner.
      */
     @Override
     public void setX(int x) {
@@ -130,7 +160,8 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Update all children and VSplitArea sizes and positions according to confines
+     * Updating all children positions (implementation of
+     * com.spvessel.spacevil.Core.InterfaceHLayout).
      */
     public void updateLayout() {
         _splitHolder.setHeight(getHeight());
@@ -160,14 +191,20 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     /**
-     * Set width of the SplitHolder
+     * Setting thickness of SplitHolder divider.
+     * 
+     * @param thickness Thickness of SplitHolder divider.
      */
-    public void SetSplitThickness(int spWidth) {
-        _splitHolder.setDividerSize(spWidth);
+    public void SetSplitThickness(int thickness) {
+        _splitHolder.setDividerSize(thickness);
     }
 
     /**
-     * Set style of the VerticalSplitArea
+     * Setting style of the VerticalSplitArea.
+     * <p>
+     * Inner styles: "splitholder".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

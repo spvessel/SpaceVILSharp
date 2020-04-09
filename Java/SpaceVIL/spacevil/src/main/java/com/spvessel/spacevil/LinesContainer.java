@@ -1,16 +1,19 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceLine;
+import com.spvessel.spacevil.Core.InterfaceLines;
 
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Color;
 
-public class LinesContainer extends Primitive implements InterfaceLine {
+/**
+ * LinesContainer is class for rendering lines in graph.
+ */
+public class LinesContainer extends Primitive implements InterfaceLines {
     private static int count = 0;
 
     /**
-     * Constructs a LinesContainer
+     * Default LinesContainer constructor.
      */
     public LinesContainer() {
         setItemName("LinesContainer_" + count);
@@ -19,22 +22,20 @@ public class LinesContainer extends Primitive implements InterfaceLine {
     }
 
     /**
-     * List of the points coordinates
+     * Setting points coordinates.
+     * 
+     * @param coord Points list as List of float[2] array.
      */
-    public void setPointsCoord(List<float[]> coord) {
+    public void setPoints(List<float[]> coord) {
         List<float[]> tmp = new LinkedList<>(coord);
         setTriangles(tmp);
     }
 
     /**
-     * Make shape according to triangles list assigned with setTriangles
+     * Getting points coordinates.
+     * 
+     * @return Points list as List of float[2] array.
      */
-    @Override
-    public void makeShape() {
-        if (getTriangles() != null)
-            setTriangles(updateShape());
-    }
-
     @Override
     public List<float[]> getPoints() {
         if (getTriangles() == null || getTriangles().size() < 2)
@@ -42,29 +43,59 @@ public class LinesContainer extends Primitive implements InterfaceLine {
         return getTriangles();
     }
 
-    private float _line_thickness = 1.0f;
+    /**
+     * Overridden method for stretching the points position relative to the current
+     * size of the item. Use in conjunction with getTriangles() and setTriangles()
+     * methods.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
+    @Override
+    public void makeShape() {
+        if (getTriangles() != null)
+            setTriangles(updateShape());
+    }
+
+    private float _lineThickness = 1.0f;
 
     /**
-     * Thickness of the line between the points
+     * Setting thickness of lines.
+     * 
+     * @param thickness Line thickness.
      */
     public void setLineThickness(float thickness) {
-        _line_thickness = thickness;
+        _lineThickness = thickness;
     }
-
-    public float getLineThickness() {
-        return _line_thickness;
-    }
-
-    private Color _line_color = new Color(0, 0, 255);
 
     /**
-     * The line color
+     * Getting lines thickness.
+     * 
+     * @return Lines thickness.
      */
-    public void setLineColor(Color color) {
-        _line_color = color;
+    public float getLineThickness() {
+        return _lineThickness;
     }
 
+    private Color _lineColor = new Color(0, 0, 255);
+
+    /**
+     * Setting lines color.
+     * <p>
+     * Default: Blue.
+     * 
+     * @param color Line color.
+     */
+    public void setLineColor(Color color) {
+        _lineColor = color;
+    }
+
+    /**
+     * Getting lines color.
+     * 
+     * @return Lines color.
+     */
     public Color getLineColor() {
-        return _line_color;
+        return _lineColor;
     }
 }

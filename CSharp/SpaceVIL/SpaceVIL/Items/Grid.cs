@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
-using System.Threading;
 
 namespace SpaceVIL
 {
@@ -14,14 +10,14 @@ namespace SpaceVIL
     /// Grid is a class that represents a grid type container. 
     /// Each element is in a specific grid cell. 
     /// <para/> Cells size based on items margins, sizes and size policies.
-    /// <para/> Grid cannot receive any events, so Grid is always in the ItemState.Base state.
+    /// <para/> Grid cannot receive any events, so Grid is always in the SpaceVIL.Core.ItemStateType.Base state.
     /// </summary>
     public class Grid : Prototype, IFreeLayout
     {
         static int count = 0;
 
         /// <summary>
-        /// Drfault Grid constructor.
+        /// Default Grid constructor.
         /// </summary>
         private Grid()
         {
@@ -43,7 +39,6 @@ namespace SpaceVIL
             InitCells();
         }
 
-        //rows and counts
         private List<Cell> _cells;
         internal void InitCells()
         {
@@ -137,8 +132,8 @@ namespace SpaceVIL
         /// <summary>
         /// Returns the cell by row and column number.
         /// </summary>
-        /// <param name="row"></param>
-        /// <param name="column"></param>
+        /// <param name="row">Number of cell row.</param>
+        /// <param name="column">Number of cell column.</param>
         /// <returns>Cell of the Grid as SpaceVIL.Cell.</returns>
         public Cell GetCell(int row, int column)
         {
@@ -158,7 +153,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting all cells as list.
         /// </summary>
-        /// <returns>Cells as List&lt;SpaceVIL.Core.Cell&gt;</returns>
+        /// <returns>Cells as List&lt;SpaceVIL.Cell&gt;</returns>
         public List<Cell> GetAllCells()
         {
             return _cells;
@@ -322,6 +317,7 @@ namespace SpaceVIL
         }
 
         private bool _isUpdating = false;
+        
         /// <summary>
         /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
         /// </summary>

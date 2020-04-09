@@ -10,6 +10,13 @@ import com.spvessel.spacevil.Flags.KeyCode;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * RadioButton is the basic implementation of a user interface radio button with
+ * the ability to be checked (others radio button becomes unchecked) or be
+ * unchecked. Contains text and indicator.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class RadioButton extends Prototype {
     class CustomIndicator extends Indicator {
         @Override
@@ -19,18 +26,20 @@ public class RadioButton extends Prototype {
     }
 
     private static int count = 0;
-    private TextLine _text_object;
+    private TextLine _textObject;
     private CustomIndicator _indicator;
 
     /**
-     * @return RadioButton's indicator
+     * Getting indicator item of the .
+     * 
+     * @return Indicator as com.spvessel.spacevil.Indicator.
      */
     public Indicator getIndicator() {
         return _indicator;
     }
 
     /**
-     * Constructs a RadioButton
+     * Default  constructor. Text is empty.
      */
     public RadioButton() {
         setItemName("RadioButton_" + count);
@@ -38,19 +47,20 @@ public class RadioButton extends Prototype {
         eventKeyPress.add(this::onKeyPress);
 
         // text
-        _text_object = new TextLine();
-        _text_object.setItemName(getItemName() + "_text_object");
+        _textObject = new TextLine();
+        _textObject.setItemName(getItemName() + "_textObject");
 
         // indicator
         _indicator = new CustomIndicator();
         _indicator.isFocusable = false;
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.RadioButton"));
         setStyle(DefaultsService.getDefaultStyle(RadioButton.class));
     }
 
     /**
-     * Constructs a RadioButton with text
+     * Constructs a  with the specified text.
+     * 
+     * @param text  text as java.lang.String.
      */
     public RadioButton(String text) {
         this();
@@ -64,7 +74,12 @@ public class RadioButton extends Prototype {
     }
 
     /**
-     * Set is mouse hover on the RadioButton
+     * Overrided Prototype.setMouseHover(bool) method.
+     * <p>
+     * Setting this item hovered (mouse cursor located within item's shape).
+     * 
+     * @param value True: if you want this item be hovered. False: if you want this
+     *              item be not hovered.
      */
     @Override
     public void setMouseHover(boolean value) {
@@ -73,100 +88,208 @@ public class RadioButton extends Prototype {
         updateState();
     }
 
-    // text init
     /**
-     * Text alignment in the RadioButton
+     * Setting alignment of a  text. Combines with alignment by vertically
+     * (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
-    }
-
-    public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     /**
-     * Text margin in the RadioButton
+     * Setting alignment of a  text. Combines with alignment by vertically
+     * (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT).
+     * 
+     * @param alignment Text alignment as List of
+     *                  com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        _textObject.setTextAlignment(alignment);
+    }
+
+    /**
+     * Setting indents for the text to offset text relative to .
+     * 
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
-    }
-
-    public Indents getTextMargin() {
-        return _text_object.getMargin();
+        _textObject.setMargin(margin);
     }
 
     /**
-     * Text font parameters in the RadioButton
+     * Setting indents for the text to offset text relative to .
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
+     * @param bottom Indent on the bottom.
+     */
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textObject.setMargin(left, top, right, bottom);
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
+    public Indents getTextMargin() {
+        return _textObject.getMargin();
+    }
+
+    /**
+     * Setting font of the text.
+     * 
+     * @param font Font as java.awt.Font.
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
-    }
-
-    public void setFontSize(int size) {
-        _text_object.setFontSize(size);
-    }
-
-    public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
-    }
-
-    public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
-    }
-
-    public Font getFont() {
-        return _text_object.getFont();
+        _textObject.setFont(font);
     }
 
     /**
-     * Text in the RadioButton
+     * Setting font size of the text.
+     * 
+     * @param size New size of the font.
+     */
+    public void setFontSize(int size) {
+        _textObject.setFontSize(size);
+    }
+
+    /**
+     * Setting font style of the text.
+     * 
+     * @param style New font style (from java.awt.Font package).
+     */
+    public void setFontStyle(int style) {
+        _textObject.setFontStyle(style);
+    }
+
+    /**
+     * Setting new font family of the text.
+     * 
+     * @param fontFamily New font family name.
+     */
+    public void setFontFamily(String fontFamily) {
+        _textObject.setFontFamily(fontFamily);
+    }
+
+    /**
+     * Getting the current font of the text.
+     * 
+     * @return Font as java.awt.Font.
+     */
+    public Font getFont() {
+        return _textObject.getFont();
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.String.
      */
     public void setText(String text) {
-        _text_object.setItemText(text);
-    }
-
-    public String getText() {
-        return _text_object.getText();
-    }
-
-    public int getTextWidth() {
-        return _text_object.getWidth();
-    }
-
-    public int getTextHeight() {
-        return _text_object.getHeight();
+        _textObject.setItemText(text);
     }
 
     /**
-     * Text color in the RadioButton
+     * Getting the current text of the .
+     * 
+     * @return Text as java.lang.String.
+     */
+    public String getText() {
+        return _textObject.getItemText();
+    }
+
+    /**
+     * Getting the text width (useful when you need resize  by text width).
+     * 
+     * @return Text width.
+     */
+    public int getTextWidth() {
+        return _textObject.getWidth();
+    }
+
+    /**
+     * Getting the text height (useful when you need resize  by text
+     * height).
+     * 
+     * @return Text height.
+     */
+    public int getTextHeight() {
+        return _textObject.getHeight();
+    }
+
+    /**
+     * Setting text color of a .
+     * 
+     * @param color Text color as java.awt.Color.
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
-    }
-
-    public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
-    }
-
-    public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
-    }
-
-    public Color getForeground() {
-        return _text_object.getForeground();
+        _textObject.setForeground(color);
     }
 
     /**
-     * Initialization and adding of all elements in the RadioButton
+     * Setting text color of a  in byte RGB format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b) {
+        _textObject.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting background color of an item in byte RGBA format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
+     */
+    public void setForeground(int r, int g, int b, int a) {
+        _textObject.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Setting text color of a  in float RGB format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b) {
+        _textObject.setForeground(r, g, b);
+    }
+
+    /**
+     * Setting text color of a  in float RGBA format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
+     */
+    public void setForeground(float r, float g, float b, float a) {
+        _textObject.setForeground(r, g, b, a);
+    }
+
+    /**
+     * Getting current text color.
+     * 
+     * @return Text color as as java.awt.Color.
+     */
+    public Color getForeground() {
+        return _textObject.getForeground();
+    }
+
+    /**
+     * Initializing all elements in the .
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -182,11 +305,13 @@ public class RadioButton extends Prototype {
         eventMouseClick.add(btn_click);
 
         // adding
-        addItems(_indicator, _text_object);
+        addItems(_indicator, _textObject);
     }
 
     /**
-     * Is RadioButton checked (boolean)
+     * Returns True if  is checked otherwise returns False.
+     * 
+     * @return True:  is checked. False:  is unchecked.
      */
     public boolean isChecked() {
         return _indicator.getIndicatorMarker().isToggled();
@@ -195,7 +320,12 @@ public class RadioButton extends Prototype {
     public void setChecked(boolean value) {
         _indicator.getIndicatorMarker().setToggled(value);
     }
-
+/**
+     * Setting  checked or unchecked.
+     * 
+     * @param value True: if you want  to be checked. False: if you want
+     *               to be unchecked.
+     */
     private void uncheckOthers(InterfaceItem sender) {
         List<InterfaceBaseItem> items = getParent().getItems();
         for (InterfaceBaseItem item : items) {
@@ -206,9 +336,12 @@ public class RadioButton extends Prototype {
     }
 
     /**
-     * Set style of the RadioButton
+     * Setting style of the .
+     * <p>
+     * Inner styles: "indicator", "text".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
-    // style
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -224,7 +357,7 @@ public class RadioButton extends Prototype {
         }
         innerStyle = style.getInnerStyle("text");
         if (innerStyle != null) {
-            _text_object.setStyle(innerStyle);
+            _textObject.setStyle(innerStyle);
         }
     }
 }

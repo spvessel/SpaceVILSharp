@@ -279,7 +279,7 @@ namespace SpaceVIL
             UpdateCurrentValue();
         }
 
-        enum InputRestriction
+        internal enum InputRestriction
         {
             IntNumbers, DoubleNumbers, Letters, All
         }

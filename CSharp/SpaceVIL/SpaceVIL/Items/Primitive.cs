@@ -1,4 +1,5 @@
 ﻿using SpaceVIL.Decorations;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
@@ -11,25 +12,30 @@ namespace SpaceVIL
         /// <summary>
         /// Default constructor of Primitive class.
         /// </summary>
+        /// <returns></returns>
+        public Primitive() : this("Primitive_") { }
+
+        /// <summary>
+        /// Constructs a Primitive with the specified name.
+        /// </summary>
         /// <param name="name"> Item name of Primitive. </param>
-        public Primitive(
-            string name = "Primitive_")
+        public Primitive(string name)
         {
             SetItemName(name);
+            SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
         }
 
         /// <summary>
         /// Setting item position.
         /// </summary>
-        /// <param name="x"> X position of the left top corner. </param>
-        /// <param name="y"> Y position of the left top corner. </param>
+        /// <param name="x"> X position of the left-top corner. </param>
+        /// <param name="y"> Y position of the left-top corner. </param>
         public void SetPosition(int x, int y)
         {
             this.SetX(x);
             this.SetY(y);
         }
 
-        //style
         /// <summary>
         /// Setting a style that describes the appearance of an item.
         /// </summary>

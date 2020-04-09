@@ -15,7 +15,7 @@ namespace SpaceVIL
     {
         /// <summary>
         /// Property for enabling/disabling drag and drop. 
-        /// True: Drag and drop is enabled. False: Drag and drop is disabled.
+        /// <para/> True: Drag and drop is enabled. False: Drag and drop is disabled.
         /// <para/> Default: True.
         /// </summary>
         public bool IsFloating = true;
@@ -24,12 +24,11 @@ namespace SpaceVIL
         static int count = 0;
         private int _diffX = 0;
         private int _diffY = 0;
-
         private bool _ouside = false;
 
         /// <summary>
         /// Returns True if FloatItem (see SpaceVIL.Core.IFloating)
-        /// should closes when mouse click outside the area of FloatItem otherwise returns False..
+        /// should closes when mouse click outside the area of FloatItem otherwise returns False.
         /// </summary>
         /// <returns>True: if FloatItem closes when mouse click outside the area.
         /// False: if FloatItem stays opened when mouse click outside the area.</returns>
@@ -67,7 +66,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initializing FloatItem.
+        /// Initializing FloatItem. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -102,7 +103,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Hide the FloatItem
+        /// Hides the FloatItem without destroying.
         /// </summary>
         public void Hide()
         {
@@ -111,8 +112,11 @@ namespace SpaceVIL
             SetX(-GetWidth());
         }
         /// <summary>
-        /// Hide the FloatItem without destroying.
+        /// Hides the FloatItem without destroying.
+        /// <para/> This method do exactly as Hide() method without arguments.
         /// </summary>
+        /// <param name="args">Mouse click arguments (cursor position, mouse button,
+        /// mouse button press/release, etc.).</param>
         public void Hide(MouseArgs args)
         {
             Hide();

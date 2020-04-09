@@ -11,7 +11,7 @@ namespace SpaceVIL
     /// the execution of any long time task.
     /// <para/> Contains image and text.
     /// <para/> Supports all events except drag and drop.
-    /// <para> By default ProgressBar cannot get focus.
+    /// <para/> By default ProgressBar cannot get focus.
     /// </summary>
     public class ProgressBar : Prototype
     {

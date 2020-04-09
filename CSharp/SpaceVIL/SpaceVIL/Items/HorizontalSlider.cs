@@ -84,7 +84,7 @@ namespace SpaceVIL
         /// Setting the current slider value. If the value is greater/less than the maximum/minimum 
         /// slider value, then the slider value becomes equal to the maximum/minimum value.
         /// </summary>
-        /// <param name="value">Slider value</param>
+        /// <param name="value">Slider value.</param>
         public void SetCurrentValue(float value)
         {
             _currentValue = value;

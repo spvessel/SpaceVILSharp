@@ -14,9 +14,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**
+ * TreeView is special container designed to show content as tree view
+ * structure.
+ * <p>
+ * Extended from com.spvessel.spacevil.ListBox.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
 
+    /**
+     * Disposing TreeView resources if it was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         eventSortTree.clear();
@@ -27,7 +41,12 @@ public class TreeView extends ListBox {
     int maxWrapperWidth = 0;
 
     /**
-     * Is root item visible
+     * Setting the root (head) com.spvessel.spacevil.TreeItem is visible or
+     * invisible.
+     * 
+     * @param visible True: if you want root com.spvessel.spacevil.TreeItem to be
+     *                visible. False: if you want root
+     *                com.spvessel.spacevil.TreeItem to be invisible.
      */
     public void setRootVisible(boolean visible) {
         if (_root == null)
@@ -49,28 +68,55 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
+    /**
+     * Returns True if root (head) com.spvessel.spacevil.TreeItem is visible
+     * otherwise returns False.
+     * 
+     * @return True: if root com.spvessel.spacevil.TreeItem is visible. False: if
+     *         root com.spvessel.spacevil.TreeItem is invisible.
+     */
     public boolean isRootVisible() {
         if (_root == null)
             return false;
         return _root.isVisible();
     }
 
+    /**
+     * Setting text to root (head) com.spvessel.spacevil.TreeItem of TreeView.
+     * 
+     * @param text Text for root.
+     */
     public void setRootText(String text) {
         if (_root == null)
             return;
         _root.setText(text);
     }
 
+    /**
+     * Getting text of root (head) com.spvessel.spacevil.TreeItem of TreeView.
+     * 
+     * @return Text of root.
+     */
     public String getRootText() {
         if (_root == null)
             return "";
         return _root.getText();
     }
 
+    /**
+     * Getting root (head) com.spvessel.spacevil.TreeItem of TreeView.
+     * 
+     * @return Root as com.spvessel.spacevil.TreeItem.
+     */
     public TreeItem getRootItem() {
         return _root;
     }
 
+    /**
+     * Setting new root (head) com.spvessel.spacevil.TreeItem for TreeView.
+     * 
+     * @param rootTreeItem New root as com.spvessel.spacevil.TreeItem.
+     */
     public void setRootItem(TreeItem rootTreeItem) {
         if (_root != null)
             removeItem(_root);
@@ -80,7 +126,7 @@ public class TreeView extends ListBox {
     private static int count = 0;
 
     /**
-     * Constructs a TreeView
+     * Default TreeView constructor.
      */
     public TreeView() {
         setItemName("TreeView_" + count);
@@ -95,7 +141,10 @@ public class TreeView extends ListBox {
     }
 
     /**
-     * Initialization and adding of all elements in the TreeView
+     * Initializing all elements in the TreeView.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -120,9 +169,9 @@ public class TreeView extends ListBox {
     void refreshTree(TreeItem prev, TreeItem item) {
         List<InterfaceBaseItem> list = getListContent();
         int index = getListContent().indexOf(prev) + 1;
-        int nestLev = item._nesting_level;
+        int nestLev = item._nestingLevel;
         while (index < list.size()) {
-            if (((TreeItem) list.get(index))._nesting_level <= nestLev)
+            if (((TreeItem) list.get(index))._nestingLevel <= nestLev)
                 break;
             index++;
         }
@@ -132,6 +181,12 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
+    /**
+     * Adding all elements in the list area of TreeView from the given list.
+     * 
+     * @param content List of items as
+     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     */
     @Override
     public void setListContent(List<InterfaceBaseItem> content) {
         getArea().clear();
@@ -141,6 +196,9 @@ public class TreeView extends ListBox {
         }
     }
 
+    /**
+     * Updating all TreeView inner items.
+     */
     @Override
     public void updateElements() {
         maxWrapperWidth = 0;
@@ -210,7 +268,9 @@ public class TreeView extends ListBox {
     }
 
     /**
-     * Add item to the TreeView
+     * Adding a node to the TreeView.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -231,7 +291,11 @@ public class TreeView extends ListBox {
     }
 
     /**
-     * Set style of the TreeView
+     * Setting style of the TreeView.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -242,6 +306,9 @@ public class TreeView extends ListBox {
 
     }
 
+    /**
+     * Removing all items from the list area of TreeView.
+     */
     @Override
     public void clear() {
         _root.removeChildren();
@@ -251,6 +318,13 @@ public class TreeView extends ListBox {
         maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
+    /**
+     * Removing the specified item from the list area of TreeView.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
+     */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
         if (item == null)
@@ -262,10 +336,18 @@ public class TreeView extends ListBox {
         return super.removeItem(item);
     }
 
+    /**
+     * Sorting TreeView nodes in internal list area starting with root (head).
+     */
     public void sortTree() {
         sortBrunch(_root);
     }
 
+    /**
+     * Sorting part of TreeView content starting with specified branch node.
+     * 
+     * @param branch Branch node as com.spvessel.spacevil.TreeItem.
+     */
     public void sortBrunch(TreeItem branch) {
         if (branch == null)
             return;
@@ -277,13 +359,13 @@ public class TreeView extends ListBox {
         Map<Integer, List<SelectionItem>> savedMap = new HashMap<>();
 
         int indFirst = list.indexOf(getWrapper(branch)) + 1;
-        int nestLev = branch._nesting_level + 1;
+        int nestLev = branch._nestingLevel + 1;
         int indLast = indFirst;
         int maxLev = nestLev;
 
         while (indLast < list.size()) {
             SelectionItem si = ((SelectionItem) list.get(indLast));
-            int stiLev = ((TreeItem) si.getContent())._nesting_level;
+            int stiLev = ((TreeItem) si.getContent())._nestingLevel;
             if (stiLev < nestLev)
                 break;
 
@@ -316,7 +398,7 @@ public class TreeView extends ListBox {
 
                 for (int ii = parNum + 1; ii < list.size(); ii++) {
                     TreeItem tmpItm = (TreeItem) ((SelectionItem) list.get(ii)).getContent();
-                    if (tmpItm._nesting_level <= parItm._nesting_level)
+                    if (tmpItm._nestingLevel <= parItm._nestingLevel)
                         break;
 
                     int out = comp.compare(tmpItm, curItm);

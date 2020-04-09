@@ -324,6 +324,7 @@ namespace SpaceVIL
         }
         /// <summary>
         /// Hide the ContextMenu without destroying with using specified mouse arguments.
+        /// <para/> This method do exactly as Hide() method without arguments.
         /// </summary>
         /// <param name="args">Arguments as SpaceVIL.Core.MouseArgs.</param>
         public void Hide(MouseArgs args)

@@ -15,11 +15,24 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
+import com.spvessel.spacevil.Flags.OpenDialogType;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
+/**
+ * OpenEntryDialog is user interface element for browsing file system to select
+ * a file or folder to open or save. Support create/rename/delete files and
+ * folders, navigate shortcuts, file filtering.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class OpenEntryDialog extends OpenDialog {
     private String _result = null;
 
+    /**
+     * Getting full path of selected fyle system entry.
+     * 
+     * @return Full path of selected fyle system entry.
+     */
     public String getResult() {
         return _result;
     }
@@ -49,17 +62,30 @@ public class OpenEntryDialog extends OpenDialog {
     private BufferedImage _folder = null;
     private BufferedImage _file = null;
 
+    /**
+     * Setting the default path that will be opened when OpenEntryDialog is shown.
+     * 
+     * @param path Default path to open.
+     */
     public void setDefaultPath(String path) {
         _addressLine.setText(path);
-    }
-
-    public enum OpenDialogType {
-        OPEN, SAVE
     }
 
     private FileSystemEntryType _entryType = FileSystemEntryType.FILE;
     private OpenDialogType _dialogType = OpenDialogType.OPEN;
 
+    /**
+     * Constructs OpenEntryDialog with title text, entry type and dialog type.
+     * <p>
+     * Entry type can be FileSystemEntryType.FILE or FileSystemEntryType.DIRECTORY.
+     * <p>
+     * Dialog type can be OpenDialogType.OPEN or OpenDialogType.SAVE.
+     * 
+     * @param title      Title text.
+     * @param entryType  Entry type as
+     *                   com.spvessel.spacevil.Flags.FileSystemEntryType.
+     * @param dialogType Dialog type as com.spvessel.spacevil.Flags.OpenDialogType.
+     */
     public OpenEntryDialog(String title, FileSystemEntryType entryType, OpenDialogType dialogType) {
         setTitle(title);
         _entryType = entryType;
@@ -87,20 +113,42 @@ public class OpenEntryDialog extends OpenDialog {
             _btnOpen = new ButtonCore("Save");
         else
             _btnOpen = new ButtonCore("Open");
-            
+
         _btnCancel = new ButtonCore("Cancel");
 
         setStyle(DefaultsService.getDefaultStyle(OpenEntryDialog.class));
     }
 
+    /**
+     * Constructs OpenEntryDialog with title text, entry type. Dialog type is
+     * OpenDialogType.OPEN.
+     * <p>
+     * Entry type can be FileSystemEntryType.FILE or FileSystemEntryType.DIRECTORY.
+     * 
+     * @param title     Title text.
+     * @param entryType Entry type as
+     *                  com.spvessel.spacevil.Flags.FileSystemEntryType.
+     */
     public OpenEntryDialog(String title, FileSystemEntryType entryType) {
         this(title, entryType, OpenDialogType.OPEN);
     }
 
+    /**
+     * Constructs OpenEntryDialog with title text. Entry type is
+     * FileSystemEntryType.FILE. Dialog type is OpenDialogType.OPEN.
+     * 
+     * @param title Title text.
+     */
     public OpenEntryDialog(String title) {
         this(title, FileSystemEntryType.FILE);
     }
 
+    /**
+     * Initializing all elements in the OpenEntryDialog.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void initElements() {
         // important!
@@ -341,6 +389,9 @@ public class OpenEntryDialog extends OpenDialog {
         _fileName.setText(fse.getText());
     }
 
+    /**
+     * Refresh opened folder.
+     */
     public final void refreshFolder() {
         String path = _addressLine.getText(); // need some check
         showFolder(path);
@@ -353,7 +404,17 @@ public class OpenEntryDialog extends OpenDialog {
 
     private Map<String, String[]> _extensionFilter = new LinkedHashMap<>();
 
-    // "All files (*.*);*.*"
+    /**
+     * Adding file filter extensions.
+     * <p>
+     * Rule: "filter name (*.ext1, *.ext2, *.extN) ; *.ext1, *.ext2, *.extN&quot;
+     * <p>
+     * Example 1: "Text files (*.txt) ; *.txt&quot;
+     * <p>
+     * Example 2: "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg&quot;
+     * 
+     * @param exts File filter extensions.
+     */
     public void addFilterExtensions(String... exts) {
         for (int i = 0; i < exts.length; i++) {
             String[] line = exts[i].split(";");
@@ -472,77 +533,93 @@ public class OpenEntryDialog extends OpenDialog {
         close();
     }
 
+    /**
+     * Shows OpenEntryDialog and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow).
+     * 
+     * @param handler Window for attaching OpenEntryDialog.
+     */
     @Override
     public void show(CoreWindow handler) {
         super.show(handler);
         _fileList.getArea().setFocus();
     }
 
+    /**
+     * Setting style of the OpenEntryDialog.
+     * <p>
+     * Inner styles: "window", "layout", "toolbar", "toolbarbutton", "buttonhidden",
+     * "addressline", "filenameline", "list", "controlpanel", "okbutton",
+     * "cancelbutton", "filter", "filtertext", "divider".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
             return;
         super.setStyle(style);
         // toolbar
-        Style inner_style = style.getInnerStyle("window");
-        if (inner_style != null)
-            window.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("window");
+        if (innerStyle != null)
+            window.setStyle(innerStyle);
         // layout
-        inner_style = style.getInnerStyle("layout");
-        if (inner_style != null)
-            _layout.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("layout");
+        if (innerStyle != null)
+            _layout.setStyle(innerStyle);
         // toolbar
-        inner_style = style.getInnerStyle("toolbar");
-        if (inner_style != null)
-            _toolbar.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("toolbar");
+        if (innerStyle != null)
+            _toolbar.setStyle(innerStyle);
         // buttoncore
-        inner_style = style.getInnerStyle("toolbarbutton");
-        if (inner_style != null) {
-            _btnBackward.setStyle(inner_style);
-            _btnUpward.setStyle(inner_style);
-            _btnHome.setStyle(inner_style);
-            _btnUser.setStyle(inner_style);
-            _btnCreate.setStyle(inner_style);
-            _btnRename.setStyle(inner_style);
-            _btnRefresh.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("toolbarbutton");
+        if (innerStyle != null) {
+            _btnBackward.setStyle(innerStyle);
+            _btnUpward.setStyle(innerStyle);
+            _btnHome.setStyle(innerStyle);
+            _btnUser.setStyle(innerStyle);
+            _btnCreate.setStyle(innerStyle);
+            _btnRename.setStyle(innerStyle);
+            _btnRefresh.setStyle(innerStyle);
         }
         // buttontogle
-        inner_style = style.getInnerStyle("buttonhidden");
-        if (inner_style != null)
-            _btnShowHidden.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("buttonhidden");
+        if (innerStyle != null)
+            _btnShowHidden.setStyle(innerStyle);
         // addressline
-        inner_style = style.getInnerStyle("addressline");
-        if (inner_style != null)
-            _addressLine.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("addressline");
+        if (innerStyle != null)
+            _addressLine.setStyle(innerStyle);
         // filename
-        inner_style = style.getInnerStyle("filenameline");
-        if (inner_style != null)
-            _fileName.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("filenameline");
+        if (innerStyle != null)
+            _fileName.setStyle(innerStyle);
         // listbox
-        inner_style = style.getInnerStyle("list");
-        if (inner_style != null)
-            _fileList.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("list");
+        if (innerStyle != null)
+            _fileList.setStyle(innerStyle);
         // controlpanel
-        inner_style = style.getInnerStyle("controlpanel");
-        if (inner_style != null)
-            _controlPanel.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("controlpanel");
+        if (innerStyle != null)
+            _controlPanel.setStyle(innerStyle);
         // ok, cancel
-        inner_style = style.getInnerStyle("okbutton");
-        if (inner_style != null)
-            _btnOpen.setStyle(inner_style);
-        inner_style = style.getInnerStyle("cancelbutton");
-        if (inner_style != null)
-            _btnCancel.setStyle(inner_style);
-        inner_style = style.getInnerStyle("filter");
-        if (inner_style != null)
-            _btnFilter.setStyle(inner_style);
-        inner_style = style.getInnerStyle("filtertext");
-        if (inner_style != null) {
-            _filterText.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("okbutton");
+        if (innerStyle != null)
+            _btnOpen.setStyle(innerStyle);
+        innerStyle = style.getInnerStyle("cancelbutton");
+        if (innerStyle != null)
+            _btnCancel.setStyle(innerStyle);
+        innerStyle = style.getInnerStyle("filter");
+        if (innerStyle != null)
+            _btnFilter.setStyle(innerStyle);
+        innerStyle = style.getInnerStyle("filtertext");
+        if (innerStyle != null) {
+            _filterText.setStyle(innerStyle);
             updateFilterText();
         }
-        inner_style = style.getInnerStyle("divider");
-        if (inner_style != null)
-            _dividerStyle = inner_style;
+        innerStyle = style.getInnerStyle("divider");
+        if (innerStyle != null)
+            _dividerStyle = innerStyle;
     }
 }

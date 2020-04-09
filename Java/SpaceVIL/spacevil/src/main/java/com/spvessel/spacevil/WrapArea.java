@@ -1,8 +1,6 @@
 package com.spvessel.spacevil;
 
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
@@ -17,40 +15,83 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * WrapArea is a scrollable container for other elements with ability of
+ * selection. WrapArea groups elements in cells of a certain size. It can be
+ * oriented vertically or horizontally. WrapArea is part of
+ * com.spvessel.spacevil.WrapGrid which controls scrolling, resizing and etc.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class WrapArea extends Prototype implements InterfaceFreeLayout {
     Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
-    private Lock _lock = new ReentrantLock();
+
+    /**
+     * Event that is invoked when one of the element is selected.
+     */
     public EventCommonMethod selectionChanged = new EventCommonMethod();
+
+    /**
+     * Event that is invoked when one of the set of elements is changed.
+     */
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
+    /**
+     * Disposing WrapArea resources if it was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         selectionChanged.clear();
         itemListChanged.clear();
     }
 
-    int _rows = 0;
-    int _columns = 0;
+    int rows = 0;
+    int columns = 0;
 
     private int _step = 30;
 
     /**
-     * ScrollBar moving step
+     * Setting scroll movement step.
+     * 
+     * @param value Scroll step.
      */
     public void setStep(int value) {
         _step = value;
     }
 
+    /**
+     * Getting scroll movement step.
+     * 
+     * @return Scroll step.
+     */
     public int getStep() {
         return _step;
     }
 
     private boolean _isStretch = false;
 
+    /**
+     * Returns True if WrapArea allocates all available space between cells to
+     * achieve smooth streching, otherwise returns False.
+     * 
+     * @return True: if WrapArea allocates all available space between cells. False:
+     *         if space between cells is fixed.
+     */
     public boolean isStretch() {
         return _isStretch;
     }
 
+    /**
+     * Setting strech mode for WrapArea. WrapArea can allocates all available space
+     * between cells or uses fixed space between cells.
+     * 
+     * @param value True: if you want to WrapArea allocates all available space
+     *              between cells. False: if you want space between cells to be
+     *              fixed.
+     */
     public void setStretch(boolean value) {
         if (value == _isStretch)
             return;
@@ -61,7 +102,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     private int _selection = -1;
 
     /**
-     * @return Index of the selected item
+     * Getting index of selected item.
+     * 
+     * @return Index of selected item.
      */
     public int getSelection() {
         return _selection;
@@ -70,9 +113,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     private SelectionItem _selectionItem;
 
     /**
-     * @return selected item
+     * Getting selected item.
+     * 
+     * @return Selected item as com.spvessel.spacevil.Core.InterfaceBaseItem
      */
-    public InterfaceBaseItem getSelectionItem() {
+    public InterfaceBaseItem getSelectedItem() {
         if (_selectionItem != null)
             return _selectionItem.getContent();
         return null;
@@ -82,6 +127,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         return _selectionItem;
     }
 
+    /**
+     * Select item by index.
+     * 
+     * @param index Index of selection.
+     */
     public void setSelection(int index) {
         if (!_isSelectionVisible)
             return;
@@ -105,7 +155,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Unselect all items
+     * Unselect selected item.
      */
     public void unselect() {
         _selection = -1;
@@ -118,7 +168,10 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     private boolean _isSelectionVisible = true;
 
     /**
-     * Is selection changes view of the item or not
+     * Enable or disable selection ability of WrapArea.
+     * 
+     * @param value True: if you want selection ability of WrapArea to be enabled.
+     *              False: if you want selection ability of WrapArea to be disabled.
      */
     public void setSelectionVisible(boolean value) {
         _isSelectionVisible = value;
@@ -129,6 +182,13 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         }
     }
 
+    /**
+     * Returns True if selection ability of WrapArea is enabled otherwise returns
+     * False.
+     * 
+     * @return True: selection ability of WrapArea is enabled. False: selection
+     *         ability of WrapArea is disabled.
+     */
     public boolean isSelectionVisible() {
         return _isSelectionVisible;
     }
@@ -144,12 +204,12 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Constructs a ListArea
+     * Default WrapArea constructor.
      */
     public WrapArea(int cellWidth, int cellHeight, Orientation orientation) {
         setItemName("WrapArea_" + count);
         count++;
-        _orientation = orientation;
+        orientation = orientation;
         _cellWidth = cellWidth;
         _cellHeight = cellHeight;
         eventMouseClick.add(this::onMouseClick);
@@ -170,65 +230,65 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     void onKeyPress(InterfaceItem sender, KeyArgs args) {
         int index = _selection;
         int x, y;
-        if (_orientation == Orientation.HORIZONTAL) {
-            x = _selection % _columns;
-            y = _selection / _columns;
+        if (orientation == Orientation.HORIZONTAL) {
+            x = _selection % columns;
+            y = _selection / columns;
         } else {
-            x = _selection / _rows;
-            y = _selection % _rows;
+            x = _selection / rows;
+            y = _selection % rows;
         }
         List<InterfaceBaseItem> list = getItems();
         switch (args.key) {
-        case UP:
-            y--;
-            if (y < 0)
-                y = 0;
-            index = getIndexByCoord(x, y);
-            if (index != _selection)
-                setSelection(index);
-            break;
-        case DOWN:
-            y++;
-            if (y >= _rows)
-                y = _rows - 1;
-            index = getIndexByCoord(x, y);
-            if (index >= list.size())
-                index = list.size() - 1;
-            if (index != _selection)
-                setSelection(index);
-            break;
+            case UP:
+                y--;
+                if (y < 0)
+                    y = 0;
+                index = getIndexByCoord(x, y);
+                if (index != _selection)
+                    setSelection(index);
+                break;
+            case DOWN:
+                y++;
+                if (y >= rows)
+                    y = rows - 1;
+                index = getIndexByCoord(x, y);
+                if (index >= list.size())
+                    index = list.size() - 1;
+                if (index != _selection)
+                    setSelection(index);
+                break;
 
-        case LEFT:
-            x--;
-            if (x < 0)
-                x = 0;
-            index = getIndexByCoord(x, y);
-            if (index != _selection)
-                setSelection(index);
-            break;
-        case RIGHT:
-            x++;
-            if (x >= _columns)
-                x = _columns - 1;
-            index = getIndexByCoord(x, y);
-            if (index >= list.size())
-                index = list.size() - 1;
-            if (index != _selection)
-                setSelection(index);
-            break;
-        case ESCAPE:
-            unselect();
-            break;
-        default:
-            break;
+            case LEFT:
+                x--;
+                if (x < 0)
+                    x = 0;
+                index = getIndexByCoord(x, y);
+                if (index != _selection)
+                    setSelection(index);
+                break;
+            case RIGHT:
+                x++;
+                if (x >= columns)
+                    x = columns - 1;
+                index = getIndexByCoord(x, y);
+                if (index >= list.size())
+                    index = list.size() - 1;
+                if (index != _selection)
+                    setSelection(index);
+                break;
+            case ESCAPE:
+                unselect();
+                break;
+            default:
+                break;
         }
     }
 
     private int getIndexByCoord(int x, int y) {
-        if (_orientation == Orientation.HORIZONTAL) {
-            return (x + y * _columns);
+        if (orientation == Orientation.HORIZONTAL) {
+            return (x + y * columns);
         } else {
-            return (y + x * _rows);
+            return (y + x * rows);
         }
     }
 
@@ -254,7 +314,10 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Insert item into the ListArea by index
+     * Insert item into the WrapArea by index.
+     * 
+     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param index Index of insertion.
      */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
@@ -268,7 +331,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Add item to the ListArea
+     * Adding item to the WrapArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -278,6 +343,12 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         updateLayout();
     }
 
+    /**
+     * Adding all elements in the WrapArea from the given list.
+     * 
+     * @param content List of items as
+     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     */
     public void setListContent(List<InterfaceBaseItem> content) {
         removeAllItems();
         for (InterfaceBaseItem item : content) {
@@ -290,7 +361,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Remove item from the ListArea
+     * Removing the specified item from the WrapArea.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -329,6 +404,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         return b;
     }
 
+    /**
+     * Removing all items from the WrapArea.
+     */
     @Override
     public void clear() {
         removeAllItems();
@@ -352,7 +430,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set X position of the ListArea
+     * Setting X coordinate of the left-top corner of the WrapArea.
+     * 
+     * @param x X position of the left-top corner.
      */
     @Override
     public void setX(int x) {
@@ -361,7 +441,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Set Y position of the ListArea
+     * Setting Y coordinate of the left-top corner of the WrapArea.
+     * 
+     * @param y Y position of the left-top corner.
      */
     @Override
     public void setY(int y) {
@@ -370,22 +452,29 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     // update content position
-    Orientation _orientation = Orientation.HORIZONTAL;
+    Orientation orientation = Orientation.HORIZONTAL;
     private long _yOffset = 0;
     private long _xOffset = 0;
 
-    /// <summary>
-    /// Vertical scroll offset in the WrapArea
-    /// </summary>
+    /**
+     * Getting scroll offset in the WrapArea.
+     * 
+     * @return Scroll offset.
+     */
     public long getScrollOffset() {
-        if (_orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.HORIZONTAL)
             return _yOffset;
         else
             return _xOffset;
     }
 
+    /**
+     * Setting scroll offset of the WrapArea.
+     * 
+     * @param value Scroll offset.
+     */
     public void setScrollOffset(long value) {
-        if (_orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.HORIZONTAL)
             _yOffset = value;
         else
             _xOffset = value;
@@ -395,7 +484,8 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     private boolean _isUpdating = false;
 
     /**
-     * Update all children and ListArea sizes and positions according to confines
+     * Updating all children positions (implementation of
+     * com.spvessel.spacevil.Core.InterfaceFreeLayout).
      */
     // Update Layout
     public void updateLayout() {
@@ -407,26 +497,26 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         long offset = (-1) * getScrollOffset();
         long x = getX() + getPadding().left;
         long y = getY() + getPadding().top;
-        if (_orientation == Orientation.HORIZONTAL) {
+        if (orientation == Orientation.HORIZONTAL) {
             // update
             long globalY = y + offset;
             int w = getWidth() - getPadding().left - getPadding().right;
             int itemCount = (w + getSpacing().horizontal) / (_cellWidth + getSpacing().horizontal);
             int column = 0;
             int row = 0;
-            _columns = (itemCount > list.size()) ? list.size() : itemCount;
-            if (_columns == 0) {
-                _columns = 1;
+            columns = (itemCount > list.size()) ? list.size() : itemCount;
+            if (columns == 0) {
+                columns = 1;
                 itemCount = 1;
             }
 
             // stretch
             int xOffset = 0;
             if (_isStretch && itemCount < list.size()) {
-                int freeSpace = w - ((_cellWidth + getSpacing().horizontal) * _columns) - getSpacing().horizontal;
-                xOffset = freeSpace / _columns;
-                if (_columns > 1)
-                    xOffset = freeSpace / (_columns - 1);
+                int freeSpace = w - ((_cellWidth + getSpacing().horizontal) * columns) - getSpacing().horizontal;
+                xOffset = freeSpace / columns;
+                if (columns > 1)
+                    xOffset = freeSpace / (columns - 1);
             }
 
             for (InterfaceBaseItem item : list) {
@@ -462,28 +552,28 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
             }
             if (list.size() % itemCount == 0)
                 row--;
-            _rows = row + 1;
+            rows = row + 1;
 
-        } else if (_orientation == Orientation.VERTICAL) {
+        } else if (orientation == Orientation.VERTICAL) {
             // update
             long globalX = x + offset;
             int h = getHeight() - getPadding().top - getPadding().bottom;
             int itemCount = (h + getSpacing().vertical) / (_cellHeight + getSpacing().vertical);
             int column = 0;
             int row = 0;
-            _rows = (itemCount > list.size()) ? list.size() : itemCount;
-            if (_rows == 0) {
-                _rows = 1;
+            rows = (itemCount > list.size()) ? list.size() : itemCount;
+            if (rows == 0) {
+                rows = 1;
                 itemCount = 1;
             }
 
             // stretch
             int yOffset = 0;
             if (_isStretch && itemCount < list.size()) {
-                int freeSpace = h - ((_cellHeight + getSpacing().vertical + yOffset) * _rows) - getSpacing().vertical;
-                yOffset = freeSpace / _rows;
-                if (_rows > 1)
-                    yOffset = freeSpace / (_rows - 1);
+                int freeSpace = h - ((_cellHeight + getSpacing().vertical + yOffset) * rows) - getSpacing().vertical;
+                yOffset = freeSpace / rows;
+                if (rows > 1)
+                    yOffset = freeSpace / (rows - 1);
             }
 
             for (InterfaceBaseItem item : list) {
@@ -520,7 +610,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
             }
             if (list.size() % itemCount == 0)
                 column--;
-            _columns = column + 1;
+            columns = column + 1;
         }
         _isUpdating = false;
     }
@@ -528,7 +618,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     private Style _selectedStyle;
 
     /**
-     * Set style of the ListArea
+     * Setting style of the WrapArea.
+     * <p>
+     * Inner styles: "selection".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {

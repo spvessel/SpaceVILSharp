@@ -16,23 +16,24 @@ namespace SpaceVIL
         static int count = 0;
         private Grid _grid = new Grid(2, 2);
         private TextBlock _area = new TextBlock();
+
         /// <summary>
         /// Interactive item to show the navigation context menu.
         /// </summary>
         public BlankItem Menu = new BlankItem();
+        private ContextMenu _menu;
         private bool _isMenuDisabled = false;
 
         /// <summary>
         /// Setting the navigation context menu to disable or enable.
+        /// <para/> Default: False.
         /// </summary>
         /// <param name="value">True: if you want to disable navigation context menu. 
         /// False: if you want to enable navigation context menu. </param>
-        public void SetDisableMenu(bool value)
+        public void DisableMenu(bool value)
         {
             _isMenuDisabled = value;
         }
-
-        private ContextMenu _menu;
 
         /// <summary>
         /// Returns True if TextArea is editable otherwise returns False.
@@ -53,10 +54,12 @@ namespace SpaceVIL
         {
             _area.IsEditable = value;
         }
+
         /// <summary>
         /// Vertical scroll bar of TextArea.
         /// </summary>
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
+        
         /// <summary>
         /// Horizontal scroll bar of TextArea.
         /// </summary>
@@ -72,6 +75,7 @@ namespace SpaceVIL
         {
             return _vScrollBarPolicy;
         }
+
         /// <summary>
         /// Setting vertical scroll bar visibility policy.
         /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
@@ -113,6 +117,7 @@ namespace SpaceVIL
         {
             return _hScrollBarPolicy;
         }
+
         /// <summary>
         /// Setting horizontal scroll bar visibility policy.
         /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
@@ -168,6 +173,7 @@ namespace SpaceVIL
                 _area.SetFocus();
             };
         }
+
         /// <summary>
         /// Constructs TextArea with the specified text.
         /// </summary>
@@ -320,6 +326,7 @@ namespace SpaceVIL
             UpdateHorizontalSlider();
             HScrollBar.Slider.UpdateHandler();
         }
+
         /// <summary>
         /// Event that is invoked when text is changed.
         /// </summary>
@@ -406,6 +413,7 @@ namespace SpaceVIL
 
             UpdateElements();
         }
+
         /// <summary>
         /// Setting the text.
         /// </summary>
@@ -415,6 +423,7 @@ namespace SpaceVIL
             _area.SetText(text);
             UpdateElements();
         }
+
         /// <summary>
         /// Getting the current text of the TextArea.
         /// </summary>
@@ -460,65 +469,6 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Setting text color of a TextArea.
-        /// </summary>
-        /// <param name="color">Text color as System.Drawing.Color.</param>
-        public void SetForeground(Color color)
-        {
-            _area.SetForeground(color);
-        }
-        /// <summary>
-        /// Setting text color of a TextArea in byte RGB format.
-        /// </summary>
-        /// <param name="r">Red color component. Range: (0 - 255)</param>
-        /// <param name="g">Green color component. Range: (0 - 255)</param>
-        /// <param name="b">Blue color component. Range: (0 - 255)</param>
-        public void SetForeground(int r, int g, int b)
-        {
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
-        }
-        /// <summary>
-        /// Setting text color of a TextArea in byte RGBA format.
-        /// </summary>
-        /// <param name="r">Red color component. Range: (0 - 255)</param>
-        /// <param name="g">Green color component. Range: (0 - 255)</param>
-        /// <param name="b">Blue color component. Range: (0 - 255)</param>
-        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
-        public void SetForeground(int r, int g, int b, int a)
-        {
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
-        }
-        /// <summary>
-        /// Setting text color of a TextArea in float RGB format.
-        /// </summary>
-        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
-        public void SetForeground(float r, float g, float b)
-        {
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
-        }
-        /// <summary>
-        /// Setting text color of a TextArea in float RGBA format.
-        /// </summary>
-        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
-        public void SetForeground(float r, float g, float b, float a)
-        {
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
-        }
-        /// <summary>
-        /// Getting current text color.
-        /// </summary>
-        /// <returns>Text color as System.Drawing.Color.</returns>
-        public Color GetForeground()
-        {
-            return _area.GetForeground();
-        }
-
-        /// <summary>
         /// Setting indent between lines in TextArea.
         /// </summary>
         /// <param name="lineSpacer">Indent between lines.</param>
@@ -526,8 +476,9 @@ namespace SpaceVIL
         {
             _area.SetLineSpacer(lineSpacer);
         }
+
         /// <summary>
-        /// Setting current indent between lines in TextArea.
+        /// Getting current indent between lines in TextArea.
         /// </summary>
         /// <returns>Indent between lines.</returns>
         public int GetLineSpacer()
@@ -543,6 +494,7 @@ namespace SpaceVIL
         {
             _area.SetTextMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to TextArea.
         /// </summary>
@@ -554,6 +506,7 @@ namespace SpaceVIL
         {
             _area.SetTextMargin(new Indents(left, top, right, bottom));
         }
+
         /// <summary>
         /// Getting indents of the text.
         /// </summary>
@@ -571,6 +524,7 @@ namespace SpaceVIL
         {
             _area.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text.
         /// </summary>
@@ -584,6 +538,7 @@ namespace SpaceVIL
                 SetFont(newFont);
             }
         }
+
         /// <summary>
         /// Setting font style of the text.
         /// </summary>
@@ -597,6 +552,7 @@ namespace SpaceVIL
                 SetFont(newFont);
             }
         }
+
         /// <summary>
         /// Setting new font family of the text.
         /// </summary>
@@ -612,6 +568,7 @@ namespace SpaceVIL
                 SetFont(newFont);
             }
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -640,6 +597,70 @@ namespace SpaceVIL
         }
 
         /// <summary>
+        /// Setting text color of a TextArea.
+        /// </summary>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
+        public void SetForeground(Color color)
+        {
+            _area.SetForeground(color);
+        }
+
+        /// <summary>
+        /// Setting text color of a TextArea in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        public void SetForeground(int r, int g, int b)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+        }
+
+        /// <summary>
+        /// Setting text color of a TextArea in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+
+        /// <summary>
+        /// Setting text color of a TextArea in float RGB format.
+        /// </summary>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        public void SetForeground(float r, float g, float b)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+        }
+
+        /// <summary>
+        /// Setting text color of a TextArea in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+
+        /// <summary>
+        /// Getting current text color.
+        /// </summary>
+        /// <returns>Text color as System.Drawing.Color.</returns>
+        public Color GetForeground()
+        {
+            return _area.GetForeground();
+        }
+
+        /// <summary>
         /// Setting focus on TextArea if it is focusable.
         /// </summary>
         public override void SetFocus()
@@ -654,6 +675,7 @@ namespace SpaceVIL
         {
             _area.ClearText();
         }
+
         /// <summary>
         /// Adding the specified text to the end of the existing text.
         /// </summary>
@@ -662,6 +684,7 @@ namespace SpaceVIL
         {
             _area.AppendText(text);
         }
+
         /// <summary>
         /// Paste the specified text at the current position of the text cursor 
         /// (or replace the specified text at the current starting position of 
@@ -672,6 +695,7 @@ namespace SpaceVIL
         {
             _area.PasteText(text);
         }
+
         /// <summary>
         /// Cuts and returns the current selected text.
         /// </summary>
@@ -680,6 +704,7 @@ namespace SpaceVIL
         {
             return _area.CutText();
         }
+
         /// <summary>
         /// Getting the current selected text.
         /// </summary>
@@ -696,6 +721,7 @@ namespace SpaceVIL
         {
             _area.RewindText();
         }
+
         /// <summary>
         /// Returns True if TextArea wraps the contained text to the 
         /// width of the TextArea otherwise returns False.
@@ -706,6 +732,7 @@ namespace SpaceVIL
         {
             return _area.IsWrapText();
         }
+
         /// <summary>
         /// Setting TextArea mode that wraps (or not wraps) input text to the width of the TextArea.
         /// </summary>
@@ -716,12 +743,13 @@ namespace SpaceVIL
             _area.SetWrapText(value);
             UpdateHorizontalSlider();
         }
+
         /// <summary>
         /// Setting scroll step factor. The scroll factor determines how many lines are scrolled 
         /// in a single scroll request (using a button or mouse wheel).
         /// <para/> Default: 1.0
         /// </summary>
-        /// <param name="value">Scroll step factor</param>
+        /// <param name="value">Scroll step factor.</param>
         public void SetScrollStepFactor(float value)
         {
             _area.SetScrollStepFactor(value);

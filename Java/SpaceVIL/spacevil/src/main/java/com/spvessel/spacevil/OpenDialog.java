@@ -4,24 +4,47 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.KeyCode;
 
+/**
+ * Abstract class containing all common methods and properties for creating
+ * modal window for file browsing.
+ */
 public abstract class OpenDialog extends DialogItem {
 
     private TitleBar titleBar;
 
+    /**
+     * Setting a title text of the dialog window.
+     * 
+     * @param title Title text.
+     */
     public void setTitle(String title) {
         titleBar.setText(title);
     }
 
+    /**
+     * Getting a title text of the dialog window.
+     * 
+     * @return Title text.
+     */
     public String getTitle() {
         return titleBar.getText();
     }
 
+    /**
+     * Default common constructor.
+     */
     public OpenDialog() {
         setItemName("OpenDialog_" + count);
         count++;
         titleBar = new TitleBar();
     }
 
+    /**
+     * Initializing all elements in the OpenDialog.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void initElements() {
         // important!
@@ -52,11 +75,21 @@ public abstract class OpenDialog extends DialogItem {
         window.update(GeometryEventType.RESIZE_WIDTH, 0);
     }
 
+    /**
+     * Shows OpenDialog and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow).
+     * 
+     * @param handler Window for attaching OpenDialog.
+     */
     @Override
     public void show(CoreWindow handler) {
         super.show(handler);
     }
 
+    /**
+     * Closes OpenDialog.
+     */
     @Override
     public void close() {
         if (onCloseDialog != null)
@@ -64,11 +97,4 @@ public abstract class OpenDialog extends DialogItem {
 
         super.close();
     }
-
-    // @Override
-    // public void setStyle(Style style) {
-    // if (style == null)
-    // return;
-    // window.setStyle(style);
-    // }
 }

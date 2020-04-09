@@ -12,10 +12,26 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * ResisableItem is a special container that can move and resize by mouse input
+ * events while inside another container.
+ * <p>
+ * Te get full functionality try to use ResizableItem with
+ * com.spvessel.spacevil.FreeArea container.
+ * <p>
+ * Supports all events including drag and drop.
+ */
 public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     private List<Side> _sidesExclude = new LinkedList<>();
 
+    /**
+     * Specify which sides will be excluded, and these sides can no longer be
+     * dragged to resize the ResizableItem.
+     * 
+     * @param sides Sides for exclusion as sequence of
+     *              com.spvessel.spacevil.Flags.Side.
+     */
     public void excludeSides(Side... sides) {
         for (Side side : sides) {
             if (!_sidesExclude.contains(side))
@@ -23,29 +39,85 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
     }
 
+    /**
+     * Getting exclused sides. These sides cannot be dragged to resize the
+     * ResizableItem.
+     * 
+     * @return Sides for exclusion as list of com.spvessel.spacevil.Flags.Side.
+     */
     public List<Side> getExcludedSides() {
         return _sidesExclude;
     }
 
+    /**
+     * Removing all exclused sides. After that all sides can be dragged to resize
+     * the ResizableItem.
+     */
     public void clearExcludedSides() {
         _sidesExclude.clear();
     }
 
     List<Side> _sides = new LinkedList<>();
 
+    /**
+     * Event that is invoked when ResizableItem moves.
+     */
     public EventCommonMethod positionChanged = new EventCommonMethod();
+
+    /**
+     * Event that is invoked when ResizableItem resizes.
+     */
     public EventCommonMethod sizeChanged = new EventCommonMethod();
 
+    /**
+     * Disposing all resources if the item was removed.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
+     */
     @Override
     public void release() {
         positionChanged.clear();
         sizeChanged.clear();
     }
 
+    /**
+     * Property to lock ResizableItem movement and resizing.
+     * <p>
+     * True: to lock. False: to unlock.
+     * <p>
+     * Default: False.
+     */
     public boolean isLocked = false;
-    public boolean isWResizable = true;
-    public boolean isHResizable = true;
+
+    /**
+     * Property to lock ResizableItem resizing by X axis.
+     * <p>
+     * True: to unlock. False: to lock.
+     * <p>
+     * Default: True.
+     */
+    public boolean isXResizable = true;
+
+    /**
+     * Property to lock ResizableItem resizing by Y axis. <p True: to unlock. False:
+     * to lock. <p Default: True.
+     */
+    public boolean isYResizable = true;
+
+    /**
+     * Property to lock ResizableItem movement by X axis. <p True: to unlock. False:
+     * to lock. <p Default: True.
+     */
     public boolean isXFloating = true;
+
+    /**
+     * Property to lock ResizableItem movement by Y axis.
+     * <p>
+     * True: to unlock. False: to lock.
+     * <p>
+     * Default: True.
+     */
     public boolean isYFloating = true;
 
     private boolean _isMoved;
@@ -61,7 +133,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     private int _diffY = 0;
 
     /**
-     * Constructs a ResizableItem
+     * Default ResizableItem constructor.
      */
     public ResizableItem() {
         setItemName("ResizableItem_" + count);
@@ -93,7 +165,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             setCursor(DefaultsService.getDefaultCursor());
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
+    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
             return;
 
@@ -115,7 +187,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    protected void onDragging(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
             return;
 
@@ -136,7 +208,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
 
         else {
-            if (!isWResizable && !isHResizable)
+            if (!isXResizable && !isYResizable)
                 return;
 
             int x_handler = getX();
@@ -179,11 +251,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
                 }
 
                 boolean flag = false;
-                if (isWResizable && w != getWidth()) {
+                if (isXResizable && w != getWidth()) {
                     setWidth(w);
                     flag = true;
                 }
-                if (isHResizable && h != getHeight())
+                if (isYResizable && h != getHeight())
                     setHeight(h);
                 if (flag)
                     sizeChanged.execute();
@@ -193,7 +265,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     }
 
     /**
-     * Set width of the ResizableItem
+     * Setting ResizableItem width. If the value is greater/less than the
+     * maximum/minimum value of the width, then the width becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param width Width of the ResizableItem.
      */
     @Override
     public void setWidth(int width) {
@@ -202,7 +278,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     }
 
     /**
-     * Set height of the ResizableItem
+     * Setting ResizableItem height. If the value is greater/less than the
+     * maximum/minimum value of the height, then the height becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param height Height of the ResizableItem.
      */
     @Override
     public void setHeight(int height) {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using SpaceVIL.Common;
+﻿using SpaceVIL.Common;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
@@ -29,11 +23,6 @@ namespace SpaceVIL
 
         private CustomToggle _marker;
 
-        /// <returns> IndicationMarker ButtonToggle type for styling </returns>
-        /// <summary>
-        /// Getting indicator marker.
-        /// </summary>
-        /// <returns>SpaceVIL.ButtonToggle</returns>
         internal ButtonToggle GetIndicatorMarker()
         {
             return _marker;

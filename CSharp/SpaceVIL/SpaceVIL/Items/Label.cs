@@ -23,8 +23,8 @@ namespace SpaceVIL
 
         /// <summary>
         /// Property to enable or disable mouse events (hover, click, press, scroll).
-        /// <para/> True: Graph can receive mouse events. False: cannot receive mouse events.
-        /// Default: True.
+        /// <para/> True: Label can receive mouse events. False: cannot receive mouse events.
+        /// <para/> Default: True.
         /// </summary>
         public bool IsHover = true;
 
@@ -64,7 +64,7 @@ namespace SpaceVIL
         /// to enable or disable mouse events.
         /// </summary>
         /// <param name="text">Label text.</param>
-        /// <param name="hover">True: Graph can receive mouse events. 
+        /// <param name="hover">True: Label can receive mouse events. 
         /// False: cannot receive mouse events.</param>
         public Label(String text, bool hover) : this(text)
         {

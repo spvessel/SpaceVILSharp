@@ -9,36 +9,86 @@ import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import java.awt.*;
 
+/**
+ * TextArea is a basic implementation of a user interface editable text area.
+ * <p>
+ * Contains text area, scroll bars, menu button, navigation context menu.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class TextArea extends Prototype {
     private static int count = 0;
     private Grid _grid = new Grid(2, 2);
     private TextBlock _area;// = new TextBlock();
 
+    /**
+     * Interactive item to show the navigation context menu.
+     */
     public BlankItem menu = new BlankItem();
+    private ContextMenu _menu;
     private boolean _isMenuDisabled = false;
 
     /**
-     * Set context menu disable true or false
+     * Setting the navigation context menu to disable or enable.
+     * <p>
+     * Default: False.
+     * 
+     * @param value True: if you want to disable navigation context menu. False: if
+     *              you want to enable navigation context menu.
      */
     public void disableMenu(boolean value) {
         _isMenuDisabled = value;
     }
 
-    private ContextMenu _menu;
+    /**
+     * Returns True if TextArea is editable otherwise returns False.
+     * 
+     * @return True: if TextArea is editable. True: if TextArea is non-editable.
+     */
+    public boolean isEditable() {
+        return _area.isEditable();
+    }
+
+    /**
+     * Setting TextArea text field be editable or be non-editable.
+     * 
+     * @param value True: if you want TextArea be editable. True: if you want
+     *              TextArea be non-editable.
+     */
+    public void setEditable(boolean value) {
+        _area.setEditable(value);
+    }
+
+    /**
+     * Vertical scroll bar of TextArea.
+     */
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
+
+    /**
+     * Horizontal scroll bar of TextArea.
+     */
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
 
     private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
     private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
     /**
-     * Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the
-     * TextArea
+     * Getting vertical scroll bar visibility policy.
+     * 
+     * @return Visibility policy as com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public VisibilityPolicy getVScrollBarPolicy() {
         return _vScrollBarPolicy;
     }
 
+    /**
+     * Setting vertical scroll bar visibility policy.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
+     * 
+     * @param policy Visibility policy as
+     *               com.spvessel.spacevil.Flags.VisibilityPolicy.
+     */
     public void setVScrollBarPolicy(VisibilityPolicy policy) {
         _vScrollBarPolicy = policy;
 
@@ -62,13 +112,22 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the
-     * TextArea
+     * Getting horizontal scroll bar visibility policy.
+     * 
+     * @return Visibility policy as com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public VisibilityPolicy getHScrollBarPolicy() {
         return _hScrollBarPolicy;
     }
 
+    /**
+     * Setting horizontal scroll bar visibility policy.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
+     * 
+     * @param policy Visibility policy as
+     *               com.spvessel.spacevil.Flags.VisibilityPolicy.
+     */
     public void setHScrollBarPolicy(VisibilityPolicy policy) {
         _hScrollBarPolicy = policy;
 
@@ -92,7 +151,7 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Constructs a TextArea
+     * Default TextArea constructor.
      */
     public TextArea() {
         setItemName("TextArea_" + count);
@@ -116,6 +175,11 @@ public class TextArea extends Prototype {
         });
     }
 
+    /**
+     * Constructs TextArea with the specified text.
+     * 
+     * @param text Text for TextArea.
+     */
     public TextArea(String text) {
         this();
         setText(text);
@@ -224,7 +288,11 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Set width of the TextArea
+     * Setting item width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the item.
      */
     @Override
     public void setWidth(int width) {
@@ -234,7 +302,11 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Set height of the TextArea
+     * Setting item height. If the value is greater/less than the maximum/minimum
+     * value of the height, then the height becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param height Height of the item.
      */
     @Override
     public void setHeight(int height) {
@@ -250,10 +322,16 @@ public class TextArea extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Event that is invoked when text is changed.
+     */
     public EventCommonMethod onTextChanged = new EventCommonMethod();
 
     /**
-     * Initialization and adding of all elements in the TextArea
+     * Initializing all elements in the TextArea.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -330,7 +408,9 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Set text in the TextArea
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.String.
      */
     public void setText(String text) {
         _area.setText(text);
@@ -338,14 +418,20 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * @return text from the TextArea
+     * Getting the current text of the TextArea.
+     * 
+     * @return Text as java.lang.String.
      */
     public String getText() {
         return _area.getText();
     }
 
     /**
-     * Set style of the TextArea
+     * Setting style of the TextArea.
+     * <p>
+     * Inner styles: "vscrollbar", "hscrollbar", "textedit", "menu".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -374,127 +460,197 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Space between lines in the TextArea
+     * Setting indent between lines in TextArea.
+     * 
+     * @param lineSpacer Indent between lines.
      */
     public void setLineSpacer(int lineSpacer) {
         _area.setLineSpacer(lineSpacer);
     }
 
+    /**
+     * Setting current indent between lines in TextArea.
+     * 
+     * @return Indent between lines.
+     */
     public int getLineSpacer() {
         return _area.getLineSpacer();
     }
 
     /**
-     * Text margin in the TextArea
+     * Setting indents for the text to offset text relative to this TextArea.
+     * 
+     * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
         _area.setTextMargin(margin);
     }
 
+    /**
+     * Setting indents for the text to offset text relative to TextArea.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
+     * @param bottom Indent on the bottom.
+     */
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _area.setTextMargin(new Indents(left, top, right, bottom));
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
     public Indents getTextMargin() {
         return _area.getTextMargin();
     }
 
     /**
-     * Text font in the TextArea
+     * Setting font of the text.
+     * 
+     * @param font Font as java.awt.Font.
      */
     public void setFont(Font font) {
         _area.setFont(font);
     }
 
+    /**
+     * Setting font size of the text.
+     * 
+     * @param size New size of the font.
+     */
     public void setFontSize(int size) {
         Font oldFont = getFont();
         if (oldFont.getSize() != size) {
-            Font newFont = GraphicsMathService.changeFontSize(size, oldFont); //new Font(oldFont.getFamily(), oldFont.getStyle(), size);
+            Font newFont = GraphicsMathService.changeFontSize(size, oldFont);
             setFont(newFont);
         }
     }
 
+    /**
+     * Setting font style of the text.
+     * 
+     * @param style New font style (from java.awt.Font package).
+     */
     public void setFontStyle(int style) {
         Font oldFont = getFont();
         if (oldFont.getStyle() != style) {
-            Font newFont = GraphicsMathService.changeFontStyle(style, oldFont); //new Font(oldFont.getFamily(), style, oldFont.getSize());
+            Font newFont = GraphicsMathService.changeFontStyle(style, oldFont);
             setFont(newFont);
         }
     }
 
+    /**
+     * Setting new font family of the text.
+     * 
+     * @param fontFamily New font family name.
+     */
     public void setFontFamily(String font_family) {
         if (font_family == null)
             return;
         Font oldFont = getFont();
         if (!oldFont.getFamily().equals(font_family)) {
-            Font newFont = GraphicsMathService.changeFontFamily(font_family, oldFont); //new Font(font_family, oldFont.getStyle(), oldFont.getSize());
+            Font newFont = GraphicsMathService.changeFontFamily(font_family, oldFont);
             setFont(newFont);
         }
     }
 
+    /**
+     * Getting the current font of the text.
+     * 
+     * @return Font as java.awt.Font.
+     */
     public Font getFont() {
         return _area.getFont();
     }
 
     /**
-     * Returns width of the whole text in the TextArea (includes visible and
-     * invisible parts of the text)
+     * Getting the text width.
+     * 
+     * @return Text width.
      */
     public int getTextWidth() {
         return _area.getWidth();
     }
 
     /**
-     * Returns height of the whole text in the TextArea (includes visible and
-     * invisible parts of the text)
+     * Getting the text height.
+     * 
+     * @return Text height.
      */
     public int getTextHeight() {
         return _area.getTextHeight();
     }
 
     /**
-     * Text color in the TextArea
+     * Setting text color of a TextArea.
+     * 
+     * @param color Text color as java.awt.Color.
      */
     public void setForeground(Color color) {
         _area.setForeground(color);
     }
 
+    /**
+     * Setting text color of a TextArea in byte RGB format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     */
     public void setForeground(int r, int g, int b) {
-        //_area.setForeground(r, g, b);
+        // _area.setForeground(r, g, b);
         setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
+    /**
+     * Setting background color of an item in byte RGBA format.
+     * 
+     * @param r Red color component. Range: (0 - 255)
+     * @param g Green color component. Range: (0 - 255)
+     * @param b Blue color component. Range: (0 - 255)
+     * @param a Alpha color component. Range: (0 - 255)
+     */
     public void setForeground(int r, int g, int b, int a) {
-        //_area.setForeground(r, g, b, a);
         setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
+    /**
+     * Setting text color of a TextArea in float RGB format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     */
     public void setForeground(float r, float g, float b) {
-        //_area.setForeground(r, g, b);
         setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
+    /**
+     * Setting text color of a TextArea in float RGBA format.
+     * 
+     * @param r Red color component. Range: (0.0f - 1.0f)
+     * @param g Green color component. Range: (0.0f - 1.0f)
+     * @param b Blue color component. Range: (0.0f - 1.0f)
+     * @param a Alpha color component. Range: (0.0f - 1.0f)
+     */
     public void setForeground(float r, float g, float b, float a) {
-        //_area.setForeground(r, g, b, a);
         setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
+    /**
+     * Getting current text color.
+     * 
+     * @return Text color as as java.awt.Color.
+     */
     public Color getForeground() {
         return _area.getForeground();
     }
 
     /**
-     * Returns if TextArea editable or not
-     */
-    public boolean isEditable() {
-        return _area.isEditable();
-    }
-
-    /**
-     * Set TextArea editable true or false
-     */
-    public void setEditable(boolean value) {
-        _area.setEditable(value);
-    }
-
-    /**
-     * Set TextArea focused/unfocused
+     * Setting focus on TextArea if it is focusable.
      */
     @Override
     public void setFocus() {
@@ -502,45 +658,90 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Remove all text from the TextArea
+     * Deletes all text in the TextArea.
      */
     @Override
     public void clear() {
         _area.clearText();
     }
 
+    /**
+     * Adding the specified text to the end of the existing text.
+     * 
+     * @param text Text for adding.
+     */
     public void appendText(String text) {
         _area.appendText(text);
     }
 
+    /**
+     * Paste the specified text at the current position of the text cursor (or
+     * replace the specified text at the current starting position of the selected
+     * text).
+     * 
+     * @param text Text to insert.
+     */
     public void pasteText(String text) {
         _area.pasteText(text);
     }
 
+    /**
+     * Cuts and returns the current selected text.
+     * 
+     * @return Selected text.
+     */
     public String cutText() {
         return _area.cutText();
     }
 
+    /**
+     * Getting the current selected text.
+     * 
+     * @return Current selected text.
+     */
     public String getSelectedText() {
         return _area.getSelectedText();
     }
 
     /**
-     * Move cursor to the text beginning
+     * Moves text cursor to the text beginning.
      */
     public void rewindText() {
         _area.rewindText();
     }
 
+    /**
+     * Returns True if TextArea wraps the contained text to the width of the
+     * TextArea otherwise returns False.
+     * 
+     * @return True: if TextArea wraps the contained text to the width of the
+     *         TextArea. False: if TextArea does not wraps the contained text.
+     */
     public boolean isWrapText() {
         return _area.isWrapText();
     }
 
+    /**
+     * Setting TextArea mode that wraps (or not wraps) input text to the width of
+     * the TextArea.
+     * 
+     * @param value True: if you want to TextArea wraps the contained text to the
+     *              width of the TextArea. False: if you want to TextArea does not
+     *              wraps the contained text.
+     */
     public void setWrapText(boolean value) {
         _area.setWrapText(value);
         updateHorizontalSlider();
     }
 
+    /**
+     * Setting scroll step factor. The scroll factor determines how many lines are
+     * scrolled in a single scroll request (using a button or mouse wheel).
+     * <p>
+     * Default: 1.0
+     * 
+     * @param value Scroll step factor.
+     */
     public void setScrollStepFactor(float value) {
         _area.setScrollStepFactor(value);
     }

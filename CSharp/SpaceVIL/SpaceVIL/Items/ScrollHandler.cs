@@ -11,6 +11,7 @@ namespace SpaceVIL
     public class ScrollHandler : Prototype, IDraggable
     {
         static int count = 0;
+
         /// <summary>
         /// Specify orientation of ScrollHandler.
         /// <para/> Can be SpaceVIL.Core.Orientation.Vertical or
@@ -52,9 +53,6 @@ namespace SpaceVIL
             SetOffset(offset);
         }
 
-        /// <summary>
-        /// Set offset of the ScrollHandler
-        /// </summary>
         /// <summary>
         /// Setting offset of the ScrollHandler by X axis or Y axis 
         /// depending on Orientation property.

@@ -37,15 +37,12 @@ namespace SpaceVIL
         /// Getting the assigned SpaceVIL.ContextMenu. 
         /// If MenuItem is active type it can invoke assigned SpaceVIL.ContextMenu.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Assigned context menu as SpaceVIL.ContextMenu.</returns>
         public ContextMenu GetSubContextMenu()
         {
             return _subContextMenu;
         }
 
-        /// <summary>
-        /// Is MenuItem ready to close
-        /// </summary>
         internal bool IsReadyToClose(MouseArgs args)
         {
             if (_subContextMenu != null)
@@ -57,8 +54,12 @@ namespace SpaceVIL
             return false;
         }
 
-        CustomShape _arrow;
+        private CustomShape _arrow;
 
+        /// <summary>
+        /// Getting arrow for styling appearance.
+        /// </summary>
+        /// <returns>Arrow as SpaceVIL.CustomShape.</returns>
         public CustomShape GetArrow()
         {
             return _arrow;
@@ -112,7 +113,7 @@ namespace SpaceVIL
             SetText(text);
         }
 
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        private void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
@@ -318,6 +319,7 @@ namespace SpaceVIL
         }
 
         private List<IBaseItem> _queue = new List<IBaseItem>();
+        
         /// <summary>
         /// Adding item into the container (this).
         /// </summary>

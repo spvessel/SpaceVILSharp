@@ -14,84 +14,143 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * ListBox is a container for com.spvessel.spacevil.ListArea (scrollable
+ * container for other elements with ability of selection) and scroll bars.
+ * ListBox controls scrolling, resizing and other actions of
+ * com.spvessel.spacevil.ListArea.
+ * <p>
+ * Contains list area, scroll bars, menu button, navigation context menu.
+ * <p>
+ * Supports all events except drag and drop.
+ */
 public class ListBox extends Prototype {
     private static int count = 0;
 
     /**
-     * ScrollBar moving step
+     * Setting scroll movement step.
+     * 
+     * @param step Scroll step.
      */
     public void setScrollStep(int step) {
         _area.setStep(step);
     }
 
+    /**
+     * Getting scroll movement step.
+     * 
+     * @return Scroll step.
+     */
     public int getScrollStep() {
         return _area.getStep();
     }
 
     /**
-     * Selection index
+     * Getting index of selected item.
+     * 
+     * @return Index of selected item.
      */
     public int getSelection() {
         return _area.getSelection();
     }
 
     /**
-     * Set selected item of the ListBox by index
+     * Select item by index.
+     * 
+     * @param index Index of selection.
      */
     public void setSelection(int index) {
         _area.setSelection(index);
     }
 
     /**
-     * Unselect all items
+     * Unselect selected item.
      */
     public void unselect() {
         _area.unselect();
     }
 
     /**
-     * Is selection changes view of the item or not
+     * Enable or disable selection ability of ListArea.
+     * 
+     * @param value True: if you want selection ability of ListArea to be enabled.
+     *              False: if you want selection ability of ListArea to be disabled.
      */
     public void setSelectionVisible(boolean value) {
         _area.setSelectionVisible(value);
     }
 
+    /**
+     * Returns True if selection ability of ListArea is enabled otherwise returns
+     * False.
+     * 
+     * @return True: selection ability of ListArea is enabled. False: selection
+     *         ability of ListArea is disabled.
+     */
     public boolean isSelectionVisible() {
         return _area.isSelectionVisible();
     }
 
     /**
-     * Is ListBox menu disabled
+     * Interactive item to show the navigation context menu.
+     */
+    public BlankItem menu = new BlankItem();
+    private boolean _isMenuDisabled = false;
+
+    /**
+     * Setting the navigation context menu to disable or enable.
+     * 
+     * @param value True: if you want to disable navigation context menu. False: if
+     *              you want to enable navigation context menu.
      */
     public void disableMenu(boolean value) {
-        _is_menu_disabled = value;
+        _isMenuDisabled = value;
     }
 
     private Grid _grid = new Grid(2, 2);
     private ListArea _area = new ListArea();
 
     /**
-     * @return ListArea
+     * Getting list area of ListBox.
+     * 
+     * @return List area as com.spvessel.spacevil.ListArea.
      */
     public ListArea getArea() {
         return _area;
     }
 
-    public BlankItem menu = new BlankItem();
-    private boolean _is_menu_disabled = false;
-
     private ContextMenu _menu;
-    public VerticalScrollBar vScrollBar = new VerticalScrollBar();
-    public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
-    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
     /**
-     * Is vertical scroll bar visible
+     * Vertical scroll bar of ListBox.
+     */
+    public VerticalScrollBar vScrollBar = new VerticalScrollBar();
+
+    /**
+     * Horizontal scroll bar of ListBox.
+     */
+    public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
+
+    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
+    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
+
+    /**
+     * Getting vertical scroll bar visibility policy.
+     * 
+     * @return Visibility policy as com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public VisibilityPolicy getVScrollBarPolicy() {
         return _vScrollBarPolicy;
     }
 
+    /**
+     * Setting vertical scroll bar visibility policy.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
+     * 
+     * @param policy Visibility policy as
+     *               com.spvessel.spacevil.Flags.VisibilityPolicy.
+     */
     public void setVScrollBarPolicy(VisibilityPolicy policy) {
         _vScrollBarPolicy = policy;
 
@@ -114,15 +173,23 @@ public class ListBox extends Prototype {
         vScrollBar.slider.updateHandler();
     }
 
-    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
-
     /**
-     * Is horizontal scroll bar visible
+     * Getting horizontal scroll bar visibility policy.
+     * 
+     * @return Visibility policy as com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public VisibilityPolicy getHScrollBarPolicy() {
         return _hScrollBarPolicy;
     }
 
+    /**
+     * Setting horizontal scroll bar visibility policy.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
+     * 
+     * @param policy Visibility policy as
+     *               com.spvessel.spacevil.Flags.VisibilityPolicy.
+     */
     public void setHScrollBarPolicy(VisibilityPolicy policy) {
         _hScrollBarPolicy = policy;
 
@@ -146,7 +213,7 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Constructs a ListBox
+     * Default ListBox constructor.
      */
     public ListBox() {
         setItemName("ListBox_" + count);
@@ -190,34 +257,34 @@ public class ListBox extends Prototype {
         long selection_Y = selection.getY() + selection.getMargin().top;
 
         switch (args.key) {
-        case UP:
-            if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
-                _area.setVScrollOffset(offset - (startY - selection_Y));
-                updateVerticalSlider();
+            case UP:
+                if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
+                    _area.setVScrollOffset(offset - (startY - selection_Y));
+                    updateVerticalSlider();
+                    break;
+                }
+                if (selection_Y < startY) {
+                    _area.setVScrollOffset(offset - (startY - selection_Y));
+                    updateVerticalSlider();
+                }
                 break;
-            }
-            if (selection_Y < startY) {
-                _area.setVScrollOffset(offset - (startY - selection_Y));
-                updateVerticalSlider();
-            }
-            break;
-        case DOWN:
-            if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
-                // _area.setVScrollOffset(offset - (startY - selection_Y));
-                _area.setVScrollOffset(
-                        offset + selection.getHeight() + (selection.getY() - (_area.getY() + _area.getHeight())));
-                updateVerticalSlider();
+            case DOWN:
+                if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
+                    // _area.setVScrollOffset(offset - (startY - selection_Y));
+                    _area.setVScrollOffset(
+                            offset + selection.getHeight() + (selection.getY() - (_area.getY() + _area.getHeight())));
+                    updateVerticalSlider();
+                    break;
+                }
+                if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
+                        - getPadding().bottom) {
+                    _area.setVScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
+                            + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
+                    updateVerticalSlider();
+                }
                 break;
-            }
-            if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
-                    - getPadding().bottom) {
-                _area.setVScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
-                        + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
-                updateVerticalSlider();
-            }
-            break;
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -342,7 +409,11 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Set width of the ListBox
+     * Setting item width. If the value is greater/less than the maximum/minimum
+     * value of the width, then the width becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param width Width of the item.
      */
     @Override
     public void setWidth(int width) {
@@ -352,7 +423,11 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Set height of the ListBox
+     * Setting item height. If the value is greater/less than the maximum/minimum
+     * value of the height, then the height becomes equal to the maximum/minimum
+     * value.
+     * 
+     * @param height Height of the item.
      */
     @Override
     public void setHeight(int height) {
@@ -362,7 +437,9 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Add item to the ListBox
+     * Adding item to the list area of ListBox.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -371,7 +448,10 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Insert item to the ListBox by index
+     * Insert item into the list area of ListBox by index.
+     * 
+     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param index Index of insertion.
      */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
@@ -380,7 +460,11 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Remove item from the ListBox
+     * Removing the specified item from the list area of ListBox.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -394,13 +478,16 @@ public class ListBox extends Prototype {
         return b;
     }
 
+    /**
+     * Removing all items from the list area of ListBox.
+     */
     @Override
     public void clear() {
         _area.clear();
     }
 
     /**
-     * Update states of the all ListBox inner items
+     * Updating all ListBox inner items.
      */
     public void updateElements() {
         updateVerticalSlider();
@@ -410,7 +497,10 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Initialization and adding of all elements in the ListBox
+     * Initializing all elements in the ListBox.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -438,7 +528,7 @@ public class ListBox extends Prototype {
         hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
 
         // create menu
-        if (!_is_menu_disabled) {
+        if (!_isMenuDisabled) {
             _menu = new ContextMenu(getHandler());
             _menu.setBackground(60, 60, 60);
             _menu.setPassEvents(false);
@@ -472,7 +562,7 @@ public class ListBox extends Prototype {
             });
             _menu.addItems(go_up_left, go_down_right, go_up, go_down);
             menu.eventMouseClick.add((sender, args) -> {
-                if (!_is_menu_disabled)
+                if (!_isMenuDisabled)
                     _menu.show(sender, args);
             });
             _menu.activeButton = MouseButton.BUTTON_LEFT;
@@ -481,7 +571,10 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * @return list of all ListBox items
+     * Getting content of the list area of ListBox.
+     * 
+     * @return List of items as
+     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<>();
@@ -493,7 +586,10 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * Set list of items
+     * Adding all elements in the list area of ListBox from the given list.
+     * 
+     * @param content List of items as
+     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
      */
     public void setListContent(List<InterfaceBaseItem> content) {
         _area.setListContent(content);
@@ -501,18 +597,30 @@ public class ListBox extends Prototype {
     }
 
     /**
-     * @return selection item
+     * Getting selected item.
+     * 
+     * @return Selected item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public InterfaceBaseItem getSelectedItem() {
         return _area.getSelectedItem();
     }
 
+    /**
+     * Getting wrapper of item.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return Wrapper of given item as com.spvessel.spacevil.SelectionItem.
+     */
     public SelectionItem getWrapper(InterfaceBaseItem item) {
         return getArea()._mapContent.get(item);
     }
 
     /**
-     * Set style of the ListBox
+     * Setting style of the ButtonCore.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -537,12 +645,4 @@ public class ListBox extends Prototype {
             _area.setStyle(inner_style);
         }
     }
-
-    // @Override
-    // public void release()
-    // {
-    // System.out.println("release");
-    // super.clear();
-    // System.out.println("release done");
-    // }
 }

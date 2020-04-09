@@ -19,7 +19,7 @@ import java.util.Map;
 public class MessageBox extends DialogWindow {
     /**
      * An event to describe the actions that must be performed after the window is closed.
-     * <p> Event type: SpaceVIL.EventCommonMethod.
+     * <p> Event type: com.spvessel.spacevil.Core.EventCommonMethod.
      * <p> Function arguments: none.
      */
     public EventCommonMethod onCloseDialog = new EventCommonMethod();
@@ -58,7 +58,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting OK button for appearance customizing or assigning new actions.
-     * @return MessageBox's OK button as MessageBox's OK button as SpaceVIL.ButtonCore.
+     * @return MessageBox's OK button as MessageBox's OK button as com.spvessel.spacevil.ButtonCore.
      */
     public ButtonCore getOkButton() {
         return _okButton;

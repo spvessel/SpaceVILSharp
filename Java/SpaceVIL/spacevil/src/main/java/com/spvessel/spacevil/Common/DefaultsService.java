@@ -58,7 +58,7 @@ public final class DefaultsService {
 
     /**
      * Getting the default theme.
-     * @return The theme as The theme as SpaceVIL.Decorations.ThemeStyle
+     * @return The theme as The theme as com.spvessel.spacevil.Decorations.ThemeStyle
      */
     public static ThemeStyle getDefaultTheme() {
         if (_default_theme == null) {

@@ -12,6 +12,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         private TitleBar _titleBar;
+
         /// <summary>
         /// Setting a title text of the dialog window.
         /// </summary>
@@ -20,6 +21,7 @@ namespace SpaceVIL
         {
             _titleBar.SetText(title);
         }
+
         /// <summary>
         /// Getting a title text of the dialog window.
         /// </summary>
@@ -28,6 +30,7 @@ namespace SpaceVIL
         {
             return _titleBar.GetText();
         }
+
         /// <summary>
         /// Default common constructor.
         /// </summary>
@@ -37,6 +40,7 @@ namespace SpaceVIL
             count++;
             _titleBar = new TitleBar();
         }
+
         /// <summary>
         /// Initializing all elements in the OpenDialog.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -69,20 +73,23 @@ namespace SpaceVIL
                     Close();
             };
         }
+
         private void UpdateWindow()
         {
             Window.Update(GeometryEventType.ResizeHeight, 0);
             Window.Update(GeometryEventType.ResizeWidth, 0);
         }
+
         /// <summary>
         /// Shows OpenDialog and attaches it to the specified window 
         /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
         /// </summary>
-        /// <param name="handler">Window for attaching InputDialog.</param>
+        /// <param name="handler">Window for attaching OpenDialog.</param>
         public override void Show(CoreWindow handler)
         {
             base.Show(handler);
         }
+
         /// <summary>
         /// Closes OpenDialog.
         /// </summary>

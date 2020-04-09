@@ -11,39 +11,67 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
+/**
+ * VerticalStack is a class that represents a line type container (vertical
+ * version). VerticalStack groups items one after another using content
+ * alignment, margins, paddings, sizes and size policies. VerticalStack
+ * implements com.spvessel.spacevil.Core.InterfaceVLayout. By default ability to
+ * get focus is disabled.
+ * <p>
+ * VerticalStack cannot receive any events, so VerticalStack is always in the
+ * com.spvessel.spacevil.Flags.ItemStateType.BASE state.
+ */
 public class VerticalStack extends Prototype implements InterfaceVLayout {
     private static int count = 0;
 
     private ItemAlignment _contentAlignment = ItemAlignment.TOP;
 
+    /**
+     * Setting content alignment within VerticalStack area.
+     * <p>
+     * Supports only: ItemAlignment.TOP, ItemAlignment.VCENTER,
+     * ItemAlignment.BOTTOM.
+     * <p>
+     * Default: ItemAlignment.TOP.
+     * 
+     * @param alignment Content alignment as
+     *                  com.spvessel.spacevil.Flags.ItemAlignment.
+     */
     public void setContentAlignment(ItemAlignment alignment) {
         if (alignment == ItemAlignment.TOP || alignment == ItemAlignment.VCENTER || alignment == ItemAlignment.BOTTOM)
             _contentAlignment = alignment;
     }
 
+    /**
+     * Getting current content alignment.
+     * <p>
+     * Can be: ItemAlignment.TOP, ItemAlignment.VCENTER, ItemAlignment.BOTTOM.
+     * 
+     * @return Content alignment as com.spvessel.spacevil.Flags.ItemAlignment.
+     */
     public ItemAlignment getContentAlignment() {
         return _contentAlignment;
     }
 
     /**
-     * Constructs a VerticalStack
+     * Default VerticalStack constructor.
      */
     public VerticalStack() {
         setItemName("verticalStack_" + count);
         count++;
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalStack"));
         setStyle(DefaultsService.getDefaultStyle(VerticalStack.class));
         isFocusable = false;
     }
 
-    // overrides
     @Override
     protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 
     /**
-     * Add item to the VerticalStack
+     * Adding item to the VerticalStack.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -51,12 +79,27 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    /**
+     * Inserting item to the VerticalStack container. If the number of container
+     * elements is less than the index, then the element is added to the end of the
+     * list.
+     * 
+     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param index Index of insertion.
+     */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
         super.insertItem(item, index);
         updateLayout();
     }
 
+    /**
+     * Removing the specified item from the VerticalStack container.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
+     */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
         boolean result = super.removeItem(item);
@@ -66,7 +109,11 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Set height of the VerticalStack
+     * Setting VerticalStack height. If the value is greater/less than the
+     * maximum/minimum value of the height, then the height becomes equal to the
+     * maximum/minimum value.
+     * 
+     * @param height Height of the VerticalStack.
      */
     @Override
     public void setHeight(int height) {
@@ -75,7 +122,9 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Set Y position of the VerticalStack
+     * Setting Y coordinate of the left-top corner of the VerticalStack.
+     * 
+     * @param y Y position of the left-top corner.
      */
     @Override
     public void setY(int y) {
@@ -84,8 +133,8 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Update all children and VerticalStack sizes and positions according to
-     * confines
+     * Updating all children positions (implementation of
+     * com.spvessel.spacevil.Core.InterfaceVLayout).
      */
     public void updateLayout() {
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
@@ -112,7 +161,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
 
         int height_for_expanded = 1;
         // if (expanded_count > 0 && free_space > expanded_count)
-            // height_for_expanded = free_space / expanded_count;
+        // height_for_expanded = free_space / expanded_count;
 
         Collections.sort(maxHeightExpands);
 
@@ -138,7 +187,6 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
             }
         }
 
-        
         int offset = 0;
         int startY = getY() + getPadding().top;
         boolean isFirstExpand = false;
@@ -152,15 +200,17 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
                 if (child.isVisible()) {
                     child.setY(startY + offset + child.getMargin().top);//
                     if (child.getHeightPolicy() == SizePolicy.EXPAND) {
-                        if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child.getMaxHeight()) {
+                        if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child
+                                .getMaxHeight()) {
                             child.setHeight(height_for_expanded - child.getMargin().top - child.getMargin().bottom);
                         } else {
                             // expanded_count--;
-                            // free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);
+                            // free_space -= (child.getHeight() + child.getMargin().top +
+                            // child.getMargin().bottom);
                             // height_for_expanded = 1;
                             // if (expanded_count > 0 && free_space > expanded_count)
-                            //     height_for_expanded = free_space / expanded_count;
-                            child.setHeight(child.getMaxHeight()); //?
+                            // height_for_expanded = free_space / expanded_count;
+                            child.setHeight(child.getMaxHeight()); // ?
                         }
 
                         if (isFirstExpand) {
@@ -195,7 +245,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
                         child.setY(startY + offset + child.getMargin().top + free_space / 2);//
                         offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
                                 + child.getMargin().bottom;//
-                        
+
                         if (child.getHeightPolicy() == SizePolicy.EXPAND)
                             child.setHeight(child.getMaxHeight());
                     }

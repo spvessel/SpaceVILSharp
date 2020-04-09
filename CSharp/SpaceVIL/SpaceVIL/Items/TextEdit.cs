@@ -80,7 +80,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs TextEdit eith the given text.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">Text for TextEdit.</param>
         public TextEdit(String text) : this()
         {
             SetText(text);
@@ -435,6 +435,7 @@ namespace SpaceVIL
             // _text_object.SetTextAlignment(ial);
             // _substrate_text.SetTextAlignment(ial);
         }
+
         /// <summary>
         /// Setting alignment of the text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -603,6 +604,7 @@ namespace SpaceVIL
             // return PrivGetText();
             return _textObject.GetText();
         }
+
         /// <summary>
         /// Setting text color of a TextEdit.
         /// </summary>
@@ -612,6 +614,7 @@ namespace SpaceVIL
             // _text_object.SetForeground(color);
             _textObject.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a TextEdit in byte RGB format.
         /// </summary>
@@ -623,6 +626,7 @@ namespace SpaceVIL
             // _text_object.SetForeground(r, g, b);
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a TextEdit in byte RGBA format.
         /// </summary>
@@ -635,6 +639,7 @@ namespace SpaceVIL
             // _text_object.SetForeground(r, g, b, a);
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Setting text color of a TextEdit in float RGB format.
         /// </summary>
@@ -646,6 +651,7 @@ namespace SpaceVIL
             // _text_object.SetForeground(r, g, b);
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a TextEdit in float RGBA format.
         /// </summary>
@@ -658,6 +664,7 @@ namespace SpaceVIL
             // _text_object.SetForeground(r, g, b, a);
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>
@@ -667,6 +674,7 @@ namespace SpaceVIL
             // return _text_object.GetForeground();
             return _textObject.GetForeground();
         }
+
         /// <summary>
         /// Returns True if TextEdit is editable otherwise returns False.
         /// </summary>
@@ -676,6 +684,7 @@ namespace SpaceVIL
         {
             return _textObject.IsEditable;
         }
+
         /// <summary>
         /// Setting TextEdit text field be editable or be non-editable.
         /// </summary>
@@ -701,6 +710,7 @@ namespace SpaceVIL
         //     if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
         //         MakeSelectedArea();
         // }
+
         /// <summary>
         /// Initializing all elements in the TextEdit.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -837,7 +847,7 @@ namespace SpaceVIL
         /// (or replace the specified text at the current starting position of 
         /// the selected text).
         /// </summary>
-        /// <param name="text">Text to insert.</param>
+        /// <param name="pasteStr">Text to insert.</param>
         public void PasteText(string pasteStr)
         {
             // if (pasteStr != null)
@@ -1167,18 +1177,18 @@ namespace SpaceVIL
             // PasteText(text);
         }
 
-        internal class TextEditState
-        {
-            internal String textState;
-            internal int cursorState;
-            internal TextEditState()
-            {
-            }
-            internal TextEditState(String textState, int cursorState)
-            {
-                this.textState = textState;
-                this.cursorState = cursorState;
-            }
-        }
+        // internal class TextEditState
+        // {
+        //     internal String textState;
+        //     internal int cursorState;
+        //     internal TextEditState()
+        //     {
+        //     }
+        //     internal TextEditState(String textState, int cursorState)
+        //     {
+        //         this.textState = textState;
+        //         this.cursorState = cursorState;
+        //     }
+        // }
     }
 }
