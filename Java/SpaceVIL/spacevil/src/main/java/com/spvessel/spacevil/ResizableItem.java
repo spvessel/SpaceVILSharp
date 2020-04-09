@@ -136,13 +136,12 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
      * Default ResizableItem constructor.
      */
     public ResizableItem() {
-        setItemName("ResizableItem_" + count);
+        setItemName("ResizableItem_" + count++);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
 
         eventMousePress.add(this::onMousePress);
         eventMouseDrag.add(this::onDragging);
         eventMouseHover.add(this::onHover);
-        count++;
     }
 
     protected void onHover(InterfaceItem sender, MouseArgs args) {
