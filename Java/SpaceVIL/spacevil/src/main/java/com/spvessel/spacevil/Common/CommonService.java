@@ -11,7 +11,6 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.CursorImage;
-import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.WindowsBox;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -57,12 +56,7 @@ public final class CommonService {
 
     // cursors
     public static CursorImage currentCursor = null;
-    public static long cursorArrow;
-    public static long cursorInput;
-    public static long cursorHand;
-    public static long cursorResizeH;
-    public static long cursorResizeV;
-    public static long cursorResizeAll;
+    
 
     /**
      * Initializing the mandatory SpaceVIL common components (GLFW, default values and etc.).
@@ -91,14 +85,6 @@ public final class CommonService {
 
         System.setProperty("java.awt.headless", "true");
         System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "false");
-
-        // cursors
-        cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        cursorInput = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-        cursorHand = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-        cursorResizeH = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-        cursorResizeV = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-        cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         DisplayService.setDisplaySize(vidmode.width(), vidmode.height());

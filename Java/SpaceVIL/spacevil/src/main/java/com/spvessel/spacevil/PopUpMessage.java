@@ -56,6 +56,8 @@ public class PopUpMessage extends Prototype {
 
     /**
      * Constructs a PopUpMessage with message and parent window (handler)
+     * 
+     * @param message Text message to an user.
      */
     public PopUpMessage(String message) {
         setItemName("PopUpMessage_" + count);

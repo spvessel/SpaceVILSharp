@@ -112,7 +112,7 @@ public class Graph extends Prototype {
     /**
      * Setting custom shape for points (if one want to use other shape than circle).
      * 
-     * @return Points list of the shape as List of float[2] array.
+     * @param shape Points list of the shape as List of float[2] array.
      */
     public void setPointShape(List<float[]> shape) {
         points.setPointShape(shape);
@@ -130,7 +130,7 @@ public class Graph extends Prototype {
     /**
      * Setting Graph points coordinates.
      * 
-     * @return Points list as List of float[2] array.
+     * @param coord Points list as List of float[2] array.
      */
     public void setPointsCoord(List<float[]> coord) {
         points.setPoints(coord);
@@ -149,7 +149,7 @@ public class Graph extends Prototype {
     /**
      * Setting Graph thickness of lines.
      * 
-     * @return Line thickness.
+     * @param thickness Line thickness.
      */
     public void setLineThickness(float thickness) {
         lines.setLineThickness(thickness);
@@ -167,7 +167,7 @@ public class Graph extends Prototype {
     /**
      * Setting Graph lines color.
      * 
-     * @return Line color.
+     * @param color Line color.
      */
     public void setLineColor(Color color) {
         lines.setLineColor(color);

@@ -547,12 +547,12 @@ public class TextArea extends Prototype {
      * 
      * @param fontFamily New font family name.
      */
-    public void setFontFamily(String font_family) {
-        if (font_family == null)
+    public void setFontFamily(String fontFamily) {
+        if (fontFamily == null)
             return;
         Font oldFont = getFont();
-        if (!oldFont.getFamily().equals(font_family)) {
-            Font newFont = GraphicsMathService.changeFontFamily(font_family, oldFont);
+        if (!oldFont.getFamily().equals(fontFamily)) {
+            Font newFont = GraphicsMathService.changeFontFamily(fontFamily, oldFont);
             setFont(newFont);
         }
     }

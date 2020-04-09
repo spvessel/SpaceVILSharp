@@ -529,9 +529,9 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     /**
-     * Setting font size of the text.
+     * Getting the current font of the text.
      * 
-     * @param size New size of the font.
+     * @return Font as java.awt.Font.
      */
     public Font getFont() {
         return _textureStorage.getFont();

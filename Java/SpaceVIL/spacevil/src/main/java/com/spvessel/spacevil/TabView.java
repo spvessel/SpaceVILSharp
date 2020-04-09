@@ -89,7 +89,7 @@ public class TabView extends VerticalStack {
      * <p>
      * If index is out of range then this method does nothing.
      * 
-     * @return Index of a tab.
+     * @param index Index of a tab.
      */
     public void selectTab(int index) {
         _tabBar.selectTab(index);

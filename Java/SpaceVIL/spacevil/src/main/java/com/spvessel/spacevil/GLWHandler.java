@@ -69,6 +69,7 @@ final class GLWHandler {
     }
 
     void createWindow() throws SpaceVILException {
+        CursorImage.initCursors();
         // important!!! may be the best combination of WINDOW HINTS!!!
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -195,25 +196,25 @@ final class GLWHandler {
         EmbeddedCursor cursor = EmbeddedCursor.valueOf(type);
         switch (cursor) {
             case ARROW:
-                glfwSetCursor(_window, CommonService.cursorArrow);
+                glfwSetCursor(_window, CursorImage.cursorArrow);
                 break;
             case IBEAM:
-                glfwSetCursor(_window, CommonService.cursorInput);
+                glfwSetCursor(_window, CursorImage.cursorInput);
                 break;
             case CROSSHAIR:
-                glfwSetCursor(_window, CommonService.cursorResizeAll);
+                glfwSetCursor(_window, CursorImage.cursorResizeAll);
                 break;
             case HAND:
-                glfwSetCursor(_window, CommonService.cursorHand);
+                glfwSetCursor(_window, CursorImage.cursorHand);
                 break;
             case RESIZE_X:
-                glfwSetCursor(_window, CommonService.cursorResizeH);
+                glfwSetCursor(_window, CursorImage.cursorResizeH);
                 break;
             case RESIZE_Y:
-                glfwSetCursor(_window, CommonService.cursorResizeV);
+                glfwSetCursor(_window, CursorImage.cursorResizeV);
                 break;
             default:
-                glfwSetCursor(_window, CommonService.cursorArrow);
+                glfwSetCursor(_window, CursorImage.cursorArrow);
                 break;
         }
     }

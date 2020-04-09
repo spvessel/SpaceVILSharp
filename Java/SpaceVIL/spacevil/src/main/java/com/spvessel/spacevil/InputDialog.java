@@ -76,8 +76,8 @@ public class InputDialog extends DialogItem {
      * ACTION button.
      * 
      * @param title       Title of InputDialog as java.lang.String.
-     * @param actionName
-     * @param defaultText Name of ACTION button as java.lang.String.
+     * @param actionName  Name of ACTION button as java.lang.String.
+     * @param defaultText Default text of text field as java.lang.String.
      */
     public InputDialog(String title, String actionName, String defaultText) {
         setItemName("InputDialog_");

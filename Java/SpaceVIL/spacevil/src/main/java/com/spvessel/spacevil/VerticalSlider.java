@@ -76,7 +76,8 @@ public class VerticalSlider extends Prototype {
      * <p>
      * Default: True.
      * 
-     * @param value
+     * @param value True: if you want to ignore step. False: if you do not want to
+     *              ignore step.
      */
     public void setIgnoreStep(boolean value) {
         _ignoreStep = value;
@@ -212,11 +213,7 @@ public class VerticalSlider extends Prototype {
 
     private boolean _dragging = false;
 
-    /**
-     * Slider drop event
-     */
-    protected void onDragHandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
-    {
+    protected void onDragHandler(InterfaceItem sender, MouseArgs args) {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getY() - getY()) * (_maxValue - _minValue)
@@ -225,9 +222,6 @@ public class VerticalSlider extends Prototype {
             setCurrentValue(result);
     }
 
-    /**
-     * Click on the sliders track (outside the slider handler)
-     */
     protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
         if (!_dragging)

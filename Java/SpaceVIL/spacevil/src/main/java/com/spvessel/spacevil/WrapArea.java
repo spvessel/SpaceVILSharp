@@ -204,12 +204,17 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     /**
-     * Default WrapArea constructor.
+     * Constructs a WrapGrid with specified cell width, height and orientation.
+     * 
+     * @param cellWidth   Width of each cell.
+     * @param cellHeight  Height of each cell.
+     * @param orientation Orientation of layout as
+     *                    com.spvessel.spacevil.Flags.Orientation.
      */
     public WrapArea(int cellWidth, int cellHeight, Orientation orientation) {
         setItemName("WrapArea_" + count);
         count++;
-        orientation = orientation;
+        this.orientation = orientation;
         _cellWidth = cellWidth;
         _cellHeight = cellHeight;
         eventMouseClick.add(this::onMouseClick);

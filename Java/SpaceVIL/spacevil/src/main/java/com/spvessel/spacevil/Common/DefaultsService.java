@@ -77,7 +77,7 @@ public final class DefaultsService {
 
     /**
      * Getting the default item style from the current default theme by its type.
-     * @param type Item type as java.lang.Class&lt?&gt
+     * @param type Item type as java.lang.Class&lt;?&gt;.
      * <p> Example: typeof(com.spvessel.spacevil.ButtonCore)
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */

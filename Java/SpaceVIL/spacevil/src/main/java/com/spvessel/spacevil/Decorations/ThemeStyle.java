@@ -79,7 +79,7 @@ public class ThemeStyle {
 
     /**
      * Returns style of the theme for the object by its class name.
-     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @param type Type of an item as java.lang.Class&lt;?&gt;.
      * @return Assigned style as com.spvessel.spacevil.Decorations.Style.
      */
     public Style getThemeStyle(Class<?> type) {
@@ -127,7 +127,7 @@ public class ThemeStyle {
 
     /**
      * Replace default style for the items with specified class type.
-     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @param type Type of an item as java.lang.Class&lt;?&gt;.
      * @param style A style as com.spvessel.spacevil.Decorations.Style.
      * @return If default style replaced
      */
@@ -143,7 +143,7 @@ public class ThemeStyle {
 
     /**
      * Add custom style to default theme for the items with specified class type.
-     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @param type Type of an item as java.lang.Class&lt;?&gt;.
      * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
     public void addDefaultCustomItemStyle(Class<?> type, Style style) {

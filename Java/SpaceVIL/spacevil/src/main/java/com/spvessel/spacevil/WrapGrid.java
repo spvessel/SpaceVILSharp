@@ -236,7 +236,8 @@ public class WrapGrid extends Prototype {
      * <p>
      * Default: com.spvessel.spacevil.Flags.VisibilityPolicy.AS_NEEDED.
      * 
-     * @param policy
+     * @param policy Visibility policy as
+     *               com.spvessel.spacevil.Flags.VisibilityPolicy.
      */
     public void setScrollBarPolicy(VisibilityPolicy policy) {
         _scrollBarPolicy = policy;
@@ -262,6 +263,11 @@ public class WrapGrid extends Prototype {
 
     /**
      * Constructs a WrapGrid with specified cell width, height and orientation.
+     * 
+     * @param cellWidth   Width of each cell.
+     * @param cellHeight  Height of each cell.
+     * @param orientation Orientation of layout as
+     *                    com.spvessel.spacevil.Flags.Orientation.
      */
     public WrapGrid(int cellWidth, int cellHeight, Orientation orientation) {
         setItemName("WrapGrid_" + count);

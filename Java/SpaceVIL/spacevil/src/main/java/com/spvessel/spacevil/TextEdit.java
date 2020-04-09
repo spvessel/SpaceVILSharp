@@ -523,10 +523,10 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
      * 
      * @param fontFamily New font family name.
      */
-    public void setFontFamily(String font_family) {
+    public void setFontFamily(String fontFamily) {
         // _text_object.setFontFamily(font_family);
         // _substrate_text.setFontFamily(font_family);
-        _textObject.setFontFamily(font_family);
+        _textObject.setFontFamily(fontFamily);
     }
 
     /**

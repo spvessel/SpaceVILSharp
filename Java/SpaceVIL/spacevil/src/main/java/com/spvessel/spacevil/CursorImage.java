@@ -4,15 +4,37 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.glfw.*;
+import static org.lwjgl.glfw.GLFW.*;
 
-import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 
 /**
- * Class CursorImage provides features for creating custom cursors. It can also 
- * be used with several standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
+ * Class CursorImage provides features for creating custom cursors. It can also
+ * be used with several standards types of cursor images (Arrow, IBeam,
+ * Crosshair, Hand and etc.).
  */
 public final class CursorImage {
+    private static boolean isDefaultCursorsInit = false;
+    static long cursorArrow;
+    static long cursorInput;
+    static long cursorHand;
+    static long cursorResizeH;
+    static long cursorResizeV;
+    static long cursorResizeAll;
+
+    static void initCursors() {
+        if (!isDefaultCursorsInit) {
+            // cursors
+            cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+            cursorInput = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+            cursorHand = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+            cursorResizeH = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+            cursorResizeV = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+            cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+            isDefaultCursorsInit = true;
+        }
+    }
+
     private long _cursor;
 
     long getCursor() {
@@ -22,31 +44,33 @@ public final class CursorImage {
     private ByteBuffer _bitmap;
 
     /**
-     * Constructor for creating cursor with standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
+     * Constructor for creating cursor with standards types of cursor images (Arrow,
+     * IBeam, Crosshair, Hand and etc.).
+     * 
      * @param type Cursor image as SpaceVIL.Core.EmbeddedCursor enum.
      */
     public CursorImage(EmbeddedCursor type) {
         switch (type) {
             case ARROW:
-                _cursor = CommonService.cursorArrow;
+                _cursor = CursorImage.cursorArrow;
                 break;
             case IBEAM:
-                _cursor = CommonService.cursorInput;
+                _cursor = CursorImage.cursorInput;
                 break;
             case CROSSHAIR:
-                _cursor = CommonService.cursorResizeAll;
+                _cursor = CursorImage.cursorResizeAll;
                 break;
             case HAND:
-                _cursor = CommonService.cursorHand;
+                _cursor = CursorImage.cursorHand;
                 break;
             case RESIZE_X:
-                _cursor = CommonService.cursorResizeH;
+                _cursor = CursorImage.cursorResizeH;
                 break;
             case RESIZE_Y:
-                _cursor = CommonService.cursorResizeV;
+                _cursor = CursorImage.cursorResizeV;
                 break;
             default:
-                _cursor = CommonService.cursorArrow;
+                _cursor = CursorImage.cursorArrow;
                 break;
         }
 
@@ -56,6 +80,7 @@ public final class CursorImage {
 
     /**
      * Constructor for creating cursor with custom bitmap image.
+     * 
      * @param bitmap Cursor image as java.awt.image.BufferedImage.
      */
     public CursorImage(BufferedImage bitmap) {
@@ -68,9 +93,11 @@ public final class CursorImage {
     }
 
     /**
-     * Constructor for creating cursor with custom bitmap image with the specified size.
+     * Constructor for creating cursor with custom bitmap image with the specified
+     * size.
+     * 
      * @param bitmap Cursor image as java.awt.image.BufferedImage.
-     * @param width Desired width.
+     * @param width  Desired width.
      * @param height Desired height.
      */
     public CursorImage(BufferedImage bitmap, int width, int height) {
@@ -94,6 +121,7 @@ public final class CursorImage {
 
     /**
      * Getting cursor image width.
+     * 
      * @return The width of the image.
      */
     public int getCursorWidth() {
@@ -102,6 +130,7 @@ public final class CursorImage {
 
     /**
      * Getting cursor image height.
+     * 
      * @return The height of the image.
      */
     public int getCursorHeight() {
@@ -110,6 +139,7 @@ public final class CursorImage {
 
     /**
      * Setting new image for cursor.
+     * 
      * @param image Cursor image as java.awt.image.BufferedImage.
      */
     public void setImage(BufferedImage image) {

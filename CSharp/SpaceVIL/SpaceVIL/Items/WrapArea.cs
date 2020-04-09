@@ -202,8 +202,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Default WrapArea constructor.
+        /// Constructs a WrapArea with specified cell width, height and orientation.
         /// </summary>
+        /// <param name="cellWidth">Width of each cell.</param>
+        /// <param name="cellHeight">Height of each cell.</param>
+        /// <param name="orientation">Orientation of layout as SpaceVIL.Core.Orientation.</param>
         public WrapArea(int cellWidth, int cellHeight, Orientation orientation)
         {
             SetItemName("WrapArea_" + count);

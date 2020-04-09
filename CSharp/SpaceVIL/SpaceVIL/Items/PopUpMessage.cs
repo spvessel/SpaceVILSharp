@@ -47,6 +47,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a PopUpMessage with text message.
         /// </summary>
+        /// <param name="message">Text message to an user.</param>
         public PopUpMessage(String message)
         {
             SetItemName("PopUpMessage_" + count);

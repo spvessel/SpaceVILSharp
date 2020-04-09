@@ -26,7 +26,7 @@ public class PointsContainer extends Primitive implements InterfacePoints {
     /**
      * Setting thickness of points.
      * 
-     * @param thicknes Point thickness.
+     * @param thickness Point thickness.
      */
     public void setPointThickness(float thickness) {
         _thickness = thickness;

@@ -856,7 +856,7 @@ namespace SpaceVIL
         public EventCommonMethod EventClose;
 
         /// <summary>
-        /// Lets to describe the actions when you drag&drop files/folders to the current window.
+        /// Lets to describe the actions when you drag and drop files/folders to the current window.
         /// </summary>
         public EventWindowDropMethod EventDrop;
 

@@ -31,7 +31,8 @@ import org.lwjgl.glfw.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 /**
- * CoreWindow is an abstract class containing an implementation of common functionality for a window.
+ * CoreWindow is an abstract class containing an implementation of common
+ * functionality for a window.
  */
 public abstract class CoreWindow {
     private static int count = 0;
@@ -53,7 +54,8 @@ public abstract class CoreWindow {
 
     /**
      * Setting basic window attributes.
-     * @param name Window name.
+     * 
+     * @param name  Window name.
      * @param title Title text.
      */
     public void setParameters(String name, String title) {
@@ -63,10 +65,11 @@ public abstract class CoreWindow {
 
     /**
      * Setting basic window attributes
-     * @param name Window name.
-     * @param title Title text.
-     * @param width Window width in pixels.
-     * @param height Window height  in pixels.
+     * 
+     * @param name   Window name.
+     * @param title  Title text.
+     * @param width  Window width in pixels.
+     * @param height Window height in pixels.
      */
     public void setParameters(String name, String title, int width, int height) {
         setWindowName(name);
@@ -76,10 +79,11 @@ public abstract class CoreWindow {
 
     /**
      * Setting basic window attributes.
-     * @param name Window name.
-     * @param title Title text.
-     * @param width Window width in pixels.
-     * @param height Window height  in pixels.
+     * 
+     * @param name     Window name.
+     * @param title    Title text.
+     * @param width    Window width in pixels.
+     * @param height   Window height in pixels.
      * @param isBorder A flag that shows/hides native window border decoration.
      */
     public void setParameters(String name, String title, int width, int height, boolean isBorder) {
@@ -124,7 +128,8 @@ public abstract class CoreWindow {
     }
 
     /**
-     * This abstract method should provide the initial window attributes, content, events. 
+     * This abstract method should provide the initial window attributes, content,
+     * events.
      */
     abstract public void initWindow();
 
@@ -145,6 +150,7 @@ public abstract class CoreWindow {
     // ------------------------------------------------------------------------------------------
     /**
      * Setting window background color.
+     * 
      * @param color System.Drawing.Color.FromARGB(alpha, red, green, blue)
      */
     public void setBackground(Color color) {
@@ -153,6 +159,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting window background color.
+     * 
      * @param r Red bits of a color. Range: (0 - 255)
      * @param g Green bits of a color. Range: (0 - 255)
      * @param b Blue bits of a color. Range: (0 - 255)
@@ -163,6 +170,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting window background color.
+     * 
      * @param r Red bits of a color. Range: (0 - 255)
      * @param g Green bits of a color. Range: (0 - 255)
      * @param b Blue bits of a color. Range: (0 - 255)
@@ -174,6 +182,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting window background color.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -184,6 +193,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting window background color.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -195,6 +205,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting window background color.
+     * 
      * @return Returns background color as System.Drawing.Color
      */
     public Color getBackground() {
@@ -202,18 +213,23 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting padding indents. Padding is the space that’s inside the element between the element and the border.
-     * @param padding com.spvessel.spacevil.Decorations.Indents(int left, int top, int right, int bottom)
+     * Setting padding indents. Padding is the space that’s inside the element
+     * between the element and the border.
+     * 
+     * @param padding com.spvessel.spacevil.Decorations.Indents(int left, int top,
+     *                int right, int bottom)
      */
     public void setPadding(Indents padding) {
         windowLayout.getContainer().setPadding(padding);
     }
 
     /**
-     * Setting padding indents. Padding is the space that’s inside the element between the element and the border.
-     * @param left Left indent.
-     * @param top Top indent.
-     * @param right Right indent.
+     * Setting padding indents. Padding is the space that’s inside the element
+     * between the element and the border.
+     * 
+     * @param left   Left indent.
+     * @param top    Top indent.
+     * @param right  Right indent.
      * @param bottom Bottom indent.
      */
     public void setPadding(int left, int top, int right, int bottom) {
@@ -222,6 +238,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting items as a list of IBaseItem items.
+     * 
      * @return Returns a list of contained items in the window.
      */
     public List<InterfaceBaseItem> getItems() {
@@ -230,6 +247,7 @@ public abstract class CoreWindow {
 
     /**
      * Adding an item to the window.
+     * 
      * @param item An instance of any IBaseItem class.
      */
     public void addItem(InterfaceBaseItem item) {
@@ -238,6 +256,7 @@ public abstract class CoreWindow {
 
     /**
      * Allows to add multiple items to the window.
+     * 
      * @param items An instance of any IBaseItem class.
      */
     public void addItems(InterfaceBaseItem... items) {
@@ -248,7 +267,8 @@ public abstract class CoreWindow {
 
     /**
      * Allows you to insert an item at a specified position.
-     * @param item An instance of any IBaseItem class.
+     * 
+     * @param item  An instance of any IBaseItem class.
      * @param index Index of position.
      */
     public void insertItem(InterfaceBaseItem item, int index) {
@@ -257,9 +277,11 @@ public abstract class CoreWindow {
 
     /**
      * Removing a specified item.
+     * 
      * @param item An instance of any IBaseItem class.
-     * @return True: if the window cantained the specified item and it was successfully removed.
-     * False: if the window did not cantain the specified item.
+     * @return True: if the window cantained the specified item and it was
+     *         successfully removed. False: if the window did not cantain the
+     *         specified item.
      */
     public boolean removeItem(InterfaceBaseItem item) {
         return windowLayout.getContainer().removeItem(item);
@@ -275,7 +297,9 @@ public abstract class CoreWindow {
     private String _name;
 
     /**
-     * Setting the window name. The window name is the string ID of the window and may differ from the window title.
+     * Setting the window name. The window name is the string ID of the window and
+     * may differ from the window title.
+     * 
      * @param value Window name.
      */
     public void setWindowName(String value) {
@@ -287,6 +311,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the window name.
+     * 
      * @return Window name.
      */
     public String getWindowName() {
@@ -297,6 +322,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window title text.
+     * 
      * @param title Title text.
      */
     public void setWindowTitle(String title) {
@@ -305,6 +331,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the title text.
+     * 
      * @return Title text.
      */
     public String getWindowTitle() {
@@ -321,6 +348,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window width.
+     * 
      * @param width Width in pixels.
      */
     public void setWidth(int width) {
@@ -338,6 +366,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window height.
+     * 
      * @param height Height in pixels.
      */
     public void setHeight(int height) {
@@ -350,7 +379,8 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window size in pixels: width and height.
-     * @param width Width in pixels.
+     * 
+     * @param width  Width in pixels.
      * @param height Height in pixels.
      */
     public void setSize(int width, int height) {
@@ -366,6 +396,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window minimum width.
+     * 
      * @param width Minimum width in pixels.
      */
     public void setMinWidth(int width) {
@@ -377,6 +408,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window minimum height.
+     * 
      * @param height Minimum height in pixels.
      */
     public void setMinHeight(int height) {
@@ -388,7 +420,8 @@ public abstract class CoreWindow {
 
     /**
      * Setting the minimum window size in pixels: width and height.
-     * @param width Minimum width in pixels.
+     * 
+     * @param width  Minimum width in pixels.
      * @param height Minimum height in pixels.
      */
     public void setMinSize(int width, int height) {
@@ -398,6 +431,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window maximum width.
+     * 
      * @param width Maximum width in pixels.
      */
     public void setMaxWidth(int width) {
@@ -409,6 +443,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window maximum height.
+     * 
      * @param height Maximum height in pixels.
      */
     public void setMaxHeight(int height) {
@@ -420,7 +455,8 @@ public abstract class CoreWindow {
 
     /**
      * Setting the maximum window size in pixels: width and height.
-     * @param width Maximum width in pixels.
+     * 
+     * @param width  Maximum width in pixels.
      * @param height Maximum height in pixels.
      */
     public void setMaxSize(int width, int height) {
@@ -430,6 +466,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current minimum window width.
+     * 
      * @return Current minimum width in pixels.
      */
     public int getMinWidth() {
@@ -438,6 +475,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current minimum window width.
+     * 
      * @return Current minimum width in pixels.
      */
     public int getWidth() {
@@ -446,6 +484,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current maximum window width.
+     * 
      * @return Current maximum width in pixels.
      */
     public int getMaxWidth() {
@@ -454,6 +493,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current minimum window height.
+     * 
      * @return Current minimum height in pixels.
      */
     public int getMinHeight() {
@@ -462,6 +502,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window height.
+     * 
      * @return Current height in pixels.
      */
     public int getHeight() {
@@ -470,6 +511,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current maximum window height.
+     * 
      * @return Current maximum height in pixels.
      */
     public int getMaxHeight() {
@@ -478,6 +520,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window size.
+     * 
      * @return Current window size as com.spvessel.spacevil.Core.Size.
      */
     public Size getSize() {
@@ -492,7 +535,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the window x-coordinate (the left-top window corner). Relocating the window at specified x-coordinate.
+     * Setting the window x-coordinate (the left-top window corner). Relocating the
+     * window at specified x-coordinate.
+     * 
      * @param x X-Coordinate.
      */
     public void setX(int x) {
@@ -504,6 +549,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window x-coordinate.
+     * 
      * @return Current x-coordinate.
      */
     public int getX() {
@@ -515,7 +561,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the window y-coordinate (the left-top window corner). Relocating the window at specified y-coordinate.
+     * Setting the window y-coordinate (the left-top window corner). Relocating the
+     * window at specified y-coordinate.
+     * 
      * @param y Y-Coordinate.
      */
     public void setY(int y) {
@@ -527,6 +575,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window y-coordinate.
+     * 
      * @return Current y-coordinate.
      */
     public int getY() {
@@ -534,7 +583,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the window x-coordinate and y-coordinate (the left-top window corner). Relocating the window at specified coordinates.
+     * Setting the window x-coordinate and y-coordinate (the left-top window
+     * corner). Relocating the window at specified coordinates.
+     * 
      * @param x X-Coordinate.
      * @param y Y-Coordinate.
      */
@@ -547,8 +598,11 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the window x-coordinate and y-coordinate (the left-top window corner). Relocating the window at specified coordinates.
-     * @param position X-coordinate and Y-coordinate provided as com.spvessel.spacevil.Core.Position
+     * Setting the window x-coordinate and y-coordinate (the left-top window
+     * corner). Relocating the window at specified coordinates.
+     * 
+     * @param position X-coordinate and Y-coordinate provided as
+     *                 com.spvessel.spacevil.Core.Position
      */
     public void setPosition(Position position) {
         _itemPosition.setPosition(position.getX(), position.getY());
@@ -560,7 +614,9 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window position.
-     * @return X-coordinate and Y-coordinate provided as com.spvessel.spacevil.Core.Position
+     * 
+     * @return X-coordinate and Y-coordinate provided as
+     *         com.spvessel.spacevil.Core.Position
      */
     public Position getPosition() {
         return _itemPosition;
@@ -582,117 +638,166 @@ public abstract class CoreWindow {
     }
 
     /**
-     * <p>A flag that determines whether the current window is dialog or not.
-     * <p>True: window is dialog. False: window is NOT dialog.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window is dialog or not.
+     * <p>
+     * True: window is dialog. False: window is NOT dialog.
+     * <p>
+     * Default: False.
      */
     public boolean isDialog;
 
     /**
-     * <p>A flag that determines whether the current window is in closed state or not.
-     * <p>True: window is closed. False: window is opened.
-     * <p>>Default: True.
+     * <p>
+     * A flag that determines whether the current window is in closed state or not.
+     * <p>
+     * True: window is closed. False: window is opened.
+     * <p>
+     * Default: True.
      */
     public boolean isClosed;
 
     /**
-     * <p>A flag that determines whether the current window is in hidden state or not.
-     * <p>True: window is hidden. False: window is unhidden.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window is in hidden state or not.
+     * <p>
+     * True: window is hidden. False: window is unhidden.
+     * <p>
+     * Default: False.
      */
     public boolean isHidden;
 
     /**
-     * <p>A flag that determines whether the current window can be resize or not.
-     * <p>True: window is resizable. False: window is NOT resizable.
-     * <p>Default: True.
+     * <p>
+     * A flag that determines whether the current window can be resize or not.
+     * <p>
+     * True: window is resizable. False: window is NOT resizable.
+     * <p>
+     * Default: True.
      */
     public boolean isResizable;
 
     /**
-     * <p>A flag that determines whether the current window is always on top of all other windows or not.
-     * <p>True: window is on top. False: window is NOT on top.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window is always on top of all
+     * other windows or not.
+     * <p>
+     * True: window is on top. False: window is NOT on top.
+     * <p>
+     * Default: False.
      */
     public boolean isAlwaysOnTop;
 
     /**
-     * <p>A flag that shows/hides native the current window border decoration.
-     * <p>True: native window border is HIDDEN. False: native window border is SHOWN.
-     * <p>Default: False.
+     * <p>
+     * A flag that shows/hides native the current window border decoration.
+     * <p>
+     * True: native window border is HIDDEN. False: native window border is SHOWN.
+     * <p>
+     * Default: False.
      */
     public boolean isBorderHidden;
 
     /**
-     * <p>A flag that determines whether the current window will first appear in the center of the screen or not.
-     * <p>True: window is centered. False: window is NOT centered.
-     * <p>Default: True.
+     * <p>
+     * A flag that determines whether the current window will first appear in the
+     * center of the screen or not.
+     * <p>
+     * True: window is centered. False: window is NOT centered.
+     * <p>
+     * Default: True.
      */
     public boolean isCentered;
 
     /**
-     * <p>A flag that determines whether the current window can be in focused state or not.
-     * <p>True: window is focusable. False: window is NOT focusable.
-     * <p>Default: True.
+     * <p>
+     * A flag that determines whether the current window can be in focused state or
+     * not.
+     * <p>
+     * True: window is focusable. False: window is NOT focusable.
+     * <p>
+     * Default: True.
      */
     public boolean isFocusable;
 
     /**
-     * <p>A flag that determines whether the current window can be closed if the mouse is clicked outside of the current window or not.
-     * <p>True: window can be closed if the mouse is clicked outside. False: window can NOT be closed if the mouse is clicked outside.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window can be closed if the mouse
+     * is clicked outside of the current window or not.
+     * <p>
+     * True: window can be closed if the mouse is clicked outside. False: window can
+     * NOT be closed if the mouse is clicked outside.
+     * <p>
+     * Default: False.
      */
     public boolean isOutsideClickClosable;
 
     /**
-     * <p>A flag that determines whether the current window will first appear maximized or not.
-     * <p>True: window will first appear maximized. False: window will NOT first appear maximized.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window will first appear maximized
+     * or not.
+     * <p>
+     * True: window will first appear maximized. False: window will NOT first appear
+     * maximized.
+     * <p>
+     * Default: False.
      */
     public boolean isMaximized;
 
     /**
-     * <p>A flag that determines whether the current window can be transparent or not.
-     * <p>True: window can be transparent. False: window can NOT be transparent.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window can be transparent or not.
+     * <p>
+     * True: window can be transparent. False: window can NOT be transparent.
+     * <p>
+     * Default: False.
      */
     public boolean isTransparent;
 
     /**
-     * <p>A flag that determines whether the current window will first appear in fullscreen mode or not.
-     * <p>True: window will first appear in fullscreen mode. False: window will NOT first appear in fullscreen mode.
-     * <p>Default: False.
+     * <p>
+     * A flag that determines whether the current window will first appear in
+     * fullscreen mode or not.
+     * <p>
+     * True: window will first appear in fullscreen mode. False: window will NOT
+     * first appear in fullscreen mode.
+     * <p>
+     * Default: False.
      */
     boolean isFullScreen;
 
     MSAA _msaa = MSAA.MSAA_4X;
-    
+
     /**
-     * Setting the anti aliasing quality (off, x2, x4, x8).
-     * Default: MSAA.MSAA4x
+     * Setting the anti aliasing quality (off, x2, x4, x8). Default: MSAA.MSAA4x
+     * 
      * @param msaa com.spvessel.spacevil.Flags.MSAA anti aliasing quality.
      */
     public void setAntiAliasingQuality(MSAA msaa) {
         _msaa = msaa;
     }
-    
+
     void setFocusable(boolean value) {
         windowLayout.setFocusable(value);
     }
-    
+
     private boolean _isFocused;
-    
+
     /**
      * Lets to know if the current window is focused or not.
-     * @return True: if the current window is focused. False: if the current window is unfocused.
+     * 
+     * @return True: if the current window is focused. False: if the current window
+     *         is unfocused.
      */
     public boolean isFocused() {
         return _isFocused;
     }
-    
+
     /**
      * Lets to manage focus state ot the current window.
-     * @param value True: if you want the window to be focused. False: if you want the window to be unfocused.
+     * 
+     * @param value True: if you want the window to be focused. False: if you want
+     *              the window to be unfocused.
      */
     public void setFocus(Boolean value) {
         if (_isFocused == value) {
@@ -703,14 +808,14 @@ public abstract class CoreWindow {
             windowLayout.setFocus();
         }
     }
-    
+
     /**
      * Sets the window focused.
      */
     public void setWindowFocused() {
         windowLayout.setFocus();
     }
-    
+
     /**
      * Sets the window minimized.
      */
@@ -753,7 +858,9 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current focused item in the current window.
-     * @return com.spvessel.spacevil.Prototype (abstract class for interactive items).
+     * 
+     * @return com.spvessel.spacevil.Prototype (abstract class for interactive
+     *         items).
      */
     public Prototype getFocusedItem() {
         return windowLayout.getFocusedItem();
@@ -761,14 +868,17 @@ public abstract class CoreWindow {
 
     /**
      * Setting the specified item to the focused state.
-     * @param item Any item that can be focused and extends of com.spvessel.spacevil.Prototype (abstract class for interactive items).
+     * 
+     * @param item Any item that can be focused and extends of
+     *             com.spvessel.spacevil.Prototype (abstract class for interactive
+     *             items).
      */
     public void setFocusedItem(Prototype item) {
         windowLayout.setFocusedItem(item);
     }
 
     // public void setFocus() {
-    //     windowLayout.getContainer().setFocus();
+    // windowLayout.getContainer().setFocus();
     // }
 
     void resetItems() {
@@ -784,7 +894,8 @@ public abstract class CoreWindow {
 
     /**
      * Sets the icons of the current window.
-     * @param icon_big Task bar icon.
+     * 
+     * @param icon_big   Task bar icon.
      * @param icon_small Title bar icon.
      */
     public void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
@@ -793,7 +904,9 @@ public abstract class CoreWindow {
 
     /**
      * Hides of unhides the current window.
-     * @param value True: if you want to hide the window. False: if you want tu unhide the window.
+     * 
+     * @param value True: if you want to hide the window. False: if you want tu
+     *              unhide the window.
      */
     public void setHidden(Boolean value) {
         windowLayout.setHidden(value);
@@ -801,9 +914,11 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Lets to set the rendering frequency.
-     * Default: com.spvessel.spacevil.Flags.RedrawFrequency.Low
-     * @param value Rendering frequency as com.spvessel.spacevil.Flags.RedrawFrequency.
+     * Lets to set the rendering frequency. Default:
+     * com.spvessel.spacevil.Flags.RedrawFrequency.Low
+     * 
+     * @param value Rendering frequency as
+     *              com.spvessel.spacevil.Flags.RedrawFrequency.
      */
     public void setRenderFrequency(RedrawFrequency value) {
         WindowManager.setRenderFrequency(value);
@@ -811,24 +926,26 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current rendering frequency.
+     * 
      * @return Rendering frequency as com.spvessel.spacevil.Flags.RedrawFrequency
      */
     public RedrawFrequency getRenderFrequency() {
         return WindowManager.getRenderFrequency();
     }
-    
+
     /**
      * Lets to describe the actions when the window starts.
      */
     public EventCommonMethod eventOnStart = new EventCommonMethod();
-    
+
     /**
      * Lets to describe the actions when closing the window.
      */
     public EventCommonMethod eventClose = new EventCommonMethod();
-    
+
     /**
-     * Lets to describe the actions when you drag&drop files/folders to the current window.
+     * Lets to describe the actions when you drag and drop files/folders to the
+     * current window.
      */
     public EventDropMethodState eventDrop = new EventDropMethodState();
 
@@ -838,17 +955,18 @@ public abstract class CoreWindow {
         eventHide.clear();
         freeEvents();
     }
-    
+
     void setWindow(WContainer window) {
         windowLayout.setWindow(window);
     }
-    
+
     int ratioW = -1;
     int ratioH = -1;
     boolean isKeepAspectRatio = false;
 
     /**
      * Lets to set aspect ratio.
+     * 
      * @param w Width value.
      * @param h Height value.
      */
@@ -857,32 +975,32 @@ public abstract class CoreWindow {
         ratioW = w;
         ratioH = h;
     }
-    
+
     private EventCommonMethod eventMinimize = new EventCommonMethod();
     private EventCommonMethod eventHide = new EventCommonMethod();
-    
+
     EventCommonMethodState eventFocusGet = new EventCommonMethodState();
     EventCommonMethodState eventFocusLost = new EventCommonMethodState();
 
     /**
-     * ATTENTION!
-     * Not implemented yet.
+     * ATTENTION! Not implemented yet.
      */
     public EventCommonMethodState eventResize = new EventCommonMethodState();
 
     /**
-     * ATTENTION!
-     * Not implemented yet.
+     * ATTENTION! Not implemented yet.
      */
     public EventCommonMethodState eventDestroy = new EventCommonMethodState();
 
     /**
-     * Lets to describe the actions when mouse cursor hovers the root item of the window.
+     * Lets to describe the actions when mouse cursor hovers the root item of the
+     * window.
      */
     public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
 
     /**
-     * Lets to describe the actions when mouse cursor leaves the root item of the window.
+     * Lets to describe the actions when mouse cursor leaves the root item of the
+     * window.
      */
     public EventMouseMethodState eventMouseLeave = new EventMouseMethodState();
 
@@ -892,7 +1010,8 @@ public abstract class CoreWindow {
     public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
 
     /**
-     * Lets to describe the actions when the root item of the window was double clicked.
+     * Lets to describe the actions when the root item of the window was double
+     * clicked.
      */
     public EventMouseMethodState eventMouseDoubleClick = new EventMouseMethodState();
 
@@ -902,12 +1021,14 @@ public abstract class CoreWindow {
     public EventMouseMethodState eventMousePress = new EventMouseMethodState();
 
     /**
-     * Lets to describe the actions when the mouse button was pressed and moved inside the root item of the window.
+     * Lets to describe the actions when the mouse button was pressed and moved
+     * inside the root item of the window.
      */
     public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
 
     /**
-     * Lets to describe the actions when the mouse button was released after dragging.
+     * Lets to describe the actions when the mouse button was released after
+     * dragging.
      */
     public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
 
@@ -959,6 +1080,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the border of the root item of the window.
+     * 
      * @param border Border as com.spvessel.spacevil.Decorations.Border
      */
     public void setBorder(Border border) {
@@ -969,6 +1091,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the color of the window border.
+     * 
      * @param fill Color as java.awt.Color
      */
     public void setBorderFill(Color fill) {
@@ -979,6 +1102,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the color of the window border.
+     * 
      * @param r Red (0 - 255)
      * @param g Green (0 - 255)
      * @param b Blue (0 - 255)
@@ -991,6 +1115,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the color of the window border.
+     * 
      * @param r Red (0 - 255)
      * @param g Green (0 - 255)
      * @param b Blue (0 - 255)
@@ -1004,6 +1129,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the color of the window border.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -1016,6 +1142,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the color of the window border.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -1029,6 +1156,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the corner radii of the window border.
+     * 
      * @param radius Corner radii as com.spvessel.spacevil.Decorations.CornerRadius
      */
     public void setBorderRadius(CornerRadius radius) {
@@ -1039,6 +1167,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the common corner radius of the window border.
+     * 
      * @param radius The corner radius.
      */
     public void setBorderRadius(int radius) {
@@ -1049,6 +1178,7 @@ public abstract class CoreWindow {
 
     /**
      * Setting the window border thickness.
+     * 
      * @param thickness The border thickness.
      */
     public void setBorderThickness(int thickness) {
@@ -1059,6 +1189,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window border corner radii.
+     * 
      * @return Corner radii as com.spvessel.spacevil.Decorations.CornerRadius
      */
     public CornerRadius getBorderRadius() {
@@ -1070,6 +1201,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window border thickness.
+     * 
      * @return The current thickness.
      */
     public int getBorderThickness() {
@@ -1081,6 +1213,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current window border color.
+     * 
      * @return The border color as java.awt.Color
      */
     public Color getBorderFill() {
@@ -1092,6 +1225,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the GLFW ID of the window.
+     * 
      * @return ID of the window.
      */
     public long getGLWID() {
@@ -1115,7 +1249,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
+     * Setting the dimmer color of the window. The dimmer appears when the current
+     * window opens a dialog window.
+     * 
      * @param color The dimmer color as java.awt.Color
      */
     public void setShadeColor(Color color) {
@@ -1123,7 +1259,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
+     * Setting the dimmer color of the window. The dimmer appears when the current
+     * window opens a dialog window.
+     * 
      * @param r Red (0 - 255)
      * @param g Green (0 - 255)
      * @param b Blue (0 - 255)
@@ -1133,7 +1271,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
+     * Setting the dimmer color of the window. The dimmer appears when the current
+     * window opens a dialog window.
+     * 
      * @param r Red (0 - 255)
      * @param g Green (0 - 255)
      * @param b Blue (0 - 255)
@@ -1144,7 +1284,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
+     * Setting the dimmer color of the window. The dimmer appears when the current
+     * window opens a dialog window.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -1154,7 +1296,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
+     * Setting the dimmer color of the window. The dimmer appears when the current
+     * window opens a dialog window.
+     * 
      * @param r Red (0.0f - 1.0f)
      * @param g Green (0.0f - 1.0f)
      * @param b Blue (0.0f - 1.0f)
@@ -1166,6 +1310,7 @@ public abstract class CoreWindow {
 
     /**
      * Getting the current dimmer color.
+     * 
      * @return The dimmer color as java.awt.Color
      */
     public Color getShadeColor() {
@@ -1177,7 +1322,9 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Getting the area of a primary monitor. The work area not occupied by global task bars or menu bars.
+     * Getting the area of a primary monitor. The work area not occupied by global
+     * task bars or menu bars.
+     * 
      * @return Work area as com.spvessel.spacevil.Core.Area
      */
     public Area getWorkArea() {
@@ -1197,15 +1344,14 @@ public abstract class CoreWindow {
 
     /**
      * Get DPI scale for the current window.
+     * 
      * @return DPI scale as com.spvessel.spacevil.Core.Scale
      */
-    public Scale getDpiScale()
-    {
+    public Scale getDpiScale() {
         return _windowScale;
     }
-    
-    void setWindowScale(float x, float y)
-    {
+
+    void setWindowScale(float x, float y) {
         _windowScale.setScale(x, y);
     }
 }

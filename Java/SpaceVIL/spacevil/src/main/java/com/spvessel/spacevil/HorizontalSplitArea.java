@@ -193,7 +193,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     /**
      * Setting thickness of SplitHolder divider.
      * 
-     * @param spHeight
+     * @param spHeight Thickness of SplitHolder divider.
      */
     public void setSplitThickness(int spHeight) {
         _splitHolder.setDividerSize(spHeight);

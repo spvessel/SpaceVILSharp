@@ -261,8 +261,8 @@ public class Style implements Cloneable {
     /**
      * Setting the size policy of an item's shape. 
      * Can be FIXED (shape not changes its size) or EXPAND (shape is stretched to all available space).
-     * @param widthPolicy
-     * @param heightPolicy
+     * @param widthPolicy Width policy of an item's shape.
+     * @param heightPolicy Height policy of an item's shape.
      */
     public void setSizePolicy(SizePolicy widthPolicy, SizePolicy heightPolicy) {
         this.widthPolicy = widthPolicy;
@@ -473,6 +473,8 @@ public class Style implements Cloneable {
     /**
      * Add inner primitives to the object (as decorations only). 
      * Note: not supported in the current version!
+     * 
+     * @param shape Shape as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void addInnerShape(InterfaceBaseItem shape) {
         if (innerShapes == null) {

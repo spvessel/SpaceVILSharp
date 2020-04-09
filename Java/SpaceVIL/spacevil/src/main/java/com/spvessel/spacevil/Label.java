@@ -181,9 +181,9 @@ public class Label extends Prototype implements InterfaceVLayout {
      * 
      * @param fontFamily New font family name.
      */
-    public void setFontFamily(String font_family) {
+    public void setFontFamily(String fontFamily) {
         for (TextLine tl : _textObjects) {
-            tl.setFontFamily(font_family);
+            tl.setFontFamily(fontFamily);
         }
     }
 

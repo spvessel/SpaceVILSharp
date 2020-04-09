@@ -100,14 +100,20 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     public boolean isXResizable = true;
 
     /**
-     * Property to lock ResizableItem resizing by Y axis. <p True: to unlock. False:
-     * to lock. <p Default: True.
+     * Property to lock ResizableItem resizing by Y axis.
+     * <p>
+     * True: to unlock. False: to lock.
+     * <p>
+     * Default: True.
      */
     public boolean isYResizable = true;
 
     /**
-     * Property to lock ResizableItem movement by X axis. <p True: to unlock. False:
-     * to lock. <p Default: True.
+     * Property to lock ResizableItem movement by X axis.
+     * <p>
+     * True: to unlock. False: to lock.
+     * <p>
+     * Default: True.
      */
     public boolean isXFloating = true;
 
