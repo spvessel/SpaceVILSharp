@@ -68,242 +68,267 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="class_space_v_i_l_1_1_base_item-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SpaceVIL.BaseItem Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Abstract class implementation of <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html" title="The main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects ...">SpaceVIL.Core.IBaseItem</a> interface. <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html" title="The main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects ...">SpaceVIL.Core.IBaseItem</a> is the main interface of <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> environment. Contains all the necessary methods for rendering objects and interacting with them.  
+ <a href="class_space_v_i_l_1_1_base_item.html#details">More...</a></p>
+
 <p>Inherits <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
 
-<p>Inherited by <a class="el" href="class_space_v_i_l_1_1_primitive.html">SpaceVIL.Primitive</a>.</p>
+<p>Inherited by <a class="el" href="class_space_v_i_l_1_1_primitive.html">SpaceVIL.Primitive</a>, and SpaceVIL.VisualItem.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af62e189b018fffc486961909ab4671cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#af62e189b018fffc486961909ab4671cb">SetHandler</a> (<a class="el" href="class_space_v_i_l_1_1_window_layout.html">WindowLayout</a> handler)</td></tr>
-<tr class="separator:af62e189b018fffc486961909ab4671cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75711759b9a916390f30a994e41f653b"><td class="memItemLeft" align="right" valign="top"><a id="a75711759b9a916390f30a994e41f653b"></a>
-<a class="el" href="class_space_v_i_l_1_1_window_layout.html">WindowLayout</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetHandler</b> ()</td></tr>
-<tr class="separator:a75711759b9a916390f30a994e41f653b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a529754a616b7be4d9837c209840f28d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a529754a616b7be4d9837c209840f28d4">SetHandler</a> (<a class="el" href="class_space_v_i_l_1_1_core_window.html">CoreWindow</a> handler)</td></tr>
+<tr class="memdesc:a529754a616b7be4d9837c209840f28d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the window to which the item will belong.  <a href="#a529754a616b7be4d9837c209840f28d4">More...</a><br /></td></tr>
+<tr class="separator:a529754a616b7be4d9837c209840f28d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb28d464fb24ed54b40bd97952a23839"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_core_window.html">CoreWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aeb28d464fb24ed54b40bd97952a23839">GetHandler</a> ()</td></tr>
+<tr class="memdesc:aeb28d464fb24ed54b40bd97952a23839"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the window to which the item will belong.  <a href="#aeb28d464fb24ed54b40bd97952a23839">More...</a><br /></td></tr>
+<tr class="separator:aeb28d464fb24ed54b40bd97952a23839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af249ff93f366ebc0020d171276576426"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_prototype.html">Prototype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#af249ff93f366ebc0020d171276576426">GetParent</a> ()</td></tr>
-<tr class="memdesc:af249ff93f366ebc0020d171276576426"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s parent item  <a href="#af249ff93f366ebc0020d171276576426">More...</a><br /></td></tr>
+<tr class="memdesc:af249ff93f366ebc0020d171276576426"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the parent of the item.  <a href="#af249ff93f366ebc0020d171276576426">More...</a><br /></td></tr>
 <tr class="separator:af249ff93f366ebc0020d171276576426"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93ab7f178605794c1016e566031a791f"><td class="memItemLeft" align="right" valign="top"><a id="a93ab7f178605794c1016e566031a791f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetParent</b> (<a class="el" href="class_space_v_i_l_1_1_prototype.html">Prototype</a> parent)</td></tr>
+<tr class="memitem:a93ab7f178605794c1016e566031a791f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a93ab7f178605794c1016e566031a791f">SetParent</a> (<a class="el" href="class_space_v_i_l_1_1_prototype.html">Prototype</a> parent)</td></tr>
+<tr class="memdesc:a93ab7f178605794c1016e566031a791f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the parent of the item.  <a href="#a93ab7f178605794c1016e566031a791f">More...</a><br /></td></tr>
 <tr class="separator:a93ab7f178605794c1016e566031a791f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07e16796013b2e7d71b303c006ea2bc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a07e16796013b2e7d71b303c006ea2bc7">RemoveItemFromListeners</a> ()</td></tr>
-<tr class="memdesc:a07e16796013b2e7d71b303c006ea2bc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Item will not react on parent's changes  <a href="#a07e16796013b2e7d71b303c006ea2bc7">More...</a><br /></td></tr>
-<tr class="separator:a07e16796013b2e7d71b303c006ea2bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dd530484abb5ad9ba9abd92117e735b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a8dd530484abb5ad9ba9abd92117e735b">InitElements</a> ()</td></tr>
-<tr class="memdesc:a8dd530484abb5ad9ba9abd92117e735b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization and adding of all elements in the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a8dd530484abb5ad9ba9abd92117e735b">More...</a><br /></td></tr>
+<tr class="memdesc:a8dd530484abb5ad9ba9abd92117e735b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing children if this <a class="el" href="class_space_v_i_l_1_1_base_item.html" title="Abstract class implementation of SpaceVIL.Core.IBaseItem interface. SpaceVIL.Core.IBaseItem is the main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects and interacting with them. ">BaseItem</a> is container (<a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">SpaceVIL.Prototype</a>). Notice: This method is mainly for overriding only. <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> calls this method if necessary and no need to call it manually.  <a href="#a8dd530484abb5ad9ba9abd92117e735b">More...</a><br /></td></tr>
 <tr class="separator:a8dd530484abb5ad9ba9abd92117e735b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab470c6d47d0c5c9e218424a9054c4b53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html">Indents</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ab470c6d47d0c5c9e218424a9054c4b53">GetMargin</a> ()</td></tr>
-<tr class="memdesc:ab470c6d47d0c5c9e218424a9054c4b53"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> margin  <a href="#ab470c6d47d0c5c9e218424a9054c4b53">More...</a><br /></td></tr>
+<tr class="memdesc:ab470c6d47d0c5c9e218424a9054c4b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the indents of an item to offset itself relative to its container.  <a href="#ab470c6d47d0c5c9e218424a9054c4b53">More...</a><br /></td></tr>
 <tr class="separator:ab470c6d47d0c5c9e218424a9054c4b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fe9a70fe60c50802c6cc6f9593d9409"><td class="memItemLeft" align="right" valign="top"><a id="a3fe9a70fe60c50802c6cc6f9593d9409"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMargin</b> (<a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html">Indents</a> margin)</td></tr>
+<tr class="memitem:a3fe9a70fe60c50802c6cc6f9593d9409"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a3fe9a70fe60c50802c6cc6f9593d9409">SetMargin</a> (<a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html">Indents</a> margin)</td></tr>
+<tr class="memdesc:a3fe9a70fe60c50802c6cc6f9593d9409"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the indents of an item to offset itself relative to its container.  <a href="#a3fe9a70fe60c50802c6cc6f9593d9409">More...</a><br /></td></tr>
 <tr class="separator:a3fe9a70fe60c50802c6cc6f9593d9409"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63ee32be1841607604464a2cc247e5be"><td class="memItemLeft" align="right" valign="top"><a id="a63ee32be1841607604464a2cc247e5be"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMargin</b> (int left=0, int top=0, int right=0, int bottom=0)</td></tr>
+<tr class="memitem:a63ee32be1841607604464a2cc247e5be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a63ee32be1841607604464a2cc247e5be">SetMargin</a> (int left=0, int top=0, int right=0, int bottom=0)</td></tr>
+<tr class="memdesc:a63ee32be1841607604464a2cc247e5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the indents of an item to offset itself relative to its container.  <a href="#a63ee32be1841607604464a2cc247e5be">More...</a><br /></td></tr>
 <tr class="separator:a63ee32be1841607604464a2cc247e5be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a196eedcb995f3d4fd3f0c231c47b2b9e"><td class="memItemLeft" align="right" valign="top"><a id="a196eedcb995f3d4fd3f0c231c47b2b9e"></a>
-List&lt; float[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a196eedcb995f3d4fd3f0c231c47b2b9e">GetTriangles</a> ()</td></tr>
-<tr class="memdesc:a196eedcb995f3d4fd3f0c231c47b2b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="section return"><dt>Returns</dt><dd>triangles list of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shape</dd></dl>
-<br /></td></tr>
+<tr class="memitem:a196eedcb995f3d4fd3f0c231c47b2b9e"><td class="memItemLeft" align="right" valign="top">List&lt; float[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a196eedcb995f3d4fd3f0c231c47b2b9e">GetTriangles</a> ()</td></tr>
+<tr class="memdesc:a196eedcb995f3d4fd3f0c231c47b2b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting triangles of item's shape.  <a href="#a196eedcb995f3d4fd3f0c231c47b2b9e">More...</a><br /></td></tr>
 <tr class="separator:a196eedcb995f3d4fd3f0c231c47b2b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abce4d28de70cae71fde1612342e519a4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#abce4d28de70cae71fde1612342e519a4">SetTriangles</a> (List&lt; float[]&gt; triangles)</td></tr>
-<tr class="memdesc:abce4d28de70cae71fde1612342e519a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shape as triangles list  <a href="#abce4d28de70cae71fde1612342e519a4">More...</a><br /></td></tr>
+<tr class="memdesc:abce4d28de70cae71fde1612342e519a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting triangles as item's shape.  <a href="#abce4d28de70cae71fde1612342e519a4">More...</a><br /></td></tr>
 <tr class="separator:abce4d28de70cae71fde1612342e519a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac111d3d8cef36f406aa11862cefab9e2"><td class="memItemLeft" align="right" valign="top">virtual List&lt; float[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ac111d3d8cef36f406aa11862cefab9e2">MakeShape</a> ()</td></tr>
-<tr class="separator:ac111d3d8cef36f406aa11862cefab9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a727b3efd0e64d89baaeac4ef96e45213"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a727b3efd0e64d89baaeac4ef96e45213">MakeShape</a> ()</td></tr>
+<tr class="memdesc:a727b3efd0e64d89baaeac4ef96e45213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Making default item's shape. Use in conjunction with <a class="el" href="class_space_v_i_l_1_1_base_item.html#a196eedcb995f3d4fd3f0c231c47b2b9e" title="Getting triangles of item&#39;s shape. ">GetTriangles()</a> and <a class="el" href="class_space_v_i_l_1_1_base_item.html#abce4d28de70cae71fde1612342e519a4" title="Setting triangles as item&#39;s shape. ">SetTriangles()</a> methods. Notice: This method is mainly for overriding only. <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> calls this method if necessary and no need to call it manually.  <a href="#a727b3efd0e64d89baaeac4ef96e45213">More...</a><br /></td></tr>
+<tr class="separator:a727b3efd0e64d89baaeac4ef96e45213"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ac74dbeeaedbc9dc13edbad28ee1d8c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a9ac74dbeeaedbc9dc13edbad28ee1d8c">SetBackground</a> (Color color)</td></tr>
-<tr class="memdesc:a9ac74dbeeaedbc9dc13edbad28ee1d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background color of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a9ac74dbeeaedbc9dc13edbad28ee1d8c">More...</a><br /></td></tr>
+<tr class="memdesc:a9ac74dbeeaedbc9dc13edbad28ee1d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting background color of an item's shape.  <a href="#a9ac74dbeeaedbc9dc13edbad28ee1d8c">More...</a><br /></td></tr>
 <tr class="separator:a9ac74dbeeaedbc9dc13edbad28ee1d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f76dd4ad8d980111b39a84329348706"><td class="memItemLeft" align="right" valign="top"><a id="a9f76dd4ad8d980111b39a84329348706"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBackground</b> (int r, int g, int b)</td></tr>
+<tr class="memitem:a9f76dd4ad8d980111b39a84329348706"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a9f76dd4ad8d980111b39a84329348706">SetBackground</a> (int r, int g, int b)</td></tr>
+<tr class="memdesc:a9f76dd4ad8d980111b39a84329348706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting background color of an item's shape in byte RGB format.  <a href="#a9f76dd4ad8d980111b39a84329348706">More...</a><br /></td></tr>
 <tr class="separator:a9f76dd4ad8d980111b39a84329348706"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d750bcf2254f44623cf1697ebbd9ca8"><td class="memItemLeft" align="right" valign="top"><a id="a9d750bcf2254f44623cf1697ebbd9ca8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBackground</b> (int r, int g, int b, int a)</td></tr>
+<tr class="memitem:a9d750bcf2254f44623cf1697ebbd9ca8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a9d750bcf2254f44623cf1697ebbd9ca8">SetBackground</a> (int r, int g, int b, int a)</td></tr>
+<tr class="memdesc:a9d750bcf2254f44623cf1697ebbd9ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting background color of an item in byte RGBA format.  <a href="#a9d750bcf2254f44623cf1697ebbd9ca8">More...</a><br /></td></tr>
 <tr class="separator:a9d750bcf2254f44623cf1697ebbd9ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6134cdb21d533ac5186e4acd30fe465c"><td class="memItemLeft" align="right" valign="top"><a id="a6134cdb21d533ac5186e4acd30fe465c"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBackground</b> (float r, float g, float b)</td></tr>
+<tr class="memitem:a6134cdb21d533ac5186e4acd30fe465c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a6134cdb21d533ac5186e4acd30fe465c">SetBackground</a> (float r, float g, float b)</td></tr>
+<tr class="memdesc:a6134cdb21d533ac5186e4acd30fe465c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting background color of an item in float RGB format.  <a href="#a6134cdb21d533ac5186e4acd30fe465c">More...</a><br /></td></tr>
 <tr class="separator:a6134cdb21d533ac5186e4acd30fe465c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b47d3fe8c356d1756bbff999d476e07"><td class="memItemLeft" align="right" valign="top"><a id="a2b47d3fe8c356d1756bbff999d476e07"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBackground</b> (float r, float g, float b, float a)</td></tr>
+<tr class="memitem:a2b47d3fe8c356d1756bbff999d476e07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a2b47d3fe8c356d1756bbff999d476e07">SetBackground</a> (float r, float g, float b, float a)</td></tr>
+<tr class="memdesc:a2b47d3fe8c356d1756bbff999d476e07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting background color of an item in float RGBA format.  <a href="#a2b47d3fe8c356d1756bbff999d476e07">More...</a><br /></td></tr>
 <tr class="separator:a2b47d3fe8c356d1756bbff999d476e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6a7649082ecc3da16b450dad6360c1d"><td class="memItemLeft" align="right" valign="top"><a id="ab6a7649082ecc3da16b450dad6360c1d"></a>
-virtual Color&#160;</td><td class="memItemRight" valign="bottom"><b>GetBackground</b> ()</td></tr>
+<tr class="memitem:ab6a7649082ecc3da16b450dad6360c1d"><td class="memItemLeft" align="right" valign="top">virtual Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ab6a7649082ecc3da16b450dad6360c1d">GetBackground</a> ()</td></tr>
+<tr class="memdesc:ab6a7649082ecc3da16b450dad6360c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting background color of an item.  <a href="#ab6a7649082ecc3da16b450dad6360c1d">More...</a><br /></td></tr>
 <tr class="separator:ab6a7649082ecc3da16b450dad6360c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10bc09b650b0e0ed08536b402beb6813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a10bc09b650b0e0ed08536b402beb6813">SetItemName</a> (string name)</td></tr>
-<tr class="memdesc:a10bc09b650b0e0ed08536b402beb6813"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s name  <a href="#a10bc09b650b0e0ed08536b402beb6813">More...</a><br /></td></tr>
+<tr class="memdesc:a10bc09b650b0e0ed08536b402beb6813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the name of the item.  <a href="#a10bc09b650b0e0ed08536b402beb6813">More...</a><br /></td></tr>
 <tr class="separator:a10bc09b650b0e0ed08536b402beb6813"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70fc344d02591cf519cd36e278e6f95f"><td class="memItemLeft" align="right" valign="top"><a id="a70fc344d02591cf519cd36e278e6f95f"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>GetItemName</b> ()</td></tr>
+<tr class="memitem:a70fc344d02591cf519cd36e278e6f95f"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a70fc344d02591cf519cd36e278e6f95f">GetItemName</a> ()</td></tr>
+<tr class="memdesc:a70fc344d02591cf519cd36e278e6f95f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the name of the item.  <a href="#a70fc344d02591cf519cd36e278e6f95f">More...</a><br /></td></tr>
 <tr class="separator:a70fc344d02591cf519cd36e278e6f95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002a247f3745be1e1e57c504589d7036"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a002a247f3745be1e1e57c504589d7036">IsDrawable</a> ()</td></tr>
-<tr class="memdesc:a002a247f3745be1e1e57c504589d7036"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> will drawn by engine  <a href="#a002a247f3745be1e1e57c504589d7036">More...</a><br /></td></tr>
+<tr class="memdesc:a002a247f3745be1e1e57c504589d7036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the drawable (visibility) status of an item. This property used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a29b915d6e655b48a8b7505118441e961" title="Getting the visibility status of an item. This property may used in conjunction with the IsDrawable()...">IsVisible()</a> property. Explanation: an item can be visible and invisible, in some cases the item can be located outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">SpaceVIL.ListBox</a>), and it must be invisible so as not to waste CPU / GPU resources, but in some cases you must control the visibility of elements that are inside container and should be invisible (example: <a class="el" href="class_space_v_i_l_1_1_tree_view.html" title="TreeView is special container designed to show content as tree view structure. Extended from SpaceVIL...">SpaceVIL.TreeView</a>).  <a href="#a002a247f3745be1e1e57c504589d7036">More...</a><br /></td></tr>
 <tr class="separator:a002a247f3745be1e1e57c504589d7036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dfcfb7cb25bf50d10941e59e919d3f8"><td class="memItemLeft" align="right" valign="top"><a id="a7dfcfb7cb25bf50d10941e59e919d3f8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetDrawable</b> (bool value)</td></tr>
+<tr class="memitem:a7dfcfb7cb25bf50d10941e59e919d3f8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a7dfcfb7cb25bf50d10941e59e919d3f8">SetDrawable</a> (bool value)</td></tr>
+<tr class="memdesc:a7dfcfb7cb25bf50d10941e59e919d3f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the drawable (visibility) status of an item. This property used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a29b915d6e655b48a8b7505118441e961" title="Getting the visibility status of an item. This property may used in conjunction with the IsDrawable()...">IsVisible()</a> property. Explanation: an item can be visible and invisible, in some cases the item can be located outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">SpaceVIL.ListBox</a>), and it must be invisible so as not to waste CPU / GPU resources, but in some cases you must control the visibility of elements that are inside container and should be invisible (example: <a class="el" href="class_space_v_i_l_1_1_tree_view.html" title="TreeView is special container designed to show content as tree view structure. Extended from SpaceVIL...">SpaceVIL.TreeView</a>).  <a href="#a7dfcfb7cb25bf50d10941e59e919d3f8">More...</a><br /></td></tr>
 <tr class="separator:a7dfcfb7cb25bf50d10941e59e919d3f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29b915d6e655b48a8b7505118441e961"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a29b915d6e655b48a8b7505118441e961">IsVisible</a> ()</td></tr>
-<tr class="memdesc:a29b915d6e655b48a8b7505118441e961"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> is visible  <a href="#a29b915d6e655b48a8b7505118441e961">More...</a><br /></td></tr>
+<tr class="memdesc:a29b915d6e655b48a8b7505118441e961"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the visibility status of an item. This property may used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a002a247f3745be1e1e57c504589d7036" title="Getting the drawable (visibility) status of an item. This property used in conjunction with the IsVis...">IsDrawable()</a> property.  <a href="#a29b915d6e655b48a8b7505118441e961">More...</a><br /></td></tr>
 <tr class="separator:a29b915d6e655b48a8b7505118441e961"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaae3ba9b57ac31dca372950e77b02ea"><td class="memItemLeft" align="right" valign="top"><a id="adaae3ba9b57ac31dca372950e77b02ea"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetVisible</b> (bool value)</td></tr>
+<tr class="memitem:adaae3ba9b57ac31dca372950e77b02ea"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#adaae3ba9b57ac31dca372950e77b02ea">SetVisible</a> (bool value)</td></tr>
+<tr class="memdesc:adaae3ba9b57ac31dca372950e77b02ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the visibility status of an item. This property may used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a002a247f3745be1e1e57c504589d7036" title="Getting the drawable (visibility) status of an item. This property used in conjunction with the IsVis...">IsDrawable()</a> property.  <a href="#adaae3ba9b57ac31dca372950e77b02ea">More...</a><br /></td></tr>
 <tr class="separator:adaae3ba9b57ac31dca372950e77b02ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a139384f2e49b221864f8a580973a21c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a139384f2e49b221864f8a580973a21c1">SetMinWidth</a> (int width)</td></tr>
-<tr class="memdesc:a139384f2e49b221864f8a580973a21c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a139384f2e49b221864f8a580973a21c1">More...</a><br /></td></tr>
+<tr class="memdesc:a139384f2e49b221864f8a580973a21c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the minimum width limit. Actual width cannot be less than this limit.  <a href="#a139384f2e49b221864f8a580973a21c1">More...</a><br /></td></tr>
 <tr class="separator:a139384f2e49b221864f8a580973a21c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64c0166488ae312314e20359f6188ee8"><td class="memItemLeft" align="right" valign="top"><a id="a64c0166488ae312314e20359f6188ee8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetWidth</b> (int width)</td></tr>
+<tr class="memitem:a64c0166488ae312314e20359f6188ee8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a64c0166488ae312314e20359f6188ee8">SetWidth</a> (int width)</td></tr>
+<tr class="memdesc:a64c0166488ae312314e20359f6188ee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting item width. If the value is greater/less than the maximum/minimum value of the width, then the width becomes equal to the maximum/minimum value.  <a href="#a64c0166488ae312314e20359f6188ee8">More...</a><br /></td></tr>
 <tr class="separator:a64c0166488ae312314e20359f6188ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a156d8c92de44c966e01dc0af21908571"><td class="memItemLeft" align="right" valign="top"><a id="a156d8c92de44c966e01dc0af21908571"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMaxWidth</b> (int width)</td></tr>
+<tr class="memitem:a156d8c92de44c966e01dc0af21908571"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a156d8c92de44c966e01dc0af21908571">SetMaxWidth</a> (int width)</td></tr>
+<tr class="memdesc:a156d8c92de44c966e01dc0af21908571"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the maximum width limit. Actual width cannot be greater than this limit.  <a href="#a156d8c92de44c966e01dc0af21908571">More...</a><br /></td></tr>
 <tr class="separator:a156d8c92de44c966e01dc0af21908571"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab79fa09387e428483e8834b78f5aa2e8"><td class="memItemLeft" align="right" valign="top"><a id="ab79fa09387e428483e8834b78f5aa2e8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetMinWidth</b> ()</td></tr>
+<tr class="memitem:ab79fa09387e428483e8834b78f5aa2e8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ab79fa09387e428483e8834b78f5aa2e8">GetMinWidth</a> ()</td></tr>
+<tr class="memdesc:ab79fa09387e428483e8834b78f5aa2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the minimum width limit.  <a href="#ab79fa09387e428483e8834b78f5aa2e8">More...</a><br /></td></tr>
 <tr class="separator:ab79fa09387e428483e8834b78f5aa2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8da6083ef49330bb47c7924a889e18a7"><td class="memItemLeft" align="right" valign="top"><a id="a8da6083ef49330bb47c7924a889e18a7"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>GetWidth</b> ()</td></tr>
+<tr class="memitem:a8da6083ef49330bb47c7924a889e18a7"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a8da6083ef49330bb47c7924a889e18a7">GetWidth</a> ()</td></tr>
+<tr class="memdesc:a8da6083ef49330bb47c7924a889e18a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting item width.  <a href="#a8da6083ef49330bb47c7924a889e18a7">More...</a><br /></td></tr>
 <tr class="separator:a8da6083ef49330bb47c7924a889e18a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9990a214bf0c72bbf62c0ef766eb024"><td class="memItemLeft" align="right" valign="top"><a id="ad9990a214bf0c72bbf62c0ef766eb024"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetMaxWidth</b> ()</td></tr>
+<tr class="memitem:ad9990a214bf0c72bbf62c0ef766eb024"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ad9990a214bf0c72bbf62c0ef766eb024">GetMaxWidth</a> ()</td></tr>
+<tr class="memdesc:ad9990a214bf0c72bbf62c0ef766eb024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the maximum width limit.  <a href="#ad9990a214bf0c72bbf62c0ef766eb024">More...</a><br /></td></tr>
 <tr class="separator:ad9990a214bf0c72bbf62c0ef766eb024"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dbc5edca77a56b7998c8cee6b0e9a3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a5dbc5edca77a56b7998c8cee6b0e9a3a">SetMinHeight</a> (int height)</td></tr>
-<tr class="memdesc:a5dbc5edca77a56b7998c8cee6b0e9a3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a5dbc5edca77a56b7998c8cee6b0e9a3a">More...</a><br /></td></tr>
+<tr class="memdesc:a5dbc5edca77a56b7998c8cee6b0e9a3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the minimum height limit. Actual height cannot be less than this limit.  <a href="#a5dbc5edca77a56b7998c8cee6b0e9a3a">More...</a><br /></td></tr>
 <tr class="separator:a5dbc5edca77a56b7998c8cee6b0e9a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af18211cd2654fbe4e37843f12b51ad8e"><td class="memItemLeft" align="right" valign="top"><a id="af18211cd2654fbe4e37843f12b51ad8e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetHeight</b> (int height)</td></tr>
+<tr class="memitem:af18211cd2654fbe4e37843f12b51ad8e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#af18211cd2654fbe4e37843f12b51ad8e">SetHeight</a> (int height)</td></tr>
+<tr class="memdesc:af18211cd2654fbe4e37843f12b51ad8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting item height. If the value is greater/less than the maximum/minimum value of the height, then the height becomes equal to the maximum/minimum value.  <a href="#af18211cd2654fbe4e37843f12b51ad8e">More...</a><br /></td></tr>
 <tr class="separator:af18211cd2654fbe4e37843f12b51ad8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a464426fa794d6e3a7e597d90d68d127c"><td class="memItemLeft" align="right" valign="top"><a id="a464426fa794d6e3a7e597d90d68d127c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMaxHeight</b> (int height)</td></tr>
+<tr class="memitem:a464426fa794d6e3a7e597d90d68d127c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a464426fa794d6e3a7e597d90d68d127c">SetMaxHeight</a> (int height)</td></tr>
+<tr class="memdesc:a464426fa794d6e3a7e597d90d68d127c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the maximum height limit. Actual height cannot be greater than this limit.  <a href="#a464426fa794d6e3a7e597d90d68d127c">More...</a><br /></td></tr>
 <tr class="separator:a464426fa794d6e3a7e597d90d68d127c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af306b6a8c5c05fb212bed23d187133d8"><td class="memItemLeft" align="right" valign="top"><a id="af306b6a8c5c05fb212bed23d187133d8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetMinHeight</b> ()</td></tr>
+<tr class="memitem:af306b6a8c5c05fb212bed23d187133d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#af306b6a8c5c05fb212bed23d187133d8">GetMinHeight</a> ()</td></tr>
+<tr class="memdesc:af306b6a8c5c05fb212bed23d187133d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the minimum height limit.  <a href="#af306b6a8c5c05fb212bed23d187133d8">More...</a><br /></td></tr>
 <tr class="separator:af306b6a8c5c05fb212bed23d187133d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec3155c279f774f7d088088273462725"><td class="memItemLeft" align="right" valign="top"><a id="aec3155c279f774f7d088088273462725"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>GetHeight</b> ()</td></tr>
+<tr class="memitem:aec3155c279f774f7d088088273462725"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aec3155c279f774f7d088088273462725">GetHeight</a> ()</td></tr>
+<tr class="memdesc:aec3155c279f774f7d088088273462725"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting item height.  <a href="#aec3155c279f774f7d088088273462725">More...</a><br /></td></tr>
 <tr class="separator:aec3155c279f774f7d088088273462725"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03ff7df7c1f72758c04d8255686295ef"><td class="memItemLeft" align="right" valign="top"><a id="a03ff7df7c1f72758c04d8255686295ef"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetMaxHeight</b> ()</td></tr>
+<tr class="memitem:a03ff7df7c1f72758c04d8255686295ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a03ff7df7c1f72758c04d8255686295ef">GetMaxHeight</a> ()</td></tr>
+<tr class="memdesc:a03ff7df7c1f72758c04d8255686295ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the maximum height limit.  <a href="#a03ff7df7c1f72758c04d8255686295ef">More...</a><br /></td></tr>
 <tr class="separator:a03ff7df7c1f72758c04d8255686295ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ac00a12fcbf63a467fcb4fc11652513"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a4ac00a12fcbf63a467fcb4fc11652513">SetSize</a> (int width, int height)</td></tr>
-<tr class="memdesc:a4ac00a12fcbf63a467fcb4fc11652513"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size (width and height) of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a4ac00a12fcbf63a467fcb4fc11652513">More...</a><br /></td></tr>
+<tr class="memdesc:a4ac00a12fcbf63a467fcb4fc11652513"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting item size (width and height).  <a href="#a4ac00a12fcbf63a467fcb4fc11652513">More...</a><br /></td></tr>
 <tr class="separator:a4ac00a12fcbf63a467fcb4fc11652513"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab15a0875b2d42d6ddaeb179eeaa5ac5c"><td class="memItemLeft" align="right" valign="top"><a id="ab15a0875b2d42d6ddaeb179eeaa5ac5c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMinSize</b> (int width, int height)</td></tr>
+<tr class="memitem:ab15a0875b2d42d6ddaeb179eeaa5ac5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ab15a0875b2d42d6ddaeb179eeaa5ac5c">SetMinSize</a> (int width, int height)</td></tr>
+<tr class="memdesc:ab15a0875b2d42d6ddaeb179eeaa5ac5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting minimum item size limit (width and height limits).  <a href="#ab15a0875b2d42d6ddaeb179eeaa5ac5c">More...</a><br /></td></tr>
 <tr class="separator:ab15a0875b2d42d6ddaeb179eeaa5ac5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acef25dd1bb395b938a226a0a4ec80049"><td class="memItemLeft" align="right" valign="top"><a id="acef25dd1bb395b938a226a0a4ec80049"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMaxSize</b> (int width, int height)</td></tr>
+<tr class="memitem:acef25dd1bb395b938a226a0a4ec80049"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#acef25dd1bb395b938a226a0a4ec80049">SetMaxSize</a> (int width, int height)</td></tr>
+<tr class="memdesc:acef25dd1bb395b938a226a0a4ec80049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting maximum item size limit (width and height limits).  <a href="#acef25dd1bb395b938a226a0a4ec80049">More...</a><br /></td></tr>
 <tr class="separator:acef25dd1bb395b938a226a0a4ec80049"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b77093b1afed165f535847e8a5d4e6e"><td class="memItemLeft" align="right" valign="top"><a id="a3b77093b1afed165f535847e8a5d4e6e"></a>
-int []&#160;</td><td class="memItemRight" valign="bottom"><b>GetSize</b> ()</td></tr>
-<tr class="separator:a3b77093b1afed165f535847e8a5d4e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae475ec4c65c255ae141db2280f389eb6"><td class="memItemLeft" align="right" valign="top"><a id="ae475ec4c65c255ae141db2280f389eb6"></a>
-int []&#160;</td><td class="memItemRight" valign="bottom"><b>GetMinSize</b> ()</td></tr>
-<tr class="separator:ae475ec4c65c255ae141db2280f389eb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac53fdc9c5d53b6d295d5fcd77ae26c2e"><td class="memItemLeft" align="right" valign="top"><a id="ac53fdc9c5d53b6d295d5fcd77ae26c2e"></a>
-int []&#160;</td><td class="memItemRight" valign="bottom"><b>GetMaxSize</b> ()</td></tr>
-<tr class="separator:ac53fdc9c5d53b6d295d5fcd77ae26c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e307fb7749ddd02e3cf7489849be9f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a2e307fb7749ddd02e3cf7489849be9f0">SetAlignment</a> (ItemAlignment alignment)</td></tr>
-<tr class="memdesc:a2e307fb7749ddd02e3cf7489849be9f0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> alignment  <a href="#a2e307fb7749ddd02e3cf7489849be9f0">More...</a><br /></td></tr>
+<tr class="memitem:adf7b0d5d1ac13ba237354f84d00b8882"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#adf7b0d5d1ac13ba237354f84d00b8882">GetSize</a> ()</td></tr>
+<tr class="memdesc:adf7b0d5d1ac13ba237354f84d00b8882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting current item size.  <a href="#adf7b0d5d1ac13ba237354f84d00b8882">More...</a><br /></td></tr>
+<tr class="separator:adf7b0d5d1ac13ba237354f84d00b8882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a493b9a8c56c1eacb5063d1d6d0aa7a08"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a493b9a8c56c1eacb5063d1d6d0aa7a08">GetMinSize</a> ()</td></tr>
+<tr class="memdesc:a493b9a8c56c1eacb5063d1d6d0aa7a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting current item minimum size limit.  <a href="#a493b9a8c56c1eacb5063d1d6d0aa7a08">More...</a><br /></td></tr>
+<tr class="separator:a493b9a8c56c1eacb5063d1d6d0aa7a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a022a2af61a6c1fd4fcd58ef9435a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a55a022a2af61a6c1fd4fcd58ef9435a3">GetMaxSize</a> ()</td></tr>
+<tr class="memdesc:a55a022a2af61a6c1fd4fcd58ef9435a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting current item maximum size limit.  <a href="#a55a022a2af61a6c1fd4fcd58ef9435a3">More...</a><br /></td></tr>
+<tr class="separator:a55a022a2af61a6c1fd4fcd58ef9435a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e307fb7749ddd02e3cf7489849be9f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a2e307fb7749ddd02e3cf7489849be9f0">SetAlignment</a> (<a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a> alignment)</td></tr>
+<tr class="memdesc:a2e307fb7749ddd02e3cf7489849be9f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting an alignment of an item's shape relative to its container. Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right).  <a href="#a2e307fb7749ddd02e3cf7489849be9f0">More...</a><br /></td></tr>
 <tr class="separator:a2e307fb7749ddd02e3cf7489849be9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699c58e54f41d2c2c688cf336563ee48"><td class="memItemLeft" align="right" valign="top"><a id="a699c58e54f41d2c2c688cf336563ee48"></a>
-ItemAlignment&#160;</td><td class="memItemRight" valign="bottom"><b>GetAlignment</b> ()</td></tr>
+<tr class="memitem:a56d9a374b86a247aa41ce258bd53d247"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a56d9a374b86a247aa41ce258bd53d247">SetAlignment</a> (params <a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a>[] alignment)</td></tr>
+<tr class="memdesc:a56d9a374b86a247aa41ce258bd53d247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting an alignment of an item's shape relative to its container. Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right).  <a href="#a56d9a374b86a247aa41ce258bd53d247">More...</a><br /></td></tr>
+<tr class="separator:a56d9a374b86a247aa41ce258bd53d247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a699c58e54f41d2c2c688cf336563ee48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a699c58e54f41d2c2c688cf336563ee48">GetAlignment</a> ()</td></tr>
+<tr class="memdesc:a699c58e54f41d2c2c688cf336563ee48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting an alignment of an item's shape relative to its container.  <a href="#a699c58e54f41d2c2c688cf336563ee48">More...</a><br /></td></tr>
 <tr class="separator:a699c58e54f41d2c2c688cf336563ee48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae07c14607caf666e80c40f9f0df2882a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ae07c14607caf666e80c40f9f0df2882a">SetSizePolicy</a> (SizePolicy width, SizePolicy height)</td></tr>
-<tr class="memdesc:ae07c14607caf666e80c40f9f0df2882a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> size (width and height) policy - FIXED or EXPAND  <a href="#ae07c14607caf666e80c40f9f0df2882a">More...</a><br /></td></tr>
+<tr class="memitem:ae07c14607caf666e80c40f9f0df2882a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ae07c14607caf666e80c40f9f0df2882a">SetSizePolicy</a> (<a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> width, <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> height)</td></tr>
+<tr class="memdesc:ae07c14607caf666e80c40f9f0df2882a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the size policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).  <a href="#ae07c14607caf666e80c40f9f0df2882a">More...</a><br /></td></tr>
 <tr class="separator:ae07c14607caf666e80c40f9f0df2882a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54c4128d60fd9f13d1239132841a74fc"><td class="memItemLeft" align="right" valign="top"><a id="a54c4128d60fd9f13d1239132841a74fc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetWidthPolicy</b> (SizePolicy policy)</td></tr>
+<tr class="memitem:a54c4128d60fd9f13d1239132841a74fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a54c4128d60fd9f13d1239132841a74fc">SetWidthPolicy</a> (<a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> policy)</td></tr>
+<tr class="memdesc:a54c4128d60fd9f13d1239132841a74fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting width policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).  <a href="#a54c4128d60fd9f13d1239132841a74fc">More...</a><br /></td></tr>
 <tr class="separator:a54c4128d60fd9f13d1239132841a74fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acabce4137c0a1b99eb75022b4a58cc20"><td class="memItemLeft" align="right" valign="top"><a id="acabce4137c0a1b99eb75022b4a58cc20"></a>
-SizePolicy&#160;</td><td class="memItemRight" valign="bottom"><b>GetWidthPolicy</b> ()</td></tr>
+<tr class="memitem:acabce4137c0a1b99eb75022b4a58cc20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#acabce4137c0a1b99eb75022b4a58cc20">GetWidthPolicy</a> ()</td></tr>
+<tr class="memdesc:acabce4137c0a1b99eb75022b4a58cc20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting width policy of an item's shape.Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).  <a href="#acabce4137c0a1b99eb75022b4a58cc20">More...</a><br /></td></tr>
 <tr class="separator:acabce4137c0a1b99eb75022b4a58cc20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a2ecc1459e4dc5721b5919592da1a5"><td class="memItemLeft" align="right" valign="top"><a id="a64a2ecc1459e4dc5721b5919592da1a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetHeightPolicy</b> (SizePolicy policy)</td></tr>
+<tr class="memitem:a64a2ecc1459e4dc5721b5919592da1a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a64a2ecc1459e4dc5721b5919592da1a5">SetHeightPolicy</a> (<a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> policy)</td></tr>
+<tr class="memdesc:a64a2ecc1459e4dc5721b5919592da1a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting height policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).  <a href="#a64a2ecc1459e4dc5721b5919592da1a5">More...</a><br /></td></tr>
 <tr class="separator:a64a2ecc1459e4dc5721b5919592da1a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a127b9adf116215833028bfc41f0e9967"><td class="memItemLeft" align="right" valign="top"><a id="a127b9adf116215833028bfc41f0e9967"></a>
-SizePolicy&#160;</td><td class="memItemRight" valign="bottom"><b>GetHeightPolicy</b> ()</td></tr>
+<tr class="memitem:a127b9adf116215833028bfc41f0e9967"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a127b9adf116215833028bfc41f0e9967">GetHeightPolicy</a> ()</td></tr>
+<tr class="memdesc:a127b9adf116215833028bfc41f0e9967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting height policy of an item's shape.Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).  <a href="#a127b9adf116215833028bfc41f0e9967">More...</a><br /></td></tr>
 <tr class="separator:a127b9adf116215833028bfc41f0e9967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad3ba5bf9637b193d78b22ee2867434"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a6ad3ba5bf9637b193d78b22ee2867434">SetX</a> (int x)</td></tr>
-<tr class="memdesc:a6ad3ba5bf9637b193d78b22ee2867434"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> (x, y) position  <a href="#a6ad3ba5bf9637b193d78b22ee2867434">More...</a><br /></td></tr>
+<tr class="memdesc:a6ad3ba5bf9637b193d78b22ee2867434"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting X coordinate of the left-top corner of a shape.  <a href="#a6ad3ba5bf9637b193d78b22ee2867434">More...</a><br /></td></tr>
 <tr class="separator:a6ad3ba5bf9637b193d78b22ee2867434"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a378aa87e287eba0cc17b79274dfda93c"><td class="memItemLeft" align="right" valign="top"><a id="a378aa87e287eba0cc17b79274dfda93c"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>GetX</b> ()</td></tr>
+<tr class="memitem:a378aa87e287eba0cc17b79274dfda93c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a378aa87e287eba0cc17b79274dfda93c">GetX</a> ()</td></tr>
+<tr class="memdesc:a378aa87e287eba0cc17b79274dfda93c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting X coordinate of the left-top corner of a shape.  <a href="#a378aa87e287eba0cc17b79274dfda93c">More...</a><br /></td></tr>
 <tr class="separator:a378aa87e287eba0cc17b79274dfda93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa40218ded67e9cc7dff5153a3f48c30"><td class="memItemLeft" align="right" valign="top"><a id="afa40218ded67e9cc7dff5153a3f48c30"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetY</b> (int y)</td></tr>
+<tr class="memitem:afa40218ded67e9cc7dff5153a3f48c30"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#afa40218ded67e9cc7dff5153a3f48c30">SetY</a> (int y)</td></tr>
+<tr class="memdesc:afa40218ded67e9cc7dff5153a3f48c30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting Y coordinate of the left-top corner of a shape.  <a href="#afa40218ded67e9cc7dff5153a3f48c30">More...</a><br /></td></tr>
 <tr class="separator:afa40218ded67e9cc7dff5153a3f48c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf2a77b3346736f7622203b0ae6ae312"><td class="memItemLeft" align="right" valign="top"><a id="adf2a77b3346736f7622203b0ae6ae312"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>GetY</b> ()</td></tr>
+<tr class="memitem:adf2a77b3346736f7622203b0ae6ae312"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#adf2a77b3346736f7622203b0ae6ae312">GetY</a> ()</td></tr>
+<tr class="memdesc:adf2a77b3346736f7622203b0ae6ae312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting Y coordinate of the left-top corner of a shape.  <a href="#adf2a77b3346736f7622203b0ae6ae312">More...</a><br /></td></tr>
 <tr class="separator:adf2a77b3346736f7622203b0ae6ae312"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec3ac6bb0e7d814b478d89b93f8e3d18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aec3ac6bb0e7d814b478d89b93f8e3d18">Update</a> (GeometryEventType type, int value=0)</td></tr>
-<tr class="memdesc:aec3ac6bb0e7d814b478d89b93f8e3d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s state  <a href="#aec3ac6bb0e7d814b478d89b93f8e3d18">More...</a><br /></td></tr>
+<tr class="memitem:aec3ac6bb0e7d814b478d89b93f8e3d18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aec3ac6bb0e7d814b478d89b93f8e3d18">Update</a> (<a class="el" href="namespace_space_v_i_l_1_1_core.html#a0af1884788ee8e7521bb374f26672006">GeometryEventType</a> type, int value=0)</td></tr>
+<tr class="memdesc:aec3ac6bb0e7d814b478d89b93f8e3d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updating an item size or/and position.  <a href="#aec3ac6bb0e7d814b478d89b93f8e3d18">More...</a><br /></td></tr>
 <tr class="separator:aec3ac6bb0e7d814b478d89b93f8e3d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74dec9854f0a7553ad3b50f140bfe07d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a74dec9854f0a7553ad3b50f140bfe07d">SetStyle</a> (<a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html">Style</a> style)</td></tr>
-<tr class="memdesc:a74dec9854f0a7553ad3b50f140bfe07d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Style of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>  <a href="#a74dec9854f0a7553ad3b50f140bfe07d">More...</a><br /></td></tr>
+<tr class="memdesc:a74dec9854f0a7553ad3b50f140bfe07d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting a style that describes the appearance of an item.  <a href="#a74dec9854f0a7553ad3b50f140bfe07d">More...</a><br /></td></tr>
 <tr class="separator:a74dec9854f0a7553ad3b50f140bfe07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89861094e3f3ebf91cdadce421f21e79"><td class="memItemLeft" align="right" valign="top"><a id="a89861094e3f3ebf91cdadce421f21e79"></a>
-abstract <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html">Style</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetCoreStyle</b> ()</td></tr>
+<tr class="memitem:a89861094e3f3ebf91cdadce421f21e79"><td class="memItemLeft" align="right" valign="top">abstract <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html">Style</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a89861094e3f3ebf91cdadce421f21e79">GetCoreStyle</a> ()</td></tr>
+<tr class="memdesc:a89861094e3f3ebf91cdadce421f21e79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the core (only appearance properties without inner styles) style of an item.  <a href="#a89861094e3f3ebf91cdadce421f21e79">More...</a><br /></td></tr>
 <tr class="separator:a89861094e3f3ebf91cdadce421f21e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66974390b46c82f1a4c4d54c141559d5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a66974390b46c82f1a4c4d54c141559d5">CheckDefaults</a> ()</td></tr>
-<tr class="memdesc:a66974390b46c82f1a4c4d54c141559d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and set <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> default style  <a href="#a66974390b46c82f1a4c4d54c141559d5">More...</a><br /></td></tr>
-<tr class="separator:a66974390b46c82f1a4c4d54c141559d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0ba7a8556c3691b41cf16b8d30e1f9e"><td class="memItemLeft" align="right" valign="top"><a id="af0ba7a8556c3691b41cf16b8d30e1f9e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetDefaults</b> ()</td></tr>
-<tr class="separator:af0ba7a8556c3691b41cf16b8d30e1f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaed84b5d9c5b4b05ca46d72dcf370ef3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aaed84b5d9c5b4b05ca46d72dcf370ef3">IsShadowDrop</a> ()</td></tr>
-<tr class="memdesc:aaed84b5d9c5b4b05ca46d72dcf370ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Is item has shadow  <a href="#aaed84b5d9c5b4b05ca46d72dcf370ef3">More...</a><br /></td></tr>
+<tr class="memdesc:aaed84b5d9c5b4b05ca46d72dcf370ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the shadow visibility status of an item.  <a href="#aaed84b5d9c5b4b05ca46d72dcf370ef3">More...</a><br /></td></tr>
 <tr class="separator:aaed84b5d9c5b4b05ca46d72dcf370ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63877e1232da619ddf87269551af1486"><td class="memItemLeft" align="right" valign="top"><a id="a63877e1232da619ddf87269551af1486"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetShadowDrop</b> (bool value)</td></tr>
+<tr class="memitem:a63877e1232da619ddf87269551af1486"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a63877e1232da619ddf87269551af1486">SetShadowDrop</a> (bool value)</td></tr>
+<tr class="memdesc:a63877e1232da619ddf87269551af1486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the shadow visibility status of an item.  <a href="#a63877e1232da619ddf87269551af1486">More...</a><br /></td></tr>
 <tr class="separator:a63877e1232da619ddf87269551af1486"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1238f2ea9b5a7cffdf53f5ce63222fc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a1238f2ea9b5a7cffdf53f5ce63222fc3">SetShadowRadius</a> (int radius)</td></tr>
-<tr class="memdesc:a1238f2ea9b5a7cffdf53f5ce63222fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow corners radius  <a href="#a1238f2ea9b5a7cffdf53f5ce63222fc3">More...</a><br /></td></tr>
+<tr class="memdesc:a1238f2ea9b5a7cffdf53f5ce63222fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the specified blur radius of the shadow. Default: 0.  <a href="#a1238f2ea9b5a7cffdf53f5ce63222fc3">More...</a><br /></td></tr>
 <tr class="separator:a1238f2ea9b5a7cffdf53f5ce63222fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f2ae9ba26364d4f24014cf58790ef17"><td class="memItemLeft" align="right" valign="top"><a id="a2f2ae9ba26364d4f24014cf58790ef17"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetShadowRadius</b> ()</td></tr>
+<tr class="memitem:a2f2ae9ba26364d4f24014cf58790ef17"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a2f2ae9ba26364d4f24014cf58790ef17">GetShadowRadius</a> ()</td></tr>
+<tr class="memdesc:a2f2ae9ba26364d4f24014cf58790ef17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the shadow blur raduis.  <a href="#a2f2ae9ba26364d4f24014cf58790ef17">More...</a><br /></td></tr>
 <tr class="separator:a2f2ae9ba26364d4f24014cf58790ef17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9130d928ceb471b497f3a73e0c5574b1"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a9130d928ceb471b497f3a73e0c5574b1">GetShadowColor</a> ()</td></tr>
-<tr class="memdesc:a9130d928ceb471b497f3a73e0c5574b1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow color  <a href="#a9130d928ceb471b497f3a73e0c5574b1">More...</a><br /></td></tr>
+<tr class="memdesc:a9130d928ceb471b497f3a73e0c5574b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting shadow color.  <a href="#a9130d928ceb471b497f3a73e0c5574b1">More...</a><br /></td></tr>
 <tr class="separator:a9130d928ceb471b497f3a73e0c5574b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d398edb539ba6c4d36d2cbf18499a4b"><td class="memItemLeft" align="right" valign="top"><a id="a1d398edb539ba6c4d36d2cbf18499a4b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetShadowColor</b> (Color color)</td></tr>
+<tr class="memitem:a1d398edb539ba6c4d36d2cbf18499a4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a1d398edb539ba6c4d36d2cbf18499a4b">SetShadowColor</a> (Color color)</td></tr>
+<tr class="memdesc:a1d398edb539ba6c4d36d2cbf18499a4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting shadow color.  <a href="#a1d398edb539ba6c4d36d2cbf18499a4b">More...</a><br /></td></tr>
 <tr class="separator:a1d398edb539ba6c4d36d2cbf18499a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab51a153da9449f9d8f24e84f31148830"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_space_v_i_l_1_1_core_1_1_position.html">Position</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#ab51a153da9449f9d8f24e84f31148830">GetShadowPos</a> ()</td></tr>
-<tr class="memdesc:ab51a153da9449f9d8f24e84f31148830"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow position  <a href="#ab51a153da9449f9d8f24e84f31148830">More...</a><br /></td></tr>
+<tr class="memdesc:ab51a153da9449f9d8f24e84f31148830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the offset of the shadow relative to the position of the item.  <a href="#ab51a153da9449f9d8f24e84f31148830">More...</a><br /></td></tr>
 <tr class="separator:ab51a153da9449f9d8f24e84f31148830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4b589c7d3e65fab5a7d1f2ba1c4d59"><td class="memItemLeft" align="right" valign="top">int []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aea4b589c7d3e65fab5a7d1f2ba1c4d59">GetShadowExtension</a> ()</td></tr>
+<tr class="memdesc:aea4b589c7d3e65fab5a7d1f2ba1c4d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the values of shadow extensions in pixels.  <a href="#aea4b589c7d3e65fab5a7d1f2ba1c4d59">More...</a><br /></td></tr>
+<tr class="separator:aea4b589c7d3e65fab5a7d1f2ba1c4d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eab7ba3cc995754ae24808250f48938"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a3eab7ba3cc995754ae24808250f48938">SetShadowExtension</a> (int wExtension, int hExtension)</td></tr>
+<tr class="memdesc:a3eab7ba3cc995754ae24808250f48938"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the values of shadow extensions in pixels.  <a href="#a3eab7ba3cc995754ae24808250f48938">More...</a><br /></td></tr>
+<tr class="separator:a3eab7ba3cc995754ae24808250f48938"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaa4c47dddc52af32bf6bfba6bd85f9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#adaa4c47dddc52af32bf6bfba6bd85f9f">SetShadow</a> (int radius, int x, int y, Color color)</td></tr>
-<tr class="memdesc:adaa4c47dddc52af32bf6bfba6bd85f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow with parameters  <a href="#adaa4c47dddc52af32bf6bfba6bd85f9f">More...</a><br /></td></tr>
+<tr class="memdesc:adaa4c47dddc52af32bf6bfba6bd85f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the shadow with specified blur radius, axis shifts, shadow color.  <a href="#adaa4c47dddc52af32bf6bfba6bd85f9f">More...</a><br /></td></tr>
 <tr class="separator:adaa4c47dddc52af32bf6bfba6bd85f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae76beb59e72cbb9045ec9dbd159a43a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#aae76beb59e72cbb9045ec9dbd159a43a">SetShadow</a> (<a class="el" href="class_space_v_i_l_1_1_decorations_1_1_shadow.html">Shadow</a> shadow)</td></tr>
+<tr class="memdesc:aae76beb59e72cbb9045ec9dbd159a43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the shadow of an item.  <a href="#aae76beb59e72cbb9045ec9dbd159a43a">More...</a><br /></td></tr>
+<tr class="separator:aae76beb59e72cbb9045ec9dbd159a43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb2566ee1b68d0e415d003fcb252ca70"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#abb2566ee1b68d0e415d003fcb252ca70">SetConfines</a> ()</td></tr>
-<tr class="memdesc:abb2566ee1b68d0e415d003fcb252ca70"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> confines  <a href="#abb2566ee1b68d0e415d003fcb252ca70">More...</a><br /></td></tr>
+<tr class="memdesc:abb2566ee1b68d0e415d003fcb252ca70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the confines of the item relative to its parent's size and position. Example: items can be partially (or completely) outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">ListBox</a>), in which case the part that is outside the container should not be visible and should not interact with the user.  <a href="#abb2566ee1b68d0e415d003fcb252ca70">More...</a><br /></td></tr>
 <tr class="separator:abb2566ee1b68d0e415d003fcb252ca70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b0345fd4a7b73f7bf3310bd80861620"><td class="memItemLeft" align="right" valign="top"><a id="a8b0345fd4a7b73f7bf3310bd80861620"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetConfines</b> (int x0, int x1, int y0, int y1)</td></tr>
+<tr class="memitem:a8b0345fd4a7b73f7bf3310bd80861620"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a8b0345fd4a7b73f7bf3310bd80861620">SetConfines</a> (int x0, int x1, int y0, int y1)</td></tr>
+<tr class="memdesc:a8b0345fd4a7b73f7bf3310bd80861620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the confines of the item relative to specified bounds. Example: items can be partially (or completely) outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">ListBox</a>), in which case the part that is outside the container should not be visible and should not interact with the user.  <a href="#a8b0345fd4a7b73f7bf3310bd80861620">More...</a><br /></td></tr>
 <tr class="separator:a8b0345fd4a7b73f7bf3310bd80861620"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa49650ca1911b9fa60e6a2ea9e8a3f34"><td class="memItemLeft" align="right" valign="top"><a id="aa49650ca1911b9fa60e6a2ea9e8a3f34"></a>
-int []&#160;</td><td class="memItemRight" valign="bottom"><b>GetConfines</b> ()</td></tr>
-<tr class="separator:aa49650ca1911b9fa60e6a2ea9e8a3f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88fee9f79b5c84d8ee60ac6b883864d8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a88fee9f79b5c84d8ee60ac6b883864d8">Release</a> ()</td></tr>
+<tr class="memdesc:a88fee9f79b5c84d8ee60ac6b883864d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to describe disposing item's resources if the item was removed.  <a href="#a88fee9f79b5c84d8ee60ac6b883864d8">More...</a><br /></td></tr>
+<tr class="separator:a88fee9f79b5c84d8ee60ac6b883864d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:accc863c17c2b80aa9170686b5a0d9f66"><td class="memItemLeft" align="right" valign="top"><a id="accc863c17c2b80aa9170686b5a0d9f66"></a>
-ItemRule&#160;</td><td class="memItemRight" valign="bottom"><b>HoverRule</b> = ItemRule.Lazy</td></tr>
-<tr class="separator:accc863c17c2b80aa9170686b5a0d9f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a6283f17a4100c1c334469b81f6b3c6d4"><td class="memItemLeft" align="right" valign="top"><a id="a6283f17a4100c1c334469b81f6b3c6d4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersDrawable</b> (bool value)</td></tr>
-<tr class="separator:a6283f17a4100c1c334469b81f6b3c6d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f82a5c5c0b0c2fd224dd0a118791a99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_space_v_i_l_1_1_core.html#ac73c33033cff807aac23e32cd395cca9">ItemHoverRule</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_space_v_i_l_1_1_base_item.html#a2f82a5c5c0b0c2fd224dd0a118791a99">HoverRule</a> = ItemHoverRule.Lazy</td></tr>
+<tr class="memdesc:a2f82a5c5c0b0c2fd224dd0a118791a99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hovering rule propetry of this item. Can be ItemHoverRule.Lazy or ItemHoverRule.Strict (see <a class="el" href="namespace_space_v_i_l_1_1_core.html#ac73c33033cff807aac23e32cd395cca9" title="Item hovering rule types enum. Values: Lazy, Strict. ">SpaceVIL.Core.ItemHoverRule</a>).  <a href="#a2f82a5c5c0b0c2fd224dd0a118791a99">More...</a><br /></td></tr>
+<tr class="separator:a2f82a5c5c0b0c2fd224dd0a118791a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a66974390b46c82f1a4c4d54c141559d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66974390b46c82f1a4c4d54c141559d5">&#9670;&nbsp;</a></span>CheckDefaults()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract class implementation of <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html" title="The main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects ...">SpaceVIL.Core.IBaseItem</a> interface. </p>
+<p><a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html" title="The main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects ...">SpaceVIL.Core.IBaseItem</a> is the main interface of <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> environment. </p>
+<p>Contains all the necessary methods for rendering objects and interacting with them. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a699c58e54f41d2c2c688cf336563ee48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a699c58e54f41d2c2c688cf336563ee48">&#9670;&nbsp;</a></span>GetAlignment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a> SpaceVIL.BaseItem.GetAlignment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting an alignment of an item's shape relative to its container. </p>
+<dl class="section return"><dt>Returns</dt><dd>Alignment as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2" title="Alignment types enum. Values: Left, Top, Right, Bottom, HCenter, VCenter. ">SpaceVIL.Core.ItemAlignment</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#a2eebdc8ff7f573ad44fecd38fc3afefe">SpaceVIL.Core.IBehavior</a>.</p>
+
+</div>
+</div>
+<a id="ab6a7649082ecc3da16b450dad6360c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6a7649082ecc3da16b450dad6360c1d">&#9670;&nbsp;</a></span>GetBackground()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -312,7 +337,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void SpaceVIL.BaseItem.CheckDefaults </td>
+          <td class="memname">virtual Color SpaceVIL.BaseItem.GetBackground </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -325,7 +350,134 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>Check and set <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> default style </p>
+<p>Getting background color of an item. </p>
+<dl class="section return"><dt>Returns</dt><dd>Background color as System.Drawing.Color.</dd></dl>
+
+</div>
+</div>
+<a id="a89861094e3f3ebf91cdadce421f21e79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89861094e3f3ebf91cdadce421f21e79">&#9670;&nbsp;</a></span>GetCoreStyle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html">Style</a> SpaceVIL.BaseItem.GetCoreStyle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting the core (only appearance properties without inner styles) style of an item. </p>
+<dl class="section return"><dt>Returns</dt><dd>Style as <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html" title="Style is a class that describes the appearance of an element. Can contains Styles for inner items...">SpaceVIL.Decorations.Style</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ab25ce1ffaaa88dc31cf091c53e75f251">SpaceVIL.Core.IBaseItem</a>.</p>
+
+<p>Implemented in <a class="el" href="class_space_v_i_l_1_1_primitive.html#ae057ec4be7ceca4cbb29e317201e284d">SpaceVIL.Primitive</a>.</p>
+
+</div>
+</div>
+<a id="aeb28d464fb24ed54b40bd97952a23839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb28d464fb24ed54b40bd97952a23839">&#9670;&nbsp;</a></span>GetHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_space_v_i_l_1_1_core_window.html">CoreWindow</a> SpaceVIL.BaseItem.GetHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the window to which the item will belong. </p>
+<dl class="section return"><dt>Returns</dt><dd>Window as <a class="el" href="class_space_v_i_l_1_1_core_window.html" title="CoreWindow is an abstract class containing an implementation of common functionality for a window...">SpaceVIL.CoreWindow</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a46420e70be1ddf8ae1d3c05b19de70ca">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="aec3155c279f774f7d088088273462725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec3155c279f774f7d088088273462725">&#9670;&nbsp;</a></span>GetHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int SpaceVIL.BaseItem.GetHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting item height. </p>
+<dl class="section return"><dt>Returns</dt><dd>Height of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a3989030b1e4cb112f049e60059f2d82b">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a127b9adf116215833028bfc41f0e9967"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a127b9adf116215833028bfc41f0e9967">&#9670;&nbsp;</a></span>GetHeightPolicy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> SpaceVIL.BaseItem.GetHeightPolicy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting height policy of an item's shape.Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). </p>
+<dl class="section return"><dt>Returns</dt><dd>Height policy as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#aa0a8976a19b412f4f1c564a6a9409ca7">SpaceVIL.Core.IBehavior</a>.</p>
+
+</div>
+</div>
+<a id="a70fc344d02591cf519cd36e278e6f95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70fc344d02591cf519cd36e278e6f95f">&#9670;&nbsp;</a></span>GetItemName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string SpaceVIL.BaseItem.GetItemName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the name of the item. </p>
+<dl class="section return"><dt>Returns</dt><dd>Item name as System.String.</dd></dl>
 
 </div>
 </div>
@@ -344,9 +496,138 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> margin </p>
+<p>Getting the indents of an item to offset itself relative to its container. </p>
+<dl class="section return"><dt>Returns</dt><dd>Margin as <a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html" title="A structure that store indents of the item. ">SpaceVIL.Decorations.Indents</a>.</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#abde9c5bc900bbdf10f6a388db7e49538">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a03ff7df7c1f72758c04d8255686295ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03ff7df7c1f72758c04d8255686295ef">&#9670;&nbsp;</a></span>GetMaxHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpaceVIL.BaseItem.GetMaxHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the maximum height limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Maximum height limit of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a620775c8c2d4300af33bfac30ff6bc93">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a55a022a2af61a6c1fd4fcd58ef9435a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55a022a2af61a6c1fd4fcd58ef9435a3">&#9670;&nbsp;</a></span>GetMaxSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a> SpaceVIL.BaseItem.GetMaxSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting current item maximum size limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Minimum item size limit as <a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html" title="Size is a class that describes the width and height of an object. ">SpaceVIL.Core.Size</a>.</dd></dl>
+
+</div>
+</div>
+<a id="ad9990a214bf0c72bbf62c0ef766eb024"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9990a214bf0c72bbf62c0ef766eb024">&#9670;&nbsp;</a></span>GetMaxWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpaceVIL.BaseItem.GetMaxWidth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the maximum width limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Maximum width limit of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#ae16a0c8649a4a018d1196f5784e99171">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="af306b6a8c5c05fb212bed23d187133d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af306b6a8c5c05fb212bed23d187133d8">&#9670;&nbsp;</a></span>GetMinHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpaceVIL.BaseItem.GetMinHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the minimum height limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Minimum height limit of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a581efdd6c7fa9ef6938a87d24a276fd5">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a493b9a8c56c1eacb5063d1d6d0aa7a08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a493b9a8c56c1eacb5063d1d6d0aa7a08">&#9670;&nbsp;</a></span>GetMinSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a> SpaceVIL.BaseItem.GetMinSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting current item minimum size limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Minimum item size limit as <a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html" title="Size is a class that describes the width and height of an object. ">SpaceVIL.Core.Size</a>.</dd></dl>
+
+</div>
+</div>
+<a id="ab79fa09387e428483e8834b78f5aa2e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab79fa09387e428483e8834b78f5aa2e8">&#9670;&nbsp;</a></span>GetMinWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpaceVIL.BaseItem.GetMinWidth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the minimum width limit. </p>
+<dl class="section return"><dt>Returns</dt><dd>Minimum width limit of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#abb1f1eb9691a43699c908995ddb0b801">SpaceVIL.Core.ISize</a>.</p>
 
 </div>
 </div>
@@ -365,9 +646,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s parent item </p>
+<p>Getting the parent of the item. </p>
+<dl class="section return"><dt>Returns</dt><dd>Parent as <a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">SpaceVIL.Prototype</a> (<a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">Prototype</a> is container and can contains children).</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aac1ce65f3f92f4162393bb6368c826ac">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -386,9 +668,32 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow color </p>
+<p>Getting shadow color. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the shadow color as System.Drawing.Color.</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a64efed99ccbddd1ae2f0003b5497f0a4">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="aea4b589c7d3e65fab5a7d1f2ba1c4d59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea4b589c7d3e65fab5a7d1f2ba1c4d59">&#9670;&nbsp;</a></span>GetShadowExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int [] SpaceVIL.BaseItem.GetShadowExtension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the values of shadow extensions in pixels. </p>
+<dl class="section return"><dt>Returns</dt><dd>The values of shadow extensions. 0 - width extension, 1 - height extension.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aabbb2fa3c8f810d5443bbd39c895e3aa">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -407,9 +712,186 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow position </p>
+<p>Getting the offset of the shadow relative to the position of the item. </p>
+<dl class="section return"><dt>Returns</dt><dd>Shadow offset as <a class="el" href="class_space_v_i_l_1_1_core_1_1_position.html" title="Position is a class representing the location of a 2D coordinate integer point. ">SpaceVIL.Core.Position</a>.</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ab4030e9ed3774554f911a7d4c59957ee">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a2f2ae9ba26364d4f24014cf58790ef17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f2ae9ba26364d4f24014cf58790ef17">&#9670;&nbsp;</a></span>GetShadowRadius()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpaceVIL.BaseItem.GetShadowRadius </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting the shadow blur raduis. </p>
+<dl class="section return"><dt>Returns</dt><dd>The blur radius of the shadow.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aec002ae19753be8723b2d0fc07a2b9d5">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="adf7b0d5d1ac13ba237354f84d00b8882"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf7b0d5d1ac13ba237354f84d00b8882">&#9670;&nbsp;</a></span>GetSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html">Core.Size</a> SpaceVIL.BaseItem.GetSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting current item size. </p>
+<dl class="section return"><dt>Returns</dt><dd>Item size as <a class="el" href="class_space_v_i_l_1_1_core_1_1_size.html" title="Size is a class that describes the width and height of an object. ">SpaceVIL.Core.Size</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a661b5367f0e37fb2b70eacc37162ad35">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a196eedcb995f3d4fd3f0c231c47b2b9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a196eedcb995f3d4fd3f0c231c47b2b9e">&#9670;&nbsp;</a></span>GetTriangles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;float[]&gt; SpaceVIL.BaseItem.GetTriangles </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting triangles of item's shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>Points list of the shape as List of float[2] array (2D).</dd></dl>
+
+</div>
+</div>
+<a id="a8da6083ef49330bb47c7924a889e18a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8da6083ef49330bb47c7924a889e18a7">&#9670;&nbsp;</a></span>GetWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int SpaceVIL.BaseItem.GetWidth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting item width. </p>
+<dl class="section return"><dt>Returns</dt><dd>Width of the item. </dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#aac15636e936a15b0917dfdd777280ae7">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="acabce4137c0a1b99eb75022b4a58cc20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acabce4137c0a1b99eb75022b4a58cc20">&#9670;&nbsp;</a></span>GetWidthPolicy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a> SpaceVIL.BaseItem.GetWidthPolicy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getting width policy of an item's shape.Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). </p>
+<dl class="section return"><dt>Returns</dt><dd>Width policy as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#acd5152dbc3db861d85ca0b58f6b83f6d">SpaceVIL.Core.IBehavior</a>.</p>
+
+</div>
+</div>
+<a id="a378aa87e287eba0cc17b79274dfda93c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a378aa87e287eba0cc17b79274dfda93c">&#9670;&nbsp;</a></span>GetX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int SpaceVIL.BaseItem.GetX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting X coordinate of the left-top corner of a shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>X position of the left-top corner.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_position.html#a67fb53a55aadf1038903346778b41318">SpaceVIL.Core.IPosition</a>.</p>
+
+</div>
+</div>
+<a id="adf2a77b3346736f7622203b0ae6ae312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf2a77b3346736f7622203b0ae6ae312">&#9670;&nbsp;</a></span>GetY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int SpaceVIL.BaseItem.GetY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting Y coordinate of the left-top corner of a shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>Y position of the left-top corner.</dd></dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_position.html#a2d11f35d825eba597abb021e7f146f06">SpaceVIL.Core.IPosition</a>.</p>
 
 </div>
 </div>
@@ -436,9 +918,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>Initialization and adding of all elements in the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Initializing children if this <a class="el" href="class_space_v_i_l_1_1_base_item.html" title="Abstract class implementation of SpaceVIL.Core.IBaseItem interface. SpaceVIL.Core.IBaseItem is the main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects and interacting with them. ">BaseItem</a> is container (<a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">SpaceVIL.Prototype</a>). Notice: This method is mainly for overriding only. <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> calls this method if necessary and no need to call it manually. </p>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a6befa091a8c281ecb0a9f4a828811dd5">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -465,9 +947,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>If <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> will drawn by engine </p>
+<p>Getting the drawable (visibility) status of an item. This property used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a29b915d6e655b48a8b7505118441e961" title="Getting the visibility status of an item. This property may used in conjunction with the IsDrawable()...">IsVisible()</a> property. Explanation: an item can be visible and invisible, in some cases the item can be located outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">SpaceVIL.ListBox</a>), and it must be invisible so as not to waste CPU / GPU resources, but in some cases you must control the visibility of elements that are inside container and should be invisible (example: <a class="el" href="class_space_v_i_l_1_1_tree_view.html" title="TreeView is special container designed to show content as tree view structure. Extended from SpaceVIL...">SpaceVIL.TreeView</a>). </p>
+<dl class="section return"><dt>Returns</dt><dd>True: if item is drawable (visible). False: if item is not drawable (invisible).</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ae0bd3a5916b47ae2813f9c857eae9af1">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -486,9 +969,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Is item has shadow </p>
+<p>Getting the shadow visibility status of an item. </p>
+<dl class="section return"><dt>Returns</dt><dd>True: if shadow is visible. False: if shadow is invisible.</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aa639cd1bb96b4146c1f92ed5c25aa5c5">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -515,14 +999,15 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>If <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> is visible </p>
+<p>Getting the visibility status of an item. This property may used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a002a247f3745be1e1e57c504589d7036" title="Getting the drawable (visibility) status of an item. This property used in conjunction with the IsVis...">IsDrawable()</a> property. </p>
+<dl class="section return"><dt>Returns</dt><dd>True: if item is visible. False: if item is invisible.</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#af879e50ebf2e7a213c31024616b7bff8">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
-<a id="ac111d3d8cef36f406aa11862cefab9e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac111d3d8cef36f406aa11862cefab9e2">&#9670;&nbsp;</a></span>MakeShape()</h2>
+<a id="a727b3efd0e64d89baaeac4ef96e45213"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a727b3efd0e64d89baaeac4ef96e45213">&#9670;&nbsp;</a></span>MakeShape()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -531,7 +1016,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual List&lt;float[]&gt; SpaceVIL.BaseItem.MakeShape </td>
+          <td class="memname">virtual void SpaceVIL.BaseItem.MakeShape </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -543,35 +1028,44 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>shape points list in GL coordinates, using triangles from getTriangles()</dd></dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_item.html">SpaceVIL.Core.IItem</a>.</p>
+<p>Making default item's shape. Use in conjunction with <a class="el" href="class_space_v_i_l_1_1_base_item.html#a196eedcb995f3d4fd3f0c231c47b2b9e" title="Getting triangles of item&#39;s shape. ">GetTriangles()</a> and <a class="el" href="class_space_v_i_l_1_1_base_item.html#abce4d28de70cae71fde1612342e519a4" title="Setting triangles as item&#39;s shape. ">SetTriangles()</a> methods. Notice: This method is mainly for overriding only. <a class="el" href="namespace_space_v_i_l.html">SpaceVIL</a> calls this method if necessary and no need to call it manually. </p>
 
-<p>Reimplemented in <a class="el" href="class_space_v_i_l_1_1_points_container.html#a7fd8cf39e463780c871d538b884a3fdb">SpaceVIL.PointsContainer</a>, <a class="el" href="class_space_v_i_l_1_1_rectangle.html#acc0a5018e266efaa750459bb875eb805">SpaceVIL.Rectangle</a>, <a class="el" href="class_space_v_i_l_1_1_custom_shape.html#aa8a1eb76ab361eea35540787f79fac6f">SpaceVIL.CustomShape</a>, <a class="el" href="class_space_v_i_l_1_1_ellipse.html#aa2311fd87e9a988eca0d754ad6e9093d">SpaceVIL.Ellipse</a>, <a class="el" href="class_space_v_i_l_1_1_primitive.html#a4e7ed3f8d9e28e0063c36f4f2bf470cd">SpaceVIL.Primitive</a>, and <a class="el" href="class_space_v_i_l_1_1_triangle.html#a454090bb2cb1e8635643fce5ecfd7e7c">SpaceVIL.Triangle</a>.</p>
+<p>Reimplemented in <a class="el" href="class_space_v_i_l_1_1_points_container.html#a97fddc2bb77802cc94e7fe9317eb8fbb">SpaceVIL.PointsContainer</a>, <a class="el" href="class_space_v_i_l_1_1_lines_container.html#a1c72dd2d972c9f771c51a03389502e2f">SpaceVIL.LinesContainer</a>, <a class="el" href="class_space_v_i_l_1_1_rectangle.html#adab0743bfa6c55160a01411b609bbf29">SpaceVIL.Rectangle</a>, <a class="el" href="class_space_v_i_l_1_1_triangle.html#a1338859efd233f1df2330471bc202d83">SpaceVIL.Triangle</a>, <a class="el" href="class_space_v_i_l_1_1_custom_shape.html#a3b4ff24b14a950464e3c625d805370bf">SpaceVIL.CustomShape</a>, and <a class="el" href="class_space_v_i_l_1_1_ellipse.html#abcd05fee6d306e55cc79e8b12ab5cb70">SpaceVIL.Ellipse</a>.</p>
 
 </div>
 </div>
-<a id="a07e16796013b2e7d71b303c006ea2bc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07e16796013b2e7d71b303c006ea2bc7">&#9670;&nbsp;</a></span>RemoveItemFromListeners()</h2>
+<a id="a88fee9f79b5c84d8ee60ac6b883864d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88fee9f79b5c84d8ee60ac6b883864d8">&#9670;&nbsp;</a></span>Release()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void SpaceVIL.BaseItem.RemoveItemFromListeners </td>
+          <td class="memname">virtual void SpaceVIL.BaseItem.Release </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Item will not react on parent's changes </p>
+<p>Method to describe disposing item's resources if the item was removed. </p>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a4e6d60b889ac5cd755348efeaeb01399">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
 <a id="a2e307fb7749ddd02e3cf7489849be9f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e307fb7749ddd02e3cf7489849be9f0">&#9670;&nbsp;</a></span>SetAlignment()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e307fb7749ddd02e3cf7489849be9f0">&#9670;&nbsp;</a></span>SetAlignment() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -579,21 +1073,53 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
         <tr>
           <td class="memname">void SpaceVIL.BaseItem.SetAlignment </td>
           <td>(</td>
-          <td class="paramtype">ItemAlignment&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a>&#160;</td>
           <td class="paramname"><em>alignment</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> alignment </p>
+<p>Setting an alignment of an item's shape relative to its container. Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alignment</td><td>Alignment as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2" title="Alignment types enum. Values: Left, Top, Right, Bottom, HCenter, VCenter. ">SpaceVIL.Core.ItemAlignment</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html">SpaceVIL.Core.IBehavior</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#a1dac2292f28f54b6ab7a543a372ed3ff">SpaceVIL.Core.IBehavior</a>.</p>
+
+</div>
+</div>
+<a id="a56d9a374b86a247aa41ce258bd53d247"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56d9a374b86a247aa41ce258bd53d247">&#9670;&nbsp;</a></span>SetAlignment() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetAlignment </td>
+          <td>(</td>
+          <td class="paramtype">params <a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2">ItemAlignment</a> []&#160;</td>
+          <td class="paramname"><em>alignment</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting an alignment of an item's shape relative to its container. Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alignment</td><td>Alignment as sequence of <a class="el" href="namespace_space_v_i_l_1_1_core.html#a85087f29b01b9e8031ed98cc9d75b7e2" title="Alignment types enum. Values: Left, Top, Right, Bottom, HCenter, VCenter. ">SpaceVIL.Core.ItemAlignment</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <a id="a9ac74dbeeaedbc9dc13edbad28ee1d8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ac74dbeeaedbc9dc13edbad28ee1d8c">&#9670;&nbsp;</a></span>SetBackground()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ac74dbeeaedbc9dc13edbad28ee1d8c">&#9670;&nbsp;</a></span>SetBackground() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -616,14 +1142,240 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>Background color of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Setting background color of an item's shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>Background color as System.Drawing.Color.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_item.html">SpaceVIL.Core.IItem</a>.</p>
+</div>
+</div>
+<a id="a9f76dd4ad8d980111b39a84329348706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f76dd4ad8d980111b39a84329348706">&#9670;&nbsp;</a></span>SetBackground() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetBackground </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting background color of an item's shape in byte RGB format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>Red color component. Range: (0 - 255)</td></tr>
+    <tr><td class="paramname">g</td><td>Green color component. Range: (0 - 255)</td></tr>
+    <tr><td class="paramname">b</td><td>Blue color component. Range: (0 - 255)</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9d750bcf2254f44623cf1697ebbd9ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d750bcf2254f44623cf1697ebbd9ca8">&#9670;&nbsp;</a></span>SetBackground() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetBackground </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting background color of an item in byte RGBA format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>Red color component. Range: (0 - 255)</td></tr>
+    <tr><td class="paramname">g</td><td>Green color component. Range: (0 - 255)</td></tr>
+    <tr><td class="paramname">b</td><td>Blue color component. Range: (0 - 255)</td></tr>
+    <tr><td class="paramname">a</td><td>Alpha color component. Range: (0 - 255)</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6134cdb21d533ac5186e4acd30fe465c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6134cdb21d533ac5186e4acd30fe465c">&#9670;&nbsp;</a></span>SetBackground() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetBackground </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting background color of an item in float RGB format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>Red color component. Range: (0.0f - 1.0f)</td></tr>
+    <tr><td class="paramname">g</td><td>Green color component. Range: (0.0f - 1.0f)</td></tr>
+    <tr><td class="paramname">b</td><td>Blue color component. Range: (0.0f - 1.0f)</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2b47d3fe8c356d1756bbff999d476e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b47d3fe8c356d1756bbff999d476e07">&#9670;&nbsp;</a></span>SetBackground() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetBackground </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting background color of an item in float RGBA format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>Red color component. Range: (0.0f - 1.0f)</td></tr>
+    <tr><td class="paramname">g</td><td>Green color component. Range: (0.0f - 1.0f)</td></tr>
+    <tr><td class="paramname">b</td><td>Blue color component. Range: (0.0f - 1.0f)</td></tr>
+    <tr><td class="paramname">a</td><td>Alpha color component. Range: (0.0f - 1.0f)</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <a id="abb2566ee1b68d0e415d003fcb252ca70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb2566ee1b68d0e415d003fcb252ca70">&#9670;&nbsp;</a></span>SetConfines()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abb2566ee1b68d0e415d003fcb252ca70">&#9670;&nbsp;</a></span>SetConfines() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -645,14 +1397,103 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> confines </p>
+<p>Setting the confines of the item relative to its parent's size and position. Example: items can be partially (or completely) outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">ListBox</a>), in which case the part that is outside the container should not be visible and should not interact with the user. </p>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ae7c2cd8a250f143cc4852e2c5f997e2a">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
-<a id="af62e189b018fffc486961909ab4671cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af62e189b018fffc486961909ab4671cb">&#9670;&nbsp;</a></span>SetHandler()</h2>
+<a id="a8b0345fd4a7b73f7bf3310bd80861620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b0345fd4a7b73f7bf3310bd80861620">&#9670;&nbsp;</a></span>SetConfines() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetConfines </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the confines of the item relative to specified bounds. Example: items can be partially (or completely) outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">ListBox</a>), in which case the part that is outside the container should not be visible and should not interact with the user. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x0</td><td>Left X begin position.</td></tr>
+    <tr><td class="paramname">x1</td><td>Right X end position.</td></tr>
+    <tr><td class="paramname">y0</td><td>Top Y begin position.</td></tr>
+    <tr><td class="paramname">y1</td><td>Bottom Y end position.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a73f902c1bc569cd8c9f3d42c974364b6">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a7dfcfb7cb25bf50d10941e59e919d3f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dfcfb7cb25bf50d10941e59e919d3f8">&#9670;&nbsp;</a></span>SetDrawable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetDrawable </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting the drawable (visibility) status of an item. This property used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a29b915d6e655b48a8b7505118441e961" title="Getting the visibility status of an item. This property may used in conjunction with the IsDrawable()...">IsVisible()</a> property. Explanation: an item can be visible and invisible, in some cases the item can be located outside the container (example: <a class="el" href="class_space_v_i_l_1_1_list_box.html" title="ListBox is a container for SpaceVIL.ListArea (scrollable container for other elements with ability of...">SpaceVIL.ListBox</a>), and it must be invisible so as not to waste CPU / GPU resources, but in some cases you must control the visibility of elements that are inside container and should be invisible (example: <a class="el" href="class_space_v_i_l_1_1_tree_view.html" title="TreeView is special container designed to show content as tree view structure. Extended from SpaceVIL...">SpaceVIL.TreeView</a>). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>True: if item should be drawable (visible). False: if item should not be drawable (invisible).</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a6196b093e257a190fbf9a798887d776b">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a529754a616b7be4d9837c209840f28d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a529754a616b7be4d9837c209840f28d4">&#9670;&nbsp;</a></span>SetHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -660,20 +1501,86 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
         <tr>
           <td class="memname">void SpaceVIL.BaseItem.SetHandler </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_space_v_i_l_1_1_window_layout.html">WindowLayout</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="class_space_v_i_l_1_1_core_window.html">CoreWindow</a>&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Setting the window to which the item will belong. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">handler</td><td><a class="el" href="class_space_v_i_l_1_1_window_layout.html">WindowLayout</a> handler - window that contains the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </td></tr>
+    <tr><td class="paramname">handler</td><td>Window as <a class="el" href="class_space_v_i_l_1_1_core_window.html" title="CoreWindow is an abstract class containing an implementation of common functionality for a window...">SpaceVIL.CoreWindow</a>.</td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ae522b8f6195fbef7f374f1a18ff8d199">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="af18211cd2654fbe4e37843f12b51ad8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af18211cd2654fbe4e37843f12b51ad8e">&#9670;&nbsp;</a></span>SetHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetHeight </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting item height. If the value is greater/less than the maximum/minimum value of the height, then the height becomes equal to the maximum/minimum value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">height</td><td>Height of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#ab0910bdbc76016cb6b4cc916fa149531">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a64a2ecc1459e4dc5721b5919592da1a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64a2ecc1459e4dc5721b5919592da1a5">&#9670;&nbsp;</a></span>SetHeightPolicy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetHeightPolicy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td>
+          <td class="paramname"><em>policy</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting height policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">policy</td><td>Height policy as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#ad315b5b729f7b94bcfbf5bd85265a7e8">SpaceVIL.Core.IBehavior</a>.</p>
 
 </div>
 </div>
@@ -693,9 +1600,187 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s name </p>
+<p>Setting the name of the item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Item name as System.String.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_item.html">SpaceVIL.Core.IItem</a>.</p>
+</div>
+</div>
+<a id="a3fe9a70fe60c50802c6cc6f9593d9409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fe9a70fe60c50802c6cc6f9593d9409">&#9670;&nbsp;</a></span>SetMargin() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMargin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html">Indents</a>&#160;</td>
+          <td class="paramname"><em>margin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the indents of an item to offset itself relative to its container. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">margin</td><td>Margin as <a class="el" href="struct_space_v_i_l_1_1_decorations_1_1_indents.html" title="A structure that store indents of the item. ">SpaceVIL.Decorations.Indents</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aa6c6bf1237ad722c9760b98cc9421156">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a63ee32be1841607604464a2cc247e5be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63ee32be1841607604464a2cc247e5be">&#9670;&nbsp;</a></span>SetMargin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMargin </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>left</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>top</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>right</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bottom</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the indents of an item to offset itself relative to its container. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">left</td><td>Indent on the left.</td></tr>
+    <tr><td class="paramname">top</td><td>Indent on the top.</td></tr>
+    <tr><td class="paramname">right</td><td>Indent on the right.</td></tr>
+    <tr><td class="paramname">bottom</td><td>Indent on the bottom.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a7e0e3010bb30f1c0d2ffa3783fb0726c">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a464426fa794d6e3a7e597d90d68d127c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a464426fa794d6e3a7e597d90d68d127c">&#9670;&nbsp;</a></span>SetMaxHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMaxHeight </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the maximum height limit. Actual height cannot be greater than this limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">height</td><td>Maximum height limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a3717d11086772867d022652a06443e72">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="acef25dd1bb395b938a226a0a4ec80049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acef25dd1bb395b938a226a0a4ec80049">&#9670;&nbsp;</a></span>SetMaxSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMaxSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting maximum item size limit (width and height limits). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Maximum width limit of the item. </td></tr>
+    <tr><td class="paramname">height</td><td>Maximum height limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a156d8c92de44c966e01dc0af21908571"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a156d8c92de44c966e01dc0af21908571">&#9670;&nbsp;</a></span>SetMaxWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMaxWidth </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the maximum width limit. Actual width cannot be greater than this limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Maximum width limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#af69b56bd76a63897435a252e11ca7fef">SpaceVIL.Core.ISize</a>.</p>
 
 </div>
 </div>
@@ -715,9 +1800,52 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p>Height of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Setting the minimum height limit. Actual height cannot be less than this limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">height</td><td>Minimum height limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html">SpaceVIL.Core.ISize</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#a127f7106a3bcc134d97c563a3f45cd31">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="ab15a0875b2d42d6ddaeb179eeaa5ac5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab15a0875b2d42d6ddaeb179eeaa5ac5c">&#9670;&nbsp;</a></span>SetMinSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetMinSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting minimum item size limit (width and height limits). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Minimum width limit of the item. </td></tr>
+    <tr><td class="paramname">height</td><td>Minimum height limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -737,14 +1865,48 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p>Width of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Setting the minimum width limit. Actual width cannot be less than this limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Minimum width limit of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html">SpaceVIL.Core.ISize</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#afe725e1729ee01b7b607a914c5f6900d">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a93ab7f178605794c1016e566031a791f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93ab7f178605794c1016e566031a791f">&#9670;&nbsp;</a></span>SetParent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetParent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_space_v_i_l_1_1_prototype.html">Prototype</a>&#160;</td>
+          <td class="paramname"><em>parent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the parent of the item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>Parent as <a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">SpaceVIL.Prototype</a> (<a class="el" href="class_space_v_i_l_1_1_prototype.html" title="The Prototype is an abstract implementation of IBaseItem for complex interactive items. Contains all the necessary methods for rendering objects and interacting with them. Examples of subclasses: SpaceVIL.ButtonCore, SpaceVIL.TextEdit, SpaceVIL.ListBox and etc. ">Prototype</a> is container and can contains children).</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#aaf57e60174b9a9871fe7447bfe785461">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
 <a id="adaa4c47dddc52af32bf6bfba6bd85f9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adaa4c47dddc52af32bf6bfba6bd85f9f">&#9670;&nbsp;</a></span>SetShadow()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa4c47dddc52af32bf6bfba6bd85f9f">&#9670;&nbsp;</a></span>SetShadow() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -781,18 +1943,137 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p>Set <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow with parameters </p>
+<p>Setting the shadow with specified blur radius, axis shifts, shadow color. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">radius</td><td>Shadow corners radius (same for all corners)</td></tr>
-    <tr><td class="paramname">x</td><td>Shadow X position</td></tr>
-    <tr><td class="paramname">y</td><td>Shadow Y position</td></tr>
-    <tr><td class="paramname">color</td><td>Shadow color</td></tr>
+    <tr><td class="paramname">radius</td><td>A blur radius of the shadow.</td></tr>
+    <tr><td class="paramname">x</td><td>X shift of the shadow.</td></tr>
+    <tr><td class="paramname">y</td><td>Y shift of the shadow.</td></tr>
+    <tr><td class="paramname">color</td><td>A shadow color as System.Drawing.Color.</td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a549826d52383f33dd94768b4cd643595">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="aae76beb59e72cbb9045ec9dbd159a43a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae76beb59e72cbb9045ec9dbd159a43a">&#9670;&nbsp;</a></span>SetShadow() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetShadow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_space_v_i_l_1_1_decorations_1_1_shadow.html">Shadow</a>&#160;</td>
+          <td class="paramname"><em>shadow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the shadow of an item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shadow</td><td>Shadow as <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_shadow.html" title="Class that is the shadow of an item. ">SpaceVIL.Decorations.Shadow</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1d398edb539ba6c4d36d2cbf18499a4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d398edb539ba6c4d36d2cbf18499a4b">&#9670;&nbsp;</a></span>SetShadowColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetShadowColor </td>
+          <td>(</td>
+          <td class="paramtype">Color&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting shadow color. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>Shadow color as System.Drawing.Color.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a6c4fdb19a36657da9bb23c1f94fd8681">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a63877e1232da619ddf87269551af1486"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63877e1232da619ddf87269551af1486">&#9670;&nbsp;</a></span>SetShadowDrop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetShadowDrop </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the shadow visibility status of an item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>True: if shadow should be visible. False: if shadow should be invisible.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#ada0aea4ea1e78acff64faee35e58bb9f">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a3eab7ba3cc995754ae24808250f48938"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eab7ba3cc995754ae24808250f48938">&#9670;&nbsp;</a></span>SetShadowExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetShadowExtension </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wExtension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>hExtension</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting the values of shadow extensions in pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wExtension</td><td>Extension by width.</td></tr>
+    <tr><td class="paramname">hExtension</td><td>Extension by height.</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -812,9 +2093,15 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shadow parameters. Shadow corners radius </p>
+<p>Setting the specified blur radius of the shadow. Default: 0. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">radius</td><td>The blur radius of the shadow.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a4eccb5110f10f763a159c9034b1bfbf8">SpaceVIL.Core.IBaseItem</a>.</p>
 
 </div>
 </div>
@@ -844,9 +2131,16 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p>Size (width and height) of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Setting item size (width and height). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Width of the item. </td></tr>
+    <tr><td class="paramname">height</td><td>Height of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html">SpaceVIL.Core.ISize</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#ab91d35905d82f7cb64588f387db9510d">SpaceVIL.Core.ISize</a>.</p>
 
 </div>
 </div>
@@ -859,13 +2153,13 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
         <tr>
           <td class="memname">void SpaceVIL.BaseItem.SetSizePolicy </td>
           <td>(</td>
-          <td class="paramtype">SizePolicy&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">SizePolicy&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td>
           <td class="paramname"><em>height</em>&#160;</td>
         </tr>
         <tr>
@@ -876,7 +2170,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> size (width and height) policy - FIXED or EXPAND </p>
+<p>Setting the size policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Width policy of an item's shape as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</td></tr>
+    <tr><td class="paramname">height</td><td>Height policy of an item's shape as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -904,9 +2205,15 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>Style of the <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> </p>
+<p>Setting a style that describes the appearance of an item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">style</td><td>Style as <a class="el" href="class_space_v_i_l_1_1_decorations_1_1_style.html" title="Style is a class that describes the appearance of an element. Can contains Styles for inner items...">SpaceVIL.Decorations.Style</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html">SpaceVIL.Core.IBaseItem</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a677464b9dad4f9d67fb642d0196006fe">SpaceVIL.Core.IBaseItem</a>.</p>
 
 <p>Reimplemented in <a class="el" href="class_space_v_i_l_1_1_primitive.html#ad2a9fbb75eddf7f36af72385a5453fb2">SpaceVIL.Primitive</a>.</p>
 
@@ -936,9 +2243,113 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p>Sets <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s shape as triangles list </p>
+<p>Setting triangles as item's shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangles</td><td>Points list of the shape as List of float[2] array (2D).</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_item.html">SpaceVIL.Core.IItem</a>.</p>
+</div>
+</div>
+<a id="adaae3ba9b57ac31dca372950e77b02ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaae3ba9b57ac31dca372950e77b02ea">&#9670;&nbsp;</a></span>SetVisible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetVisible </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting the visibility status of an item. This property may used in conjunction with the <a class="el" href="class_space_v_i_l_1_1_base_item.html#a002a247f3745be1e1e57c504589d7036" title="Getting the drawable (visibility) status of an item. This property used in conjunction with the IsVis...">IsDrawable()</a> property. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>True: if item should be visible. False: if item should be invisible.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_base_item.html#a62e7a7edef2b465046083b57dcf1210c">SpaceVIL.Core.IBaseItem</a>.</p>
+
+</div>
+</div>
+<a id="a64c0166488ae312314e20359f6188ee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64c0166488ae312314e20359f6188ee8">&#9670;&nbsp;</a></span>SetWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetWidth </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting item width. If the value is greater/less than the maximum/minimum value of the width, then the width becomes equal to the maximum/minimum value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Width of the item. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_size.html#af284a80248548aa4ea67e4c9a98acaa1">SpaceVIL.Core.ISize</a>.</p>
+
+</div>
+</div>
+<a id="a54c4128d60fd9f13d1239132841a74fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54c4128d60fd9f13d1239132841a74fc">&#9670;&nbsp;</a></span>SetWidthPolicy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpaceVIL.BaseItem.SetWidthPolicy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382">SizePolicy</a>&#160;</td>
+          <td class="paramname"><em>policy</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setting width policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">policy</td><td>Width policy as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0a2f860873db7d5aadc3ae6d2b9d6382" title="Size policy types enum. Values: Fixed, Expand. ">SpaceVIL.Core.SizePolicy</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_behavior.html#ad05b17fc4495e98d5acecc52ed87ba0f">SpaceVIL.Core.IBehavior</a>.</p>
 
 </div>
 </div>
@@ -966,9 +2377,51 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a> (x, y) position </p>
+<p>Setting X coordinate of the left-top corner of a shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>X position of the left-top corner.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_position.html">SpaceVIL.Core.IPosition</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_position.html#a9a98baa12afe5da8cdc553d0ce25369f">SpaceVIL.Core.IPosition</a>.</p>
+
+</div>
+</div>
+<a id="afa40218ded67e9cc7dff5153a3f48c30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa40218ded67e9cc7dff5153a3f48c30">&#9670;&nbsp;</a></span>SetY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void SpaceVIL.BaseItem.SetY </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setting Y coordinate of the left-top corner of a shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Y position of the left-top corner.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_position.html#afdecfb9237eb56c074b391fc2ad8fe5b">SpaceVIL.Core.IPosition</a>.</p>
 
 </div>
 </div>
@@ -981,7 +2434,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
         <tr>
           <td class="memname">void SpaceVIL.BaseItem.Update </td>
           <td>(</td>
-          <td class="paramtype">GeometryEventType&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_space_v_i_l_1_1_core.html#a0af1884788ee8e7521bb374f26672006">GeometryEventType</a>&#160;</td>
           <td class="paramname"><em>type</em>, </td>
         </tr>
         <tr>
@@ -998,15 +2451,36 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateInnersD
       </table>
 </div><div class="memdoc">
 
-<p>Update <a class="el" href="class_space_v_i_l_1_1_base_item.html">BaseItem</a>'s state </p>
+<p>Updating an item size or/and position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>Type of event as <a class="el" href="namespace_space_v_i_l_1_1_core.html#a0af1884788ee8e7521bb374f26672006" title="Enum of event types directly related to events that change the size and position of an item...">SpaceVIL.Core.GeometryEventType</a>.</td></tr>
+    <tr><td class="paramname">value</td><td>Value of a property that was changed.</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_event_update.html">SpaceVIL.Core.IEventUpdate</a>.</p>
+<p>Implements <a class="el" href="interface_space_v_i_l_1_1_core_1_1_i_event_update.html#a7cef5587515d1c89297cd2848ea6ac65">SpaceVIL.Core.IEventUpdate</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>F:/spacevil/CSharp_docOnly/Items/BaseItem.cs</li>
-</ul>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2f82a5c5c0b0c2fd224dd0a118791a99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f82a5c5c0b0c2fd224dd0a118791a99">&#9670;&nbsp;</a></span>HoverRule</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_space_v_i_l_1_1_core.html#ac73c33033cff807aac23e32cd395cca9">ItemHoverRule</a> SpaceVIL.BaseItem.HoverRule = ItemHoverRule.Lazy</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Hovering rule propetry of this item. Can be ItemHoverRule.Lazy or ItemHoverRule.Strict (see <a class="el" href="namespace_space_v_i_l_1_1_core.html#ac73c33033cff807aac23e32cd395cca9" title="Item hovering rule types enum. Values: Lazy, Strict. ">SpaceVIL.Core.ItemHoverRule</a>). </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
