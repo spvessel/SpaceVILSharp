@@ -122,14 +122,12 @@ namespace SpaceVIL
         /// </summary>
         public ResizableItem()
         {
-            SetItemName("ResizableItem_" + count);
+            SetItemName("ResizableItem_" + count++);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
 
             EventMousePress += OnMousePress;
-            // EventMouseClick+= OnMouseRelease;
             EventMouseDrag += OnDragging;
             EventMouseHover += OnHover;
-            count++;
         }
 
         protected virtual void OnHover(IItem sender, MouseArgs args)

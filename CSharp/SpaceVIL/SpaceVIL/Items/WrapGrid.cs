@@ -254,6 +254,9 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a WrapGrid with specified cell width, height and orientation.
         /// </summary>
+        /// <param name="cellWidth">Width of each cell.</param>
+        /// <param name="cellHeight">Height of each cell.</param>
+        /// <param name="orientation">Orientation of layout as SpaceVIL.Core.Orientation.</param>
         public WrapGrid(int cellWidth, int cellHeight, Orientation orientation)
         {
             SetItemName("WrapGrid_" + count);

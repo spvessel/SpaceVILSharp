@@ -646,9 +646,9 @@ final class DrawEngine {
         boolean stencil = checkOutsideBorders(oglItem);
 
         setViewPort(oglItem);
-
         ogllRoot.draw();
         restoreView();
+
         glDisable(GL_SCISSOR_TEST);
     }
 
