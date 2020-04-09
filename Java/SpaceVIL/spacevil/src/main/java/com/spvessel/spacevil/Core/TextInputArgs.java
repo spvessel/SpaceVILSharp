@@ -5,11 +5,23 @@ import java.util.List;
 
 import com.spvessel.spacevil.Flags.KeyMods;
 
-public final class TextInputArgs extends InputEventArgs {
+/**
+ * A class that describe keyboard text typing input.
+ */
+public final class TextInputArgs implements InterfaceInputEventArgs {
+    /**
+     * Character code.
+     */
     public Integer character;
+
+    /**
+     * Used modifiers while typing.
+     */
     public List<KeyMods> mods;
 
-    @Override
+    /**
+     * Clearing TextInputArgs.
+     */
     public void clear() {
         character = 0;
         mods = new LinkedList<>();

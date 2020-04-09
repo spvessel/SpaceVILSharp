@@ -13,6 +13,9 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceEffect;
 import com.spvessel.spacevil.Core.InterfaceSubtractFigure;
 
+/**
+ * Effects is a static class for controlling the application of effects to a item's shape.
+ */
 public final class Effects {
     private static Lock _lock = new ReentrantLock();
 
@@ -21,6 +24,11 @@ public final class Effects {
 
     private static Map<InterfaceBaseItem, Set<InterfaceEffect>> _subtractEffects = new HashMap<>();
 
+    /**
+     * Adding effect to specified item.
+     * @param item A item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param effect A effect as com.spvessel.spacevil.Core.InterfaceEffect.
+     */
     public static void addEffect(InterfaceBaseItem item, InterfaceEffect effect) {
         _lock.lock();
         try {
@@ -37,6 +45,12 @@ public final class Effects {
         }
     }
 
+    /**
+     * Removing specified effect form item.
+     * @param item A item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param effect A effect as com.spvessel.spacevil.Core.InterfaceEffect.
+     * @return True: if such effect is presented and removed. False: if item has no such effect.
+     */
     public static boolean removeEffect(InterfaceBaseItem item, InterfaceEffect effect) {
         _lock.lock();
         try {
@@ -51,6 +65,11 @@ public final class Effects {
         }
     }
 
+    /**
+     * Getting list of applyed effects on specified item.
+     * @param item An item as com.spvessel.spacevil.Core.InterfaceEffect.
+     * @return List of effects of specified item as List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
+     */
     public static List<InterfaceEffect> getEffects(InterfaceBaseItem item) {
         _lock.lock();
         try {

@@ -8,39 +8,45 @@ using System.Drawing;
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// Border of the item
+    /// Border is a class that decorates item's shape with border.
     /// </summary>
     public class Border
     {
-        private CornerRadius _border_radius;
-
-        /// <returns> Radius of the border's corners </returns>
+        private CornerRadius _borderRadius;
+        
+        /// <summary>
+        /// Getting border radiuses.
+        /// </summary>
+        /// <returns>Border radiuses as SpaceVIL.Decorations.CornerRadius.</returns>
         public CornerRadius GetRadius()
         {
-            return _border_radius;
+            return _borderRadius;
         }
 
         /// <summary>
-        /// Set radius of the border's corners
+        /// Setting radius of the border's corners.
         /// </summary>
+        /// <param name="value">Radiuses of the border's corners as SpaceVIL.Decorations.CornerRadius.</param>
         public void SetRadius(CornerRadius value)
         {
-            _border_radius = value;
+            _borderRadius = value;
         }
 
         private Color _border_color;
 
         /// <summary>
-        /// Border color
+        /// Getting the border color oa an item's shape.
         /// </summary>
+        /// <returns>Border color as System.Drawing.Color.</returns>
         public Color GetFill()
         {
             return _border_color;
         }
 
         /// <summary>
-        /// Border color
+        /// Setting the border color of an item's shape.
         /// </summary>
+        /// <param name="fill">Border color as System.Drawing.Color.</param>
         public void SetFill(Color fill)
         {
             _border_color = fill;
@@ -49,28 +55,30 @@ namespace SpaceVIL.Decorations
         private int border_thickness;
 
         /// <summary>
-        /// Border thickness
+        /// Getting border thickness of an item's shape.
         /// </summary>
+        /// <returns>Border thickness.</returns>
         public int GetThickness()
         {
             return border_thickness;
         }
 
         /// <summary>
-        /// Border thickness
+        /// Setting border thickness of an item's shape.
         /// </summary>
+        /// <param name="thickness">Border thickness.</param>
         public void SetThickness(int thickness)
         {
             border_thickness = thickness;
         }
 
         /// <summary>
-        /// Is border visible
+        /// Propery that defines if border is visible
         /// </summary>
         public bool IsVisible = false;
 
         /// <summary>
-        /// Constructs a Border
+        /// Default Border constructor.
         /// </summary>
         public Border()
         {
@@ -80,8 +88,11 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Constructs a Border with color, radius and thickness
+        /// Constructs a Border  with specified color, radius and thickness.
         /// </summary>
+        /// <param name="fill">Border color as System.Drawing.Color.</param>
+        /// <param name="radius">Radiuses of the border's corners as SpaceVIL.Decorations.CornerRadius.</param>
+        /// <param name="thickness">Border thickness.</param>
         public Border(Color fill, CornerRadius radius, int thickness)
         {
             SetFill(fill); // (Color.Transparent);

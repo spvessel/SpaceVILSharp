@@ -9,10 +9,12 @@ namespace SpaceVIL.Core
     {
         private float _x = 1f;
         private float _y = 1f;
+
         /// <summary>
         /// Default Scale constructor. All scaling factors are 1.
         /// </summary>
         public Scale() { }
+
         /// <summary>
         /// Constructs Scale with specified scaling factors.
         /// </summary>
@@ -22,6 +24,7 @@ namespace SpaceVIL.Core
         {
             SetScale(xScale, yScale);
         }
+
         /// <summary>
         /// Setting scaling factors.
         /// </summary>
@@ -30,10 +33,13 @@ namespace SpaceVIL.Core
         public void SetScale(float xScale, float yScale)
         {
             if (xScale <= 0 || yScale <= 0)
+            {
                 return;
+            }
             _x = xScale;
             _y = yScale;
         }
+
         /// <summary>
         /// Getting scaling factor by X axis.
         /// </summary>
@@ -42,6 +48,7 @@ namespace SpaceVIL.Core
         {
             return _x;
         }
+        
         /// <summary>
         /// Getting scaling factor by Y axis.
         /// </summary>

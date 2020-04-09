@@ -2,7 +2,7 @@ package com.spvessel.spacevil.Flags;
 
 /**
  * Size policy types enum.
- * <p> Values: Fixed, Expand.
+ * <p> Values: FIXED, EXPAND.
  */
 public enum SizePolicy {
     /**

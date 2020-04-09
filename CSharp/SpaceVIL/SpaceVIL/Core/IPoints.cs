@@ -14,36 +14,43 @@ namespace SpaceVIL.Core
         /// </summary>
         /// <param name="thickness">Point thickness.</param>
         void SetPointThickness(float thickness);
+
         /// <summary>
         /// Getting points thickness.
         /// </summary>
         /// <returns>Point thickness.</returns>
         float GetPointThickness();
+
         /// <summary>
         /// Setting points color.
         /// </summary>
-        /// <param name="color">Points color.</param>
+        /// <param name="color">Points color as System.Drawing.Color.</param>
         void SetPointColor(Color color);
+
         /// <summary>
         /// Getting points color.
         /// </summary>
-        /// <returns>Points color.</returns>
+        /// <returns>Points color as System.Drawing.Color.</returns>
         Color GetPointColor();
+
         /// <summary>
         /// Setting custom shape for points (if one want to use other shape than circle).
         /// </summary>
         /// <param name="shape">Points list of the shape as List of float[2] array.</param>
         void SetPointShape(List<float[]> shape);
+
         /// <summary>
         /// Getting current shape of points. Default: circle shape.
         /// </summary>
         /// <returns>Points list of the shape as List of float[2] array.</returns>
+        /// 
         List<float[]> GetPointShape();
         /// <summary>
         /// Getting points coordinates.
         /// </summary>
         /// <returns>Points list as List of float[2] array.</returns>
         List<float[]> GetPoints();
+        
         /// <summary>
         /// Setting points coordinates.
         /// </summary>

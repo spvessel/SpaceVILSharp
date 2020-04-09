@@ -2,18 +2,31 @@ package com.spvessel.spacevil.Decorations;
 
 import java.awt.*;
 
+/**
+ * A class that describes state of the item and its changes according
+ * to state value.
+ */
 public class ItemState {
-    /**
-     * A class that describes state of the item and its changes according
-     * to state value
-     */
     public Boolean value = true;
+
+    /**
+     * Getting backgroud color of the item of current state as java.awt.Color.
+     */
     public Color background;
+
+    /**
+     * Getting border of the item of current state as com.spvessel.spacevil.Decorations.Border.
+     */
     public Border border = new Border();
+    
     // public Color Foreground = Color.Black;
     // public string Text = null;
     // public string ImageUri = null;
     // public bool IsVisible = true;
+
+    /**
+     * Getting shape of the item of current state as com.spvessel.spacevil.Decorations.Figure.
+     */
     public Figure shape = null;
 
     /**
@@ -24,7 +37,8 @@ public class ItemState {
     }
 
     /**
-     * Constructs an ItemState with background color
+     * Constructs an ItemState with the specified background color.
+     * @param background A color of item as java.awt.Color.
      */
     public ItemState(Color background) {
         this.background = background;

@@ -15,6 +15,9 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
+/**
+ * Not implemented!!!
+ */
 public interface InterfaceVisualItem extends InterfaceBaseItem {
     public String getToolTip();
 

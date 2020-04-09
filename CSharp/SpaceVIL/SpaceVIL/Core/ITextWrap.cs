@@ -9,7 +9,8 @@ namespace SpaceVIL.Core
         /// <summary>
         /// Method for getting wrap status of the text item.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True: if text is wrapped in width by its container. 
+        /// False: if container does not wraps the contained text.</returns>
         bool IsWrapText();
     }
 }

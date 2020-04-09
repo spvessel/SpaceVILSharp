@@ -47,7 +47,9 @@ namespace SpaceVIL
             try
             {
                 if (vi == null)
+                {
                     return _shapes.Add(item);
+                }
                 return _shapes.Add(vi.prototype);
             }
             finally
@@ -55,6 +57,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lockShapeObject);
             }
         }
+
         /// <summary>
         /// Adding an ITextContainer implementation to the queue for a forced refresh.
         /// <para/>Tips: use this function only if you want to refresh text of an item, 
@@ -74,6 +77,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lockTextObject);
             }
         }
+        
         /// <summary>
         /// Adding an IImageItem implementation to the queue for a forced refresh.
         /// <para/>Tips: use this function only if you want to refresh image of an item, 

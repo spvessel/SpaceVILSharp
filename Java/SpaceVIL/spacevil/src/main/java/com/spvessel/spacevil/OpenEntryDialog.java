@@ -18,6 +18,7 @@ import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.OpenDialogType;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
+
 /**
  * OpenEntryDialog is user interface element for browsing file system to select
  * a file or folder to open or save. Support create/rename/delete files and

@@ -7,12 +7,15 @@ import com.spvessel.spacevil.*;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * A style theme to store styles for items in the current application.
+ */
 public class ThemeStyle {
     private Map<Class<?>, Style> defaultItemsStyle = new HashMap<>();
-    public static Boolean applyEmbedded = true;
+    public static boolean applyEmbedded = true;
 
     /**
-     * Constructs a default ThemeStyle
+     * Constructs a default ThemeStyle.
      */
     public ThemeStyle() {
         if (ThemeStyle.applyEmbedded) {
@@ -75,50 +78,62 @@ public class ThemeStyle {
     // public Style getThemeStyle(String type) {
 
     /**
-     * Returns style of the theme for the object by its class name
+     * Returns style of the theme for the object by its class name.
+     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @return Assigned style as com.spvessel.spacevil.Decorations.Style.
      */
     public Style getThemeStyle(Class<?> type) {
-        if (defaultItemsStyle.containsKey(type))
+        if (defaultItemsStyle.containsKey(type)) {
             return defaultItemsStyle.get(type);
+        }
         return null;
     }
 
     private Map<InterfaceBaseItem, Style> specificItemsStyle = new HashMap<>();
 
     /**
-     * Set this theme as default
+     * Set this theme as default.
      */
     public void setCurrentAsDefault() {
         DefaultsService.setDefaultTheme(this);
     }
 
     /**
-     * Add unique style for the item
+     * Add unique style for the specified item (specific item, not type of item).
+     * @param item An item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void addSpecificItemStyle(InterfaceBaseItem current_item, Style style) {
-        if (specificItemsStyle.containsKey(current_item))
-            specificItemsStyle.replace(current_item, style);
-        else
-            specificItemsStyle.put(current_item, style);
+    public void addSpecificItemStyle(InterfaceBaseItem item, Style style) {
+        if (specificItemsStyle.containsKey(item)) {
+            specificItemsStyle.replace(item, style);
+        } else {
+            specificItemsStyle.put(item, style);
+        }
     }
 
     /**
-     * Remove unique style for the item
+     * Remove unique style for the item (specific item, not type of item).
+     * @param item An item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void removeSpecificItemStyle(InterfaceBaseItem current_item, Style style)
+    public void removeSpecificItemStyle(InterfaceBaseItem item, Style style)
         {
-            if (specificItemsStyle.containsKey(current_item))
-                specificItemsStyle.remove(current_item);
+            if (specificItemsStyle.containsKey(item)) {
+                specificItemsStyle.remove(item);
+            }
         }
 
     // public Boolean ReplaceDefaultItemStyle(String class_type, Style style) {
 
     /**
-     * Replace default style for the items with class name class_type
+     * Replace default style for the items with specified class type.
+     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @param style A style as com.spvessel.spacevil.Decorations.Style.
+     * @return If default style replaced
      */
-    public Boolean replaceDefaultItemStyle(Class<?> class_type, Style style) {
-        if (defaultItemsStyle.containsKey(class_type)) {
-            defaultItemsStyle.replace(class_type, style);
+    public boolean replaceDefaultItemStyle(Class<?> type, Style style) {
+        if (defaultItemsStyle.containsKey(type)) {
+            defaultItemsStyle.replace(type, style);
             return true;
         }
         return false;
@@ -127,12 +142,15 @@ public class ThemeStyle {
     // public void addDefaultCustomItemStyle(String class_type, Style style) {
 
     /**
-     * Add custom style to default theme for the items with class name class_type
+     * Add custom style to default theme for the items with specified class type.
+     * @param type Type of an item as java.lang.Class&lt?&gt.
+     * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void addDefaultCustomItemStyle(Class<?> class_type, Style style) {
-        if (defaultItemsStyle.containsKey(class_type))
-            defaultItemsStyle.replace(class_type, style);
-        else
-            defaultItemsStyle.put(class_type, style);
+    public void addDefaultCustomItemStyle(Class<?> type, Style style) {
+        if (defaultItemsStyle.containsKey(type)) {
+            defaultItemsStyle.replace(type, style);
+        } else {
+            defaultItemsStyle.put(type, style);
+        }
     }
 }

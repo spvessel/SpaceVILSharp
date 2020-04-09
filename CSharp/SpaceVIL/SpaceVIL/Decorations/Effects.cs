@@ -13,6 +13,7 @@ namespace SpaceVIL.Decorations
         private static Object _lock = new Object();
 
         private static Dictionary<IBaseItem, HashSet<IEffect>> _subtractEffects = new Dictionary<IBaseItem, HashSet<IEffect>>();
+
         /// <summary>
         /// Adding effect to specified item.
         /// </summary>
@@ -39,6 +40,7 @@ namespace SpaceVIL.Decorations
                 Monitor.Exit(_lock);
             }
         }
+
         /// <summary>
         /// Removing specified effect form item.
         /// </summary>
@@ -64,6 +66,7 @@ namespace SpaceVIL.Decorations
                 Monitor.Exit(_lock);
             }
         }
+        
         /// <summary>
         /// Getting list of applyed effects on specified item.
         /// </summary>

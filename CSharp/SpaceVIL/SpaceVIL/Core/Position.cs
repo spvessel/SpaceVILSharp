@@ -15,11 +15,12 @@ namespace SpaceVIL.Core
         /// Default Position constructor.
         /// </summary>
         public Position() { }
+
         /// <summary>
         /// Position constructor with specified X and Y coordinates.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">X position of the 2D point.</param>
+        /// <param name="y">Y position of the 2D point.</param>
         public Position(int x, int y)
         {
             _x = x;
@@ -64,6 +65,7 @@ namespace SpaceVIL.Core
         {
             return _y;
         }
+        
         /// <summary>
         /// Setting 2D point position.
         /// </summary>

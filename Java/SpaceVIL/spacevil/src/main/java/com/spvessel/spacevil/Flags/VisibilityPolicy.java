@@ -2,7 +2,7 @@ package com.spvessel.spacevil.Flags;
 
 /**
  * Visibility types of item enum. Used in such items as scroll bars.
- * <p> Values: Always, AsNeeded, Never.
+ * <p> Values: ALWAYS, AS_NEEDED, NEVER.
  */
 public enum VisibilityPolicy {
     /**

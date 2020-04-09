@@ -7,6 +7,7 @@ namespace SpaceVIL.Core
     {
         int _w = 0;
         int _h = 0;
+
         /// <summary>
         /// Constructs Size with specified width and height.
         /// </summary>
@@ -17,6 +18,7 @@ namespace SpaceVIL.Core
             _w = w;
             _h = h;
         }
+
         /// <summary>
         /// Getting the width of the object.
         /// </summary>
@@ -25,6 +27,7 @@ namespace SpaceVIL.Core
         {
             return _w;
         }
+
         /// <summary>
         /// Setting the width of the object.
         /// </summary>
@@ -33,6 +36,7 @@ namespace SpaceVIL.Core
         {
             _w = value;
         }
+
         /// <summary>
         /// Getting the height of the object.
         /// </summary>
@@ -41,6 +45,7 @@ namespace SpaceVIL.Core
         {
             return _h;
         }
+
         /// <summary>
         /// Setting the height of the object.
         /// </summary>
@@ -49,6 +54,7 @@ namespace SpaceVIL.Core
         {
             _h = value;
         }
+        
         /// <summary>
         /// Setting the size of the object.
         /// </summary>

@@ -12,60 +12,72 @@ namespace SpaceVIL.Decorations
     /// </summary>
     public class Style
     {
-        private Dictionary<String, Style> _inner_styles = new Dictionary<String, Style>();
+        private Dictionary<String, Style> _innerStyles = new Dictionary<String, Style>();
+
         /// <summary>
         /// Background color of an item's shape. Attention: this property is required.
         /// <para/> This property is System.Drawing.Color.
         /// </summary>
         public Color Background;
+
         /// <summary>
         /// Color of an item's text. Can be used only if the item contains text and in this case this property is required.
         /// <para/> This property is System.Drawing.Color.
         /// </summary>
         public Color Foreground;
+
         /// <summary>
         /// Font of an item's text. Can be used only if the item contains text and in this case this property is required.
         /// <para/> This property is System.Drawing.Font.
         /// </summary>
         public Font Font = null;
+
         /// <summary>
         /// Width policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). Attention: this property is required.
         /// <para/> This property is SpaceVIL.Core.SizePolicy.
         /// </summary>
         public SizePolicy WidthPolicy;
+
         /// <summary>
         /// Height policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). Attention: this property is required.
         /// <para/> This property is SpaceVIL.Core.SizePolicy.
         /// </summary>
         public SizePolicy HeightPolicy;
+
         /// <summary>
         /// Width of an item's shape.
         /// </summary>
         public int Width;
+
         /// <summary>
         /// Minimum width of an item's shape (shape cannot be smaller this value).
         /// <para/> Default: 0.
         /// </summary>
         public int MinWidth;
+
         /// <summary>
         /// Maximum width of an item's shape (shape cannot be bigger this value).
         /// <para/> Default: 32767.
         /// </summary>
         public int MaxWidth;
+
         /// <summary>
         /// Height of an item's shape.
         /// </summary>
         public int Height;
+
         /// <summary>
         /// Minimum height of an item's shape (shape cannot be smaller this value).
         /// <para/> Default: 0.
         /// </summary>
         public int MinHeight;
+
         /// <summary>
         /// Maximum height of an item's shape (shape cannot be bigget this value).
         /// <para/> Default: 32767.
         /// </summary>
         public int MaxHeight;
+
         /// <summary>
         /// Alignment of an item's shape relative to its container. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -73,6 +85,7 @@ namespace SpaceVIL.Decorations
         /// <para/> This property is SpaceVIL.Core.ItemAlignment.
         /// </summary>
         public ItemAlignment Alignment;
+
         /// <summary>
         /// Alignment of an item's text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -80,81 +93,100 @@ namespace SpaceVIL.Decorations
         /// <para/> This property is SpaceVIL.Core.ItemAlignment.
         /// </summary>
         public ItemAlignment TextAlignment;
+
         /// <summary>
         /// X axis position of left-top cornet of an item's shape. This property itself is mostly ignored. Used only when creating container-type items or with SpaceVIL.FreeArea.
         /// </summary>
         public int X;
+
         /// <summary>
         /// Y axis position of left-top cornet of an item's shape. This property itself is mostly ignored. Used only when creating container-type items or with SpaceVIL.FreeArea.
         /// </summary>
         public int Y;
+
         private Dictionary<ItemStateType, ItemState> _itemStates = new Dictionary<ItemStateType, ItemState>();
+
         /// <summary>
         /// Indents of an item to offset its children. Attention: this property is required.
         /// <para/> This property is SpaceVIL.Decorations.Indents.
         /// </summary>
         public Indents Padding;
+
         /// <summary>
         /// Indents between children of a container type item. It is used mainly in containers.
-        /// <para/> This property is SpaceVIL.Decorations.Indents.
+        /// <para/> This property is SpaceVIL.Decorations.Spacing.
         /// </summary>
         public Spacing Spacing;
+
         /// <summary>
         /// Indents of an item to offset itself relative to its container. Attention: this property is required.
         /// <para/> This property is SpaceVIL.Decorations.Indents.
         /// </summary>
         public Indents Margin;
+
         /// <summary>
         /// Radiuses to round the rectangular shape of the item.
         /// </summary>
         public CornerRadius BorderRadius = new CornerRadius();
+
         /// <summary>
         /// Thickness of an item's border. 
         /// <para/> Default: 0.
         /// </summary>
-        public int BorderThickness;
+        public int BorderThickness = 0;
+
         /// <summary>
         /// Color of an item's border. 
         /// <para/> This property is System.Drawing.Color.
         /// </summary>
         public Color BorderFill;
+
         /// <summary>
         /// A form of an item's shape. If not assigned, the shape is rectangular.
         /// <para/> Format: System.Collections.Generic.List&lt;System.Single[]&gt;.
         /// </summary>
         public List<float[]> Shape;
+
         /// <summary>
         /// A flag that determines if the shape of an item can be changed or not.
         /// <para/>True: if shape can not be resized. False: if shape can be resised. Default: False.
         /// </summary>
-        public bool IsFixedShape;
+        public bool IsFixedShape = false;
+
         /// <summary>
         /// A storage of shapes for future use. Note: not supported in the current version!
-        /// <para/> Format: System.Collections.Generic.List&lt;System.Single[]&gt;.
+        /// <para/> Format: System.Collections.Generic.List&lt;SpaceVIL.Core.IBaseItem&gt;.
         /// </summary>
         public List<IBaseItem> InnerShapes;
+
         /// <summary>
         /// Blur radius of a shadow.
         /// <para/> Min value: 0. Max value: 10. Default: 0.
         /// </summary>
         public int ShadowRadius;
+
         /// <summary>
         /// X shift of a shadow.
         /// </summary>
         public int ShadowXOffset;
+
         /// <summary>
         /// Y shift of a shadow.
         /// </summary>
         public int ShadowYOffset;
+
         /// <summary>
         /// Drop shadow flag. True: allow shadow dropping. False: not allow shadow dropping.
         /// <para/> Default: False.
         /// </summary>
         public bool IsShadowDrop = false;
+
         /// <summary>
         /// Color of a shadow.
+        /// <para/> This property is System.Drawing.Color.
         /// </summary>
         public Color ShadowColor;
+
         /// <summary>
         /// A flag that determines if an item is visible or not.
         /// <para/> True: if visible. False: if not visible. Default: True.
@@ -179,7 +211,9 @@ namespace SpaceVIL.Decorations
         public void SetStyle(params IBaseItem[] items)
         {
             foreach (IBaseItem item in items)
+            {
                 item.SetStyle(this);
+            }
         }
 
         /// <summary>
@@ -237,6 +271,7 @@ namespace SpaceVIL.Decorations
         {
             Background = GraphicsMathService.ColorTransform(r, g, b);
         }
+
         /// <summary>
         /// Setting background color of an item's shape in byte RGBA format.
         /// </summary>
@@ -248,6 +283,7 @@ namespace SpaceVIL.Decorations
         {
             Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
+
         /// <summary>
         /// Setting background color of an item's shape in float RGB format.
         /// </summary>
@@ -404,10 +440,11 @@ namespace SpaceVIL.Decorations
             BorderRadius = radius;
             BorderThickness = thickness;
         }
+
         /// <summary>
         /// Setting shadow for an item's shape. 
         /// </summary>
-        /// <param name="shadow">Shadow as SpaceVIL.Decorations.Shadow</param>
+        /// <param name="shadow">Shadow as SpaceVIL.Decorations.Shadow.</param>
         public void SetShadow(Shadow shadow)
         {
             ShadowColor = shadow.GetColor();
@@ -426,6 +463,7 @@ namespace SpaceVIL.Decorations
         {
             Alignment = alignment;
         }
+
         /// <summary>
         /// Setting an Alignment of an item's shape relative to its container. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -443,6 +481,7 @@ namespace SpaceVIL.Decorations
                 }
             }
         }
+
         /// <summary>
         /// Alignment of an item's text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -453,6 +492,7 @@ namespace SpaceVIL.Decorations
         {
             TextAlignment = alignment;
         }
+
         /// <summary>
         /// Alignment of an item's text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -478,7 +518,9 @@ namespace SpaceVIL.Decorations
         public void AddInnerShape(IBaseItem shape)
         {
             if (InnerShapes == null)
+            {
                 InnerShapes = new List<IBaseItem>();
+            }
             InnerShapes.Add(shape);
         }
 
@@ -489,34 +531,41 @@ namespace SpaceVIL.Decorations
         /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public void AddInnerStyle(String keyName, Style style)
         {
-            if (_inner_styles.ContainsKey(keyName))
-                _inner_styles[keyName] = style;
+            if (_innerStyles.ContainsKey(keyName))
+            {
+                _innerStyles[keyName] = style;
+            }
             else
-                _inner_styles.Add(keyName, style);
+            {
+                _innerStyles.Add(keyName, style);
+            }
         }
 
         /// <summary>
         /// Getting a child’s style by key name.
         /// </summary>
         /// <param name="keyName">Key name of a child.</param>
-        /// <returns></returns>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public Style GetInnerStyle(String keyName)
         {
-            if (_inner_styles.ContainsKey(keyName))
-                return _inner_styles[keyName];
+            if (_innerStyles.ContainsKey(keyName))
+            {
+                return _innerStyles[keyName];
+            }
 
             return null;
         }
+
         /// <summary>
         /// Removing a child's style by its key name.
         /// </summary>
         /// <param name="keyName">Key name of a child.</param>
         public void RemoveInnerStyle(String keyName)
         {
-            if (_inner_styles.ContainsKey(keyName))
-                _inner_styles.Remove(keyName);
-            else
-                return;
+            if (_innerStyles.ContainsKey(keyName))
+            {
+                _innerStyles.Remove(keyName);
+            }
         }
 
         /// <summary>
@@ -547,7 +596,9 @@ namespace SpaceVIL.Decorations
         public ItemState GetState(ItemStateType type)
         {
             if (_itemStates.ContainsKey(type))
+            {
                 return _itemStates[type];
+            }
             return null;
         }
 
@@ -568,9 +619,13 @@ namespace SpaceVIL.Decorations
         public void RemoveItemState(ItemStateType type)
         {
             if (type == ItemStateType.Base)
+            {
                 return;
+            }
             if (_itemStates.ContainsKey(type))
+            {
                 _itemStates.Remove(type);
+            }
         }
 
         internal static void ItemStatesSyncBase(Style style)
@@ -578,12 +633,14 @@ namespace SpaceVIL.Decorations
             ItemState coreState = style.GetState(ItemStateType.Base);
             foreach (var state in style.GetAllStates())
             {
-                if (coreState == state.Value)
+                if (coreState == state.Value) {
                     continue;
+                }
 
                 state.Value.Border = coreState.Border;
             }
         }
+
         /// <summary>
         /// Cloning the current style and returning a new deep copy of Style.
         /// </summary>
@@ -593,13 +650,24 @@ namespace SpaceVIL.Decorations
             Style style = new Style();
 
             if (Background != null)
+            {
                 style.Background = Color.FromArgb(Background.A, Background.R, Background.G, Background.B);
+            }
+
             if (Foreground != null)
+            {
                 style.Foreground = Color.FromArgb(Foreground.A, Foreground.R, Foreground.G, Foreground.B);
+            }
+            
             if (Font != null)
+            {
                 style.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
+            }
             else
+            {
                 style.Font = DefaultsService.GetDefaultFont();
+            }
+
             style.SetSizePolicy(WidthPolicy, HeightPolicy);
             style.SetSize(Width, Height);
             style.SetMaxSize(MaxWidth, MaxHeight);
@@ -611,25 +679,39 @@ namespace SpaceVIL.Decorations
             style.SetSpacing(Spacing.Horizontal, Spacing.Vertical);
 
             if (BorderFill != null)
+            {
                 style.BorderFill = Color.FromArgb(BorderFill.A, BorderFill.R, BorderFill.G, BorderFill.B);
+            }
+
             style.BorderThickness = BorderThickness;
+            
             if (BorderRadius != null)
+            {
                 style.BorderRadius = new CornerRadius(BorderRadius.LeftTop, BorderRadius.RightTop, BorderRadius.LeftBottom,
                         BorderRadius.RightBottom);
+            }
 
             if (ShadowColor != null)
+            {
                 style.ShadowColor = Color.FromArgb(ShadowColor.A, ShadowColor.R, ShadowColor.G, ShadowColor.B);
+            }
+
             style.ShadowRadius = ShadowRadius;
             style.ShadowXOffset = ShadowXOffset;
             style.ShadowYOffset = ShadowYOffset;
             style.IsShadowDrop = IsShadowDrop;
 
             if (Shape != null)
+            {
                 style.Shape = new List<float[]>(Shape);
-            if (InnerShapes != null)
-                style.InnerShapes = new List<IBaseItem>(InnerShapes);
-            style.IsFixedShape = IsFixedShape;
+            }
 
+            if (InnerShapes != null)
+            {
+                style.InnerShapes = new List<IBaseItem>(InnerShapes);
+            }
+
+            style.IsFixedShape = IsFixedShape;
             style.IsVisible = IsVisible;
             style._itemStates = new Dictionary<ItemStateType, ItemState>(_itemStates);
 
@@ -638,7 +720,7 @@ namespace SpaceVIL.Decorations
 
         /// <summary>
         /// Getting a default common style. Properly filled in all the necessary properties.
-        /// <para/> Use this method to create instance of Style class instead of  using pure constructor (<c>new Style()</c>).
+        /// <para/> Use this method to create instance of Style class instead of  using pure constructor (new Style()).
         /// </summary>
         /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetDefaultCommonStyle()
@@ -739,16 +821,16 @@ namespace SpaceVIL.Decorations
             style.MinWidth = 20;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
 
-            Style indicator_style = GetIndicatorStyle();
-            style.AddInnerStyle("indicator", indicator_style);
+            Style indicatorStyle = GetIndicatorStyle();
+            style.AddInnerStyle("indicator", indicatorStyle);
 
-            Style textline_style = GetLabelStyle();
-            textline_style.WidthPolicy = SizePolicy.Expand;
-            textline_style.HeightPolicy = SizePolicy.Expand;
-            textline_style.Alignment = ItemAlignment.VCenter;
-            textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.Margin = new Indents(10 + indicator_style.Width, 0, 0, 0);
-            style.AddInnerStyle("text", textline_style);
+            Style textlineStyle = GetLabelStyle();
+            textlineStyle.WidthPolicy = SizePolicy.Expand;
+            textlineStyle.HeightPolicy = SizePolicy.Expand;
+            textlineStyle.Alignment = ItemAlignment.VCenter;
+            textlineStyle.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textlineStyle.Margin = new Indents(10 + indicatorStyle.Width, 0, 0, 0);
+            style.AddInnerStyle("text", textlineStyle);
 
             return style;
         }
@@ -773,22 +855,22 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(4, 4, 4, 4);
 
-            Style marker_style = new Style();
-            marker_style.Background = Color.FromArgb(255, 32, 32, 32);
-            marker_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
-            marker_style.Font = DefaultsService.GetDefaultFont();
-            marker_style.WidthPolicy = SizePolicy.Expand;
-            marker_style.HeightPolicy = SizePolicy.Expand;
-            marker_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            marker_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style markerStyle = new Style();
+            markerStyle.Background = Color.FromArgb(255, 32, 32, 32);
+            markerStyle.Foreground = Color.FromArgb(255, 70, 70, 70); ;
+            markerStyle.Font = DefaultsService.GetDefaultFont();
+            markerStyle.WidthPolicy = SizePolicy.Expand;
+            markerStyle.HeightPolicy = SizePolicy.Expand;
+            markerStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            markerStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(60, 255, 255, 255)
             });
-            marker_style.AddItemState(ItemStateType.Toggled, new ItemState()
+            markerStyle.AddItemState(ItemStateType.Toggled, new ItemState()
             {
                 Background = Color.FromArgb(255, 255, 181, 111)
             });
-            style.AddInnerStyle("marker", marker_style);
+            style.AddInnerStyle("marker", markerStyle);
 
             return style;
         }
@@ -826,17 +908,17 @@ namespace SpaceVIL.Decorations
             style.MinHeight = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
 
-            Style selection_style = new Style();
-            selection_style.Background = Color.Transparent;
-            selection_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
-            selection_style.Font = DefaultsService.GetDefaultFont(14);
-            selection_style.WidthPolicy = SizePolicy.Expand;
-            selection_style.HeightPolicy = SizePolicy.Expand;
-            selection_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            selection_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            selection_style.Padding = new Indents(10, 0, 0, 0);
-            selection_style.Margin = new Indents(0, 0, 20, 0);
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = new Style();
+            selectionStyle.Background = Color.Transparent;
+            selectionStyle.Foreground = Color.FromArgb(255, 70, 70, 70); ;
+            selectionStyle.Font = DefaultsService.GetDefaultFont(14);
+            selectionStyle.WidthPolicy = SizePolicy.Expand;
+            selectionStyle.HeightPolicy = SizePolicy.Expand;
+            selectionStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            selectionStyle.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            selectionStyle.Padding = new Indents(10, 0, 0, 0);
+            selectionStyle.Margin = new Indents(0, 0, 20, 0);
+            style.AddInnerStyle("selection", selectionStyle);
 
             Style dropdownbuttonStyle = new Style();
             dropdownbuttonStyle.Width = 20;
@@ -886,8 +968,8 @@ namespace SpaceVIL.Decorations
             itemlistStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlistStyle);
 
-            Style itemlistarea_style = itemlistStyle.GetInnerStyle("area");
-            if (itemlistarea_style != null)
+            Style itemlistareaFtyle = itemlistStyle.GetInnerStyle("area");
+            if (itemlistareaFtyle != null)
             {
                 itemlistStyle.SetPadding(0, 0, 0, 0);
             }
@@ -1465,8 +1547,8 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(2, 2, 2, 2);
             style.Spacing = new Spacing(0, 4);
 
-            Style selection_style = GetSelectionItemStyle();
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = GetSelectionItemStyle();
+            style.AddInnerStyle("selection", selectionStyle);
 
             return style;
         }
@@ -1506,9 +1588,9 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// note: not supported in current version
+        /// Note: not supported in current version.
         /// </summary>
-        /// <returns> default style for WContainer objects  </returns>
+        /// <returns> default style for WContainer objects. </returns>
         public static Style GetWContainerStyle()//нужен ли?
         {
             Style style = new Style();
@@ -2073,6 +2155,7 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
         /// <summary>
         /// Getting default style for a DialogItem item. Properly filled in all the necessary properties.
         /// <para/> Inner styles: "window".
@@ -2104,6 +2187,7 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
         /// <summary>
         /// Getting default style for a MessageItem item. Properly filled in all the necessary properties.
         /// <para/> Inner styles: "window", "button", "toolbar", "userbar", "message", "layout".
@@ -2638,16 +2722,16 @@ namespace SpaceVIL.Decorations
             tabBarStyle.Height = 30;
             style.AddInnerStyle("tabbar", tabBarStyle);
 
-            Style tab_style = GetTabStyle();
-            style.AddInnerStyle("tab", tab_style);
+            Style tabStyle = GetTabStyle();
+            style.AddInnerStyle("tab", tabStyle);
 
             // Style view_style = tab_style.GetInnerStyle("view");
             // if (view_style != null)
             //     style.AddInnerStyle("view", view_style);
 
-            Style area_style = GetFrameStyle();
-            area_style.SetPadding(0, 0, 0, 0);
-            style.AddInnerStyle("viewarea", area_style);
+            Style areaStyle = GetFrameStyle();
+            areaStyle.SetPadding(0, 0, 0, 0);
+            style.AddInnerStyle("viewarea", areaStyle);
 
             return style;
         }

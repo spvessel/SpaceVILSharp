@@ -83,7 +83,9 @@ namespace SpaceVIL.Decorations
         public Style GetThemeStyle(Type type)
         {
             if (DefaultItemsStyle.ContainsKey(type))
+            {
                 return DefaultItemsStyle[type];
+            }
             return null;
         }
 
@@ -105,9 +107,13 @@ namespace SpaceVIL.Decorations
         public void AddSpecificItemStyle(IBaseItem item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(item))
+            {
                 SpecificItemsStyle[item] = style;
+            }
             else
+            {
                 SpecificItemsStyle.TryAdd(item, style);
+            }
         }
 
         /// <summary>
@@ -118,7 +124,9 @@ namespace SpaceVIL.Decorations
         public void RemoveSpecificItemStyle(IBaseItem item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(item))
+            {
                 SpecificItemsStyle.TryRemove(item, out style);
+            }
         }
 
         /// <summary>
@@ -126,7 +134,7 @@ namespace SpaceVIL.Decorations
         /// </summary>
         /// <param name="type">Type of an item as System.Type.</param>
         /// <param name="style">A style as SpaceVIL.Decorations.Style.</param>
-        /// <returns></returns>
+        /// <returns>If default style replaced</returns>
         public bool ReplaceDefaultItemStyle(Type type, Style style)
         {
             if (DefaultItemsStyle.ContainsKey(type))
@@ -145,9 +153,13 @@ namespace SpaceVIL.Decorations
         public void AddDefaultCustomItemStyle(Type type, Style style)
         {
             if (DefaultItemsStyle.ContainsKey(type))
+            {
                 DefaultItemsStyle[type] = style;
+            }
             else
+            {
                 DefaultItemsStyle.Add(type, style);
+            }
         }
     }
 }

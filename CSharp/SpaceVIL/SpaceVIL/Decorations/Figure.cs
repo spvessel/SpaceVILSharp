@@ -17,6 +17,7 @@ namespace SpaceVIL.Decorations
         {
             return _figure;
         }
+
         private bool _isFixed = false;
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace SpaceVIL.Decorations
             _isFixed = isFixed;
             _figure = new List<float[]>(triangles);
         }
+        
         /// <summary>
         /// Constructs a Figure with specified triangles.
         /// </summary>

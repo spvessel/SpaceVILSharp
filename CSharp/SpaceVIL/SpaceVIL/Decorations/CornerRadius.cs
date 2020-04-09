@@ -5,10 +5,26 @@ namespace SpaceVIL.Decorations
     /// </summary>
     public class CornerRadius
     {
+        /// <summary>
+        /// Left-top corner radius
+        /// </summary>
         public float LeftTop;
+
+        /// <summary>
+        /// Right-top corner radius
+        /// </summary>
         public float RightTop;
+
+        /// <summary>
+        /// Left-bottom corner radius
+        /// </summary>
         public float LeftBottom;
+
+        /// <summary>
+        /// Right-bottom corner radius
+        /// </summary>
         public float RightBottom;
+
         /// <summary>
         /// Checking if all corner radiuses is 0.
         /// </summary>
@@ -24,6 +40,7 @@ namespace SpaceVIL.Decorations
         /// <summary>
         /// Constructs a CornerRadius with the radius values from other CornerRadius object.
         /// </summary>
+        /// <param name="radius">Radius values as SpaceVIL.Decorations.CornerRadius.</param>
         public CornerRadius(CornerRadius radius)
         {
             LeftTop = radius.LeftTop;
@@ -31,10 +48,12 @@ namespace SpaceVIL.Decorations
             LeftBottom = radius.LeftBottom;
             RightBottom = radius.RightBottom;
         }
+
         /// <summary>
         /// Constructs a CornerRadius with the same radius values for each corner of the rectangle object. 
-        /// (default radius = 0)
+        /// (default radius = 0).
         /// </summary>
+        /// <param name="radius">Radius of the item's corners.</param>
         public CornerRadius(float radius = 0)
         {
             LeftTop = radius;
@@ -46,6 +65,10 @@ namespace SpaceVIL.Decorations
         /// <summary>
         /// Constructs a CornerRadius with the radius values for each corner of the rectangle object.
         /// </summary>
+        /// <param name="lt">Left-top corner radius.</param>
+        /// <param name="rt">Right-top corner radius.</param>
+        /// <param name="lb">Left-bottom corner radius.</param>
+        /// <param name="rb">Right-bottom corner radius.</param>
         public CornerRadius(float lt, float rt, float lb, float rb)
         {
             LeftTop = lt;
@@ -53,6 +76,7 @@ namespace SpaceVIL.Decorations
             LeftBottom = lb;
             RightBottom = rb;
         }
+
         public override bool Equals(object obj)
         {
             if (obj == this)
@@ -69,6 +93,7 @@ namespace SpaceVIL.Decorations
             else
                 return false;
         }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
