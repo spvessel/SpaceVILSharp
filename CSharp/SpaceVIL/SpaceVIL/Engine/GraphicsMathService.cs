@@ -8,48 +8,6 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class BorderSection
-    {
-        internal float thickness = 0;
-        internal float x1;
-        internal float y1;
-        internal float x2;
-        internal float y2;
-        internal float nx;
-        internal float ny;
-
-        internal BorderSection(float x1, float y1, float x2, float y2, float x3, float y3)
-        {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-
-            checkNormDir(x3, y3);
-        }
-
-        private void checkNormDir(float x3, float y3)
-        {
-            nx = y1 - y2;
-            ny = x2 - x1;
-
-            float k = Math.Sign((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1));
-
-            if (k != 0)
-            {
-                nx *= k;
-                ny *= k;
-            }
-
-            float d = (float)Math.Sqrt(Math.Pow(nx, 2.0) + Math.Pow(ny, 2.0));
-            if (d != 0)
-            {
-                nx /= d;
-                ny /= d;
-            }
-        }
-    }
-
     /// <summary>
     /// GraphicsMathService is a static class with static methods for working with colors, fonts, shapes and images.
     /// </summary>
@@ -58,19 +16,27 @@ namespace SpaceVIL
         /// <summary>
         /// Mixing two or more colors into one.
         /// </summary>
-        public static Color MixColors(params Color[] m_colors)
+        /// <param name="colors">Sequence of colors as System.Drawing.Color.</param>
+        /// <returns>Mixed color as System.Drawing.Color.</returns>
+        public static Color MixColors(params Color[] colors)
         {
-            if (m_colors.Length == 0)
+            if (colors.Length == 0)
+            {
                 return Color.White;
-            if (m_colors.Length == 1)
-                return m_colors[0];
+            }
+            if (colors.Length == 1)
+            {
+                return colors[0];
+            }
 
             float r = 0, g = 0, b = 0, a = 0.0f;
 
-            foreach (Color item in m_colors)
+            foreach (Color item in colors)
             {
                 if (item == null || item.A == 0)
+                {
                     continue;
+                }
 
                 if (item.A == 255) //exchange
                 {
@@ -84,28 +50,45 @@ namespace SpaceVIL
                     float alpha = item.A / 255.0f;
                     float notAlpha = 1.0f - alpha;
                     if (r == 0.0f)
+                    {
                         r = item.R;
+                    }
                     else
+                    {
                         r = r * notAlpha + item.R * alpha;
+                    }
 
                     if (g == 0.0f)
+                    {
                         g = item.G;
+                    }
                     else
+                    {
                         g = g * notAlpha + item.G * alpha;
+                    }
 
                     if (b == 0.0f)
+                    {
                         b = item.B;
+                    }
                     else
+                    {
                         b = b * notAlpha + item.B * alpha;
+                    }
 
                     if (a == 0.0f)
+                    {
                         a = item.A;
+                    }
                     else if (a < 255.0f)
+                    {
                         a = a * notAlpha + item.A * alpha;
+                    }
                 }
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
         }
+
         /// <summary>
         /// Getting clone of the specified color.
         /// </summary>
@@ -150,20 +133,32 @@ namespace SpaceVIL
         static public List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
+            {
                 return null;
+            }
 
             if (cornerRadius == null)
+            {
                 cornerRadius = new CornerRadius();
+            }
             else
             {
                 if (cornerRadius.LeftTop < 0)
+                {
                     cornerRadius.LeftTop = 0;
+                }
                 if (cornerRadius.RightTop < 0)
+                {
                     cornerRadius.RightTop = 0;
+                }
                 if (cornerRadius.LeftBottom < 0)
+                {
                     cornerRadius.LeftBottom = 0;
+                }
                 if (cornerRadius.RightBottom < 0)
+                {
                     cornerRadius.RightBottom = 0;
+                }
             }
 
             if (cornerRadius.IsCornersZero())
@@ -393,7 +388,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="R"> Circumscribed circle radius (default = 100). </param>
         /// <param name="r"> Incircle radius (default = 50). </param>
-        /// <param name="n"> vertices count (default = 5). </param>
+        /// <param name="n"> Vertices count (default = 5). </param>
         /// <returns> Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetStar(float R = 100, float r = 50, int n = 5)
         {
@@ -516,7 +511,7 @@ namespace SpaceVIL
         /// Making an ellipse with two equal radii (i. e. circle).
         /// </summary>
         /// <param name="r">Radius of a circle (default = 100).</param>
-        /// <param name="n"> Points count on the ellipse border (default = 32). </param>
+        /// <param name="n">Points count on the ellipse border (default = 32). </param>
         /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetEllipse(float r = 100, int n = 32)
         {
@@ -723,6 +718,7 @@ namespace SpaceVIL
             }
             return figure;
         }
+
         /// <summary>
         /// Rotating the specified shape.
         /// </summary>
@@ -747,6 +743,7 @@ namespace SpaceVIL
             }
             return triangles;
         }
+
         /// <summary>
         /// Making an arrow shape.
         /// </summary>
@@ -860,7 +857,9 @@ namespace SpaceVIL
         public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
         {
             if (shape.Count == 0)
+            {
                 return null;
+            }
 
             //clone triangles
             List<float[]> result = new List<float[]>();
@@ -908,7 +907,9 @@ namespace SpaceVIL
         public static List<float[]> GetRoundSquareBorder(float width, float height, float radius, float thickness, int x, int y)
         {
             if (radius < 0)
+            {
                 radius = 0;
+            }
 
             List<BorderSection> border = new List<BorderSection>();
             // Начало координат в углу
@@ -934,7 +935,9 @@ namespace SpaceVIL
             //    triangles.add(new float[] { x, radius + y });
 
             if (radius < 1)
+            {
                 return MakeBorder(border, thickness);
+            }
 
             List<float[]> tmpList;
             float x0, y0;
@@ -980,20 +983,32 @@ namespace SpaceVIL
         static public List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
         {
             if (width <= 0 || height <= 0)
+            {
                 return null;
+            }
 
             if (cornerRadius == null)
+            {
                 cornerRadius = new CornerRadius();
+            }
             else
             {
                 if (cornerRadius.LeftTop < 0)
+                {
                     cornerRadius.LeftTop = 0;
+                }
                 if (cornerRadius.RightTop < 0)
+                {
                     cornerRadius.RightTop = 0;
+                }
                 if (cornerRadius.LeftBottom < 0)
+                {
                     cornerRadius.LeftBottom = 0;
+                }
                 if (cornerRadius.RightBottom < 0)
+                {
                     cornerRadius.RightBottom = 0;
+                }
             }
 
             List<BorderSection> border = new List<BorderSection>();
@@ -1103,6 +1118,7 @@ namespace SpaceVIL
             }
             return clockwise;
         }
+
         /// <summary>
         /// Smooth scaling the specified image by new size.
         /// </summary>
@@ -1132,6 +1148,7 @@ namespace SpaceVIL
 
             return bmp;
         }
+
         /// <summary>
         /// Making System.Drawing.Color from specified byte RGB format.
         /// </summary>
@@ -1141,11 +1158,15 @@ namespace SpaceVIL
         /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(int r, int g, int b)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            if (r < 0) r = Math.Abs(r);
+            if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g);
+            if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b);
+            if (b > 255) b = 255;
             return Color.FromArgb(255, r, g, b);
         }
+
         /// <summary>
         /// Making System.Drawing.Color from specified byte RGBA format.
         /// </summary>
@@ -1156,11 +1177,15 @@ namespace SpaceVIL
         /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(int r, int g, int b, int a)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            if (r < 0) r = Math.Abs(r);
+            if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g);
+            if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b);
+            if (b > 255) b = 255;
             return Color.FromArgb(a, r, g, b);
         }
+
         /// <summary>
         /// Making System.Drawing.Color from specified float RGB format.
         /// </summary>
@@ -1170,11 +1195,15 @@ namespace SpaceVIL
         /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(float r, float g, float b)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            if (r < 0) r = Math.Abs(r);
+            if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g);
+            if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b);
+            if (b > 1.0f) b = 1.0f;
             return Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
+
         /// <summary>
         /// Making System.Drawing.Color from specified float RGBA format.
         /// </summary>
@@ -1185,11 +1214,15 @@ namespace SpaceVIL
         /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(float r, float g, float b, float a)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            if (r < 0) r = Math.Abs(r);
+            if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g);
+            if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b);
+            if (b > 1.0f) b = 1.0f;
             return Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
+
         /// <summary>
         /// Changing font size.
         /// </summary>
@@ -1200,6 +1233,7 @@ namespace SpaceVIL
         {
             return new Font(oldFont.FontFamily, size, oldFont.Style);
         }
+
         /// <summary>
         /// Changing font style.
         /// </summary>
@@ -1210,6 +1244,7 @@ namespace SpaceVIL
         {
             return new Font(oldFont.FontFamily, oldFont.Size, style);
         }
+
         /// <summary>
         /// Changing font family.
         /// </summary>
@@ -1296,6 +1331,71 @@ namespace SpaceVIL
 
             return result;
         }
+
+        /// <summary>
+        /// Updating the specified shape by its new size (streching by new size).
+        /// </summary>
+        /// <param name="triangles">Triangles list of the specified shape.</param>
+        /// <param name="w">New shape width.</param>
+        /// <param name="h">New shape height.</param>
+        /// <param name="area">New shape bounds as SpaceVIL.Core.Area.</param>
+        /// <param name="alignments">New shape alignments as List of SpaceVIL.Core.ItemAlignment.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
+        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h, Area area,
+                ItemAlignment alignments)
+        {
+            if (triangles == null || triangles.Count == 0)
+            {
+                return null;
+            }
+
+            // clone triangles
+            List<float[]> result = new List<float[]>();
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                result.Add(new float[] { triangles.ElementAt(i)[0], triangles.ElementAt(i)[1] });
+            }
+
+            // max and min
+            float maxX = result.Select(_ => _[0]).Max();
+            float maxY = result.Select(_ => _[1]).Max();
+            float minX = result.Select(_ => _[0]).Min();
+            float minY = result.Select(_ => _[1]).Min();
+
+            int figureWidth = Math.Abs((int)(maxX - minX));
+            int figureHeight = Math.Abs((int)(maxY - minY));
+
+            // x offset
+            int offsetX = 0;
+            if (alignments.HasFlag(ItemAlignment.HCenter))
+            {
+                offsetX = (area.GetWidth() - figureWidth) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Right))
+            {
+                offsetX = area.GetWidth() - figureWidth;
+            }
+
+            // y offset
+            int offsetY = 0;
+            if (alignments.HasFlag(ItemAlignment.VCenter))
+            {
+                offsetY = (area.GetHeight() - figureHeight) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Bottom))
+            {
+                offsetY = area.GetHeight() - figureHeight;
+            }
+            // to the left top corner
+            foreach (float[] point in result)
+            {
+                point[0] = (point[0] - minX) * w / (maxX - minX) + offsetX;
+                point[1] = (point[1] - minY) * h / (maxY - minY) + offsetY;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Getting a shape's bounds as SpaceVIL.Core.Area.
         /// </summary>
@@ -1327,7 +1427,9 @@ namespace SpaceVIL
                 ItemAlignment alignments)
         {
             if (triangles == null || triangles.Count == 0)
+            {
                 return null;
+            }
 
             // clone triangles
             List<float[]> result = new List<float[]>();
@@ -1375,6 +1477,48 @@ namespace SpaceVIL
             }
 
             return result;
+        }
+    }
+
+    internal class BorderSection
+    {
+        // internal float thickness = 0;
+        internal float x1;
+        internal float y1;
+        internal float x2;
+        internal float y2;
+        internal float nx;
+        internal float ny;
+
+        internal BorderSection(float x1, float y1, float x2, float y2, float x3, float y3)
+        {
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+
+            checkNormDir(x3, y3);
+        }
+
+        private void checkNormDir(float x3, float y3)
+        {
+            nx = y1 - y2;
+            ny = x2 - x1;
+
+            float k = Math.Sign((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1));
+
+            if (k != 0)
+            {
+                nx *= k;
+                ny *= k;
+            }
+
+            float d = (float)Math.Sqrt(Math.Pow(nx, 2.0) + Math.Pow(ny, 2.0));
+            if (d != 0)
+            {
+                nx /= d;
+                ny /= d;
+            }
         }
     }
 }
