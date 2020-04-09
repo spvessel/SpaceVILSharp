@@ -30,7 +30,7 @@ namespace SpaceVIL.Core
         /// <summary>
         /// Getting lines color.
         /// </summary>
-        /// <returns>Lines color.</returns>
+        /// <returns>Line color.</returns>
         Color GetLineColor();
 
         /// <summary>
