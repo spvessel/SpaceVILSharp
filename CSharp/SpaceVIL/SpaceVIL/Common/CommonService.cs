@@ -8,7 +8,7 @@ using SpaceVIL.Decorations;
 namespace SpaceVIL.Common
 {
     /// <summary>
-    /// DisplayService is static class providing methods to getting basic information 
+    /// CommonService is static class providing methods to getting basic information 
     /// about the SpaceVIL framework, OS attributes, 
     /// initializing the SpaceVIL framework and working with clipboard.
     /// </summary>
