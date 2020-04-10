@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TextEditStorage extends Prototype implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
+class TextEditStorage extends Prototype implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
     static int count = 0;
     private TextLine _text_object;
     private TextLine _substrate_text;
