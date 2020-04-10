@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['v_2562',['V',['../db/dfc/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_key_code.html#ac2f5d2ada4bf63f10f43a618a60a8eaa',1,'com.spvessel.spacevil.Flags.KeyCode.V()'],['../db/dfc/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_key_code.html#aa942c6a2ba17d60de945181a2171b911',1,'com.spvessel.spacevil.Flags.KeyCode.v()']]],
+  ['value_2563',['value',['../da/d4c/classcom_1_1spvessel_1_1spacevil_1_1_decorations_1_1_item_state.html#a8448052734edd9c27004c981d5d7de63',1,'com::spvessel::spacevil::Decorations::ItemState']]],
+  ['value_5fchanged_2564',['VALUE_CHANGED',['../d4/de4/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_input_event_type.html#ac14abf644b1d7991e0dbfe06eb5c0880',1,'com::spvessel::spacevil::Flags::InputEventType']]],
+  ['vcenter_2565',['VCENTER',['../d9/da1/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_item_alignment.html#ae1f484aa9f913a4077a1f5d52ba1f35d',1,'com::spvessel::spacevil::Flags::ItemAlignment']]],
+  ['vertical_2566',['VERTICAL',['../d9/dd8/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_orientation.html#a25bfb0a5cad0e71d01fe569d2d8310d0',1,'com.spvessel.spacevil.Flags.Orientation.VERTICAL()'],['../dd/d59/classcom_1_1spvessel_1_1spacevil_1_1_decorations_1_1_spacing.html#af1d121e1d80f3da6fb76dc4cfc333c7f',1,'com.spvessel.spacevil.Decorations.Spacing.vertical()']]],
+  ['very_5flow_2567',['VERY_LOW',['../d8/dc2/enumcom_1_1spvessel_1_1spacevil_1_1_flags_1_1_redraw_frequency.html#a78ac367af5ca36b524cc52d37b7f848a',1,'com::spvessel::spacevil::Flags::RedrawFrequency']]],
+  ['vscrollbar_2568',['vScrollBar',['../df/d89/classcom_1_1spvessel_1_1spacevil_1_1_list_box.html#a26067388e3ca32a2d3248388d5963933',1,'com.spvessel.spacevil.ListBox.vScrollBar()'],['../dd/dcc/classcom_1_1spvessel_1_1spacevil_1_1_text_area.html#a880ee2998bb46abf1e811139621b569c',1,'com.spvessel.spacevil.TextArea.vScrollBar()'],['../de/dc6/classcom_1_1spvessel_1_1spacevil_1_1_wrap_grid.html#a180d16f6dcb37f814baa0f90066dcdee',1,'com.spvessel.spacevil.WrapGrid.vScrollBar()']]]
+];
