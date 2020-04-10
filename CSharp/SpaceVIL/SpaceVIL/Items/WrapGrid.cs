@@ -114,7 +114,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting scroll movement step.
         /// </summary>
-        /// <param name="value">Scroll step.</param>
+        /// <param name="step">Scroll step.</param>
         public void SetScrollStep(int step)
         {
             _area.SetStep(step);

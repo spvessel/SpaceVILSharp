@@ -1237,7 +1237,7 @@ namespace SpaceVIL
         /// <summary>
         /// Changing font style.
         /// </summary>
-        /// <param name="size">New style of the font.</param>
+        /// <param name="style">New style of the font.</param>
         /// <param name="oldFont">Font as System.Drawing.Font.</param>
         /// <returns>New styled font as System.Drawing.Font.</returns>
         public static Font ChangeFontStyle(FontStyle style, Font oldFont)
@@ -1248,7 +1248,7 @@ namespace SpaceVIL
         /// <summary>
         /// Changing font family.
         /// </summary>
-        /// <param name="size">New font family of the font.</param>
+        /// <param name="fontFamily">New font family of the font.</param>
         /// <param name="oldFont">Font as System.Drawing.Font.</param>
         /// <returns>New font as System.Drawing.Font.</returns>
         public static Font ChangeFontFamily(FontFamily fontFamily, Font oldFont)

@@ -39,7 +39,7 @@ namespace SpaceVIL
         private Color _lineColor = Color.Blue;
         /// <summary>
         /// Setting lines color.
-        /// <pata/> Default: Blue.
+        /// <para/> Default: Blue.
         /// </summary>
         /// <param name="color">Line color.</param>
         public void SetLineColor(Color color)

@@ -181,11 +181,11 @@ namespace SpaceVIL
         /// Setting new font family of the text.
         /// </summary>
         /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
-        public void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily fontFamily)
         {
             foreach (TextLine tl in _textObjects)
             {
-                tl.SetFontFamily(font_family);
+                tl.SetFontFamily(fontFamily);
             }
         }
         /// <summary>

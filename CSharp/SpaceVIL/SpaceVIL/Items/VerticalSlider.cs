@@ -231,7 +231,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting X coordinate of the left-top corner of the VerticalSlider.
         /// </summary>
-        /// <param name="x">X position of the left-top corner.</param>
+        /// <param name="y">X position of the left-top corner.</param>
         public override void SetY(int y)
         {
             base.SetY(y);

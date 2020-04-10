@@ -1060,7 +1060,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="value">True: if you want this item can pass further the specified type of input events.
         /// False: if you want this item connot pass further the specified type of input events.</param>
-        /// <param name="event">Type of input events as SpaceVIL.Core.InputEventType.</param>
+        /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
         public void SetPassEvents(bool value, InputEventType e)
         {
             _core.SetPassEvents(value, e);

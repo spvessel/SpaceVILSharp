@@ -303,9 +303,9 @@ namespace SpaceVIL
         /// Setting new font family of the text.
         /// </summary>
         /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
-        public void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily fontFamily)
         {
-            textInput.SetFontFamily(font_family);
+            textInput.SetFontFamily(fontFamily);
         }
 
         /// <summary>

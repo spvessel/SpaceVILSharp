@@ -113,9 +113,9 @@ namespace SpaceVIL
         /// to the maximum/minimum value.
         /// </summary>
         /// <param name="value">Progress value of of the unfinished task.</param>
-        public void SetCurrentValue(int currentValue)
+        public void SetCurrentValue(int value)
         {
-            _currentValue = currentValue;
+            _currentValue = value;
             UpdateProgressBar();
         }
         /// <summary>

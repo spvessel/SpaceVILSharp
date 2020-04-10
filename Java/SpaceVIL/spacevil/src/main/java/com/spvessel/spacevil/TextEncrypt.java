@@ -648,7 +648,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         _substrate_text.setForeground(r, g, b);
     }
 
-    void seSubstratetForeground(int r, int g, int b, int a) {
+    void setSubstrateForeground(int r, int g, int b, int a) {
         _substrate_text.setForeground(r, g, b, a);
     }
 

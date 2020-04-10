@@ -1147,7 +1147,7 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
      * @param b Blue color component. Range: (0 - 255)
      * @param a Alpha color component. Range: (0 - 255)
      */
-    public void seSubstratetForeground(int r, int g, int b, int a) {
+    public void setSubstratetForeground(int r, int g, int b, int a) {
         // _substrate_text.setForeground(r, g, b, a);
         setSubstrateForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
