@@ -117,9 +117,9 @@ namespace SpaceVIL
         /// Setting new font family of the text.
         /// </summary>
         /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
-        public void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily fontFamily)
         {
-            _textEncrypt.SetFontFamily(font_family);
+            _textEncrypt.SetFontFamily(fontFamily);
         }
         /// <summary>
         /// Getting the current font of the text.
@@ -333,9 +333,9 @@ namespace SpaceVIL
         /// typing substrate becomes invisible) color of a PasswordLine.
         /// </summary>
         /// <param name="color">Substrate text color as System.Drawing.Color.</param>
-        public void SetSubstrateForeground(Color foreground)
+        public void SetSubstrateForeground(Color color)
         {
-            _textEncrypt.SetSubstrateForeground(foreground);
+            _textEncrypt.SetSubstrateForeground(color);
         }
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 

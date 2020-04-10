@@ -557,14 +557,14 @@ namespace SpaceVIL
         /// Setting new font family of the text.
         /// </summary>
         /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
-        public void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily fontFamily)
         {
-            if (font_family == null)
+            if (fontFamily == null)
                 return;
             Font oldFont = GetFont();
-            if (oldFont.FontFamily != font_family)
+            if (oldFont.FontFamily != fontFamily)
             {
-                Font newFont = GraphicsMathService.ChangeFontFamily(font_family, oldFont); //new Font(font_family, oldFont.Size, oldFont.Style);
+                Font newFont = GraphicsMathService.ChangeFontFamily(fontFamily, oldFont); //new Font(font_family, oldFont.Size, oldFont.Style);
                 SetFont(newFont);
             }
         }
