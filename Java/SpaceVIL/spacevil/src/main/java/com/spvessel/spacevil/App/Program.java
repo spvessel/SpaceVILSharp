@@ -53,7 +53,7 @@ public class Program {
         ImageTest im = new ImageTest();
         FlowTest ft = new FlowTest();
         LayoutsTest lt = new LayoutsTest();
-        // ComplexTest ct = new ComplexTest();
+        ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
         // TextTest tt = new TextTest();
         // Containers con = new Containers();

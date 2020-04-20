@@ -42,6 +42,7 @@ public abstract class CoreWindow {
      * Constructs a CoreWindow
      */
     public CoreWindow() {
+        CursorImage.initCursors();
         windowUUID = UUID.randomUUID();
         setWindowName("Window_" + count);
         setWindowTitle("Window_" + count);

@@ -1466,11 +1466,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Setting mouse cursor image for this item from embedded cursors.
      * 
-     * @param cursor Mouse cursor type as
+     * @param type Mouse cursor type as
      *               com.spvessel.spacevil.Flags.EmbeddedCursor.
      */
-    public void setCursor(EmbeddedCursor cursor) {
-        _cursor = new CursorImage(cursor);
+    public void setCursor(EmbeddedCursor type) {
+        _cursor = new CursorImage(type);
     }
 
     /**

@@ -69,7 +69,6 @@ final class GLWHandler {
     }
 
     void createWindow() throws SpaceVILException {
-        CursorImage.initCursors();
         // important!!! may be the best combination of WINDOW HINTS!!!
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
