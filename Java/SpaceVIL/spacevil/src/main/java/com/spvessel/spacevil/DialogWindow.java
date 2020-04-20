@@ -14,6 +14,7 @@ public abstract class DialogWindow extends CoreWindow {
         super();
         isDialog = true;
         isCentered = true;
+        isAlwaysOnTop = true;
     }
 
     /**

@@ -305,7 +305,7 @@ final class DrawEngine {
         glwHandler.getCoreWindow().setWidthDirect((int) (width.get(0) / _scale.getXScale()));
         glwHandler.getCoreWindow().setHeightDirect((int) (height.get(0) / _scale.getYScale()));
 
-        // подписать на обновление при смене фактора масштабирования 
+        // подписать на обновление при смене фактора масштабирования
         // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
     }
 
@@ -415,25 +415,25 @@ final class DrawEngine {
     boolean flagMove = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
-        if (!flagMove || _commonProcessor.inputLocker)
+        if (!flagMove || _commonProcessor.inputLocker || !glwHandler.focusable)
             return;
+            
         flagMove = false;
         _commonProcessor.events.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);
-        if (!glwHandler.focusable)
-            return;
+
         if (CommonService.getOSType() != OSType.MAC) {
             _mouseMoveProcessor.process(wnd, xpos / _scale.getXScale(), ypos / _scale.getXScale(), _scale);
         } else {
             _mouseMoveProcessor.process(wnd, xpos, ypos, new Scale());
         }
-
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {
         if (_commonProcessor.inputLocker || !glwHandler.focusable)
             return;
         _tooltip.initTimer(false);
+
         _commonProcessor.rootContainer.clearSides();
         _mouseClickProcessor.process(wnd, button, action, mods);
     }

@@ -125,11 +125,18 @@ final class WindowLayout {
     }
 
     void setEventTask(EventTask task) {
-        _actionManager.addTask(task);
+        if (!_hold)
+            _actionManager.addTask(task);
     }
 
+    private volatile boolean _set = true;
+
     void executePollActions() {
-        _actionManager.execute.set();
+        if (!_hold) {
+            _set = _actionManager.execute.open;
+            if (!_set)
+                _actionManager.execute.set();
+        }
     }
 
     Prototype getFocusedItem() {
@@ -285,5 +292,15 @@ final class WindowLayout {
 
     ToolTipItem getToolTip() {
         return _engine.getToolTip();
+    }
+
+    boolean _hold = false;
+
+    void hold() {
+        _hold = true;
+    }
+
+    void proceed() {
+        _hold = false;
     }
 }

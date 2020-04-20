@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import glm.mat._4.Mat4;
 import glm.vec._3.Vec3;
 
-public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, InterfaceDraggable {
+public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, InterfaceMovable, InterfaceDraggable {
 
     private static int _count = 0;
 
@@ -47,17 +47,30 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         });
 
         eventMousePress.add((sender, args) -> {
+            System.out.println("press");
+            _drag = true;
             _ptr.setPosition(args.position.getX(), args.position.getY());
         });
 
+        eventMouseMove.add((sender, args) -> {
+            if (_drag) {
+                System.out.println("move");
+                float xRot = (float) (args.position.getX() - _ptr.getX()) / 2;
+                _model = _model.rotate(radians(xRot), new Vec3(0.0f, 1.0f, 0.0f));
+
+                float yRot = (float) (args.position.getY() - _ptr.getY()) / 2;
+                _model = _model.rotate(radians(yRot), new Vec3(1.0f, 0.0f, 0.0f));
+
+                _ptr.setPosition(args.position.getX(), args.position.getY());
+            }
+        });
+
         eventMouseDrag.add((sender, args) -> {
-            float xRot = (float) (args.position.getX() - _ptr.getX()) / 2;
-            _model = _model.rotate(radians(xRot), new Vec3(0.0f, 1.0f, 0.0f));
-
-            float yRot = (float) (args.position.getY() - _ptr.getY()) / 2;
-            _model = _model.rotate(radians(yRot), new Vec3(1.0f, 0.0f, 0.0f));
-
-            _ptr.setPosition(args.position.getX(), args.position.getY());
+            System.out.println("drag");
+        });
+        
+        eventMouseDrop.add((sender, args) -> {
+            System.out.println("drop");
         });
 
         eventScrollUp.add((sender, args) -> {
@@ -73,14 +86,17 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         });
 
         eventMouseClick.add((sender, args) -> {
+            System.out.println("release");
+            _drag = false;
             // if (args.Button == MouseButton.ButtonRight)
             // {
-            //     MessageItem msg = new MessageItem("OK", "Message");
-            //     msg.Show(GetHandler());
+            // MessageItem msg = new MessageItem("OK", "Message");
+            // msg.Show(GetHandler());
             // }
         });
     }
 
+    private boolean _drag = false;
     private Position _ptr = new Position();
     private int _shaderCommon = 0;
     private int _shaderLamp = 0;
@@ -328,21 +344,22 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         glBindVertexArray(_lightVAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-        // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+        // note that we update the lamp's position attribute's stride to reflect the
+        // updated buffer data
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * 4, 0);
         glEnableVertexAttribArray(0);
     }
 
     private void genTextureBuffers() {
         float[] vboData = new float[] {
-                //X    Y   U     V
-                -1f, 1f, 0f, 0.0f, 1.0f, //x0
-                -1f, -1, 0f, 0.0f, 0.0f, //x1
-                1f, -1f, 0f, 1.0f, 0.0f, //x2
-                1f, 1f, 0f, 1.0f, 1.0f, //x3
+                // X Y U V
+                -1f, 1f, 0f, 0.0f, 1.0f, // x0
+                -1f, -1, 0f, 0.0f, 0.0f, // x1
+                1f, -1f, 0f, 1.0f, 0.0f, // x2
+                1f, 1f, 0f, 1.0f, 1.0f, // x3
         };
 
-        int[] iboData = new int[] { 0, 1, 2, //first triangle
+        int[] iboData = new int[] { 0, 1, 2, // first triangle
                 2, 3, 0, // second triangle
         };
 
@@ -360,11 +377,11 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     }
 
     private void genTexturedFBO() {
-        //fbo
+        // fbo
         _FBO = glGenFramebuffersEXT();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, _FBO);
 
-        //texture
+        // texture
         _texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, _texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWidth() / _pixelingStrenght, getHeight() / _pixelingStrenght, 0,

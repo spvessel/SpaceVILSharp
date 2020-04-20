@@ -36,47 +36,64 @@ namespace SpaceVIL
         }
 
         internal EventCommonMethodState EventFocusGet;
+
         internal EventCommonMethodState EventFocusLost;
+
         /// <summary>
         /// Event that is invoked when an item is resizing.
         /// </summary>
         public EventCommonMethodState EventResize;
+
         /// <summary>
         /// Event that is invoked when an item is destroyed (removed).
         /// </summary>
         public EventCommonMethodState EventDestroy;
+
         /// <summary>
         /// Event that is invoked when mouse cursor enters inside an item area.
         /// </summary>
         public EventMouseMethodState EventMouseHover;
+
         /// <summary>
         /// Event that is invoked when mouse cursor leaves inside an item area.
         /// </summary>
         public EventMouseMethodState EventMouseLeave;
+
         /// <summary>
         /// Event that is invoked when mouse click (release) on an item.
         /// </summary>
         public EventMouseMethodState EventMouseClick;
+
         /// <summary>
         /// Event that is invoked when mouse double click on an item.
         /// </summary>
         public EventMouseMethodState EventMouseDoubleClick;
+
         /// <summary>
         /// Event that is invoked when mouse press on an item.
         /// </summary>
         public EventMouseMethodState EventMousePress;
+
         /// <summary>
         /// Event that is invoked when mouse drag on an item.
         /// </summary>
         public EventMouseMethodState EventMouseDrag;
+
+        /// <summary>
+        /// Event that is invoked when mouse move on an item.
+        /// </summary>
+        public EventMouseMethodState EventMouseMove;
+
         /// <summary>
         /// Event that is invoked when mouse drop on an item.
         /// </summary>
         public EventMouseMethodState EventMouseDrop;
+
         /// <summary>
         /// Event that is invoked when mouse wheel scrolls up on an item.
         /// </summary>
         public EventMouseMethodState EventScrollUp;
+
         /// <summary>
         /// Event that is invoked when mouse wheel scrolls down on an item.
         /// </summary>
@@ -86,6 +103,7 @@ namespace SpaceVIL
         /// Event that is invoked when key of keyboard is pressed.
         /// </summary>
         public EventKeyMethodState EventKeyPress;
+
         /// <summary>
         /// Event that is invoked when key of keyboard is released.
         /// </summary>

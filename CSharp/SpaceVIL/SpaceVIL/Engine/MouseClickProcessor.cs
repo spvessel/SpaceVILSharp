@@ -72,7 +72,7 @@ namespace SpaceVIL
                 _commonProcessor.PtrClick.SetPosition((int)x, (int)y);
             }
 
-            if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(), 
+            if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(),
                     _commonProcessor.PtrRelease.GetY(), m_state))
             {
                 lastHovered.SetMousePressed(false);
@@ -167,10 +167,11 @@ namespace SpaceVIL
         internal void Release(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
             _commonProcessor.FocusedItem.SetMousePressed(false);
-            
+
             _commonProcessor.RootContainer.RestoreFocus();
             bool isDoubleClick = IsDoubleClick(_commonProcessor.HoveredItem);
             Queue<Prototype> underHoveredList = new Queue<Prototype>(_commonProcessor.UnderHoveredItems);
+
             while (underHoveredList.Count > 0)
             {
                 Prototype item = underHoveredList.Dequeue();
@@ -178,6 +179,7 @@ namespace SpaceVIL
                     continue;
                 item.SetMousePressed(false);
             }
+
             if (_commonProcessor.Events.LastEvent().HasFlag(InputEventType.WindowResize)
                 || _commonProcessor.Events.LastEvent().HasFlag(InputEventType.WindowMove))
             {
@@ -185,11 +187,17 @@ namespace SpaceVIL
                 _commonProcessor.Events.SetEvent(InputEventType.MouseRelease);
                 return;
             }
+
             if (_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MouseMove))
             {
                 if (_commonProcessor.DraggableItem != null)
                 {
                     _commonProcessor.DraggableItem.EventMouseDrop?.Invoke(_commonProcessor.DraggableItem, _commonProcessor.Margs);
+                }
+
+                if (_commonProcessor.HoveredItem is IMovable)
+                {
+                    _commonProcessor.HoveredItem.EventMouseClick.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
                 }
 
                 if (!_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MouseDrag))
@@ -201,6 +209,7 @@ namespace SpaceVIL
                     {
                         _commonProcessor.Events.ResetAllEvents();
                         _commonProcessor.Events.SetEvent(InputEventType.MouseRelease);
+
                         return;
                     }
                 }
@@ -214,19 +223,36 @@ namespace SpaceVIL
                        _commonProcessor.DraggableItem, _commonProcessor.UnderFocusedItems, true);
                     _commonProcessor.Events.ResetAllEvents();
                     _commonProcessor.Events.SetEvent(InputEventType.MouseRelease);
+
                     return;
                 }
             }
+
             if (_commonProcessor.HoveredItem != null)
             {
                 _commonProcessor.HoveredItem.SetMousePressed(false);
                 if (isDoubleClick)
+                {
                     _commonProcessor.Manager.AssignActionsForHoveredItem(InputEventType.MouseDoubleClick,
                        _commonProcessor.Margs, _commonProcessor.HoveredItem, _commonProcessor.UnderHoveredItems, false);
+                }
                 else
-                    _commonProcessor.Manager.AssignActionsForHoveredItem(InputEventType.MouseRelease,
-                        _commonProcessor.Margs, _commonProcessor.HoveredItem, _commonProcessor.UnderHoveredItems, false);
+                {
+                    if (!_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MouseDrag))
+                    {
+                        if (_commonProcessor.HoveredItem is IMovable)
+                        {
+                            _commonProcessor.HoveredItem.EventMouseClick.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
+                        }
+                        else
+                        {
+                            _commonProcessor.Manager.AssignActionsForHoveredItem(InputEventType.MouseRelease,
+                                _commonProcessor.Margs, _commonProcessor.HoveredItem, _commonProcessor.UnderHoveredItems, false);
+                        }
+                    }
+                }
             }
+
             _commonProcessor.Events.ResetAllEvents();
             _commonProcessor.Events.SetEvent(InputEventType.MouseRelease);
         }

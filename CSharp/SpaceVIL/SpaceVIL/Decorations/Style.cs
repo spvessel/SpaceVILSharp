@@ -755,8 +755,8 @@ namespace SpaceVIL.Decorations
             style.Font = DefaultsService.GetDefaultFont(16);
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
-            style.Width = 10;
-            style.Height = 10;
+            style.Width = 30;
+            style.Height = 30;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.BorderRadius = new CornerRadius();
@@ -987,9 +987,6 @@ namespace SpaceVIL.Decorations
             menuStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             menuStyle.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
             itemlistStyle.AddInnerStyle("menu", menuStyle);
-
-            Style areaStyle = GetListAreaStyle();
-            style.AddInnerStyle("listarea", areaStyle);
 
             return style;
         }

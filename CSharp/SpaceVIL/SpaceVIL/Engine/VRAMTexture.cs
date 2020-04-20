@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using SpaceVIL.Core;
 using static OpenGL.OpenGLConstants;
 using static OpenGL.OpenGLWrapper;
 
@@ -19,7 +20,19 @@ namespace SpaceVIL
             Texture = new uint[1];
         }
 
-        internal void GenTexture(int w, int h, byte[] bitmap)
+        private void ApplySmoothFilter()
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        }
+
+        private void ApplyRoughFilter()
+        {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        }
+
+        internal void GenTexture(int w, int h, byte[] bitmap, ImageQuality filtering)
         {
             glGenTextures(1, Texture);
             glBindTexture(GL_TEXTURE_2D, Texture[0]);
@@ -29,14 +42,21 @@ namespace SpaceVIL
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            if (filtering == ImageQuality.Smooth)
+            {
+                ApplySmoothFilter();
+            }
+            else
+            {
+                ApplyRoughFilter();
+            }
         }
 
-        internal void GenTexture(int w, int h, Bitmap bitmap)
+        internal void GenTexture(int w, int h, Bitmap bitmap, ImageQuality filtering)
         {
             BitmapData bitData = bitmap.LockBits(
-                new System.Drawing.Rectangle(Point.Empty, bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                new System.Drawing.Rectangle(System.Drawing.Point.Empty, bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             glGenTextures(1, Texture);
             glBindTexture(GL_TEXTURE_2D, Texture[0]);
@@ -47,8 +67,15 @@ namespace SpaceVIL
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            if (filtering == ImageQuality.Smooth)
+            {
+                ApplySmoothFilter();
+            }
+            else
+            {
+                ApplyRoughFilter();
+            }
 
             bitmap.UnlockBits(bitData);
         }
@@ -65,14 +92,14 @@ namespace SpaceVIL
             //     x1,  y0,  1.0f, 1.0f, //x3
             //     };
             // else
-                _vbo_data = new float[]
-                {
+            _vbo_data = new float[]
+            {
                 //X    Y   U     V
                 x0,  y0,  0.0f, 0.0f, //x0
                 x0,  y1,  0.0f, 1.0f, //x1
                 x1,  y1,  1.0f, 1.0f, //x2
                 x1,  y0,  1.0f, 0.0f, //x3
-                };
+            };
 
             _ibo_data = new int[]
             {

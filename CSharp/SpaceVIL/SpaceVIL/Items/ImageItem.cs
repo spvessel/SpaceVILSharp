@@ -359,5 +359,24 @@ namespace SpaceVIL
             if (_image != null)
                 _image.Dispose();
         }
+
+        private ImageQuality _filter = ImageQuality.Smooth;
+        /// <summary>
+        /// Getting an image filtering quality.
+        /// </summary>
+        /// <returns>Image filtering quality as SpaceVIL.Core.ImageQuality.</returns>
+        public ImageQuality GetImageQuality()
+        {
+            return _filter;
+        }
+
+        /// <summary>
+        /// Setting an image filtering quality.
+        /// </summary>
+        /// <param name="quality">Image filtering quality as SpaceVIL.Core.ImageQuality.</param>
+        public void SetImageQuality(ImageQuality quality)
+        {
+            _filter = quality;
+        }
     }
 }

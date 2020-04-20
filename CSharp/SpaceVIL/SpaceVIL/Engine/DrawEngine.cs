@@ -949,7 +949,7 @@ namespace SpaceVIL
             }
         }
 
-        private Position tooltipBorderIndent = new Position(10, 2);
+        private Position _tooltipBorderIndent = new Position(10, 2);
 
         private void DrawToolTip()
         {
@@ -967,15 +967,15 @@ namespace SpaceVIL
 
             //проверка сверху
             if (_commonProcessor.PtrRelease.GetY() > _tooltip.GetHeight())
-                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() - _tooltip.GetHeight() - tooltipBorderIndent.GetY());
+                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() - _tooltip.GetHeight() - _tooltipBorderIndent.GetY());
             else
-                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + CommonService.CurrentCursor.GetCursorHeight() + tooltipBorderIndent.GetY());
+                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + CommonService.CurrentCursor.GetCursorHeight() + _tooltipBorderIndent.GetY());
             //проверка справа
-            if (_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX() + _tooltip.GetWidth()
-                > GLWHandler.GetCoreWindow().GetWidth() - tooltipBorderIndent.GetX())
-                _tooltip.SetX(GLWHandler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - tooltipBorderIndent.GetX());
+            if (_commonProcessor.PtrRelease.GetX() - _tooltipBorderIndent.GetX() + _tooltip.GetWidth()
+                > GLWHandler.GetCoreWindow().GetWidth() - _tooltipBorderIndent.GetX())
+                _tooltip.SetX(GLWHandler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - _tooltipBorderIndent.GetX());
             else
-                _tooltip.SetX(_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX());
+                _tooltip.SetX(_commonProcessor.PtrRelease.GetX() - _tooltipBorderIndent.GetX());
 
             _tooltip.MakeShape();
 

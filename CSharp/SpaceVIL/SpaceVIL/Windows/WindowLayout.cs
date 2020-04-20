@@ -10,7 +10,7 @@ namespace SpaceVIL
     {
         internal void RestoreView()
         {
-            if(_engine != null)
+            if (_engine != null)
             {
                 _engine.RestoreView();
             }
@@ -18,7 +18,7 @@ namespace SpaceVIL
 
         internal void RestoreCommonGLSettings()
         {
-            if(_engine != null)
+            if (_engine != null)
             {
                 _engine.RestoreCommonGLSettings();
             }
@@ -26,7 +26,7 @@ namespace SpaceVIL
 
         internal void SetGLLayerViewport(IOpenGLLayer layer)
         {
-            if(_engine != null)
+            if (_engine != null)
             {
                 _engine.SetGLLayerViewport(layer);
             }
@@ -148,16 +148,20 @@ namespace SpaceVIL
 
         internal void SetEventTask(EventTask task)
         {
-            _actionManager.AddTask(task);
+            if (!_hold)
+                _actionManager.AddTask(task);
         }
 
-        volatile bool set = true;
+        private volatile bool _set = true;
 
         internal void ExecutePollActions()
         {
-            set = _actionManager.Execute.IsSet;
-            if (!set)
-                _actionManager.Execute.Set();
+            if (!_hold)
+            {
+                _set = _actionManager.Execute.IsSet;
+                if (!_set)
+                    _actionManager.Execute.Set();
+            }
         }
 
         internal Prototype GetFocusedItem()
@@ -337,8 +341,21 @@ namespace SpaceVIL
             _engine.FreeVRAMResource(resource);
         }
 
-        internal ToolTipItem GetToolTip() {
-        return _engine.GetToolTip();
-    }
+        internal ToolTipItem GetToolTip()
+        {
+            return _engine.GetToolTip();
+        }
+
+        bool _hold = false;
+
+        internal void Hold()
+        {
+            _hold = true;
+        }
+
+        internal void Proceed()
+        {
+            _hold = false;
+        }
     }
 }

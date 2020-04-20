@@ -115,24 +115,39 @@ public class FlowTest extends ActiveWindow {
             // LoadingScreen ls = new LoadingScreen();
             // ls.show(this);
         });
-        // btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        // btn1.setCustomFigure(new CustomFigure(false,
+        // GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setMargin(0, 0, 20, 0);
         btn1.setHoverRule(ItemHoverRule.STRICT);
 
         ButtonCore btn2 = new ButtonCore();
         btn2.setBackground(121, 223, 152);
         btn2.setItemName("nameof(btn2)");
-        btn2.setWidth(30);
+        btn2.setWidth(100);
         btn2.setHeight(30);
         btn2.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn2.addItemState(ItemStateType.HOVERED, hovered);
         btn2.eventMouseClick.add((sender, args) -> {
-            InputDialog id = new InputDialog("title", "actionName", "defaultText");
-            id.show(this);
+            // InputDialog id = new InputDialog("title", "actionName", "defaultText");
+            // id.show(this);
+
+            // hold();
+
+            MyDialogBox myBox = new MyDialogBox();
+            myBox.showAndWait(this);
+
+            // proceed();
+
+            System.out.println("Ok is clicked? Result: " + myBox.getResult());
+
         });
-        btn2.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+        // btn2.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30,
+        // 30, 0, 0, 0)));
         btn2.setHoverRule(ItemHoverRule.STRICT);
+        btn2.eventMouseDoubleClick.add((s, a) -> {
+            System.out.println("double click");
+        });
 
         // btn add_at_end
         ButtonCore btn3 = new ButtonCore();
@@ -158,9 +173,9 @@ public class FlowTest extends ActiveWindow {
                     // Graph graph = getGraph();
                     // graph.setPadding(5, 5, 5, 5);
                     // frame.addItem(graph);
-//                    OpenGLLayer ogl = new OpenGLLayer();
-//                    ogl.setMargin(0, 30, 0, 0);
-//                    frame.addItem(ogl);
+                    // OpenGLLayer ogl = new OpenGLLayer();
+                    // ogl.setMargin(0, 30, 0, 0);
+                    // frame.addItem(ogl);
                 }
             }
 
@@ -307,9 +322,9 @@ public class FlowTest extends ActiveWindow {
 
         eventKeyPress.add((sender, args) -> {
             // if (args.key == KeyCode.V)
-            //     CommonService.setClipboardString("SetClipBoardString");
+            // CommonService.setClipboardString("SetClipBoardString");
             // if (args.key == KeyCode.C)
-            //     System.out.println(CommonService.getClipboardString());
+            // System.out.println(CommonService.getClipboardString());
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
@@ -434,7 +449,8 @@ public class FlowTest extends ActiveWindow {
         // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
         // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
         // graph_points.setPointsCoord(crd);
-        // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
+        // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
+        // 0, 0));
 
         if (koh.isEmpty()) {
             Point point1 = new Point(200, 200);
@@ -516,7 +532,7 @@ public class FlowTest extends ActiveWindow {
             pointsList.add(new float[] { p4.x, p4.y });
             pointsList.add(new float[] { p5.x, p5.y });
 
-            //рекурсивно вызываем функцию нужное число раз
+            // рекурсивно вызываем функцию нужное число раз
             fractalKoh(pointsList, p4, pn, p5, iterations - 1);
             fractalKoh(pointsList, pn, p5, p4, iterations - 1);
             fractalKoh(pointsList, p1, p4, new Point((2 * p1.x + p3.x) / 3, (2 * p1.y + p3.y) / 3), iterations - 1);

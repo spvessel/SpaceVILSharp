@@ -187,6 +187,12 @@ namespace SpaceVIL
                     }
                 }
             }
+
+            if (_commonProcessor.HoveredItem is IMovable)
+            {
+                _commonProcessor.Events.SetEvent(InputEventType.MouseMove);
+                _commonProcessor.HoveredItem.EventMouseMove.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
+            }
         }
 
         private List<T> GetUniqueList<T>(List<T> firstList, List<T> secondList)

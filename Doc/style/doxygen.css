@@ -1332,12 +1332,15 @@ dl.section dd {
 
 #projectlogo {
     text-align: center;
-    vertical-align: bottom;
+    vertical-align: middle;
     border-collapse: separate;
 }
 
 #projectlogo img {
     border: 0px none;
+    width: 80px;
+    height: 80px;
+    margin-left: 40px;
 }
 
 #projectalign {

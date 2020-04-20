@@ -384,9 +384,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             return;
         }
         super.setStyle(style);
-        Style inner_style = style.getInnerStyle("itemlist");
-        if (inner_style != null) {
-            itemList.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("itemlist");
+        if (innerStyle != null) {
+            itemList.setStyle(innerStyle);
         }
     }
 }

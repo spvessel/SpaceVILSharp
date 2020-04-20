@@ -91,6 +91,10 @@ abstract public class Prototype implements InterfaceBaseItem {
      */
     public EventMouseMethodState eventMousePress = new EventMouseMethodState();
     /**
+     * Event that is invoked when mouse move on an item.
+     */
+    public EventMouseMethodState eventMouseMove = new EventMouseMethodState();
+    /**
      * Event that is invoked when mouse drag on an item.
      */
     public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();

@@ -937,9 +937,6 @@ public class Style implements Cloneable {
         menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
         itemlistStyle.addInnerStyle("menu", menuStyle);
 
-        Style areaStyle = getListAreaStyle();
-        style.addInnerStyle("listarea", areaStyle);
-
         return style;
     }
 

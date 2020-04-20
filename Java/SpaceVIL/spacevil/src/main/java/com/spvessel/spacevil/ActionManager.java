@@ -70,41 +70,41 @@ class ActionManager {
 
     private void executeAction(EventTask task) {
         switch (task.action) {
-        case MOUSE_RELEASE:
-            invokeMouseClickEvent(task.item, (MouseArgs) task.args);
-            break;
-        case MOUSE_DOUBLE_CLICK:
-            invokeMouseDoubleClickEvent(task.item, (MouseArgs) task.args);
-            break;
-        case MOUSE_PRESS:
-            invokeMousePressedEvent(task.item, (MouseArgs) task.args);
-            break;
-        case MOUSE_HOVER:
-            invokeMouseHoverEvent(task.item, (MouseArgs) task.args);
-            break;
-        case MOUSE_LEAVE:
-            invokeMouseLeaveEvent(task.item, (MouseArgs) task.args);
-            break;
-        case MOUSE_DRAG:
-            invokeMouseDragEvent(task.item, (MouseArgs) task.args);
-            break;
-        case FOCUS_GET:
-            invokeFocusGetEvent(task.item);
-            break;
-        case KEY_PRESS:
-            invokeKeyPressEvent(task.item, (KeyArgs) task.args);
-            break;
-        case KEY_RELEASE:
-            invokeKeyReleaseEvent(task.item, (KeyArgs) task.args);
-            break;
-        case TEXT_INPUT:
-            invokeTextInputEvent(task.item, (TextInputArgs) task.args);
-            break;
-        case WINDOW_DROP:
-            invokeDropEvent(task.item, (DropArgs) task.args);
-            break;
-        default:
-            break;
+            case MOUSE_RELEASE:
+                invokeMouseClickEvent(task.item, (MouseArgs) task.args);
+                break;
+            case MOUSE_DOUBLE_CLICK:
+                invokeMouseDoubleClickEvent(task.item, (MouseArgs) task.args);
+                break;
+            case MOUSE_PRESS:
+                invokeMousePressedEvent(task.item, (MouseArgs) task.args);
+                break;
+            case MOUSE_HOVER:
+                invokeMouseHoverEvent(task.item, (MouseArgs) task.args);
+                break;
+            case MOUSE_LEAVE:
+                invokeMouseLeaveEvent(task.item, (MouseArgs) task.args);
+                break;
+            case MOUSE_DRAG:
+                invokeMouseDragEvent(task.item, (MouseArgs) task.args);
+                break;
+            case FOCUS_GET:
+                invokeFocusGetEvent(task.item);
+                break;
+            case KEY_PRESS:
+                invokeKeyPressEvent(task.item, (KeyArgs) task.args);
+                break;
+            case KEY_RELEASE:
+                invokeKeyReleaseEvent(task.item, (KeyArgs) task.args);
+                break;
+            case TEXT_INPUT:
+                invokeTextInputEvent(task.item, (TextInputArgs) task.args);
+                break;
+            case WINDOW_DROP:
+                invokeDropEvent(task.item, (DropArgs) task.args);
+                break;
+            default:
+                break;
         }
     }
 

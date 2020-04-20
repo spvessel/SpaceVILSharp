@@ -210,7 +210,7 @@ namespace SpaceVIL
             shader.UseShader();
             VramTexture store = new VramTexture();
             store.GenBuffers(0, printer.GetWidth() / scale.GetXScale(), 0, printer.GetHeight() / scale.GetYScale(), true);
-            store.GenTexture(printer.GetWidth(), printer.GetHeight(), printer.GetBytes());
+            store.GenTexture(printer.GetWidth(), printer.GetHeight(), printer.GetBytes(), ImageQuality.Smooth);
             TextStorage.AddResource(item, store);
 
             store.SendUniform4f(shader, "position",
@@ -353,7 +353,7 @@ namespace SpaceVIL
             shader.UseShader();
             VramTexture store = new VramTexture();
             store.GenBuffers(0, aw, 0, ah);
-            store.GenTexture(iw, ih, bmp);
+            store.GenTexture(iw, ih, bmp, image.GetImageQuality());
             store.SendUniformSample2D(shader, "tex");
             if (image.IsColorOverlay())
             {
@@ -393,7 +393,7 @@ namespace SpaceVIL
             VramTexture tex = new VramTexture();
             tex.GenBuffers(0, aw, 0, ah);
             // tex.GenTexture(iw, ih, bitmap);
-            tex.GenTexture(iw, ih, bmp);
+            tex.GenTexture(iw, ih, bmp, image.GetImageQuality());
             TextureStorage.AddResource(image, tex);
 
             ItemsRefreshManager.RemoveImage(image);

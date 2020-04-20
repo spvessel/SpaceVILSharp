@@ -11,6 +11,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.InterfaceDraggable;
+import com.spvessel.spacevil.Core.InterfaceMovable;
 import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.InputEventType;
@@ -29,6 +30,7 @@ final class MouseMoveProcessor {
         _commonProcessor.ptrRelease.setX((int) xpos);
         _commonProcessor.ptrRelease.setY((int) ypos);
         _commonProcessor.margs.position.setPosition((int) xpos, (int) ypos);
+
         if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
             if (_commonProcessor.window.isBorderHidden && _commonProcessor.window.isResizable) {
                 int w = _commonProcessor.window.getWidth();
@@ -166,6 +168,11 @@ final class MouseMoveProcessor {
                     }
                 }
             }
+        }
+
+        if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
+            _commonProcessor.events.setEvent(InputEventType.MOUSE_DRAG);
+            _commonProcessor.hoveredItem.eventMouseMove.execute(_commonProcessor.hoveredItem, _commonProcessor.margs);
         }
     }
 
