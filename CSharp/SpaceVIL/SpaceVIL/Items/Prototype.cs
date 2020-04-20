@@ -167,7 +167,6 @@ namespace SpaceVIL
         /// <para/> Tooltip is hint about an item that appears 
         /// when you hold the mouse cursor over an item long enough.
         /// </summary>
-        /// </summary>
         /// <returns>Tooltip text.</returns>
         public String GetToolTip()
         {
