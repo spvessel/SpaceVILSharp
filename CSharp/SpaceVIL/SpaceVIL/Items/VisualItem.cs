@@ -319,27 +319,27 @@ namespace SpaceVIL
         }
 
         //item
-        internal Border _border = new Border();
+        internal Border border = new Border();
         internal void SetBorderDirect(Border border)
         {
-            _border = border;
+            this.border = border;
         }
 
         internal Border GetBorderDirect()
         {
-            return _border;
+            return border;
         }
 
         internal void SetBorder(Border border)
         {
-            _border = border;
-            GetState(ItemStateType.Base).Border = _border;
+            this.border = border;
+            GetState(ItemStateType.Base).Border = this.border;
             UpdateState();
         }
 
         internal void SetBorderFill(Color fill)
         {
-            _border.SetFill(fill);
+            border.SetFill(fill);
             GetState(ItemStateType.Base).Border.SetFill(fill);
             UpdateState();
         }
@@ -362,34 +362,34 @@ namespace SpaceVIL
 
         internal void SetBorderRadius(CornerRadius radius)
         {
-            _border.SetRadius(radius);
+            border.SetRadius(radius);
             GetState(ItemStateType.Base).Border.SetRadius(radius);
             UpdateState();
         }
         internal void SetBorderThickness(int thickness)
         {
-            _border.SetThickness(thickness);
+            border.SetThickness(thickness);
             GetState(ItemStateType.Base).Border.SetThickness(thickness);
             UpdateState();
         }
         internal CornerRadius GetBorderRadius()
         {
-            return _border.GetRadius();
+            return border.GetRadius();
         }
         internal int GetBorderThickness()
         {
-            return _border.GetThickness();
+            return border.GetThickness();
         }
         internal Color GetBorderFill()
         {
-            return _border.GetFill();
+            return border.GetFill();
         }
 
 
         internal void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
-            _border = new Border(fill, radius, thickness);
-            GetState(ItemStateType.Base).Border = _border;
+            border = new Border(fill, radius, thickness);
+            GetState(ItemStateType.Base).Border = border;
             UpdateState();
         }
 

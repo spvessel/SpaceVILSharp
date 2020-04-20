@@ -320,7 +320,7 @@ public class MenuItem extends Prototype {
      * @return Text width.
      */
     public int getTextWidth() {
-        return _textObject.getWidth();
+        return _textObject.getTextWidth();
     }
 
     /**
@@ -330,7 +330,7 @@ public class MenuItem extends Prototype {
      * @return Text height.
      */
     public int getTextHeight() {
-        return _textObject.getHeight();
+        return _textObject.getTextHeight();
     }
 
     /**

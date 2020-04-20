@@ -12,6 +12,7 @@ namespace SpaceVIL
             ItemState baseState = item.GetState(ItemStateType.Base);
             ItemState currentState = item.GetState(item.GetCurrentStateType());
             item.SetBackgroundDirect(currentState.Background);
+
             if (currentState.Shape != null)
             {
                 if (item.IsCustomFigure() != currentState.Shape)
@@ -50,14 +51,14 @@ namespace SpaceVIL
                 if (!item.GetBorderDirect().GetRadius().Equals(baseState.Border.GetRadius()))
                     ItemsRefreshManager.SetRefreshShape(item.prototype);
 
-                item._border = border;
+                item.border = border;
             }
         }
 
         internal static void UpdateVisualProperties(VisualItem item, ItemState state, ItemState prevState)
         {
             ItemState currentState = item.GetState(item.GetCurrentStateType());
-            item.SetBackgroundDirect(GraphicsMathService.MixColors(currentState.Background, prevState.Background, state.Background));
+            item.SetBackgroundDirect(GraphicsMathService.MixColors(currentState.Background, item.GetBackground(), state.Background));
 
             Border borderCurrentState = CloneBorder(currentState.Border);
             Border borderState = CloneBorder(state.Border);
@@ -69,7 +70,7 @@ namespace SpaceVIL
                 {
                     if (!borderCurrentState.GetRadius().Equals(borderState.GetRadius()))
                     {
-                        item._border.SetRadius(borderState.GetRadius());
+                        item.border.SetRadius(borderState.GetRadius());
                         ItemsRefreshManager.SetRefreshShape(item.prototype);
                     }
                 }
@@ -79,7 +80,7 @@ namespace SpaceVIL
                     {
                         if (!borderCurrentState.GetRadius().Equals(prevState.Border.GetRadius()))
                         {
-                            item._border.SetRadius(prevState.Border.GetRadius());
+                            item.border.SetRadius(prevState.Border.GetRadius());
                             ItemsRefreshManager.SetRefreshShape(item.prototype);
                         }
                     }
@@ -87,22 +88,22 @@ namespace SpaceVIL
             }
             if (borderState.GetThickness() >= 0)
             {
-                item._border.SetThickness(borderState.GetThickness());
+                item.border.SetThickness(borderState.GetThickness());
             }
             else
             {
                 if (prevState.Border.GetThickness() >= 0)
-                    item._border.SetThickness(prevState.Border.GetThickness());
+                    item.border.SetThickness(prevState.Border.GetThickness());
             }
 
             if (borderState.GetFill().A > 0)
             {
-                item._border.SetFill(borderState.GetFill());
+                item.border.SetFill(borderState.GetFill());
             }
             else
             {
                 if (prevState.Border.GetFill().A > 0)
-                    item._border.SetFill(prevState.Border.GetFill());
+                    item.border.SetFill(prevState.Border.GetFill());
             }
             //     item._border.setFill(prevState.Border.getFill());
             // if (item._border.getFill().getAlpha() == 0)

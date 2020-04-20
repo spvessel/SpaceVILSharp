@@ -320,7 +320,13 @@ namespace SpaceVIL
             SetX(-GetWidth());
 
             if (ReturnFocus != null)
+            {
                 ReturnFocus.SetFocus();
+            }
+            else
+            {
+                GetHandler().ResetFocus();
+            }
         }
         /// <summary>
         /// Hide the ContextMenu without destroying with using specified mouse arguments.

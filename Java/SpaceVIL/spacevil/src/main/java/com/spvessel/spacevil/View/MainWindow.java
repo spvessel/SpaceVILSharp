@@ -248,7 +248,7 @@ public class MainWindow extends ActiveWindow {
             System.out.println("mi4 click");
             menu.addItem(new MenuItem("New menuItem"));
         });
-        menu.returnFocus = btn_flow;
+        // menu.returnFocus = btn_flow;
         // menu.setBorderRadius(15);
 
         // eventMouseClick.add((sender, args) -> menu.show(sender, args));
