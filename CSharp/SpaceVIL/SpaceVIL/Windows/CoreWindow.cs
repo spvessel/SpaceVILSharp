@@ -708,7 +708,7 @@ namespace SpaceVIL
         /// Lets to manage focus state ot the current window.
         /// </summary>
         /// <param name="value">True: if you want the window to be focused. False: if you want the window to be unfocused.</param>
-        public void SetFocus(bool value)
+        internal void SetFocus(bool value)
         {
             if (_isFocused == value)
             {
@@ -724,9 +724,10 @@ namespace SpaceVIL
         /// <summary>
         /// Sets the window focused.
         /// </summary>
-        public void SetWindowFocused()
+        public void SetFocus()
         {
             _windowLayout.SetFocus();
+            _isFocused = true;
         }
 
         /// <summary>

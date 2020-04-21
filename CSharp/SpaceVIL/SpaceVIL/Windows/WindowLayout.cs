@@ -252,7 +252,7 @@ namespace SpaceVIL
             }
             _engine.FreeOnClose();
             if (currentPair != null && !currentPair.IsClosed)
-                currentPair.SetWindowFocused();
+                currentPair.SetFocus();
         }
 
         void DestroyWindowsPair()

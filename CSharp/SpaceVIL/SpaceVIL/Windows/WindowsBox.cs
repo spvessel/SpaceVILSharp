@@ -191,7 +191,7 @@ namespace SpaceVIL
         {
             if (window == null)
             {
-                window.SetFocus(true);
+                window.SetFocus();
             }
         }
 

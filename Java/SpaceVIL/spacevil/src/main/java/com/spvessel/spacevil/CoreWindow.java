@@ -800,7 +800,7 @@ public abstract class CoreWindow {
      * @param value True: if you want the window to be focused. False: if you want
      *              the window to be unfocused.
      */
-    public void setFocus(Boolean value) {
+    void setFocus(Boolean value) {
         if (_isFocused == value) {
             return;
         }
@@ -813,8 +813,9 @@ public abstract class CoreWindow {
     /**
      * Sets the window focused.
      */
-    public void setWindowFocused() {
+    public void setFocus() {
         _windowLayout.setFocus();
+        _isFocused = true;
     }
 
     /**

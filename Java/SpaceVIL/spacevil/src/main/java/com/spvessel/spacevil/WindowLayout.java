@@ -220,7 +220,7 @@ final class WindowLayout {
         }
         _engine.freeOnClose();
         if (currentPair != null && !currentPair.isClosed)
-            currentPair.setWindowFocused();
+            currentPair.setFocus();
     }
 
     void destroyWindowsPair() {
