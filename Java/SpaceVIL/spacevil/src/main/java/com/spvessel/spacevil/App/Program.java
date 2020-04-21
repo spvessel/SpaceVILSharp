@@ -83,22 +83,22 @@ public class Program {
         System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
 
         WindowManager.startWith(
-                mw
+                // mw
                 // dw
                 // , mw2
                 // st
                 // im
                 // ft
-        // lt
-        // ct
-        // it
-        // tt
-        // con
-        // sat
-        // et
-        // pt
-        // oglt
-        );
+                // lt
+                // ct
+                // it
+                // tt
+                // con
+                // sat
+                // et
+                // pt
+                oglt
+                );
     }
 
     public static final Color Hover = new Color(255, 255, 255, 100);

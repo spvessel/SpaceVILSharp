@@ -794,12 +794,6 @@ public abstract class CoreWindow {
         return _isFocused;
     }
 
-    /**
-     * Lets to manage focus state ot the current window.
-     * 
-     * @param value True: if you want the window to be focused. False: if you want
-     *              the window to be unfocused.
-     */
     void setFocus(Boolean value) {
         if (_isFocused == value) {
             return;

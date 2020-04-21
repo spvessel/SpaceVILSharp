@@ -704,10 +704,6 @@ namespace SpaceVIL
             return _isFocused;
         }
 
-        /// <summary>
-        /// Lets to manage focus state ot the current window.
-        /// </summary>
-        /// <param name="value">True: if you want the window to be focused. False: if you want the window to be unfocused.</param>
         internal void SetFocus(bool value)
         {
             if (_isFocused == value)

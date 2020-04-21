@@ -124,6 +124,7 @@ namespace SpaceVIL
         {
             SetItemName("ResizableItem_" + count++);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            SetPassEvents(false);
 
             EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;

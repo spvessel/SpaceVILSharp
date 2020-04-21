@@ -77,14 +77,17 @@ namespace SpaceVIL
             while (tmp.Count != 0)
             {
                 Prototype item = tmp.Pop();
+
                 if (item.IsDisabled())
                     continue;
+
                 _layout.SetEventTask(new EventTask()
                 {
                     Item = item,
                     Action = action,
                     Args = args
                 });
+                
                 if (!item.IsPassEvents(action))
                     break;
             }

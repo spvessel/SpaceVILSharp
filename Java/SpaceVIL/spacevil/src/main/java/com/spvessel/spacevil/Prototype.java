@@ -1211,7 +1211,7 @@ abstract public class Prototype implements InterfaceBaseItem {
      * @return Blocked input events as
      *         List&lt;com.spvessel.spacevil.Flags.InputEventType&gt;
      */
-    public List<InputEventType> GetBlockedEvents() {
+    public List<InputEventType> getBlockedEvents() {
         return _core.getBlockedEvents();
     }
 

@@ -97,17 +97,18 @@ namespace SpaceVIL
         /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
+            base.AddItem(item);
             _storedItemsCoords.Add(item, new int[]
             {
-                item.GetX() ,
+                item.GetX(),
                 item.GetY()
             });
             ResizableItem wanted = item as ResizableItem;
             if (wanted != null)
             {
+                wanted.SetPassEvents(false);
                 wanted.PositionChanged += () => CorrectPosition(wanted);
             }
-            base.AddItem(item);
             UpdateLayout();
         }
 

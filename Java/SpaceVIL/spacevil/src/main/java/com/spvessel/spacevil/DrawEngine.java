@@ -149,6 +149,7 @@ final class DrawEngine {
     boolean init() {
         if (!initWindow())
             return false;
+
         initGL();
         initShaders();
         initProcessors();
@@ -156,6 +157,12 @@ final class DrawEngine {
             _commonProcessor.wndProcessor.applyIcon(_iconBig, _iconSmall);
         prepareCanvas();
         _tooltip.initElements();
+
+        if (glwHandler.maximized) {
+            _commonProcessor.window.isMaximized = false;
+            _commonProcessor.window.maximize();
+        }
+
         drawScene();
         return true;
     }
@@ -417,7 +424,7 @@ final class DrawEngine {
     private void mouseMove(long wnd, double xpos, double ypos) {
         if (!flagMove || _commonProcessor.inputLocker || !glwHandler.focusable)
             return;
-            
+
         flagMove = false;
         _commonProcessor.events.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);

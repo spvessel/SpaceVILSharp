@@ -76,8 +76,6 @@ final class ActionManagerAssigner {
 
             if (!item.isPassEvents(action))
                 break;
-
-            // System.out.println(item.getItemName());
         }
     }
 }

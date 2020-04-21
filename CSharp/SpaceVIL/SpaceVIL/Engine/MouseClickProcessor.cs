@@ -52,11 +52,11 @@ namespace SpaceVIL
             _commonProcessor.Margs.State = state;
             _commonProcessor.Margs.Mods = mods;
 
-            InputEventType m_state;
+            InputEventType mouseState;
             if (state == InputState.Press)
-                m_state = InputEventType.MousePress;
+                mouseState = InputEventType.MousePress;
             else
-                m_state = InputEventType.MouseRelease;
+                mouseState = InputEventType.MouseRelease;
 
             Prototype lastHovered = _commonProcessor.HoveredItem;
 
@@ -64,7 +64,7 @@ namespace SpaceVIL
             {
                 double x, y;
                 Glfw.GetCursorPos(_commonProcessor.Handler.GetWindowId(), out x, out y);
-                _commonProcessor.GetHoverPrototype((int)x, (int)y, m_state);
+                _commonProcessor.GetHoverPrototype((int)x, (int)y, mouseState);
                 lastHovered = _commonProcessor.HoveredItem;
                 _commonProcessor.Margs.Position.SetPosition((int)x, (int)y);
                 _commonProcessor.PtrRelease.SetPosition((int)x, (int)y);
@@ -73,7 +73,7 @@ namespace SpaceVIL
             }
 
             if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(),
-                    _commonProcessor.PtrRelease.GetY(), m_state))
+                    _commonProcessor.PtrRelease.GetY(), mouseState))
             {
                 lastHovered.SetMousePressed(false);
                 _commonProcessor.Events.ResetAllEvents();
@@ -109,12 +109,14 @@ namespace SpaceVIL
             Glfw.GetFramebufferSize(_commonProcessor.Handler.GetWindowId(), out _commonProcessor.WGlobal, out _commonProcessor.HGlobal);
             _commonProcessor.XGlobal = _commonProcessor.Handler.GetPointer().GetX();
             _commonProcessor.YGlobal = _commonProcessor.Handler.GetPointer().GetY();
+
             double xpos, ypos;
             Glfw.GetCursorPos(_commonProcessor.Handler.GetWindowId(), out xpos, out ypos);
             _commonProcessor.PtrClick.SetX((int)xpos);
             _commonProcessor.PtrClick.SetY((int)ypos);
             _commonProcessor.PtrPress.SetX((int)xpos);
             _commonProcessor.PtrPress.SetY((int)ypos);
+
             if (_commonProcessor.HoveredItem != null)
             {
                 _commonProcessor.HoveredItem.SetMousePressed(true);

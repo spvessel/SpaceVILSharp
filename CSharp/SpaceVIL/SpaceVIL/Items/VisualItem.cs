@@ -46,7 +46,7 @@ namespace SpaceVIL
 
     internal class VisualItem : BaseItem
     {
-        private Object Locker = new Object();
+        private Object _locker = new Object();
         internal Prototype prototype;
 
         private String _tooltip = String.Empty;
@@ -94,7 +94,7 @@ namespace SpaceVIL
         private LinkedHashSet<IBaseItem> _content = new LinkedHashSet<IBaseItem>();
         internal virtual List<IBaseItem> GetItems()
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 return new List<IBaseItem>(_content);
@@ -106,12 +106,12 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
         internal void SetContent(List<IBaseItem> content)
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 // _content = content;
@@ -123,7 +123,7 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
 
@@ -150,7 +150,7 @@ namespace SpaceVIL
 
         internal virtual void AddItem(IBaseItem item)
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 if (item == null)
@@ -179,12 +179,12 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
         internal virtual void InsertItem(IBaseItem item, Int32 index)
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 if (item == null)
@@ -224,7 +224,7 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
 
@@ -245,7 +245,7 @@ namespace SpaceVIL
 
         internal virtual bool RemoveItem(IBaseItem item)
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 if (!_content.Contains(item))
@@ -286,13 +286,13 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
 
         internal virtual void Clear()
         {
-            Monitor.Enter(Locker);
+            Monitor.Enter(_locker);
             try
             {
                 while (_content.Count > 0)
@@ -305,7 +305,7 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(Locker);
+                Monitor.Exit(_locker);
             }
         }
 

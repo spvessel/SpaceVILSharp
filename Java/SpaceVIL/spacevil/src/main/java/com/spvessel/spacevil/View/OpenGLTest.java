@@ -1,114 +1,154 @@
 package com.spvessel.spacevil.View;
 
-import java.awt.*;
-import com.spvessel.spacevil.ActiveWindow;
-import com.spvessel.spacevil.ButtonCore;
-import com.spvessel.spacevil.CustomShape;
-import com.spvessel.spacevil.GraphicsMathService;
-import com.spvessel.spacevil.HorizontalSlider;
-import com.spvessel.spacevil.HorizontalStack;
-import com.spvessel.spacevil.ImageItem;
-import com.spvessel.spacevil.TitleBar;
-import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Flags.EmbeddedImage;
-import com.spvessel.spacevil.Flags.EmbeddedImageSize;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.SizePolicy;
+import java.util.*;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.*;
+import com.spvessel.spacevil.Core.*;
+import com.spvessel.spacevil.Flags.*;
+import com.spvessel.spacevil.Decorations.*;
 
 public class OpenGLTest extends ActiveWindow {
-    @Override
-    public void initWindow() {
+   @Override
+   public void initWindow() {
+      setParameters(this.getClass().getName(), this.getClass().getName(), 800, 800, false);
+      isCentered = true;
+      isMaximized = true;
 
-        setParameters(this.getClass().getName(), this.getClass().getName(), 800, 800, true);
+      // oneCubeExample();
+      multipleCubes();
+   }
 
-        CustomShape star = new CustomShape(GraphicsMathService.getStar(100, 50, 6));
-        star.setBackground(0xFF, 0xB5, 0x6F);
-        star.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        star.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        star.setMargin(50, 80, 50, 50);
+   private void oneCubeExample() {
+      TitleBar titleBar = new TitleBar(this.getClass().getName());
 
-       OpenGLLayer ogl = new OpenGLLayer();
-       ogl.setMargin(0, 30, 0, 0);
+      OpenGLLayer ogl = new OpenGLLayer();
+      ogl.setMargin(0, titleBar.getHeight(), 0, 0);
 
-        ButtonCore btnRestoreView = new ButtonCore();
-        btnRestoreView.isFocusable = false;
-        btnRestoreView.setBackground(new Color(0xFF, 0xB5, 0x6F));
-        btnRestoreView.setShadow(5, 0, 2, Color.BLACK);
-        btnRestoreView.setSize(30, 30);
-        btnRestoreView.setPadding(5, 5, 5, 5);
-        btnRestoreView.setMargin(0, 0, 20, 20);
-        btnRestoreView.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
-        ImageItem imgRefresh = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.REFRESH, EmbeddedImageSize.SIZE_32X32), false);
-        imgRefresh.setColorOverlay(Color.WHITE);
+      HorizontalStack toolbar = getToolbarLayout();
 
-        HorizontalSlider zoom = new HorizontalSlider();
-        zoom.setStep(0.2f);
-        zoom.setMinValue(2f);
-        zoom.setMaxValue(10f);
-        zoom.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        zoom.setSize(150, 30);
-        zoom.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        zoom.setMargin(0, 0, 0, 20);
-        zoom.handler.setShadow(5, 0, 2, Color.BLACK);
+      ImagedButton btnRotateLeft = getImagedButton(EmbeddedImage.ARROW_UP, -90);
+      ImagedButton btnRotateRight = getImagedButton(EmbeddedImage.ARROW_UP, 90);
 
-        HorizontalStack toolbar3D = new HorizontalStack();
-        toolbar3D.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        toolbar3D.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        toolbar3D.setSize(65, 30);
-        toolbar3D.setSpacing(5, 0);
-        toolbar3D.setMargin(20, 0, 0, 20);
+      HorizontalSlider zoom = getSlider();
 
-        ButtonCore btnRotateLeft = new ButtonCore();
-        btnRotateLeft.isFocusable = false;
-        btnRotateLeft.setBackground(new Color(0xFF, 0xB5, 0x6F));
-        btnRotateLeft.setShadow(5, 0, 2, Color.BLACK);
-        btnRotateLeft.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        btnRotateLeft.setPadding(5, 5, 5, 5);
-        ImageItem imgLeft = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_UP, EmbeddedImageSize.SIZE_32X32), false);
-        imgLeft.setRotationAngle(-90);
-        imgLeft.setColorOverlay(Color.WHITE);
+      ImagedButton btnRestoreView = getImagedButton(EmbeddedImage.REFRESH, 0);
 
-        ButtonCore btnRotateRight = new ButtonCore();
-        btnRotateRight.isFocusable = false;
-        btnRotateRight.setBackground(new Color(0xFF, 0xB5, 0x6F));
-        btnRotateRight.setShadow(5, 0, 2, Color.BLACK);
-        btnRotateRight.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        btnRotateRight.setPadding(5, 5, 5, 5);
-        ImageItem imgRight = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_UP, EmbeddedImageSize.SIZE_32X32), false);
-        imgRight.setRotationAngle(90);
-        imgRight.setColorOverlay(Color.WHITE);
+      // adding
+      addItems(titleBar, ogl);
+      ogl.addItems(toolbar);
+      toolbar.addItems(btnRotateLeft, btnRotateRight, zoom, btnRestoreView);
 
-        addItems(new TitleBar("OpenGLLayer"),
-                //star,
-                ogl
-                );
-       ogl.addItems(toolbar3D, zoom, btnRestoreView);
-        btnRestoreView.addItem(imgRefresh);
-        toolbar3D.addItems(btnRotateLeft, btnRotateRight);
-        btnRotateLeft.addItem(imgLeft);
-        btnRotateRight.addItem(imgRight);
+      // assign events
+      btnRestoreView.eventMousePress.add((sender, args) -> {
+         ogl.restoreView();
+      });
 
-        btnRestoreView.eventMousePress.add((sender, args) -> {
-           ogl.restoreView();
-        });
+      btnRotateLeft.eventMousePress.add((sender, args) -> {
+         ogl.rotate(KeyCode.LEFT);
+      });
 
-        btnRotateLeft.eventMousePress.add((sender, args) -> {
-           ogl.rotate(KeyCode.LEFT);
-        });
+      btnRotateRight.eventMousePress.add((sender, args) -> {
+         ogl.rotate(KeyCode.RIGHT);
+      });
 
-        btnRotateRight.eventMousePress.add((sender, args) -> {
-           ogl.rotate(KeyCode.RIGHT);
-        });
+      zoom.eventValueChanged.add((sender) -> {
+         ogl.setZoom(zoom.getCurrentValue());
+      });
 
-        zoom.eventValueChanged.add((sender) -> {
-           ogl.setZoom(zoom.getCurrentValue());
-        });
+      // set focus
+      ogl.setFocus();
+      zoom.setCurrentValue(3);
+   }
 
-       ogl.setFocus();
-        zoom.setCurrentValue(3);
-    }
+   private void multipleCubes() {
+      TitleBar titleBar = new TitleBar(this.getClass().getName());
+
+      FreeArea area = new FreeArea();
+      area.setMargin(0, titleBar.getHeight(), 0, 0);
+
+      addItems(titleBar, area);
+
+      List<InterfaceBaseItem> content = new ArrayList<>();
+
+      for (int row = 0; row < 3; row++) {
+         for (int column = 0; column < 3; column++) {
+            ResizableItem frame = new ResizableItem();
+            frame.setBorder(new Border(Color.gray, new CornerRadius(), 2));
+            frame.setPadding(5, 5, 5, 5);
+            frame.setBackground(100, 100, 100);
+            frame.setSize(200, 200);
+            frame.setPosition(90 + row * 210, 60 + column * 210);
+            area.addItem(frame);
+            content.add(frame);
+
+            frame.eventMousePress.add((sender, args) -> {
+               content.remove(frame);
+               content.add(frame);
+               area.setContent(content);
+            });
+
+            OpenGLLayer ogl = new OpenGLLayer();
+            ogl.setMargin(0, 30, 0, 0);
+            frame.addItem(ogl);
+         }
+      }
+   }
+
+   public static ImagedButton getImagedButton(EmbeddedImage image, float imageRotationAngle) {
+      ImagedButton btn = new ImagedButton(DefaultsService.getDefaultImage(image, EmbeddedImageSize.SIZE_32X32),
+            imageRotationAngle);
+      return btn;
+   }
+
+   public static HorizontalSlider getSlider() {
+      HorizontalSlider slider = new HorizontalSlider();
+      slider.setStep(0.2f);
+      slider.setMinValue(2f);
+      slider.setMaxValue(10f);
+      slider.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+      slider.setSize(150, 30);
+      slider.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+      slider.setMargin(40, 0, 40, 0);
+      slider.handler.setShadow(5, 0, 2, Color.BLACK);
+      return slider;
+   }
+
+   public static HorizontalStack getToolbarLayout() {
+      HorizontalStack layout = new HorizontalStack();
+      layout.setContentAlignment(ItemAlignment.HCENTER);
+      layout.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
+      layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+      layout.setHeight(30);
+      layout.setSpacing(5, 0);
+      layout.setMargin(20, 0, 20, 20);
+      return layout;
+   }
+
+   public static class ImagedButton extends BlankItem {
+      ImageItem _image = null;
+
+      public ImagedButton(BufferedImage image, float imageRotationAngle) {
+         addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 40)));
+         addItemState(ItemStateType.PRESSED, new ItemState(new Color(0, 0, 0, 40)));
+         setBackground(0xFF, 0xB5, 0x6F);
+         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+         setSize(30, 30);
+         setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+         setPadding(5, 5, 5, 5);
+         setShadow(5, 0, 2, Color.BLACK);
+         isFocusable = false;
+
+         _image = new ImageItem(image, false);
+         _image.setRotationAngle(imageRotationAngle);
+         _image.setColorOverlay(Color.WHITE);
+      }
+
+      @Override
+      public void initElements() {
+         super.initElements();
+         addItem(_image);
+      }
+   }
 }

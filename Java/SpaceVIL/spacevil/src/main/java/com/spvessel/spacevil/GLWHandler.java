@@ -100,10 +100,10 @@ final class GLWHandler {
         else
             glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
 
-        if (maximized)
-            glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-        else
-            glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+        // if (maximized)
+        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+        // else
+        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         if (transparent)
             glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
