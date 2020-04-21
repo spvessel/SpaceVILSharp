@@ -1686,6 +1686,40 @@ public class Style implements Cloneable {
         return style;
     }
 
+    private static Style getTextFieldStyle() {
+        Style style = new Style();
+        style.background = new Color(0, 0, 0, 0);
+        style.foreground = new Color(70, 70, 70);
+        style.font = DefaultsService.getDefaultFont(16);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.padding = new Indents(5, 0, 5, 0);
+
+        Style cursorStyle = new Style();
+        cursorStyle.background = new Color(60, 60, 60);
+        cursorStyle.width = 2;
+        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.margin = new Indents(0, 5, 0, 5);
+        cursorStyle.isVisible = false;
+        style.addInnerStyle("cursor", cursorStyle);
+
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(111, 181, 255);
+        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selectionStyle.margin = new Indents(0, 5, 0, 5);
+        style.addInnerStyle("selection", selectionStyle);
+
+        Style substrateStyle = new Style();
+        substrateStyle.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
+        substrateStyle.foreground = new Color(150, 150, 150);
+        style.addInnerStyle("substrate", substrateStyle);
+
+        return style;
+    }
+
     /**
      * Getting default style for a sealed TextBlock item. Properly filled in all the necessary properties.
      * <p> Inner styles: "cursor", "selection".
@@ -2029,9 +2063,9 @@ public class Style implements Cloneable {
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSpinItemStyle() {
+        
         Style style = new Style();
-
-        style.background = new Color(50, 50, 50);
+        style.background = new Color(210, 210, 210);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
         style.height = 30;
@@ -2072,9 +2106,11 @@ public class Style implements Cloneable {
         btnsArea.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
         style.addInnerStyle("buttonsarea", btnsArea);
 
-        Style textInput = getTextEditStyle();
+        Style textInput = getTextFieldStyle();
+        textInput.background = new Color(210, 210, 210);
         textInput.heightPolicy = SizePolicy.EXPAND;
         textInput.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
+        textInput.padding.right = 10;
         style.addInnerStyle("textedit", textInput);
 
         return style;

@@ -223,10 +223,10 @@ final class VisualItemStatics {
         item.setVisible(style.isVisible);
         item.removeAllItemStates();
 
-        ItemState core_state = new ItemState(style.background);
-        core_state.border.setRadius(style.borderRadius);
-        core_state.border.setThickness(style.borderThickness);
-        core_state.border.setFill(style.borderFill);
+        ItemState coreState = new ItemState(style.background);
+        coreState.border.setRadius(style.borderRadius);
+        coreState.border.setThickness(style.borderThickness);
+        coreState.border.setFill(style.borderFill);
 
         for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             item.addItemState(state.getKey(), state.getValue());
@@ -234,11 +234,12 @@ final class VisualItemStatics {
 
         if (style.shape != null) {
             item.setCustomFigure(new Figure(style.isFixedShape, style.shape));
-            core_state.shape = item.isCustomFigure();
+            coreState.shape = item.isCustomFigure();
         }
-        item.addItemState(ItemStateType.BASE, core_state);
+        item.addItemState(ItemStateType.BASE, coreState);
 
         item.setBackground(style.background);
+        // item.setBackgroundDirect(style.background);
         item.setBorderRadius(style.borderRadius);
         item.setBorderThickness(style.borderThickness);
         item.setBorderFill(style.borderFill);

@@ -832,18 +832,18 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         setFont(style.font);
         setTextAlignment(style.textAlignment);
 
-        Style inner_style = style.getInnerStyle("selection");
-        if (inner_style != null) {
-            _selectedArea.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("selection");
+        if (innerStyle != null) {
+            _selectedArea.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("cursor");
-        if (inner_style != null) {
-            _cursor.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("cursor");
+        if (innerStyle != null) {
+            _cursor.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("substrate");
-        if (inner_style != null) {
-            _substrate_text.setFont(inner_style.font);
-            _substrate_text.setForeground(inner_style.foreground);
+        innerStyle = style.getInnerStyle("substrate");
+        if (innerStyle != null) {
+            _substrate_text.setFont(innerStyle.font);
+            _substrate_text.setForeground(innerStyle.foreground);
         }
     }
 

@@ -83,7 +83,7 @@ public class Program {
         System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
 
         WindowManager.startWith(
-                // mw
+                mw
                 // dw
                 // , mw2
                 // st
@@ -97,7 +97,7 @@ public class Program {
                 // sat
                 // et
                 // pt
-                oglt
+                // oglt
                 );
     }
 
