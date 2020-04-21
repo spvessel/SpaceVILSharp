@@ -151,8 +151,10 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     }
 
     protected void onHover(InterfaceItem sender, MouseArgs args) {
-        if (isLocked)
+        if (isLocked) {
+            setCursor(DefaultsService.getDefaultCursor());
             return;
+        }
 
         getSides(args.position.getX() - getX(), args.position.getY() - getY());
 

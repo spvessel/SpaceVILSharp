@@ -29,7 +29,7 @@ namespace SpaceVIL
                     _sidesExclude.Add(side);
             }
         }
-        
+
         /// <summary>
         /// Getting exclused sides. These sides cannot be dragged 
         /// to resize the ResizableItem.
@@ -133,7 +133,10 @@ namespace SpaceVIL
         protected virtual void OnHover(IItem sender, MouseArgs args)
         {
             if (IsLocked)
+            {
+                SetCursor(DefaultsService.GetDefaultCursor());
                 return;
+            }
 
             GetSides(args.Position.GetX() - GetX(), args.Position.GetY() - GetY());
 
@@ -152,7 +155,9 @@ namespace SpaceVIL
                     SetCursor(EmbeddedCursor.ResizeY);
             }
             else
+            {
                 SetCursor(DefaultsService.GetDefaultCursor());
+            }
         }
 
         protected virtual void OnMousePress(IItem sender, MouseArgs args)

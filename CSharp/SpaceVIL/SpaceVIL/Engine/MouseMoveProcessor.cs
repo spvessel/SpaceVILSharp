@@ -191,7 +191,7 @@ namespace SpaceVIL
             if (_commonProcessor.HoveredItem is IMovable)
             {
                 _commonProcessor.Events.SetEvent(InputEventType.MouseMove);
-                _commonProcessor.HoveredItem.EventMouseMove.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
+                _commonProcessor.HoveredItem.EventMouseMove?.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
             }
         }
 

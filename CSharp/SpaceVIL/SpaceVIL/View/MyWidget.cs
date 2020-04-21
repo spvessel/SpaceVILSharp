@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 namespace View
 {
     public class MyWidget : Prototype
-    , IMovable 
+    // , IMovable 
     , IDraggable
     {
         public MyWidget()
@@ -24,7 +24,8 @@ namespace View
             EventMousePress += OnPress;
             EventMouseDrag += OnDrag;
             EventMouseDrop += OnDrop;
-            EventMouseMove += OnMove;
+            // EventMouseMove += OnMove;
+            EventMouseHover += OnMove;
         }
 
         private void OnPress(IItem sender, MouseArgs args)
