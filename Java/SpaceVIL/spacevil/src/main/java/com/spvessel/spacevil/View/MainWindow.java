@@ -248,25 +248,27 @@ public class MainWindow extends ActiveWindow {
             System.out.println("mi4 click");
             menu.addItem(new MenuItem("New menuItem"));
         });
-        menu.returnFocus = btn_flow;
+        // menu.returnFocus = btn_flow;
         // menu.setBorderRadius(15);
 
         // eventMouseClick.add((sender, args) -> menu.show(sender, args));
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU) {
-                MouseArgs margs = new MouseArgs();
-                margs.button = MouseButton.BUTTON_RIGHT;
-                menu.show(sender, margs);
+                // MouseArgs margs = new MouseArgs();
+                // margs.button = MouseButton.BUTTON_RIGHT;
+                // menu.show(sender, margs);
+                System.out.println(isFocused());
+                focus();
             }
 
-            // if (args.key == KeyCode.V)
-            // CommonService.setClipboardString("SetClipBoardString");
-            if (args.key == KeyCode.C)
-                System.out.println(CommonService.getClipboardString());
-            if (args.key == KeyCode.F)
-                System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
-            // if (args.key == KeyCode.R)
-            //     ItemsRefreshManager.printSizeOfShapes();
+            // // if (args.key == KeyCode.V)
+            // // CommonService.setClipboardString("SetClipBoardString");
+            // if (args.key == KeyCode.C)
+            //     System.out.println(CommonService.getClipboardString());
+            // if (args.key == KeyCode.F)
+            //     System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            // // if (args.key == KeyCode.R)
+            // //     ItemsRefreshManager.printSizeOfShapes();
 
         });
 

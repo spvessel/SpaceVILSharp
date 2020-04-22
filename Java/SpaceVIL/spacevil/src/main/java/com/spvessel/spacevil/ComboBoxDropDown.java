@@ -20,15 +20,20 @@ import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 /**
- * ComboBoxDropDown is drop-down list implementation for ComboBox (see com.spvessel.spacevil.ComboBox). 
- * ComboBox do not contains ComboBoxDropDown in usual way (ComboBox.GetItems() does not 
- * return ComboBoxDropDown), they just connected with each other. Used for selecting 
- * option from the list. ComboBoxDropDown is a floating item (see com.spvessel.spacevil.Core.InterfaceFloating 
- * and  enum com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside the 
- * ComboBoxDropDown area.
- * <p> Contains ListBox. 
- * <p> Supports all events except drag and drop.
- * <p> Notice: All floating items render above all others items.
+ * ComboBoxDropDown is drop-down list implementation for ComboBox (see
+ * com.spvessel.spacevil.ComboBox). ComboBox do not contains ComboBoxDropDown in
+ * usual way (ComboBox.GetItems() does not return ComboBoxDropDown), they just
+ * connected with each other. Used for selecting option from the list.
+ * ComboBoxDropDown is a floating item (see
+ * com.spvessel.spacevil.Core.InterfaceFloating and enum
+ * com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside
+ * the ComboBoxDropDown area.
+ * <p>
+ * Contains ListBox.
+ * <p>
+ * Supports all events except drag and drop.
+ * <p>
+ * Notice: All floating items render above all others items.
  */
 public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
@@ -58,6 +63,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Getting the text of selected option.
+     * 
      * @return Text of selected option.
      */
     public String getText() {
@@ -66,6 +72,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Getting index of the current selected option in the list.
+     * 
      * @return Index of the current selected option
      */
     public int getCurrentIndex() {
@@ -74,11 +81,12 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Selecting an option from the list at the specified index.
+     * 
      * @param index Index of option in the list.
      */
     public void setCurrentIndex(int index) {
         // if (!_init) {
-            initElements();
+        initElements();
         // }
 
         itemList.setSelection(index);
@@ -93,9 +101,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private static int count = 0;
 
     /**
-     * You can specify mouse button (see com.spvessel.spacevil.Flags.MouseButton) 
+     * You can specify mouse button (see com.spvessel.spacevil.Flags.MouseButton)
      * that is used to open ComboBoxDropDown.
-     * <p> Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_LEFT.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_LEFT.
      */
     public MouseButton activeButton = MouseButton.BUTTON_LEFT;
 
@@ -103,27 +112,33 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private boolean _ouside = true;
 
     /**
-     * Returns True if ComboBoxDropDown (see com.spvessel.spacevil.Core.InterfaceFloating)
-     * should closes when mouse click outside the area of ComboBoxDropDown otherwise returns False.
+     * Returns True if ComboBoxDropDown (see
+     * com.spvessel.spacevil.Core.InterfaceFloating) should closes when mouse click
+     * outside the area of ComboBoxDropDown otherwise returns False.
+     * 
      * @return True: if ComboBoxDropDown closes when mouse click outside the area.
-     * False: if ComboBoxDropDown stays opened when mouse click outside the area.
+     *         False: if ComboBoxDropDown stays opened when mouse click outside the
+     *         area.
      */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
     /**
-     * Setting boolean value of item's behavior when mouse click occurs outside the ComboBoxDropDown.
-     * @param value True: ComboBoxDropDown should become invisible if mouse click occurs outside the item.
-     * False: an item should stay visible if mouse click occurs outside the item.
+     * Setting boolean value of item's behavior when mouse click occurs outside the
+     * ComboBoxDropDown.
+     * 
+     * @param value True: ComboBoxDropDown should become invisible if mouse click
+     *              occurs outside the item. False: an item should stay visible if
+     *              mouse click occurs outside the item.
      */
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
 
     /**
-     * Default ComboBoxDropDown constructor. 
-     * ComboBoxDropDown does not pass any input events and invisible by default.
+     * Default ComboBoxDropDown constructor. ComboBoxDropDown does not pass any
+     * input events and invisible by default.
      */
     public ComboBoxDropDown() {
         setItemName("ComboBoxDropDown_" + count++);
@@ -196,9 +211,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private int _selectionIndexStore = -1;
 
     /**
-     * Initializing all elements in the ComboBoxDropDown. 
-     * <p> Notice: This method is mainly for overriding only. SpaceVIL calls 
-     * this method if necessary and no need to call it manually.
+     * Initializing all elements in the ComboBoxDropDown.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -242,6 +258,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Getting number of options in the list.
+     * 
      * @return Number of options in the list.
      */
     public int getListCount() {
@@ -249,7 +266,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Getting all existing options (list of com.spvessel.spacevil.MenuItem objects).
+     * Getting all existing options (list of com.spvessel.spacevil.MenuItem
+     * objects).
+     * 
      * @return Options as List&lt;com.spvessel.spacevil.MenuItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
@@ -257,7 +276,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem implementation) to the ComboBoxDropDown.
+     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * implementation) to the ComboBoxDropDown.
+     * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
@@ -270,10 +291,12 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem implementation) from the ComboBoxDropDown.
+     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * implementation) from the ComboBoxDropDown.
+     * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem
-     * @return True: if the removal was successful. 
-     * False: if the removal was unsuccessful.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -344,6 +367,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     public void hide() {
         setVisible(false);
         itemList.unselect();
+
         if (parent.returnFocus != null) {
             parent.setFocus();
         } else {
@@ -352,7 +376,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Hide the ComboBoxDropDown without destroying with using specified mouse arguments.
+     * Hide the ComboBoxDropDown without destroying with using specified mouse
+     * arguments.
+     * 
      * @param args Arguments as com.spvessel.spacevil.Core.MouseArgs.
      */
     public void hide(MouseArgs args) {
@@ -365,8 +391,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Overridden method for setting confines according 
-     * to position and size of the ComboBoxDropDown (see Prototype.setConfines()).
+     * Overridden method for setting confines according to position and size of the
+     * ComboBoxDropDown (see Prototype.setConfines()).
      */
     @Override
     public void setConfines() {
@@ -375,7 +401,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Setting style of the ComboBoxDropDown.
-     * <p> Inner styles: "itemlist".
+     * <p>
+     * Inner styles: "itemlist".
+     * 
      * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
@@ -384,9 +412,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             return;
         }
         super.setStyle(style);
-        Style inner_style = style.getInnerStyle("itemlist");
-        if (inner_style != null) {
-            itemList.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("itemlist");
+        if (innerStyle != null) {
+            itemList.setStyle(innerStyle);
         }
     }
 }

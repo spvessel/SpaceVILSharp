@@ -189,9 +189,9 @@ namespace SpaceVIL
 
         internal static void SetFocusedWindow(CoreWindow window)
         {
-            if (window == null)
+            if (window != null)
             {
-                window.SetFocus(true);
+                window.Focus();
             }
         }
 

@@ -3,6 +3,7 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 import com.spvessel.spacevil.Core.Area;
+import com.spvessel.spacevil.Flags.ImageQuality;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.Color;
@@ -389,5 +390,27 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    private ImageQuality _filter = ImageQuality.SMOOTH;
+
+    /**
+     * Getting an image filtering quality.
+     * 
+     * @return Image filtering quality as com.spvessel.spacevil.Flags.ImageQuality.
+     */
+    @Override
+    public ImageQuality getImageQuality() {
+        return _filter;
+    }
+
+    /**
+     * Setting an image filtering quality.
+     * 
+     * @param quality Image filtering quality as
+     *                com.spvessel.spacevil.Flags.ImageQuality.
+     */
+    public void setImageQuality(ImageQuality quality) {
+        _filter = quality;
     }
 }

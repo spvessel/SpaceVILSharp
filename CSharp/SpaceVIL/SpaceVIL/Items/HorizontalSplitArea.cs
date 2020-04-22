@@ -106,7 +106,6 @@ namespace SpaceVIL
         /// Assign item on the bottom area of the HorizontalSplitArea.
         /// </summary>
         /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
-        /// </summary>
         public void AssignBottomItem(IBaseItem item)
         {
             AddItem(item);

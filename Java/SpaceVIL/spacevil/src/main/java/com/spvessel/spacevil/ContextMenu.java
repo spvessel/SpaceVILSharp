@@ -341,8 +341,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setVisible(false);
         setX(-getWidth());
 
-        if (returnFocus != null)
+        if (returnFocus != null) {
             returnFocus.setFocus();
+        } else {
+            getHandler().resetFocus();
+        }
     }
 
     /**

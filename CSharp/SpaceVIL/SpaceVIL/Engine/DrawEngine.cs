@@ -77,6 +77,7 @@ namespace SpaceVIL
         internal bool MinimizeRequest = false;
         internal bool UpdateSizeRequest = false;
         internal bool UpdatePositionRequest = false;
+        internal bool FocusRequest = false;
 
         private float _itemPyramidLevel = 1.0f;
 
@@ -152,13 +153,22 @@ namespace SpaceVIL
         {
             if (!InitWindow())
                 return false;
+
             InitGL();
             InitShaders();
             InitProcessors();
             _commonProcessor.WndProcessor.ApplyIcon();
             PrepareCanvas();
             _tooltip.InitElements();
+
+            if (GLWHandler.Maximized)
+            {
+                _commonProcessor.Window.IsMaximized = false;
+                _commonProcessor.Window.Maximize();
+            }
+
             DrawScene();
+
             return true;
         }
 
@@ -237,14 +247,14 @@ namespace SpaceVIL
             GLWHandler.SetCallbackContentScale(ContentScale);
         }
 
-        private void ContentScale(Int64 window, float x, float y)
+        private void ContentScale(Int64 wnd, float x, float y)
         {
             _commonProcessor.Window.SetWindowScale(x, y);
             _scale.SetScale(x, y);
             DisplayService.SetDisplayScale(x, y);
 
             int widthWnd, heightWnd;
-            Glfw.GetWindowSize(window, out widthWnd, out heightWnd);
+            Glfw.GetWindowSize(wnd, out widthWnd, out heightWnd);
 
             GLWHandler.GetCoreWindow().SetWidthDirect((int)(widthWnd / _scale.GetXScale()));
             GLWHandler.GetCoreWindow().SetHeightDirect((int)(heightWnd / _scale.GetYScale()));
@@ -253,18 +263,18 @@ namespace SpaceVIL
             // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
         }
 
-        private void Drop(Int64 window, int count, string[] paths)
+        private void Drop(Int64 wnd, int count, string[] paths)
         {
-            _commonProcessor.WndProcessor.Drop(window, count, paths);
+            _commonProcessor.WndProcessor.Drop(wnd, count, paths);
         }
 
-        private void Refresh(Int64 window)
+        private void Refresh(Int64 wnd)
         {
             Update();
             GLWHandler.Swap();
         }
 
-        private void Framebuffer(Int64 window, int w, int h)
+        private void Framebuffer(Int64 wnd, int w, int h)
         {
             _framebufferWidth = w;
             _framebufferHeight = h;
@@ -312,23 +322,23 @@ namespace SpaceVIL
             _commonProcessor.WndProcessor.FullScreenWindow();
         }
 
-        private void CloseWindow(Int64 window)
+        private void CloseWindow(Int64 wnd)
         {
             Glfw.SetWindowShouldClose(GLWHandler.GetWindowId(), false);
             _commonProcessor.Window.EventClose.Invoke();
         }
 
-        internal void Focus(Int64 window, bool value)
+        internal void Focus(Int64 wnd, bool value)
         {
-            _commonProcessor.WndProcessor.Focus(window, value);
+            _commonProcessor.WndProcessor.Focus(wnd, value);
         }
 
-        internal void SetWindowFocused()
+        internal void FocusWindow()
         {
             Glfw.FocusWindow(GLWHandler.GetWindowId());
         }
 
-        private void Resize(Int64 window, int width, int height)
+        private void Resize(Int64 wnd, int width, int height)
         {
             _tooltip.InitTimer(false);
 
@@ -368,7 +378,7 @@ namespace SpaceVIL
             }
         }
 
-        private void Position(Int64 window, int xpos, int ypos)
+        private void Position(Int64 wnd, int xpos, int ypos)
         {
             GLWHandler.GetPointer().SetX(xpos);
             GLWHandler.GetPointer().SetY(ypos);
@@ -402,38 +412,39 @@ namespace SpaceVIL
             }
         }
 
-        private void MouseClick(Int64 window, MouseButton button, InputState state, KeyMods mods)
+        private void MouseClick(Int64 wnd, MouseButton button, InputState state, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
             _tooltip.InitTimer(false);
+
             _commonProcessor.RootContainer.ClearSides();
-            _mouseClickProcessor.Process(window, button, state, mods);
+            _mouseClickProcessor.Process(wnd, button, state, mods);
         }
 
-        private void MouseScroll(Int64 window, double dx, double dy)
+        private void MouseScroll(Int64 wnd, double dx, double dy)
         {
             // if (_commonProcessor.InputLocker)
             //     return;
             _tooltip.InitTimer(false);
-            _mouseScrollProcessor.Process(window, dx, dy);
+            _mouseScrollProcessor.Process(wnd, dx, dy);
             _commonProcessor.Events.SetEvent(InputEventType.MouseScroll);
         }
 
-        private void KeyPress(Int64 window, KeyCode key, int scancode, InputState action, KeyMods mods)
+        private void KeyPress(Int64 wnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
             _tooltip.InitTimer(false);
-            _keyInputProcessor.Process(window, key, scancode, action, mods);
+            _keyInputProcessor.Process(wnd, key, scancode, action, mods);
         }
 
-        private void TextInput(Int64 window, uint character, KeyMods mods)
+        private void TextInput(Int64 wnd, uint character, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
             _tooltip.InitTimer(false);
-            _textInputProcessor.Process(window, character, mods);
+            _textInputProcessor.Process(wnd, character, mods);
         }
 
         internal void SetFrequency(RedrawFrequency value)
@@ -451,6 +462,11 @@ namespace SpaceVIL
 
         internal void DrawScene()
         {
+            if (FocusRequest)
+            {
+                FocusWindow();
+                FocusRequest = false;
+            }
             if (FullScreenRequest)
             {
                 FullScreen();
@@ -949,7 +965,7 @@ namespace SpaceVIL
             }
         }
 
-        private Position tooltipBorderIndent = new Position(10, 2);
+        private Position _tooltipBorderIndent = new Position(10, 2);
 
         private void DrawToolTip()
         {
@@ -967,15 +983,15 @@ namespace SpaceVIL
 
             //проверка сверху
             if (_commonProcessor.PtrRelease.GetY() > _tooltip.GetHeight())
-                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() - _tooltip.GetHeight() - tooltipBorderIndent.GetY());
+                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() - _tooltip.GetHeight() - _tooltipBorderIndent.GetY());
             else
-                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + CommonService.CurrentCursor.GetCursorHeight() + tooltipBorderIndent.GetY());
+                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + CommonService.CurrentCursor.GetCursorHeight() + _tooltipBorderIndent.GetY());
             //проверка справа
-            if (_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX() + _tooltip.GetWidth()
-                > GLWHandler.GetCoreWindow().GetWidth() - tooltipBorderIndent.GetX())
-                _tooltip.SetX(GLWHandler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - tooltipBorderIndent.GetX());
+            if (_commonProcessor.PtrRelease.GetX() - _tooltipBorderIndent.GetX() + _tooltip.GetWidth()
+                > GLWHandler.GetCoreWindow().GetWidth() - _tooltipBorderIndent.GetX())
+                _tooltip.SetX(GLWHandler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - _tooltipBorderIndent.GetX());
             else
-                _tooltip.SetX(_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX());
+                _tooltip.SetX(_commonProcessor.PtrRelease.GetX() - _tooltipBorderIndent.GetX());
 
             _tooltip.MakeShape();
 

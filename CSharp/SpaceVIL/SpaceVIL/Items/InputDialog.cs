@@ -65,7 +65,7 @@ namespace SpaceVIL
         /// <param name="textByDefault">Default text of text field as System.String.</param>
         public InputDialog(String title, String actionName, String textByDefault)
         {
-            SetItemName("InputDialog_");
+            SetItemName("InputDialog");
             _layout = new Frame();
             _stack = new HorizontalStack();
             _title = new TitleBar(title);

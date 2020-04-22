@@ -833,7 +833,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         setTextAlignment(style.textAlignment);
 
         Style innerStyle = style.getInnerStyle("selection");
-        System.out.println(getItemName() + " " + (innerStyle == null));
         if (innerStyle != null) {
             _selectedArea.setStyle(innerStyle);
         }

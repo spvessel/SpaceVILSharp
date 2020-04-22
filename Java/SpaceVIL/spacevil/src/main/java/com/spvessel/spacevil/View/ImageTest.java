@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 
 import com.spvessel.spacevil.ActiveWindow;
 import com.spvessel.spacevil.ButtonCore;
+import com.spvessel.spacevil.CheckBox;
 import com.spvessel.spacevil.ComboBox;
 import com.spvessel.spacevil.Ellipse;
 import com.spvessel.spacevil.GraphicsMathService;
@@ -17,6 +18,7 @@ import com.spvessel.spacevil.InputDialog;
 import com.spvessel.spacevil.MenuItem;
 import com.spvessel.spacevil.PopUpMessage;
 import com.spvessel.spacevil.ProgressBar;
+import com.spvessel.spacevil.RadioButton;
 import com.spvessel.spacevil.Rectangle;
 import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.ToolTip;
@@ -111,6 +113,9 @@ public class ImageTest extends ActiveWindow {
             frame.setPadding(20, 60, 20, 20);
             addItem(frame);
 
+            frame.addItems(new RadioButton("text1"), new RadioButton("text2"));
+            frame.addItems(new CheckBox("text1"), new CheckBox("text2"));
+
             HorizontalStack h_stack = new HorizontalStack();
             h_stack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
             h_stack.setBackground(255, 255, 255, 200);
@@ -175,7 +180,10 @@ public class ImageTest extends ActiveWindow {
                 // System.out.println(ms.getResult());
                 // h_stack.setVisible(!h_stack.isVisible());
 
-                changeImage(btn_action);
+                // changeImage(btn_action);
+
+                InputDialog inDialog = new InputDialog("Add new function...", "Add", "NewFunction");
+                inDialog.show(this);
             };
             btn_action.eventMouseClick.add(btn_action_click);
 
@@ -347,6 +355,11 @@ public class ImageTest extends ActiveWindow {
 
             // что-то сбивает фокус
             // setFocus();
+            // btn_action.setFocus();
+
+            eventKeyPress.add((s, a) -> {
+                System.out.println(getFocusedItem().getItemName());
+            });
         }
     }
 

@@ -25,9 +25,9 @@ namespace SpaceVIL.Decorations
         /// </summary>
         public int Bottom;
         
-        /// </summary>
-        /// Constructs a Indents with strict values for each side (default values is zeros).
         /// <summary>
+        /// Constructs a Indents with strict values for each side (default values is zeros).
+        /// </summary>
         /// <param name="left">Indent from left side of the item.</param>
         /// <param name="top">Indent from top side of the item.</param>
         /// <param name="right">Indent from right side of the item.</param>

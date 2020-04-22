@@ -157,7 +157,7 @@ public class SpinItem extends Prototype {
         if (style == null)
             return;
         super.setStyle(style);
-
+        
         Style innerStyle = style.getInnerStyle("buttonsarea");
         if (innerStyle != null) {
             _vertStack.setStyle(innerStyle);

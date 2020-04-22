@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.spvessel.spacevil.Flags.ImageQuality;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
@@ -22,7 +24,17 @@ final class VramTexture extends AbstractVramResource {
     VramTexture() {
     }
 
-    void genTexture(int w, int h, byte[] bitmap) {
+    private void applySmoothFilter() {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    private void applyRoughFilter() {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+
+    void genTexture(int w, int h, byte[] bitmap, ImageQuality filtering) {
         byte[] array = bitmap;
         ByteBuffer bb = BufferUtils.createByteBuffer(array.length);// ByteBuffer.allocateDirect(array.length);
         bb.put(array);
@@ -36,11 +48,15 @@ final class VramTexture extends AbstractVramResource {
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+        if (filtering == ImageQuality.SMOOTH) {
+            applySmoothFilter();
+        } else {
+            applyRoughFilter();
+        }
     }
 
-    void genTexture(int w, int h, BufferedImage bitmap) {
+    void genTexture(int w, int h, BufferedImage bitmap, ImageQuality filtering) {
         ByteBuffer buffer = getByteBuffer(bitmap);
 
         texture = glGenTextures();
@@ -51,8 +67,12 @@ final class VramTexture extends AbstractVramResource {
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+        if (filtering == ImageQuality.SMOOTH) {
+            applySmoothFilter();
+        } else {
+            applyRoughFilter();
+        }
     }
 
     void genBuffers(float x0, float x1, float y0, float y1) {
@@ -62,14 +82,14 @@ final class VramTexture extends AbstractVramResource {
     void genBuffers(float x0, float x1, float y0, float y1, boolean flip) {
         // Vertices
         // if (!flip) {
-        //     _vbo_data = new float[] {
-        //             // X Y Z //U V
-        //             x0, y0, 0.0f, 1.0f, // x0
-        //             x0, y1, 0.0f, 0.0f, // x1
-        //             x1, y1, 1.0f, 0.0f, // x2
-        //             x1, y0, 1.0f, 1.0f, // x3
-        //     };
-        // } else 
+        // _vbo_data = new float[] {
+        // // X Y Z //U V
+        // x0, y0, 0.0f, 1.0f, // x0
+        // x0, y1, 0.0f, 0.0f, // x1
+        // x1, y1, 1.0f, 0.0f, // x2
+        // x1, y0, 1.0f, 1.0f, // x3
+        // };
+        // } else
         {
             _vbo_data = new float[] {
                     // X Y Z //U V

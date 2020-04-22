@@ -379,10 +379,10 @@ namespace SpaceVIL
                 return;
             }
             base.SetStyle(style);
-            Style inner_style = style.GetInnerStyle("itemlist");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("itemlist");
+            if (innerStyle != null)
             {
-                ItemList.SetStyle(inner_style);
+                ItemList.SetStyle(innerStyle);
             }
         }
     }

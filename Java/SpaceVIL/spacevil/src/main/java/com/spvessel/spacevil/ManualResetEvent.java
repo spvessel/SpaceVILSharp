@@ -3,7 +3,7 @@ package com.spvessel.spacevil;
 final class ManualResetEvent {
 
     private final Object monitor = new Object();
-    private volatile boolean open = false;
+    volatile boolean open = false;
 
     public ManualResetEvent(boolean open) {
         this.open = open;
@@ -17,14 +17,14 @@ final class ManualResetEvent {
         }
     }
 
-    public void set() {// open start
+    public void set() {
         synchronized (monitor) {
             open = true;
             monitor.notifyAll();
         }
     }
 
-    public void reset() {// close stop
+    public void reset() {
         open = false;
     }
 }

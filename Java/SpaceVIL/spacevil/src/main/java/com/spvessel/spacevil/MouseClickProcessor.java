@@ -10,6 +10,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.system.MemoryStack;
 
 import com.spvessel.spacevil.Core.InterfaceDraggable;
+import com.spvessel.spacevil.Core.InterfaceMovable;
 import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.InputState;
@@ -49,6 +50,7 @@ final class MouseClickProcessor {
     }
 
     void process(long wnd, int button, int action, int mods) {
+
         _commonProcessor.margs.button = MouseButton.getEnum(button);
         _commonProcessor.margs.state = InputState.getEnum(action);
         _commonProcessor.margs.mods = KeyMods.getEnums(mods);
@@ -90,19 +92,19 @@ final class MouseClickProcessor {
         }
 
         switch (action) {
-        case GLFW_RELEASE:
-            release(wnd, button, action, mods);
-            break;
+            case GLFW_RELEASE:
+                release(wnd, button, action, mods);
+                break;
 
-        case GLFW_PRESS:
-            press(wnd, button, action, mods);
-            break;
+            case GLFW_PRESS:
+                press(wnd, button, action, mods);
+                break;
 
-        case GLFW_REPEAT:
-            break;
+            case GLFW_REPEAT:
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -173,25 +175,36 @@ final class MouseClickProcessor {
         _commonProcessor.focusedItem.setMousePressed(false);
 
         _commonProcessor.rootContainer.restoreFocus();
-        boolean is_double_click = isDoubleClick(_commonProcessor.hoveredItem);
+
+        boolean isDoubleClick = isDoubleClick(_commonProcessor.hoveredItem);
         Deque<Prototype> underHoveredQueue = new ArrayDeque<>(_commonProcessor.underHoveredItems);
+
         while (!underHoveredQueue.isEmpty()) {
             Prototype item = underHoveredQueue.pollLast();
             if (item.isDisabled())
                 continue;
             item.setMousePressed(false);
         }
+
         if (_commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_RESIZE)
                 || _commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_MOVE)) {
             _commonProcessor.events.resetAllEvents();
             _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
             return;
         }
+
         if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
+
             if (_commonProcessor.draggableItem != null) {
                 _commonProcessor.draggableItem.eventMouseDrop.execute(_commonProcessor.draggableItem,
                         _commonProcessor.margs);
             }
+
+            if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
+                _commonProcessor.hoveredItem.eventMouseClick.execute(_commonProcessor.hoveredItem,
+                        _commonProcessor.margs);
+            }
+
             if (!_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
                 float len = getLengthBetweenTwoPixelPoints(_commonProcessor.ptrClick.getX(),
                         _commonProcessor.ptrClick.getY(), _commonProcessor.ptrRelease.getX(),
@@ -202,7 +215,6 @@ final class MouseClickProcessor {
                     return;
                 }
             } else if (_commonProcessor.draggableItem != _commonProcessor.hoveredItem) {
-
                 Prototype lastFocused = _commonProcessor.focusedItem;
                 _commonProcessor.focusedItem = _commonProcessor.draggableItem;
                 _commonProcessor.findUnderFocusedItems(_commonProcessor.draggableItem);
@@ -215,18 +227,28 @@ final class MouseClickProcessor {
                 return;
             }
         }
+
         if (_commonProcessor.hoveredItem != null) {
             _commonProcessor.hoveredItem.setMousePressed(false);
 
-            if (is_double_click)
+            if (isDoubleClick) {
                 _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_DOUBLE_CLICK,
                         _commonProcessor.margs, _commonProcessor.hoveredItem, _commonProcessor.underHoveredItems,
                         false);
-            else
-                _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_RELEASE,
-                        _commonProcessor.margs, _commonProcessor.hoveredItem, _commonProcessor.underHoveredItems,
-                        false);
+            } else {
+                if (!_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
+                    if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
+                        _commonProcessor.hoveredItem.eventMouseClick.execute(_commonProcessor.hoveredItem,
+                                _commonProcessor.margs);
+                    } else {
+                        _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_RELEASE,
+                                _commonProcessor.margs, _commonProcessor.hoveredItem,
+                                _commonProcessor.underHoveredItems, false);
+                    }
+                }
+            }
         }
+
         _commonProcessor.events.resetAllEvents();
         _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
     }

@@ -20,6 +20,7 @@ namespace SpaceVIL
         {
             IsDialog = true;
             IsCentered = true;
+            IsAlwaysOnTop = true;
         }
 
         /// <summary>

@@ -78,6 +78,7 @@ final class DrawEngine {
     boolean minimizeRequest = false;
     boolean updateSizeRequest = false;
     boolean updatePositionRequest = false;
+    boolean focusRequest = false;
 
     private float _itemPyramidLevel = 1.0f;
 
@@ -149,6 +150,7 @@ final class DrawEngine {
     boolean init() {
         if (!initWindow())
             return false;
+
         initGL();
         initShaders();
         initProcessors();
@@ -156,6 +158,12 @@ final class DrawEngine {
             _commonProcessor.wndProcessor.applyIcon(_iconBig, _iconSmall);
         prepareCanvas();
         _tooltip.initElements();
+
+        if (glwHandler.maximized) {
+            _commonProcessor.window.isMaximized = false;
+            _commonProcessor.window.maximize();
+        }
+
         drawScene();
         return true;
     }
@@ -305,7 +313,7 @@ final class DrawEngine {
         glwHandler.getCoreWindow().setWidthDirect((int) (width.get(0) / _scale.getXScale()));
         glwHandler.getCoreWindow().setHeightDirect((int) (height.get(0) / _scale.getYScale()));
 
-        // подписать на обновление при смене фактора масштабирования 
+        // подписать на обновление при смене фактора масштабирования
         // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
     }
 
@@ -365,7 +373,7 @@ final class DrawEngine {
         _commonProcessor.wndProcessor.focus(wnd, value);
     }
 
-    void setWindowFocused() {
+    void focusWindow() {
         glfwFocusWindow(glwHandler.getWindowId());
     }
 
@@ -415,25 +423,25 @@ final class DrawEngine {
     boolean flagMove = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
-        if (!flagMove || _commonProcessor.inputLocker)
+        if (!flagMove || _commonProcessor.inputLocker || !glwHandler.focusable)
             return;
+
         flagMove = false;
         _commonProcessor.events.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);
-        if (!glwHandler.focusable)
-            return;
+
         if (CommonService.getOSType() != OSType.MAC) {
             _mouseMoveProcessor.process(wnd, xpos / _scale.getXScale(), ypos / _scale.getXScale(), _scale);
         } else {
             _mouseMoveProcessor.process(wnd, xpos, ypos, new Scale());
         }
-
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {
         if (_commonProcessor.inputLocker || !glwHandler.focusable)
             return;
         _tooltip.initTimer(false);
+
         _commonProcessor.rootContainer.clearSides();
         _mouseClickProcessor.process(wnd, button, action, mods);
     }
@@ -472,6 +480,10 @@ final class DrawEngine {
     private VramFramebuffer _fboBlur = new VramFramebuffer();
 
     void drawScene() {
+        if (focusRequest) {
+            focusWindow();
+            focusRequest = false;
+        }
         if (fullScreenRequest) {
             fullScreen();
             fullScreenRequest = false;

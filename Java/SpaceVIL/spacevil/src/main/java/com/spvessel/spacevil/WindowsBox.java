@@ -158,7 +158,7 @@ public final class WindowsBox {
 
     static void setFocusedWindow(CoreWindow window) {
         if (window != null) {
-            window.setFocus(true);
+            window.focus();
         }
     }
 

@@ -70,14 +70,14 @@ namespace SpaceVIL
             IsBorderHidden = !isBorder;
         }
 
-        private WindowLayout windowLayout;
+        private WindowLayout _windowLayout;
 
         /// <summary>
         /// Parent item for the CoreWindow.
         /// </summary>
         internal WindowLayout GetLayout()
         {
-            return windowLayout;
+            return _windowLayout;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SpaceVIL
             {
                 throw new SpaceVILException("Window handler can't be null");
             }
-            windowLayout = wl;
+            _windowLayout = wl;
             wl.SetCoreWindow();
         }
 
@@ -98,7 +98,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void Show()
         {
-            windowLayout.Show();
+            _windowLayout.Show();
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void Close()
         {
-            windowLayout.Close();
+            _windowLayout.Close();
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace SpaceVIL
         /// <param name="color">System.Drawing.Color.FromARGB(alpha, red, green, blue)</param>
         public void SetBackground(Color color)
         {
-            windowLayout.GetContainer().SetBackground(color);
+            _windowLayout.GetContainer().SetBackground(color);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b)
         {
-            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
+            _windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b, int a)
         {
-            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
+            _windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace SpaceVIL
         /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b)
         {
-            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
+            _windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b, float a)
         {
-            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
+            _windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace SpaceVIL
         /// <returns>Returns background color as System.Drawing.Color</returns>
         public Color GetBackground()
         {
-            return windowLayout.GetContainer().GetBackground();
+            return _windowLayout.GetContainer().GetBackground();
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace SpaceVIL
         /// <param name="padding">SpaceVIL.Decorations.Indents(int left, int top, int right, int bottom)</param>
         public void SetPadding(Indents padding)
         {
-            windowLayout.GetContainer().SetPadding(padding);
+            _windowLayout.GetContainer().SetPadding(padding);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace SpaceVIL
         /// <param name="bottom">Bottom indent.</param>
         public void SetPadding(int left, int top, int right, int bottom)
         {
-            windowLayout.GetContainer().SetPadding(left, top, right, bottom);
+            _windowLayout.GetContainer().SetPadding(left, top, right, bottom);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace SpaceVIL
         /// <returns>Returns a list of contained items in the window.</returns>
         public List<IBaseItem> GetItems()
         {
-            return windowLayout.GetContainer().GetItems();
+            return _windowLayout.GetContainer().GetItems();
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace SpaceVIL
         /// <param name="item">An instance of any IBaseItem class.</param>
         public void AddItem(IBaseItem item)
         {
-            windowLayout.GetContainer().AddItem(item);
+            _windowLayout.GetContainer().AddItem(item);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace SpaceVIL
         {
             foreach (IBaseItem item in items)
             {
-                windowLayout.GetContainer().AddItem(item);
+                _windowLayout.GetContainer().AddItem(item);
             }
         }
         /// <summary>
@@ -242,7 +242,7 @@ namespace SpaceVIL
         /// <param name="index">Index of position.</param>
         public void InsertItem(IBaseItem item, int index)
         {
-            windowLayout.GetContainer().InsertItem(item, index);
+            _windowLayout.GetContainer().InsertItem(item, index);
         }
         /// <summary>
         /// Removing a specified item.
@@ -252,14 +252,14 @@ namespace SpaceVIL
         /// False: if the window did not cantain the specified item.</returns>
         public bool RemoveItem(IBaseItem item)
         {
-            return windowLayout.GetContainer().RemoveItem(item);
+            return _windowLayout.GetContainer().RemoveItem(item);
         }
         /// <summary>
         /// Removing all containing items in the window.
         /// </summary>
         public void Clear()
         {
-            windowLayout.GetContainer().Clear();
+            _windowLayout.GetContainer().Clear();
         }
 
         private String _name;
@@ -271,9 +271,9 @@ namespace SpaceVIL
         public void SetWindowName(String value)
         {
             _name = value;
-            if (windowLayout != null)
+            if (_windowLayout != null)
             {
-                windowLayout.GetContainer().SetItemName(_name);
+                _windowLayout.GetContainer().SetItemName(_name);
             }
         }
         /// <summary>
@@ -310,7 +310,7 @@ namespace SpaceVIL
         internal void SetWidthDirect(int width)
         {
             _itemGeometry.SetWidth(width);
-            windowLayout.GetContainer().SetWidth(width);
+            _windowLayout.GetContainer().SetWidth(width);
         }
         /// <summary>
         /// Setting the window width.
@@ -319,17 +319,17 @@ namespace SpaceVIL
         public void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
-            windowLayout.GetContainer().SetWidth(width);
-            if (windowLayout.IsGLWIDValid())
+            _windowLayout.GetContainer().SetWidth(width);
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdateSize();
+                _windowLayout.UpdateSize();
             }
         }
 
         internal void SetHeightDirect(int height)
         {
             _itemGeometry.SetHeight(height);
-            windowLayout.GetContainer().SetHeight(height);
+            _windowLayout.GetContainer().SetHeight(height);
         }
         /// <summary>
         /// Setting the window height.
@@ -338,10 +338,10 @@ namespace SpaceVIL
         public void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
-            windowLayout.GetContainer().SetHeight(height);
-            if (windowLayout.IsGLWIDValid())
+            _windowLayout.GetContainer().SetHeight(height);
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdateSize();
+                _windowLayout.UpdateSize();
             }
         }
         /// <summary>
@@ -352,13 +352,13 @@ namespace SpaceVIL
         public void SetSize(int width, int height)
         {
             _itemGeometry.SetWidth(width);
-            windowLayout.GetContainer().SetWidth(width);
+            _windowLayout.GetContainer().SetWidth(width);
             _itemGeometry.SetHeight(height);
-            windowLayout.GetContainer().SetHeight(height);
+            _windowLayout.GetContainer().SetHeight(height);
 
-            if (windowLayout.IsGLWIDValid())
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdateSize();
+                _windowLayout.UpdateSize();
             }
         }
         /// <summary>
@@ -368,9 +368,9 @@ namespace SpaceVIL
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetMinWidth(width);
+                _windowLayout.GetContainer().SetMinWidth(width);
             }
         }
         /// <summary>
@@ -380,9 +380,9 @@ namespace SpaceVIL
         public void SetMinHeight(int height)
         {
             _itemGeometry.SetMinHeight(height);
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetMinHeight(height);
+                _windowLayout.GetContainer().SetMinHeight(height);
             }
         }
         /// <summary>
@@ -403,9 +403,9 @@ namespace SpaceVIL
         public void SetMaxWidth(int width)
         {
             _itemGeometry.SetMaxWidth(width);
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetMaxWidth(width);
+                _windowLayout.GetContainer().SetMaxWidth(width);
             }
         }
         /// <summary>
@@ -415,9 +415,9 @@ namespace SpaceVIL
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetMaxHeight(height);
+                _windowLayout.GetContainer().SetMaxHeight(height);
             }
         }
         /// <summary>
@@ -502,9 +502,9 @@ namespace SpaceVIL
         public void SetX(int x)
         {
             SetXDirect(x);
-            if (windowLayout.IsGLWIDValid())
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdatePosition();
+                _windowLayout.UpdatePosition();
             }
         }
         /// <summary>
@@ -528,9 +528,9 @@ namespace SpaceVIL
         public void SetY(int y)
         {
             SetYDirect(y);
-            if (windowLayout.IsGLWIDValid())
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdatePosition();
+                _windowLayout.UpdatePosition();
             }
         }
         /// <summary>
@@ -551,9 +551,9 @@ namespace SpaceVIL
         {
             _itemPosition.SetPosition(x, y);
 
-            if (windowLayout.IsGLWIDValid())
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdatePosition();
+                _windowLayout.UpdatePosition();
             }
         }
         /// <summary>
@@ -564,9 +564,9 @@ namespace SpaceVIL
         {
             _itemPosition.SetPosition(position.GetX(), position.GetY());
 
-            if (windowLayout.IsGLWIDValid())
+            if (_windowLayout.IsGLWIDValid())
             {
-                windowLayout.UpdatePosition();
+                _windowLayout.UpdatePosition();
             }
         }
         /// <summary>
@@ -635,7 +635,7 @@ namespace SpaceVIL
         /// <para/>Default: False.
         /// </summary>
         public bool IsBorderHidden;
-        
+
         /// <summary>
         /// <para/>A flag that determines whether the current window will first appear in the center of the screen or not.
         /// <para/>True: window is centered. False: window is NOT centered.
@@ -691,7 +691,7 @@ namespace SpaceVIL
 
         internal void SetFocusable(bool value)
         {
-            windowLayout.SetFocusable(value);
+            _windowLayout.SetFocusable(value);
         }
 
         private bool _isFocused;
@@ -704,29 +704,21 @@ namespace SpaceVIL
             return _isFocused;
         }
 
-        /// <summary>
-        /// Lets to manage focus state ot the current window.
-        /// </summary>
-        /// <param name="value">True: if you want the window to be focused. False: if you want the window to be unfocused.</param>
-        public void SetFocus(bool value)
+        internal void SetFocus(bool value)
         {
-            if (_isFocused == value)
-            {
-                return;
-            }
             _isFocused = value;
-            if (value)
-            {
-                windowLayout.SetFocus();
-            }
         }
 
         /// <summary>
         /// Sets the window focused.
         /// </summary>
-        public void SetWindowFocused()
+        public void Focus()
         {
-            windowLayout.SetFocus();
+            if (_isFocused)
+                return;
+
+            _windowLayout.SetFocus();
+            _isFocused = true;
         }
 
         /// <summary>
@@ -734,7 +726,7 @@ namespace SpaceVIL
         /// </summary>
         public void Minimize()
         {
-            windowLayout.Minimize();
+            _windowLayout.Minimize();
         }
 
         /// <summary>
@@ -743,7 +735,7 @@ namespace SpaceVIL
         public void Maximize()
         {
             if (Common.CommonService.GetOSType() != OSType.Mac)
-                windowLayout.Maximize();
+                _windowLayout.Maximize();
             else
                 MacOSMaximize();
         }
@@ -773,7 +765,7 @@ namespace SpaceVIL
         /// </summary>
         public void ToggleFullScreen()
         {
-            windowLayout.ToggleFullScreen();
+            _windowLayout.ToggleFullScreen();
         }
 
         /// <summary>
@@ -782,7 +774,7 @@ namespace SpaceVIL
         /// <returns>SpaceVIL.Prototype (abstract class for interactive items).</returns>
         public Prototype GetFocusedItem()
         {
-            return windowLayout.GetFocusedItem();
+            return _windowLayout.GetFocusedItem();
         }
         /// <summary>
         /// Setting the specified item to the focused state.
@@ -790,12 +782,12 @@ namespace SpaceVIL
         /// <param name="item">Any item that can be focused and extends of SpaceVIL.Prototype (abstract class for interactive items).</param>
         public void SetFocusedItem(Prototype item)
         {
-            windowLayout.SetFocusedItem(item);
+            _windowLayout.SetFocusedItem(item);
         }
 
         internal void ResetItems()
         {
-            windowLayout.ResetItems();
+            _windowLayout.ResetItems();
         }
 
         /// <summary>
@@ -804,7 +796,7 @@ namespace SpaceVIL
         /// 
         public void ResetFocus()
         {
-            windowLayout.ResetFocus();
+            _windowLayout.ResetFocus();
         }
 
         /// <summary>
@@ -814,7 +806,7 @@ namespace SpaceVIL
         /// <param name="iconSmall">Title bar icon.</param>
         public void SetIcon(Bitmap iconBig, Bitmap iconSmall)
         {
-            windowLayout.SetIcon(iconBig, iconSmall);
+            _windowLayout.SetIcon(iconBig, iconSmall);
         }
 
         /// <summary>
@@ -823,7 +815,7 @@ namespace SpaceVIL
         /// <param name="value">True: if you want to hide the window. False: if you want tu unhide the window.</param>
         public void SetHidden(bool value)
         {
-            windowLayout.SetHidden(value);
+            _windowLayout.SetHidden(value);
             IsHidden = value;
         }
 
@@ -870,7 +862,7 @@ namespace SpaceVIL
 
         internal void SetWindow(WContainer window)
         {
-            windowLayout.SetWindow(window);
+            _windowLayout.SetWindow(window);
         }
 
         internal int RatioW = -1;
@@ -936,7 +928,7 @@ namespace SpaceVIL
         /// Lets to describe the actions when the mouse button was pressed and moved inside the root item of the window.
         /// </summary>
         public EventMouseMethodState EventMouseDrag;
-        
+
         /// <summary>
         /// Lets to describe the actions when the mouse button was released after dragging.
         /// </summary>
@@ -996,9 +988,9 @@ namespace SpaceVIL
         /// <param name="border">Border as SpaceVIL.Decorations.Border</param>
         public void SetBorder(Border border)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorder(border);
+                _windowLayout.GetContainer().SetBorder(border);
             }
         }
 
@@ -1008,9 +1000,9 @@ namespace SpaceVIL
         /// <param name="fill">Color as System.Drawing.Color</param>
         public void SetBorderFill(Color fill)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderFill(fill);
+                _windowLayout.GetContainer().SetBorderFill(fill);
             }
         }
 
@@ -1022,9 +1014,9 @@ namespace SpaceVIL
         /// <param name="b">Blue (0 - 255)</param>
         public void SetBorderFill(int r, int g, int b)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderFill(r, g, b);
+                _windowLayout.GetContainer().SetBorderFill(r, g, b);
             }
         }
 
@@ -1037,9 +1029,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha (0 - 255)</param>
         public void SetBorderFill(int r, int g, int b, int a)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderFill(r, g, b, a);
+                _windowLayout.GetContainer().SetBorderFill(r, g, b, a);
             }
         }
 
@@ -1051,9 +1043,9 @@ namespace SpaceVIL
         /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetBorderFill(float r, float g, float b)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderFill(r, g, b);
+                _windowLayout.GetContainer().SetBorderFill(r, g, b);
             }
         }
 
@@ -1066,9 +1058,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetBorderFill(float r, float g, float b, float a)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderFill(r, g, b, a);
+                _windowLayout.GetContainer().SetBorderFill(r, g, b, a);
             }
         }
 
@@ -1078,9 +1070,9 @@ namespace SpaceVIL
         /// <param name="radius">Corner radii as SpaceVIL.Decorations.CornerRadius</param>
         public void SetBorderRadius(CornerRadius radius)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderRadius(radius);
+                _windowLayout.GetContainer().SetBorderRadius(radius);
             }
         }
 
@@ -1090,9 +1082,9 @@ namespace SpaceVIL
         /// <param name="radius">The corner radius.</param>
         public void SetBorderRadius(int radius)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderRadius(new CornerRadius(radius));
+                _windowLayout.GetContainer().SetBorderRadius(new CornerRadius(radius));
             }
         }
 
@@ -1102,9 +1094,9 @@ namespace SpaceVIL
         /// <param name="thickness">The border thickness.</param>
         public void SetBorderThickness(int thickness)
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                windowLayout.GetContainer().SetBorderThickness(thickness);
+                _windowLayout.GetContainer().SetBorderThickness(thickness);
             }
         }
 
@@ -1114,9 +1106,9 @@ namespace SpaceVIL
         /// <returns>Corner radii as SpaceVIL.Decorations.CornerRadius</returns>
         public CornerRadius GetBorderRadius()
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                return windowLayout.GetContainer().GetBorderRadius();
+                return _windowLayout.GetContainer().GetBorderRadius();
             }
             return null;
         }
@@ -1127,9 +1119,9 @@ namespace SpaceVIL
         /// <returns>The current thickness.</returns>
         public int GetBorderThickness()
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                return windowLayout.GetContainer().GetBorderThickness();
+                return _windowLayout.GetContainer().GetBorderThickness();
             }
             return 0;
         }
@@ -1140,9 +1132,9 @@ namespace SpaceVIL
         /// <returns>The border color as System.Drawing.Color</returns>
         public Color GetBorderFill()
         {
-            if (windowLayout.GetContainer() != null)
+            if (_windowLayout.GetContainer() != null)
             {
-                return windowLayout.GetContainer().GetBorderFill();
+                return _windowLayout.GetContainer().GetBorderFill();
             }
             return Color.Transparent;
         }
@@ -1158,21 +1150,21 @@ namespace SpaceVIL
 
         internal bool InitEngine()
         {
-            return windowLayout.InitEngine();
+            return _windowLayout.InitEngine();
         }
         internal void UpdateScene()
         {
-            windowLayout.UpdateScene();
+            _windowLayout.UpdateScene();
         }
 
         internal void Dispose()
         {
-            windowLayout.Dispose();
+            _windowLayout.Dispose();
         }
 
         internal CoreWindow GetPairForCurrentWindow()
         {
-            return windowLayout.GetPairForCurrentWindow();
+            return _windowLayout.GetPairForCurrentWindow();
         }
 
         /// <summary>
@@ -1181,7 +1173,7 @@ namespace SpaceVIL
         /// <param name="color">The dimmer color as System.Drawing.Color</param>
         public void SetShadeColor(Color color)
         {
-            windowLayout.SetShadeColor(color);
+            _windowLayout.SetShadeColor(color);
         }
 
         /// <summary>
@@ -1192,7 +1184,7 @@ namespace SpaceVIL
         /// <param name="b">Blue (0 - 255)</param>
         public void SetShadeColor(int r, int g, int b)
         {
-            windowLayout.SetShadeColor(r, g, b);
+            _windowLayout.SetShadeColor(r, g, b);
         }
 
         /// <summary>
@@ -1204,7 +1196,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha (0 - 255)</param>
         public void SetShadeColor(int r, int g, int b, int a)
         {
-            windowLayout.SetShadeColor(r, g, b, a);
+            _windowLayout.SetShadeColor(r, g, b, a);
         }
 
         /// <summary>
@@ -1215,7 +1207,7 @@ namespace SpaceVIL
         /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetShadeColor(float r, float g, float b)
         {
-            windowLayout.SetShadeColor(r, g, b);
+            _windowLayout.SetShadeColor(r, g, b);
         }
 
         /// <summary>
@@ -1227,7 +1219,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetShadeColor(float r, float g, float b, float a)
         {
-            windowLayout.SetShadeColor(r, g, b, a);
+            _windowLayout.SetShadeColor(r, g, b, a);
         }
 
         /// <summary>
@@ -1236,7 +1228,7 @@ namespace SpaceVIL
         /// <returns>The dimmer color as System.Drawing.Color</returns>
         public Color GetShadeColor()
         {
-            return windowLayout.GetShadeColor();
+            return _windowLayout.GetShadeColor();
         }
 
         internal void FreeVRAMResource<T>(T resource)
@@ -1261,9 +1253,9 @@ namespace SpaceVIL
         }
 
         private Scale _windowScale = new Scale();
-        
+
         /// <summary>
-        /// Get DPI scale for the current window.
+        /// Getting DPI scale for the current window.
         /// </summary>
         /// <returns>DPI scale as SpaceVIL.Core.Scale</returns>
         public Scale GetDpiScale()
@@ -1274,6 +1266,23 @@ namespace SpaceVIL
         internal void SetWindowScale(float x, float y)
         {
             _windowScale.SetScale(x, y);
+        }
+        /// <summary>
+        /// Makes this window inactive. Window cannot receive and process any input events.
+        /// <para/> Tip: to restore window activity use CoreWindow.Proceed().
+        /// </summary>
+        public void Hold()
+        {
+            _windowLayout.Hold();
+        }
+
+        /// <summary>
+        /// Restores window activity. Window may receive and process any input events.
+        /// <para/> Tip: used with CoreWindow.Hold() method which makes a window inactive.
+        /// </summary>
+        public void Proceed()
+        {
+            _windowLayout.Proceed();
         }
     }
 }

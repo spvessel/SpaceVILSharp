@@ -91,6 +91,10 @@ abstract public class Prototype implements InterfaceBaseItem {
      */
     public EventMouseMethodState eventMousePress = new EventMouseMethodState();
     /**
+     * Event that is invoked when mouse move on an item.
+     */
+    public EventMouseMethodState eventMouseMove = new EventMouseMethodState();
+    /**
      * Event that is invoked when mouse drag on an item.
      */
     public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
@@ -1207,7 +1211,7 @@ abstract public class Prototype implements InterfaceBaseItem {
      * @return Blocked input events as
      *         List&lt;com.spvessel.spacevil.Flags.InputEventType&gt;
      */
-    public List<InputEventType> GetBlockedEvents() {
+    public List<InputEventType> getBlockedEvents() {
         return _core.getBlockedEvents();
     }
 
@@ -1462,11 +1466,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Setting mouse cursor image for this item from embedded cursors.
      * 
-     * @param cursor Mouse cursor type as
+     * @param type Mouse cursor type as
      *               com.spvessel.spacevil.Flags.EmbeddedCursor.
      */
-    public void setCursor(EmbeddedCursor cursor) {
-        _cursor = new CursorImage(cursor);
+    public void setCursor(EmbeddedCursor type) {
+        _cursor = new CursorImage(type);
     }
 
     /**

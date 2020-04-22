@@ -69,7 +69,6 @@ final class GLWHandler {
     }
 
     void createWindow() throws SpaceVILException {
-        CursorImage.initCursors();
         // important!!! may be the best combination of WINDOW HINTS!!!
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -101,10 +100,10 @@ final class GLWHandler {
         else
             glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
 
-        if (maximized)
-            glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-        else
-            glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+        // if (maximized)
+        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+        // else
+        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         if (transparent)
             glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);

@@ -80,7 +80,7 @@ public class InputDialog extends DialogItem {
      * @param defaultText Default text of text field as java.lang.String.
      */
     public InputDialog(String title, String actionName, String defaultText) {
-        setItemName("InputDialog_");
+        setItemName("InputDialog");
         _layout = new Frame();
         _stack = new HorizontalStack();
         _title = new TitleBar(title);

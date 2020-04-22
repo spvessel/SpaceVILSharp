@@ -147,7 +147,7 @@ namespace SpaceVIL.Core
         /// but inside rectangle area that bounds this triangle.
         /// </summary>
         Lazy,
-        
+
         /// <summary>
         /// Hover function will return True only if mouse cursor located inside the shape of the item.
         /// </summary>
@@ -490,7 +490,7 @@ namespace SpaceVIL.Core
     /// </summary>
     public enum OpenDialogType
     {
-        Open, 
+        Open,
         Save
     }
 
@@ -547,10 +547,20 @@ namespace SpaceVIL.Core
         /// (See SetRenderFrequency(type)) in idle and every time when any input event occurs.
         /// </summary>
         Periodic,
-        
+
         /// <summary>
         /// The scene is constantly being redrawn.
         /// </summary>
         Always
+    }
+
+    /// <summary>
+    /// Enum of image filtering quality.
+    /// <para/> Values: Smooth, Rough.
+    /// </summary>
+    public enum ImageQuality
+    {
+        Smooth,
+        Rough
     }
 }

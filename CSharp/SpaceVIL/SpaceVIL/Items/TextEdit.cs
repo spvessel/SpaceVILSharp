@@ -419,6 +419,10 @@ namespace SpaceVIL
         //     //     _cursor.SetVisible(false);
         // }
 
+        public override void SetFocus() {
+            _textObject.SetFocus();
+        }
+
         /// <summary>
         /// Setting alignment of a the text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 

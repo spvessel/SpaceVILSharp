@@ -15,7 +15,7 @@ final class ActionManagerAssigner {
     }
 
     void assignActionsForHoveredItem(InputEventType action, InterfaceInputEventArgs args, Prototype hoveredItem,
-                                     List<Prototype> itemPyramid, boolean isOnlyHovered) {
+            List<Prototype> itemPyramid, boolean isOnlyHovered) {
         if (isOnlyHovered) {
             if (hoveredItem.isDisabled())
                 return;
@@ -76,8 +76,6 @@ final class ActionManagerAssigner {
 
             if (!item.isPassEvents(action))
                 break;
-
-            // System.out.println(item.getItemName());
         }
     }
 }

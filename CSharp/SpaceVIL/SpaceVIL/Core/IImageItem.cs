@@ -48,5 +48,11 @@ namespace SpaceVIL.Core
         /// </summary>
         /// <returns>Bounds as SpaceVIL.Core.Area.</returns>
         Area GetAreaBounds();
+
+        /// <summary>
+        /// Method for getting an image filtering quality.
+        /// </summary>
+        /// <returns>Image filtering quality as SpaceVIL.Core.ImageQuality.</returns>
+        ImageQuality GetImageQuality();
     }
 }

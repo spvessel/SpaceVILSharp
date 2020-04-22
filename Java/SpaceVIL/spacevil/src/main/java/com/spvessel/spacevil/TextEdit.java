@@ -397,12 +397,9 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
     // }
     // }
 
-    /**
-     * Set TextEdit focused/unfocused
-     */
     @Override
-    protected void setFocused(boolean value) {
-        _textObject.setFocused(value);
+    public void setFocus() {
+        _textObject.setFocus();
         // super.setFocused(value);
         // if (isFocused() && _isEditable) {
         // _cursor.setVisible(true);
@@ -956,9 +953,9 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
     @Override
     public void setStyle(Style style) {
         super.setStyle(style);
-        Style inner_style = style.getInnerStyle("text");
-        if (inner_style != null) {
-            _textObject.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("text");
+        if (innerStyle != null) {
+            _textObject.setStyle(innerStyle);
         }
         // if (style == null) {
         // return;

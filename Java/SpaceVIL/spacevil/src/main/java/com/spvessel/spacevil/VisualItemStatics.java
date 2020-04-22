@@ -19,7 +19,10 @@ final class VisualItemStatics {
     static void updateState(VisualItem item) {
         ItemState baseState = item.getState(ItemStateType.BASE);
         ItemState currentState = item.getState(item.getCurrentStateType());
+        
         item.setBackgroundDirect(currentState.background);
+        // item.getState(ItemStateType.BASE).background = currentState.background;
+
         if (currentState.shape != null) {
             if (item.isCustomFigure() != currentState.shape)
                 item.setCustomFigure(currentState.shape);
@@ -30,6 +33,7 @@ final class VisualItemStatics {
             updateVisualProperties(item, disabledState, baseState);
             return;
         }
+
         ItemState focusedState = item.getState(ItemStateType.FOCUSED);
         if (item.isFocused() && focusedState != null) {
             updateVisualProperties(item, focusedState, baseState);
@@ -51,14 +55,14 @@ final class VisualItemStatics {
             if (!item.getBorderDirect().getRadius().equals(baseState.border.getRadius())) {
                 ItemsRefreshManager.setRefreshShape(item.prototype);
             }
-            item._border = border;
+            item.border = border;
         }
     }
 
     static void updateVisualProperties(VisualItem item, ItemState state, ItemState prevState) {
         ItemState currentState = item.getState(item.getCurrentStateType());
         item.setBackgroundDirect(
-                GraphicsMathService.mixColors(currentState.background, prevState.background, state.background));
+                GraphicsMathService.mixColors(currentState.background, item.getBackground(), state.background));
 
         Border borderCurrentState = cloneBorder(currentState.border);
         Border borderState = cloneBorder(state.border);
@@ -67,13 +71,13 @@ final class VisualItemStatics {
         if (!borderCurrentState.getRadius().isCornersZero()) {
             if (!borderState.getRadius().isCornersZero()) {
                 if (!borderCurrentState.getRadius().equals(borderState.getRadius())) {
-                    item._border.setRadius(borderState.getRadius());
+                    item.border.setRadius(borderState.getRadius());
                     ItemsRefreshManager.setRefreshShape(item.prototype);
                 }
             } else {
                 if (!prevState.border.getRadius().isCornersZero()) {
                     if (!borderCurrentState.getRadius().equals(prevState.border.getRadius())) {
-                        item._border.setRadius(prevState.border.getRadius());
+                        item.border.setRadius(prevState.border.getRadius());
                         ItemsRefreshManager.setRefreshShape(item.prototype);
                     }
                 }
@@ -104,17 +108,17 @@ final class VisualItemStatics {
         // }
 
         if (borderState.getThickness() >= 0) {
-            item._border.setThickness(borderState.getThickness());
+            item.border.setThickness(borderState.getThickness());
         } else {
             if (prevState.border.getThickness() >= 0)
-                item._border.setThickness(prevState.border.getThickness());
+                item.border.setThickness(prevState.border.getThickness());
         }
 
         if (borderState.getFill().getAlpha() > 0) {
-            item._border.setFill(borderState.getFill());
+            item.border.setFill(borderState.getFill());
         } else {
             if (prevState.border.getFill().getAlpha() > 0)
-                item._border.setFill(prevState.border.getFill());
+                item.border.setFill(prevState.border.getFill());
         }
         //     item._border.setFill(prevState.border.getFill());
         // if (item._border.getFill().getAlpha() == 0)
@@ -219,10 +223,10 @@ final class VisualItemStatics {
         item.setVisible(style.isVisible);
         item.removeAllItemStates();
 
-        ItemState core_state = new ItemState(style.background);
-        core_state.border.setRadius(style.borderRadius);
-        core_state.border.setThickness(style.borderThickness);
-        core_state.border.setFill(style.borderFill);
+        ItemState coreState = new ItemState(style.background);
+        coreState.border.setRadius(style.borderRadius);
+        coreState.border.setThickness(style.borderThickness);
+        coreState.border.setFill(style.borderFill);
 
         for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             item.addItemState(state.getKey(), state.getValue());
@@ -230,11 +234,12 @@ final class VisualItemStatics {
 
         if (style.shape != null) {
             item.setCustomFigure(new Figure(style.isFixedShape, style.shape));
-            core_state.shape = item.isCustomFigure();
+            coreState.shape = item.isCustomFigure();
         }
-        item.addItemState(ItemStateType.BASE, core_state);
+        item.addItemState(ItemStateType.BASE, coreState);
 
         item.setBackground(style.background);
+        // item.setBackgroundDirect(style.background);
         item.setBorderRadius(style.borderRadius);
         item.setBorderThickness(style.borderThickness);
         item.setBorderFill(style.borderFill);

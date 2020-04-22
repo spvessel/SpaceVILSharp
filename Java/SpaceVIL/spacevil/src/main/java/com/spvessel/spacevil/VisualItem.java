@@ -81,24 +81,24 @@ final class VisualItem extends BaseItem {
     }
 
     // item
-    Border _border = new Border();
+    Border border = new Border();
 
     void setBorderDirect(Border border) {
-        _border = border;
+        this.border = border;
     }
 
     Border getBorderDirect() {
-        return _border;
+        return border;
     }
 
     void setBorder(Border border) {
-        _border = border;
-        getState(ItemStateType.BASE).border = _border;
+        this.border = border;
+        getState(ItemStateType.BASE).border = border;
         updateState();
     }
 
     void setBorderFill(Color fill) {
-        _border.setFill(fill);
+        border.setFill(fill);
         getState(ItemStateType.BASE).border.setFill(fill);
         updateState();
     }
@@ -120,27 +120,27 @@ final class VisualItem extends BaseItem {
     }
 
     void setBorderRadius(CornerRadius radius) {
-        _border.setRadius(radius);
+        border.setRadius(radius);
         getState(ItemStateType.BASE).border.setRadius(radius);
         updateState();
     }
 
     void setBorderThickness(int thickness) {
-        _border.setThickness(thickness);
+        border.setThickness(thickness);
         getState(ItemStateType.BASE).border.setThickness(thickness);
         updateState();
     }
 
     CornerRadius getBorderRadius() {
-        return _border.getRadius();
+        return border.getRadius();
     }
 
     int getBorderThickness() {
-        return _border.getThickness();
+        return border.getThickness();
     }
 
     Color getBorderFill() {
-        return _border.getFill();
+        return border.getFill();
     }
 
     Map<ItemStateType, ItemState> states = new HashMap<>();
