@@ -80,7 +80,7 @@ namespace SpaceVIL
         {
             if (_font.Size != size)
             {
-                _font = GraphicsMathService.ChangeFontSize(size, _font); //new Font(_font.FontFamily, size, _font.Style);
+                _font = FontService.ChangeFontSize(size, _font);
                 UpdateData();
             }
         }
@@ -88,7 +88,7 @@ namespace SpaceVIL
         {
             if (_font.Style != style)
             {
-                _font = GraphicsMathService.ChangeFontStyle(style, _font); //new Font(_font.FontFamily, _font.Size, style);
+                _font = FontService.ChangeFontStyle(style, _font);
                 UpdateData();
             }
         }
@@ -100,7 +100,7 @@ namespace SpaceVIL
             }
             if (_font.FontFamily != font_family)
             {
-                _font = GraphicsMathService.ChangeFontFamily(font_family, _font); //new Font(font_family, _font.Size, _font.Style);
+                _font = FontService.ChangeFontFamily(font_family, _font);
                 UpdateData();
             }
         }

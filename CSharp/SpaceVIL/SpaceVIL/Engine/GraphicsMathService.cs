@@ -9,7 +9,7 @@ using SpaceVIL.Decorations;
 namespace SpaceVIL
 {
     /// <summary>
-    /// GraphicsMathService is a static class with static methods for working with colors, fonts, shapes and images.
+    /// GraphicsMathService is a static class with static methods for working with colors, shapes and images.
     /// </summary>
     public static class GraphicsMathService
     {
@@ -247,79 +247,15 @@ namespace SpaceVIL
         /// <summary>
         /// Making a rectangle with roundness corners.
         /// </summary>
+        /// <param name="radius"> Same radius value for each corner (default = 0). </param>
         /// <param name="width"> Rectangle width (default = 100). </param>
         /// <param name="height"> Rectangle height (default = 100). </param>
-        /// <param name="radius"> Same radius value for each corner (default = 0). </param>
         /// <param name="x"> X position (left top corner) of the result object (default = 0). </param>
         /// <param name="y"> Y position (left top corner) of the result object (default = 0). </param>
         /// <returns> Points list of the shape with roundness corners as List of float[2] array.</returns>
-        static public List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
+        static public List<float[]> GetRoundSquare(float radius = 0.0f, float width = 100, float height = 100, int x = 0, int y = 0)
         {
-            if (width <= 0 || height <= 0)
-                return null;
-
-            if (radius < 0)
-                radius = 0;
-
-            List<float[]> triangles = new List<float[]>();
-            //Начало координат в углу
-
-            triangles.Add(new float[] { radius + x, height + y });
-            triangles.Add(new float[] { width - radius + x, y });
-            triangles.Add(new float[] { radius + x, y });
-            //1
-
-            triangles.Add(new float[] { radius + x, height + y });
-            triangles.Add(new float[] { width - radius + x, height + y });
-            triangles.Add(new float[] { width - radius + x, y });
-            //2
-
-            triangles.Add(new float[] { width - radius + x, height - radius + y });
-            triangles.Add(new float[] { width + x, radius + y });
-            triangles.Add(new float[] { width - radius + x, radius + y });
-            //3
-
-            triangles.Add(new float[] { width - radius + x, height - radius + y });
-            triangles.Add(new float[] { width + x, height - radius + y });
-            triangles.Add(new float[] { width + x, radius + y });
-            //4
-
-            triangles.Add(new float[] { x, height - radius + y });
-            triangles.Add(new float[] { radius + x, radius + y });
-            triangles.Add(new float[] { x, radius + y });
-            //5
-
-            triangles.Add(new float[] { x, height - radius + y });
-            triangles.Add(new float[] { radius + x, height - radius + y });
-            triangles.Add(new float[] { radius + x, radius + y });
-            //6
-
-            if (radius < 1)
-                return triangles;
-
-            float x0, y0;
-            int quadrantInd;
-            x0 = width - radius + x;
-            y0 = height - radius + y;
-            quadrantInd = 1;
-            triangles.AddRange(CountCircleSector(quadrantInd, x0, y0, radius)); //7
-
-            x0 = width - radius + x;
-            y0 = radius + y;
-            quadrantInd = 4;
-            triangles.AddRange(CountCircleSector(quadrantInd, x0, y0, radius)); //8
-
-            x0 = radius + x;
-            y0 = radius + y;
-            quadrantInd = 3;
-            triangles.AddRange(CountCircleSector(quadrantInd, x0, y0, radius)); //9
-
-            x0 = radius + x;
-            y0 = height - radius + y;
-            quadrantInd = 2;
-            triangles.AddRange(CountCircleSector(quadrantInd, x0, y0, radius)); //10
-
-            return triangles;
+            return GetRoundSquare(new CornerRadius(radius), width, height, x, y);
         }
 
         static private List<float[]> CountCircleSector(int quadrantInd, float x0, float y0, float radius)
@@ -1223,38 +1159,38 @@ namespace SpaceVIL
             return Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
 
-        /// <summary>
-        /// Changing font size.
-        /// </summary>
-        /// <param name="size">New size of the font.</param>
-        /// <param name="oldFont">Font as System.Drawing.Font.</param>
-        /// <returns>New sized font as System.Drawing.Font.</returns>
-        public static Font ChangeFontSize(int size, Font oldFont)
-        {
-            return new Font(oldFont.FontFamily, size, oldFont.Style);
-        }
+        // /// <summary>
+        // /// Changing font size.
+        // /// </summary>
+        // /// <param name="size">New size of the font.</param>
+        // /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        // /// <returns>New sized font as System.Drawing.Font.</returns>
+        // public static Font ChangeFontSize(int size, Font oldFont)
+        // {
+        //     return new Font(oldFont.FontFamily, size, oldFont.Style);
+        // }
 
-        /// <summary>
-        /// Changing font style.
-        /// </summary>
-        /// <param name="style">New style of the font.</param>
-        /// <param name="oldFont">Font as System.Drawing.Font.</param>
-        /// <returns>New styled font as System.Drawing.Font.</returns>
-        public static Font ChangeFontStyle(FontStyle style, Font oldFont)
-        {
-            return new Font(oldFont.FontFamily, oldFont.Size, style);
-        }
+        // /// <summary>
+        // /// Changing font style.
+        // /// </summary>
+        // /// <param name="style">New style of the font.</param>
+        // /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        // /// <returns>New styled font as System.Drawing.Font.</returns>
+        // public static Font ChangeFontStyle(FontStyle style, Font oldFont)
+        // {
+        //     return new Font(oldFont.FontFamily, oldFont.Size, style);
+        // }
 
-        /// <summary>
-        /// Changing font family.
-        /// </summary>
-        /// <param name="fontFamily">New font family of the font.</param>
-        /// <param name="oldFont">Font as System.Drawing.Font.</param>
-        /// <returns>New font as System.Drawing.Font.</returns>
-        public static Font ChangeFontFamily(FontFamily fontFamily, Font oldFont)
-        {
-            return new Font(fontFamily, oldFont.Size, oldFont.Style);
-        }
+        // /// <summary>
+        // /// Changing font family.
+        // /// </summary>
+        // /// <param name="fontFamily">New font family of the font.</param>
+        // /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        // /// <returns>New font as System.Drawing.Font.</returns>
+        // public static Font ChangeFontFamily(FontFamily fontFamily, Font oldFont)
+        // {
+        //     return new Font(fontFamily, oldFont.Size, oldFont.Style);
+        // }
 
         private static double Grad2Radian(double angleGrad)
         {

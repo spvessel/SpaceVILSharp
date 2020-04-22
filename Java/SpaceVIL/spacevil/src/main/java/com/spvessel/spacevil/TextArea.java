@@ -524,7 +524,7 @@ public class TextArea extends Prototype {
     public void setFontSize(int size) {
         Font oldFont = getFont();
         if (oldFont.getSize() != size) {
-            Font newFont = GraphicsMathService.changeFontSize(size, oldFont);
+            Font newFont = FontService.changeFontSize(size, oldFont);
             setFont(newFont);
         }
     }
@@ -537,7 +537,7 @@ public class TextArea extends Prototype {
     public void setFontStyle(int style) {
         Font oldFont = getFont();
         if (oldFont.getStyle() != style) {
-            Font newFont = GraphicsMathService.changeFontStyle(style, oldFont);
+            Font newFont = FontService.changeFontStyle(style, oldFont);
             setFont(newFont);
         }
     }
@@ -552,7 +552,7 @@ public class TextArea extends Prototype {
             return;
         Font oldFont = getFont();
         if (!oldFont.getFamily().equals(fontFamily)) {
-            Font newFont = GraphicsMathService.changeFontFamily(fontFamily, oldFont);
+            Font newFont = FontService.changeFontFamily(fontFamily, oldFont);
             setFont(newFont);
         }
     }
@@ -744,5 +744,26 @@ public class TextArea extends Prototype {
      */
     public void setScrollStepFactor(float value) {
         _area.setScrollStepFactor(value);
+    }
+
+    /**
+     * Method for undo last change.
+     */
+    public void undo() {
+        _area.undo();
+    }
+
+    /**
+     * Method for redo last undo action.
+     */
+    public void redo() {
+        _area.redo();
+    }
+
+    /**
+     * Method for selecting all text in the item.
+     */
+    public void selectAll() {
+        _area.selectAll();
     }
 }

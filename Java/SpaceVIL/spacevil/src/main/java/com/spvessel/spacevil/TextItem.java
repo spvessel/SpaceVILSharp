@@ -69,14 +69,14 @@ abstract class TextItem extends Primitive {
 
     void setFontSize(int size) {
         if (_font.getSize() != size) {
-            _font = GraphicsMathService.changeFontSize(size, _font); //new Font(_font.getFamily(), _font.getStyle(), size);
+            _font = FontService.changeFontSize(size, _font);
             updateData();
         }
     }
 
     void setFontStyle(int style) {
         if (_font.getStyle() != style) {
-            _font = GraphicsMathService.changeFontStyle(style, _font); //new Font(_font.getFamily(), style, _font.getSize());
+            _font = FontService.changeFontStyle(style, _font);
             updateData();
         }
     }
@@ -86,7 +86,7 @@ abstract class TextItem extends Primitive {
             return;
         }
         if (!_font.getFamily().equals(font_family)) {
-            _font = GraphicsMathService.changeFontFamily(font_family, _font); //new Font(font_family, _font.getStyle(), _font.getSize());
+            _font = FontService.changeFontFamily(font_family, _font);
             updateData();
         }
     }

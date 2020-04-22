@@ -12,8 +12,8 @@ namespace SpaceVIL
     internal class TextEditStorage : Prototype, ITextEditable, ITextShortcuts, IDraggable
     {
         static int count = 0;
-        private TextLine _text_object;
-        private TextLine _substrate_text;
+        private TextLine _textObject;
+        private TextLine _substrateText;
 
         private Rectangle _cursor;
         private int _cursorPosition = 0;
@@ -41,9 +41,9 @@ namespace SpaceVIL
 
         internal TextEditStorage()
         {
-            _text_object = new TextLine();
-            _text_object.SetRecountable(true);
-            _substrate_text = new TextLine();
+            _textObject = new TextLine();
+            _textObject.SetRecountable(true);
+            _substrateText = new TextLine();
 
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
@@ -148,7 +148,7 @@ namespace SpaceVIL
             sh += scrollStep;
             if (sh > 0) sh = 0;
 
-            _text_object.SetLineXShift(sh);
+            _textObject.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
             // curPos = _cursor.GetX() - curPos;
@@ -173,7 +173,7 @@ namespace SpaceVIL
             if (w + sh < _cursorXMax)
                 sh = _cursorXMax - w;
 
-            _text_object.SetLineXShift(sh);
+            _textObject.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
             // curPos = _cursor.GetX() - curPos;
@@ -186,10 +186,14 @@ namespace SpaceVIL
         private void ReplaceCursorAccordingCoord(int realPos)
         {
             int w = GetTextWidth();
-            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
-                realPos -= GetX() + (GetWidth() - w) - GetPadding().Right - _text_object.GetMargin().Right - _cursor.GetWidth();
+            if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+            {
+                realPos -= GetX() + (GetWidth() - w) - GetPadding().Right - _textObject.GetMargin().Right - _cursor.GetWidth();
+            }
             else
-                realPos -= GetX() + GetPadding().Left + _text_object.GetMargin().Left;
+            {
+                realPos -= GetX() + GetPadding().Left + _textObject.GetMargin().Left;
+            }
 
             _cursorPosition = CoordXToPos(realPos);
             ReplaceCursor();
@@ -199,7 +203,7 @@ namespace SpaceVIL
         {
             int pos = 0;
 
-            List<int> lineLetPos = _text_object.GetLetPosArray();
+            List<int> lineLetPos = _textObject.GetLetPosArray();
             if (lineLetPos == null) return pos;
 
             for (int i = 0; i < lineLetPos.Count; i++)
@@ -324,13 +328,13 @@ namespace SpaceVIL
         private int CursorPosToCoord(int cPos, bool isx)
         {
             int coord = 0;
-            if (_text_object.GetLetPosArray() == null) return coord;
-            int letCount = _text_object.GetLetPosArray().Count;
+            if (_textObject.GetLetPosArray() == null) return coord;
+            int letCount = _textObject.GetLetPosArray().Count;
             
             if (cPos > 0)
             {
-                coord = _text_object.GetLetPosArray()[cPos - 1];
-                if ((GetTextWidth() >= _cursorXMax) || !_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                coord = _textObject.GetLetPosArray()[cPos - 1];
+                if ((GetTextWidth() >= _cursorXMax) || !_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right))
                 {
                     coord += _cursor.GetWidth();
                 }
@@ -340,10 +344,10 @@ namespace SpaceVIL
             {
                 if (GetLineXShift() + coord < 0)
                 {
-                    _text_object.SetLineXShift(-coord);
+                    _textObject.SetLineXShift(-coord);
                 }
                 if (GetLineXShift() + coord > _cursorXMax)
-                    _text_object.SetLineXShift(_cursorXMax - coord);
+                    _textObject.SetLineXShift(_cursorXMax - coord);
             }
 
             return GetLineXShift() + coord;
@@ -362,17 +366,17 @@ namespace SpaceVIL
 
             int w = GetTextWidth();
 
-            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+            if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
             {
                 int xcp = GetX() + GetWidth() - w + pos - GetPadding().Right // - _cursor.GetWidth()
-                    - _text_object.GetMargin().Right - _cursor.GetWidth();
+                    - _textObject.GetMargin().Right - _cursor.GetWidth();
                 if (_cursorPosition == 0)
                     xcp -= _cursor.GetWidth();
                 _cursor.SetX(xcp);
             }
             else
             {
-                int cnt = GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left;
+                int cnt = GetX() + GetPadding().Left + pos + _textObject.GetMargin().Left;
                 _cursor.SetX(cnt);
             }
         }
@@ -408,13 +412,17 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                if (_substrate_text.IsVisible())
-                    _substrate_text.SetVisible(false);
+                if (_substrateText.IsVisible())
+                {
+                    _substrateText.SetVisible(false);
+                }
                 if (text == null || text.Equals(String.Empty))
-                    _substrate_text.SetVisible(true);
+                {
+                    _substrateText.SetVisible(true);
+                }
 
-                _text_object.SetItemText(text);
-                _text_object.CheckXShift(_cursorXMax);
+                _textObject.SetItemText(text);
+                _textObject.CheckXShift(_cursorXMax);
 
                 // _cursorPosition = PrivGetText().Length;
                 ReplaceCursor();
@@ -428,7 +436,9 @@ namespace SpaceVIL
                     nothingFlag = false;
                 }
                 if (undoQueue.Count > queueCapacity)
+                {
                     undoQueue.RemoveLast();
+                }
                 undoQueue.AddFirst(new TextEditState(GetText(), _cursorPosition));
             }
             finally
@@ -451,7 +461,7 @@ namespace SpaceVIL
 
         private String PrivGetText()
         {
-            return _text_object.GetItemText();
+            return _textObject.GetItemText();
         }
 
         internal String GetText()
@@ -485,15 +495,15 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
             _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right
-                    - _text_object.GetMargin().Left - _text_object.GetMargin().Right; // _cursorXMin;// ;
-            _text_object.SetAllowWidth(_cursorXMax);
-            _text_object.CheckXShift(_cursorXMax); //_text_object.SetLineXShift();
+                    - _textObject.GetMargin().Left - _textObject.GetMargin().Right; // _cursorXMin;// ;
+            _textObject.SetAllowWidth(_cursorXMax);
+            _textObject.CheckXShift(_cursorXMax); //_text_object.SetLineXShift();
 
-            _substrate_text.SetAllowWidth(_cursorXMax);
-            _substrate_text.CheckXShift(_cursorXMax);
+            _substrateText.SetAllowWidth(_cursorXMax);
+            _substrateText.CheckXShift(_cursorXMax);
 
             ReplaceCursor();
-            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+            if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right))
             {
                 MakeSelectedArea();
             }
@@ -501,28 +511,31 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            AddItems(_substrate_text, _selectedArea, _text_object, _cursor);
+            AddItems(_substrateText, _selectedArea, _textObject, _cursor);
 
             // _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right
             //         - _text_object.GetMargin().Left - _text_object.GetMargin().Right; // _cursorXMin;// ;
             // _text_object.SetAllowWidth(_cursorXMax);
             // _text_object.SetLineXShift();
 
-            int scctp = _text_object.GetFontDims().lineSpacer; //[0];
-            if (scctp > scrollStep) scrollStep = scctp;
+            int scctp = _textObject.GetFontDims().lineSpacer; //[0];
+            if (scctp > scrollStep)
+            {
+                scrollStep = scctp;
+            }
 
-            _text_object.SetCursorWidth(_cursor.GetWidth());
-            _substrate_text.SetCursorWidth(_cursor.GetWidth());
+            _textObject.SetCursorWidth(_cursor.GetWidth());
+            _substrateText.SetCursorWidth(_cursor.GetWidth());
         }
 
         internal int GetTextWidth()
         {
-            return _text_object.GetWidth();
+            return _textObject.GetWidth();
         }
 
         internal int GetTextHeight()
         {
-            return _text_object.GetHeight();
+            return _textObject.GetHeight();
         }
 
         private void MakeSelectedArea()
@@ -533,9 +546,13 @@ namespace SpaceVIL
         private void MakeSelectedArea(int fromPt, int toPt)
         {
             if (fromPt == -1)
+            {
                 fromPt = 0;
+            }
             if (toPt == -1)
+            {
                 toPt = 0;
+            }
             fromPt = CursorPosToCoord(fromPt, false);
             toPt = CursorPosToCoord(toPt, false);
 
@@ -548,18 +565,26 @@ namespace SpaceVIL
             int toReal = Math.Max(fromPt, toPt);
 
             if (fromReal < 0)
+            {
                 fromReal = 0;
+            }
             if (toReal > _cursorXMax)
+            {
                 toReal = _cursorXMax;
+            }
 
             int width = toReal - fromReal + 1;
 
             int w = GetTextWidth();
-            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+            if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+            {
                 _selectedArea.SetX(GetX() + GetWidth() - w + fromReal - GetPadding().Right -
-                    _text_object.GetMargin().Right - _cursor.GetWidth());
+                    _textObject.GetMargin().Right - _cursor.GetWidth());
+            }
             else
-                _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _text_object.GetMargin().Left);
+            {
+                _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _textObject.GetMargin().Left);
+            }
             _selectedArea.SetWidth(width);
         }
 
@@ -569,15 +594,24 @@ namespace SpaceVIL
             try
             {
                 if (_selectFrom == -1)
+                {
                     _selectFrom = 0;
+                }
                 if (_selectTo == -1)
+                {
                     _selectTo = 0;
-                if (_selectFrom == _selectTo) return "";
+                }
+                if (_selectFrom == _selectTo)
+                {
+                    return "";
+                }
                 string text = PrivGetText();
                 int fromReal = Math.Min(_selectFrom, _selectTo);
                 int toReal = Math.Max(_selectFrom, _selectTo);
                 if (fromReal < 0)
+                {
                     return "";
+                }
                 string selectedText = text.Substring(fromReal, toReal - fromReal);
                 return selectedText;
             }
@@ -695,7 +729,7 @@ namespace SpaceVIL
 
         private int GetLineXShift()
         {
-            return _text_object.GetLineXShift();
+            return _textObject.GetLineXShift();
         }
 
         internal bool IsBeginning()
@@ -723,24 +757,28 @@ namespace SpaceVIL
 
         private int queueCapacity = SpaceVILConstants.TextUndoCapacity;
         private bool nothingFlag = false;
+
         public void Undo()
         {
-            // _text_object.Undo();
             UndoAction();
-            // ReplaceCursor();
         }
+
         private LinkedList<TextEditState> undoQueue;
         private void UndoAction()
         {
             if (undoQueue.Count == 1)
+            {
                 return;
+            }
 
             TextEditState tmpText = undoQueue.First.Value;
             if (tmpText != null)
             {
                 undoQueue.RemoveFirst();
                 if (redoQueue.Count > queueCapacity)
+                {
                     redoQueue.RemoveLast();
+                }
                 redoQueue.AddFirst(new TextEditState(tmpText.textState, tmpText.cursorState));
 
                 tmpText = undoQueue.First.Value;
@@ -759,15 +797,17 @@ namespace SpaceVIL
 
         public void Redo()
         {
-            // _text_object.Redo();
             RedoAction();
-            // ReplaceCursor();
         }
+
         private LinkedList<TextEditState> redoQueue;
+
         private void RedoAction()
         {
             if (redoQueue.Count == 0)
+            {
                 return;
+            }
 
             TextEditState tmpText = redoQueue.First.Value;
             if (tmpText != null)
@@ -784,12 +824,12 @@ namespace SpaceVIL
 
         internal void SetSubstrateText(String substrateText)
         {
-            _substrate_text.SetItemText(substrateText);
+            _substrateText.SetItemText(substrateText);
         }
 
         internal String GetSubstrateText()
         {
-            return _substrate_text.GetItemText();
+            return _substrateText.GetItemText();
         }
 
         internal void AppendText(String text)
@@ -804,9 +844,9 @@ namespace SpaceVIL
         {
             internal String textState;
             internal int cursorState;
-            internal TextEditState()
-            {
-            }
+            // internal TextEditState()
+            // {
+            // }
             internal TextEditState(String textState, int cursorState)
             {
                 this.textState = textState;
@@ -826,101 +866,103 @@ namespace SpaceVIL
             {
                 ial = ItemAlignment.Left | ItemAlignment.VCenter;
             }
-            _text_object.SetTextAlignment(ial);
-            _substrate_text.SetTextAlignment(ial);
+            _textObject.SetTextAlignment(ial);
+            _substrateText.SetTextAlignment(ial);
         }
 
         internal ItemAlignment GetTextAlignment()
         {
-            return _text_object.GetTextAlignment();
+            return _textObject.GetTextAlignment();
         }
 
         internal void SetTextMargin(Indents margin)
         {
-            _text_object.SetMargin(margin);
-            _substrate_text.SetMargin(margin);
+            _textObject.SetMargin(margin);
+            _substrateText.SetMargin(margin);
         }
         internal Indents GetTextMargin() {
-            return _text_object.GetMargin();
+            return _textObject.GetMargin();
         }
 
         internal void SetFont(Font font)
         {
-            _text_object.SetFont(font);
-            _substrate_text.SetFont(GraphicsMathService.ChangeFontFamily(font.FontFamily, _substrate_text.GetFont())); //new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
+            _textObject.SetFont(font);
+            _substrateText.SetFont(FontService.ChangeFontFamily(font.FontFamily, _substrateText.GetFont())); //new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
         }
         internal void SetFontSize(int size)
         {
-            _text_object.SetFontSize(size);
+            _textObject.SetFontSize(size);
         }
         internal void SetFontStyle(FontStyle style)
         {
-            _text_object.SetFontStyle(style);
+            _textObject.SetFontStyle(style);
         }
         internal void SetFontFamily(FontFamily font_family)
         {
-            _text_object.SetFontFamily(font_family);
-            _substrate_text.SetFontFamily(font_family);
+            _textObject.SetFontFamily(font_family);
+            _substrateText.SetFontFamily(font_family);
         }
         internal Font GetFont()
         {
-            return _text_object.GetFont();
+            return _textObject.GetFont();
         }
 
         internal void SetForeground(Color color)
         {
-            _text_object.SetForeground(color);
+            _textObject.SetForeground(color);
         }
         internal Color GetForeground()
         {
-            return _text_object.GetForeground();
+            return _textObject.GetForeground();
         }
 
         internal void SetSubstrateFontSize(int size)
         {
-            _substrate_text.SetFontSize(size);
+            _substrateText.SetFontSize(size);
         }
 
         internal void SetSubstrateFontStyle(FontStyle style)
         {
-            _substrate_text.SetFontStyle(style);
+            _substrateText.SetFontStyle(style);
         }
 
         internal void SetSubstrateForeground(Color foreground)
         {
-            _substrate_text.SetForeground(foreground);
+            _substrateText.SetForeground(foreground);
         }
 
         internal Color GetSubstrateForeground()
         {
-            return _substrate_text.GetForeground();
+            return _substrateText.GetForeground();
         }
         
         //style
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
             SetTextAlignment(style.TextAlignment);
 
-            Style inner_style = style.GetInnerStyle("selection");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("selection");
+            if (innerStyle != null)
             {
-                _selectedArea.SetStyle(inner_style);
+                _selectedArea.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("cursor");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("cursor");
+            if (innerStyle != null)
             {
-                _cursor.SetStyle(inner_style);
+                _cursor.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("substrate");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("substrate");
+            if (innerStyle != null)
             {
-                _substrate_text.SetFont(inner_style.Font);
-                _substrate_text.SetForeground(inner_style.Foreground);
+                _substrateText.SetFont(innerStyle.Font);
+                _substrateText.SetForeground(innerStyle.Foreground);
             }
         }
     }

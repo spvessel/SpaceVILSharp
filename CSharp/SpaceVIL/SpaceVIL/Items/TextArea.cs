@@ -534,7 +534,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.Size != size)
             {
-                Font newFont = GraphicsMathService.ChangeFontSize(size, oldFont); //new Font(oldFont.FontFamily, size, oldFont.Style);
+                Font newFont = FontService.ChangeFontSize(size, oldFont);
                 SetFont(newFont);
             }
         }
@@ -548,7 +548,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.Style != style)
             {
-                Font newFont = GraphicsMathService.ChangeFontStyle(style, oldFont); //new Font(oldFont.FontFamily, oldFont.Size, style);
+                Font newFont = FontService.ChangeFontStyle(style, oldFont);
                 SetFont(newFont);
             }
         }
@@ -564,7 +564,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.FontFamily != fontFamily)
             {
-                Font newFont = GraphicsMathService.ChangeFontFamily(fontFamily, oldFont); //new Font(font_family, oldFont.Size, oldFont.Style);
+                Font newFont = FontService.ChangeFontFamily(fontFamily, oldFont);
                 SetFont(newFont);
             }
         }
@@ -753,6 +753,30 @@ namespace SpaceVIL
         public void SetScrollStepFactor(float value)
         {
             _area.SetScrollStepFactor(value);
+        }
+
+        /// <summary>
+        /// Method for undo last change.
+        /// </summary>
+        public void Undo()
+        {
+            _area.Undo();
+        }
+
+        /// <summary>
+        /// Method for redo last undo action.
+        /// </summary>
+        public void Redo()
+        {
+            _area.Redo();
+        }
+        
+        /// <summary>
+        /// Method for selecting all text in the item.
+        /// </summary>
+        public void SelectAll()
+        {
+            _area.SelectAll();
         }
     }
 }

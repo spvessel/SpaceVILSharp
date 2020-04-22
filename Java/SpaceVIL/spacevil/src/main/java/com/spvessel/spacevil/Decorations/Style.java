@@ -1550,7 +1550,7 @@ public class Style implements Cloneable {
         style.borderRadius = new CornerRadius(10);
 
         Style indicatorStyle = getIndicatorStyle();
-        indicatorStyle.shape = GraphicsMathService.getRoundSquare(20, 20, 10, 0, 0);
+        indicatorStyle.shape = GraphicsMathService.getRoundSquare(10, 20, 20, 0, 0);
         indicatorStyle.isFixedShape = true;
         style.addInnerStyle("indicator", indicatorStyle);
 

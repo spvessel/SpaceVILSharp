@@ -21,7 +21,7 @@ public class SpinItem extends Prototype {
     private static int count = 0;
     private HorizontalStack _horzStack = new HorizontalStack();
     private VerticalStack _vertStack = new VerticalStack();
-    private TextEditRestricted textInput = new TextEditRestricted();
+    private TextEditRestricted _textInput = new TextEditRestricted();
 
     /**
      * Increment value button.
@@ -40,7 +40,7 @@ public class SpinItem extends Prototype {
         setItemName("SpinItem_" + count);
         count++;
         _horzStack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        _textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
 
         setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
 
@@ -54,12 +54,22 @@ public class SpinItem extends Prototype {
         eventScrollDown.add(this::onDownClick);
     }
 
+    @Override
+    public void setFocus() {
+        _textInput.setFocus();
+    }
+
+//    @Override
+//    protected void setFocused(boolean value) {
+//        _textInput.setFocused(value);
+//    }
+
     private void onUpClick(Object sender, MouseArgs args) {
-        textInput.increaseValue();
+        _textInput.increaseValue();
     }
 
     private void onDownClick(Object sender, MouseArgs args) {
-        textInput.decreaseValue();
+        _textInput.decreaseValue();
     }
 
     /**
@@ -68,7 +78,7 @@ public class SpinItem extends Prototype {
      * @return Current value of SpinItem.
      */
     public double getValue() {
-        return textInput.getValue();
+        return _textInput.getValue();
     }
 
     /**
@@ -77,7 +87,7 @@ public class SpinItem extends Prototype {
      * @param value Integer value.
      */
     public void setValue(int value) {
-        textInput.setValue(value);
+        _textInput.setValue(value);
     }
 
     /**
@@ -86,7 +96,7 @@ public class SpinItem extends Prototype {
      * @param value Double floating point value.
      */
     public void setValue(double value) {
-        textInput.setValue(value);
+        _textInput.setValue(value);
     }
 
     /**
@@ -98,7 +108,7 @@ public class SpinItem extends Prototype {
      * @param step         Step of increment and decrement.
      */
     public void setParameters(int currentValue, int minValue, int maxValue, int step) {
-        textInput.setParameters(currentValue, minValue, maxValue, step);
+        _textInput.setParameters(currentValue, minValue, maxValue, step);
     }
 
     /**
@@ -110,7 +120,7 @@ public class SpinItem extends Prototype {
      * @param step         Step of increment and decrement.
      */
     public void setParameters(double currentValue, double minValue, double maxValue, double step) {
-        textInput.setParameters(currentValue, minValue, maxValue, step);
+        _textInput.setParameters(currentValue, minValue, maxValue, step);
     }
 
     /**
@@ -119,7 +129,7 @@ public class SpinItem extends Prototype {
      * @param accuracy Accuracy value.
      */
     public void setAccuracy(int accuracy) {
-        textInput.setAccuracy(accuracy);
+        _textInput.setAccuracy(accuracy);
     }
 
     /**
@@ -131,7 +141,7 @@ public class SpinItem extends Prototype {
     @Override
     public void initElements() {
         addItem(_horzStack);
-        _horzStack.addItems(textInput, _vertStack);
+        _horzStack.addItems(_textInput, _vertStack);
         _vertStack.addItems(upButton, downButton);
     }
 
@@ -162,7 +172,7 @@ public class SpinItem extends Prototype {
         }
         innerStyle = style.getInnerStyle("textedit");
         if (innerStyle != null) {
-            textInput.setStyle(innerStyle);
+            _textInput.setStyle(innerStyle);
         }
     }
 
@@ -173,7 +183,7 @@ public class SpinItem extends Prototype {
      * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        textInput.setTextAlignment(alignment);
+        _textInput.setTextAlignment(alignment);
     }
 
     /**
@@ -184,7 +194,7 @@ public class SpinItem extends Prototype {
      *                  com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        textInput.setTextAlignment(Arrays.asList(alignment));
+        _textInput.setTextAlignment(Arrays.asList(alignment));
     }
 
     /**
@@ -193,7 +203,7 @@ public class SpinItem extends Prototype {
      * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        textInput.setMargin(margin);
+        _textInput.setMargin(margin);
     }
 
     /**
@@ -205,7 +215,7 @@ public class SpinItem extends Prototype {
      * @param bottom Indent on the bottom.
      */
     public void setTextMargin(int left, int top, int right, int bottom) {
-        textInput.setMargin(left, top, right, bottom);
+        _textInput.setMargin(left, top, right, bottom);
     }
 
     /**
@@ -215,7 +225,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(Color color) {
-        textInput.setBackground(color);
+        _textInput.setBackground(color);
     }
 
     /**
@@ -227,7 +237,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(int r, int g, int b) {
-        textInput.setBackground(r, g, b);
+        _textInput.setBackground(r, g, b);
     }
 
     /**
@@ -240,7 +250,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(int r, int g, int b, int a) {
-        textInput.setBackground(r, g, b, a);
+        _textInput.setBackground(r, g, b, a);
     }
 
     /**
@@ -252,7 +262,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(float r, float g, float b) {
-        textInput.setBackground(r, g, b);
+        _textInput.setBackground(r, g, b);
     }
 
     /**
@@ -265,7 +275,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(float r, float g, float b, float a) {
-        textInput.setBackground(r, g, b, a);
+        _textInput.setBackground(r, g, b, a);
     }
 
     /**
@@ -275,7 +285,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public Color getBackground() {
-        return textInput.getBackground();
+        return _textInput.getBackground();
     }
 
     /**
@@ -284,7 +294,7 @@ public class SpinItem extends Prototype {
      * @param font Font as java.awt.Font.
      */
     public void setFont(Font font) {
-        textInput.setFont(font);
+        _textInput.setFont(font);
     }
 
     /**
@@ -293,7 +303,7 @@ public class SpinItem extends Prototype {
      * @param size New size of the font.
      */
     public void setFontSize(int size) {
-        textInput.setFontSize(size);
+        _textInput.setFontSize(size);
     }
 
     /**
@@ -302,7 +312,7 @@ public class SpinItem extends Prototype {
      * @param style New font style (from java.awt.Font package).
      */
     public void setFontStyle(int style) {
-        textInput.setFontStyle(style);
+        _textInput.setFontStyle(style);
     }
 
     /**
@@ -311,7 +321,7 @@ public class SpinItem extends Prototype {
      * @param fontFamily New font family name.
      */
     public void setFontFamily(String fontFamily) {
-        textInput.setFontFamily(fontFamily);
+        _textInput.setFontFamily(fontFamily);
     }
 
     /**
@@ -320,7 +330,7 @@ public class SpinItem extends Prototype {
      * @return Font as java.awt.Font.
      */
     public Font getFont() {
-        return textInput.getFont();
+        return _textInput.getFont();
     }
 
     /**
@@ -329,7 +339,7 @@ public class SpinItem extends Prototype {
      * @param color Text color as java.awt.Color.
      */
     public void setForeground(Color color) {
-        textInput.setForeground(color);
+        _textInput.setForeground(color);
     }
 
     /**
@@ -384,6 +394,6 @@ public class SpinItem extends Prototype {
      * @return Text color as as java.awt.Color.
      */
     public Color getForeground() {
-        return textInput.getForeground();
+        return _textInput.getForeground();
     }
 }

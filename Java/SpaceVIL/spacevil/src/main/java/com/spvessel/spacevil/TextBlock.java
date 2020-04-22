@@ -604,22 +604,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         _textureStorage.setForeground(color);
     }
 
-//    void setForeground(int r, int g, int b) {
-//        setForeground(GraphicsMathService.colorTransform(r, g, b));
-//    }
-//
-//    void setForeground(int r, int g, int b, int a) {
-//        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
-//    }
-//
-//    void setForeground(float r, float g, float b) {
-//        setForeground(GraphicsMathService.colorTransform(r, g, b));
-//    }
-//
-//    void setForeground(float r, float g, float b, float a) {
-//        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
-//    }
-
     Color getForeground() {
         return _textureStorage.getForeground();
     }

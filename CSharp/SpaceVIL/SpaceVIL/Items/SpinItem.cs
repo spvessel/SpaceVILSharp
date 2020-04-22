@@ -18,7 +18,7 @@ namespace SpaceVIL
         static int count = 0;
         private HorizontalStack _horzStack = new HorizontalStack();
         private VerticalStack _vertStack = new VerticalStack();
-        private TextEditRestricted textInput = new TextEditRestricted();
+        private TextEditRestricted _textInput = new TextEditRestricted();
 
         /// <summary>
         /// Increment value button.
@@ -38,24 +38,36 @@ namespace SpaceVIL
             SetItemName("SpinItem_" + count);
             count++;
             _horzStack.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            _textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
+
             UpButton.IsFocusable = false;
-            DownButton.IsFocusable = false;
             UpButton.EventMouseClick += OnUpClick;
+
+            DownButton.IsFocusable = false;
             DownButton.EventMouseClick += OnDownClick;
+
             EventScrollUp = OnUpClick;
             EventScrollDown = OnDownClick;
         }
 
+        /// <summary>
+        /// Setting focus on this item if it is focusable.
+        /// </summary>
+        public override void SetFocus()
+        {
+            _textInput.SetFocus();
+        }
+
         private void OnUpClick(Object sender, MouseArgs args)
         {
-            textInput.IncreaseValue();
+            _textInput.IncreaseValue();
         }
 
         private void OnDownClick(Object sender, MouseArgs args)
         {
-            textInput.DecreaseValue();
+            _textInput.DecreaseValue();
         }
 
         /// <summary>
@@ -64,7 +76,7 @@ namespace SpaceVIL
         /// <returns>Current value of SpinItem.</returns>
         public double GetValue()
         {
-            return textInput.GetValue();
+            return _textInput.GetValue();
         }
 
         /// <summary>
@@ -73,7 +85,7 @@ namespace SpaceVIL
         /// <param name="value">Integer value.</param>
         public void SetValue(int value)
         {
-            textInput.SetValue(value);
+            _textInput.SetValue(value);
         }
 
         /// <summary>
@@ -82,7 +94,7 @@ namespace SpaceVIL
         /// <param name="value">Double floating point value.</param>
         public void SetValue(double value)
         {
-            textInput.SetValue(value);
+            _textInput.SetValue(value);
         }
 
         /// <summary>
@@ -94,7 +106,7 @@ namespace SpaceVIL
         /// <param name="step"> Step of increment and decrement. </param>
         public void SetParameters(int currentValue, int minValue, int maxValue, int step)
         {
-            textInput.SetParameters(currentValue, minValue, maxValue, step);
+            _textInput.SetParameters(currentValue, minValue, maxValue, step);
         }
 
         /// <summary>
@@ -106,7 +118,7 @@ namespace SpaceVIL
         /// <param name="step"> Step of increment and decrement. </param>
         public void SetParameters(double currentValue, double minValue, double maxValue, double step)
         {
-            textInput.SetParameters(currentValue, minValue, maxValue, step);
+            _textInput.SetParameters(currentValue, minValue, maxValue, step);
         }
 
         /// <summary>
@@ -115,7 +127,7 @@ namespace SpaceVIL
         /// <param name="accuracy">Accuracy value.</param>
         public void SetAccuracy(int accuracy)
         {
-            textInput.SetAccuracy(accuracy);
+            _textInput.SetAccuracy(accuracy);
         }
 
         /// <summary>
@@ -126,7 +138,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             AddItem(_horzStack);
-            _horzStack.AddItems(textInput, _vertStack);
+            _horzStack.AddItems(_textInput, _vertStack);
             _vertStack.AddItems(UpButton, DownButton);
         }
 
@@ -158,7 +170,7 @@ namespace SpaceVIL
             innerStyle = style.GetInnerStyle("textedit");
             if (innerStyle != null)
             {
-                textInput.SetStyle(innerStyle);
+                _textInput.SetStyle(innerStyle);
             }
         }
 
@@ -169,7 +181,7 @@ namespace SpaceVIL
         /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            textInput.SetTextAlignment(alignment);
+            _textInput.SetTextAlignment(alignment);
         }
 
         /// <summary>
@@ -184,7 +196,7 @@ namespace SpaceVIL
             {
                 common |= a;
             }
-            textInput.SetTextAlignment(common);
+            _textInput.SetTextAlignment(common);
         }
 
         /// <summary>
@@ -193,7 +205,7 @@ namespace SpaceVIL
         /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
-            textInput.SetMargin(margin);
+            _textInput.SetMargin(margin);
         }
 
         /// <summary>
@@ -205,7 +217,7 @@ namespace SpaceVIL
         /// <param name="bottom">Indent on the bottom.</param>
         public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
-            textInput.SetMargin(left, top, right, bottom);
+            _textInput.SetMargin(left, top, right, bottom);
         }
 
         /// <summary>
@@ -214,7 +226,7 @@ namespace SpaceVIL
         /// <param name="color">Background color as System.Drawing.Color.</param>
         public override void SetBackground(Color color)
         {
-            textInput.SetBackground(color);
+            _textInput.SetBackground(color);
         }
 
         /// <summary>
@@ -225,7 +237,7 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public override void SetBackground(int r, int g, int b)
         {
-            textInput.SetBackground(r, g, b);
+            _textInput.SetBackground(r, g, b);
         }
 
         /// <summary>
@@ -237,7 +249,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public override void SetBackground(int r, int g, int b, int a)
         {
-            textInput.SetBackground(r, g, b, a);
+            _textInput.SetBackground(r, g, b, a);
         }
 
         /// <summary>
@@ -248,7 +260,7 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public override void SetBackground(float r, float g, float b)
         {
-            textInput.SetBackground(r, g, b);
+            _textInput.SetBackground(r, g, b);
         }
 
         /// <summary>
@@ -260,7 +272,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public override void SetBackground(float r, float g, float b, float a)
         {
-            textInput.SetBackground(r, g, b, a);
+            _textInput.SetBackground(r, g, b, a);
         }
 
         /// <summary>
@@ -269,7 +281,7 @@ namespace SpaceVIL
         /// <returns>Background color as System.Drawing.Color.</returns>
         public override Color GetBackground()
         {
-            return textInput.GetBackground();
+            return _textInput.GetBackground();
         }
 
         /// <summary>
@@ -278,7 +290,7 @@ namespace SpaceVIL
         /// <param name="font">Font as System.Drawing.Font.</param>
         public void SetFont(Font font)
         {
-            textInput.SetFont(font);
+            _textInput.SetFont(font);
         }
 
         /// <summary>
@@ -287,7 +299,7 @@ namespace SpaceVIL
         /// <param name="size">New size of the font.</param>
         public void SetFontSize(int size)
         {
-            textInput.SetFontSize(size);
+            _textInput.SetFontSize(size);
         }
 
         /// <summary>
@@ -296,7 +308,7 @@ namespace SpaceVIL
         /// <param name="style">New font style as System.Drawing.FontStyle.</param>
         public void SetFontStyle(FontStyle style)
         {
-            textInput.SetFontStyle(style);
+            _textInput.SetFontStyle(style);
         }
 
         /// <summary>
@@ -305,7 +317,7 @@ namespace SpaceVIL
         /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
         public void SetFontFamily(FontFamily fontFamily)
         {
-            textInput.SetFontFamily(fontFamily);
+            _textInput.SetFontFamily(fontFamily);
         }
 
         /// <summary>
@@ -314,7 +326,7 @@ namespace SpaceVIL
         /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
-            return textInput.GetFont();
+            return _textInput.GetFont();
         }
 
         /// <summary>
@@ -323,7 +335,7 @@ namespace SpaceVIL
         /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
-            textInput.SetForeground(color);
+            _textInput.SetForeground(color);
         }
 
         /// <summary>
@@ -378,7 +390,7 @@ namespace SpaceVIL
         /// <returns>Text color as System.Drawing.Color.</returns>
         public Color GetForeground()
         {
-            return textInput.GetForeground();
+            return _textInput.GetForeground();
         }
     }
 }

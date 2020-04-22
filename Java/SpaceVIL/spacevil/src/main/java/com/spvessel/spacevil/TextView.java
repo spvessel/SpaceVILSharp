@@ -529,6 +529,47 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     /**
+     * Setting font size of the text.
+     *
+     * @param size New size of the font.
+     */
+    public void setFontSize(int size) {
+        Font oldFont = getFont();
+        if (oldFont.getSize() != size) {
+            Font newFont = FontService.changeFontSize(size, oldFont);
+            setFont(newFont);
+        }
+    }
+
+    /**
+     * Setting font style of the text.
+     *
+     * @param style New font style (from java.awt.Font package).
+     */
+    public void setFontStyle(int style) {
+        Font oldFont = getFont();
+        if (oldFont.getStyle() != style) {
+            Font newFont = FontService.changeFontStyle(style, oldFont);
+            setFont(newFont);
+        }
+    }
+
+    /**
+     * Setting new font family of the text.
+     *
+     * @param fontFamily New font family name.
+     */
+    public void setFontFamily(String fontFamily) {
+        if (fontFamily == null)
+            return;
+        Font oldFont = getFont();
+        if (!oldFont.getFamily().equals(fontFamily)) {
+            Font newFont = FontService.changeFontFamily(fontFamily, oldFont);
+            setFont(newFont);
+        }
+    }
+
+    /**
      * Getting the current font of the text.
      * 
      * @return Font as java.awt.Font.

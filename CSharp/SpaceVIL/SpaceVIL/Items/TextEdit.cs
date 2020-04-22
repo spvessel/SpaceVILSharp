@@ -991,12 +991,18 @@ namespace SpaceVIL
 
         // private int queueCapacity = SpaceVILConstants.TextUndoCapacity;
         // private bool nothingFlag = false;
-        // public void Undo()
-        // {
-        //     // _text_object.Undo();
-        //     UndoAction();
-        //     // ReplaceCursor();
-        // }
+
+        /// <summary>
+        /// Method for undo last change.
+        /// </summary>
+        public void Undo()
+        {
+            _textObject.Undo();
+            // // _text_object.Undo();
+            // UndoAction();
+            // // ReplaceCursor();
+        }
+
         // private LinkedList<TextEditState> undoQueue;
         // private void UndoAction()
         // {
@@ -1025,12 +1031,17 @@ namespace SpaceVIL
         //     }
         // }
 
-        // public void Redo()
-        // {
-        //     // _text_object.Redo();
-        //     RedoAction();
-        //     // ReplaceCursor();
-        // }
+        /// <summary>
+        /// Method for redo last undo action.
+        /// </summary>
+        public void Redo()
+        {
+            _textObject.Redo();
+            // // _text_object.Redo();
+            // RedoAction();
+            // // ReplaceCursor();
+        }
+
         // private LinkedList<TextEditState> redoQueue;
         // private void RedoAction()
         // {

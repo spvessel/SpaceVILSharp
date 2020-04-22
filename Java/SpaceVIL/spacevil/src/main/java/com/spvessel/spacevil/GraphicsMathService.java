@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * GraphicsMathService is a static class with static methods for working with colors, fonts, shapes and images.
+ * GraphicsMathService is a static class with static methods for working with colors, shapes and images.
  */
 public final class GraphicsMathService {
     private GraphicsMathService() {
@@ -262,14 +262,14 @@ public final class GraphicsMathService {
     /**
      * Make a rectangle with roundness corners.
      * 
+     * @param radius Same radius value for each corner.
      * @param width Rectangle width.
      * @param height Rectangle height.
-     * @param radius Same radius value for each corner.
      * @param x X position (left top corner) of the result object.
      * @param y Y position (left top corner) of the result object.
      * @return Points list of the shape with roundness corners as List of float[2] array.
      */
-    public static List<float[]> getRoundSquare(float width, float height, float radius, int x, int y) {
+    public static List<float[]> getRoundSquare(float radius, float width, float height, int x, int y) {
         return getRoundSquare(new CornerRadius(radius), width, height, x, y);
     }
 
@@ -994,35 +994,35 @@ public final class GraphicsMathService {
         return new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f));
     }
 
-    /**
-     * Changing font size.
-     * @param size New size of the font.
-     * @param oldFont Font as java.awt.Font.
-     * @return New sized font as java.awt.Font.
-     */
-    public static Font changeFontSize(int size, Font oldFont) {
-        return oldFont.deriveFont(oldFont.getStyle(), size); // oldFont.getName(), oldFont.getStyle(), size);
-    }
-
-    /**
-     * Changing font style.
-     * @param style New style of the font.
-     * @param oldFont Font as java.awt.Font.
-     * @return New styled font as java.awt.Font.
-     */
-    public static Font changeFontStyle(int style, Font oldFont) {
-        return oldFont.deriveFont(style);
-    }
-
-    /**
-     * Changing font family.
-     * @param fontFamily New font family of the font.
-     * @param oldFont Font as java.awt.Font.
-     * @return New font as java.awt.Font.
-     */
-    public static Font changeFontFamily(String fontFamily, Font oldFont) {
-        return new Font(fontFamily, oldFont.getStyle(), oldFont.getSize());
-    }
+//    /**
+//     * Changing font size.
+//     * @param size New size of the font.
+//     * @param oldFont Font as java.awt.Font.
+//     * @return New sized font as java.awt.Font.
+//     */
+//    public static Font changeFontSize(int size, Font oldFont) {
+//        return oldFont.deriveFont(oldFont.getStyle(), size); // oldFont.getName(), oldFont.getStyle(), size);
+//    }
+//
+//    /**
+//     * Changing font style.
+//     * @param style New style of the font.
+//     * @param oldFont Font as java.awt.Font.
+//     * @return New styled font as java.awt.Font.
+//     */
+//    public static Font changeFontStyle(int style, Font oldFont) {
+//        return oldFont.deriveFont(style);
+//    }
+//
+//    /**
+//     * Changing font family.
+//     * @param fontFamily New font family of the font.
+//     * @param oldFont Font as java.awt.Font.
+//     * @return New font as java.awt.Font.
+//     */
+//    public static Font changeFontFamily(String fontFamily, Font oldFont) {
+//        return new Font(fontFamily, oldFont.getStyle(), oldFont.getSize());
+//    }
 
     private static double grad2Radian(double angleGrad) {
         return (angleGrad * Math.PI / 180.0f);

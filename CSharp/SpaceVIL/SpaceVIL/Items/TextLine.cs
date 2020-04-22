@@ -105,7 +105,7 @@ namespace SpaceVIL
             }
             // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
             // Console.WriteLine("font " + GetFont().Size + " " + cnt++);
-            Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
+            Font fontBig = FontService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
 
             _bigLetters = FontEngine.GetModifyLetters(GetItemText(), fontBig);
 
@@ -189,7 +189,7 @@ namespace SpaceVIL
                     if (_screenScale != 1) //_screenScale != 0 && 
                     {
                         // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
-                        Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
+                        Font fontBig = FontService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
 
                         FontEngine.FontDimensions bigFontDims = FontEngine.GetFontDims(fontBig); //int[] output = FontEngine.GetFontDims(fontBig);
                         bb_h = bigFontDims.height; //output[2];

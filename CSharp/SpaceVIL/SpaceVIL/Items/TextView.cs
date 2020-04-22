@@ -589,6 +589,50 @@ namespace SpaceVIL
         }
 
         /// <summary>
+        /// Setting font size of the text.
+        /// </summary>
+        /// <param name="size">New size of the font.</param>
+        public void SetFontSize(int size)
+        {
+            Font oldFont = GetFont();
+            if (oldFont.Size != size)
+            {
+                Font newFont = FontService.ChangeFontSize(size, oldFont);
+                SetFont(newFont);
+            }
+        }
+
+        /// <summary>
+        /// Setting font style of the text.
+        /// </summary>
+        /// <param name="style">New font style as System.Drawing.FontStyle.</param>
+        public void SetFontStyle(FontStyle style)
+        {
+            Font oldFont = GetFont();
+            if (oldFont.Style != style)
+            {
+                Font newFont = FontService.ChangeFontStyle(style, oldFont);
+                SetFont(newFont);
+            }
+        }
+
+        /// <summary>
+        /// Setting new font family of the text.
+        /// </summary>
+        /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
+        public void SetFontFamily(FontFamily fontFamily)
+        {
+            if (fontFamily == null)
+                return;
+            Font oldFont = GetFont();
+            if (oldFont.FontFamily != fontFamily)
+            {
+                Font newFont = FontService.ChangeFontFamily(fontFamily, oldFont);
+                SetFont(newFont);
+            }
+        }
+
+        /// <summary>
         /// Getting the current font of the text.
         /// </summary>
         /// <returns>Font as System.Drawing.Font.</returns>

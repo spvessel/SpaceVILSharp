@@ -43,20 +43,20 @@ public class Program {
 
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class, getTextEditStyle());
 
-        MainWindow mw = new MainWindow();
+//        MainWindow mw = new MainWindow();
         // mw.setPosition(500, 500);
 
         //        SettingsTest st = new SettingsTest();
-        ImageTest im = new ImageTest();
-               FlowTest ft = new FlowTest();
-        LayoutsTest lt = new LayoutsTest();
+//        ImageTest im = new ImageTest();
+//               FlowTest ft = new FlowTest();
+//        LayoutsTest lt = new LayoutsTest();
         //    ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
         //       TextTest tt = new TextTest();
         // Containers con = new Containers();
         //        SideAreaTest sat = new SideAreaTest();
         // DPIAnalysis dpi = new DPIAnalysis();
-        OpenGLTest oglt = new OpenGLTest();
+//        OpenGLTest oglt = new OpenGLTest();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -81,14 +81,14 @@ public class Program {
 
         WindowManager.startWith(
             // dw
-            mw
+//            mw
         //, mw2
         // st
         // im
         //                ft
         // lt
         // ct
-        //  it
+          it
         // tt
         // con
         // sat

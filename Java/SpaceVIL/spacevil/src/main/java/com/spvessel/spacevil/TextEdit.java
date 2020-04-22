@@ -1013,14 +1013,15 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
     // private int queueCapacity = SpaceVILConstants.textUndoCapacity;
     // private boolean nothingFlag = false;
 
-    // /**
-    // * Undo last action
-    // */
-    // public void undo() {
-    // // _text_object.undo();
-    // undoAction();
-    // // replaceCursor();
-    // }
+     /**
+     * Method for undo last change.
+     */
+     public void undo() {
+         _textObject.undo();
+//     // _text_object.undo();
+//     undoAction();
+//     // replaceCursor();
+     }
 
     // private ArrayDeque<TextEditState> undoQueue;
     //
@@ -1049,14 +1050,15 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
     // }
     // }
 
-    // /**
-    // * Redo last undo action
-    // */
-    // public void redo() {
-    // // _text_object.redo();
-    // redoAction();
-    // // replaceCursor();
-    // }
+     /**
+     * Method for redo last undo action.
+     */
+     public void redo() {
+         _textObject.redo();
+//     // _text_object.redo();
+//     redoAction();
+//     // replaceCursor();
+     }
 
     // private ArrayDeque<TextEditState> redoQueue;
     //

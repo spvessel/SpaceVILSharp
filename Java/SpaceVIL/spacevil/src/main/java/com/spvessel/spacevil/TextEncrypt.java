@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
-import com.spvessel.spacevil.SpaceVILConstants;
 import com.spvessel.spacevil.Common.CommonService;
 
 import java.awt.*;
@@ -20,12 +19,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private static int count = 0;
 
     private String _pwd = "";
-    private String _hide_sign;
-    private TextLine _text_object;
-    private TextLine _substrate_text;
+    private String _hideSign;
+    private TextLine _textObject;
+    private TextLine _substrateText;
 
     private Rectangle _cursor;
-    private int _cursor_position = 0;
+    private int _cursorPosition = 0;
 
     private Rectangle _selectedArea;
     private boolean _isEditable = true;
@@ -45,11 +44,11 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     TextEncrypt() {
         setItemName("TextEncrypt_" + count);
 
-        _hide_sign = "\u25CF";
+        _hideSign = "\u25CF";
 
-        _text_object = new TextLine();
-        _text_object.setRecountable(true);
-        _substrate_text = new TextLine();
+        _textObject = new TextLine();
+        _textObject.setRecountable(true);
+        _substrateText = new TextLine();
 
         _cursor = new Rectangle();
         _selectedArea = new Rectangle();
@@ -66,7 +65,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
 
         // setStyle(DefaultsService.getDefaultStyle(TextEncrypt.class));
-        // _text_object.setTextAlignment(new
+        // _textObject.setTextAlignment(new
         // LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
 
         setCursor(EmbeddedCursor.IBEAM);
@@ -106,9 +105,9 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
                 if (!_isSelect) {
                     _isSelect = true;
-                    _selectFrom = _cursor_position;
+                    _selectFrom = _cursorPosition;
                 } else {
-                    _selectTo = _cursor_position;
+                    _selectTo = _cursorPosition;
                     makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
@@ -119,20 +118,20 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     private void replaceCursorAccordingCoord(int realPos) {
         int w = getTextWidth();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
-            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right
+        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            realPos -= getX() + (getWidth() - w) - getPadding().right - _textObject.getMargin().right
                     - _cursor.getWidth();
         else
-            realPos -= getX() + getPadding().left + _text_object.getMargin().left;
+            realPos -= getX() + getPadding().left + _textObject.getMargin().left;
 
-        _cursor_position = coordXToPos(realPos);
+        _cursorPosition = coordXToPos(realPos);
         replaceCursor();
     }
 
     private int coordXToPos(int coordX) {
         int pos = 0;
 
-        List<Integer> lineLetPos = _text_object.getLetPosArray();
+        List<Integer> lineLetPos = _textObject.getLetPosArray();
         if (lineLetPos == null)
             return pos;
 
@@ -161,7 +160,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                     if (ShiftValCodes.contains(args.key)) {
                         if (!_isSelect) {
                             _isSelect = true;
-                            _selectFrom = _cursor_position;
+                            _selectFrom = _cursorPosition;
                         }
                     }
                 }
@@ -177,17 +176,17 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                     if (_isSelect)
                         cutText();
                     else {
-                        if (args.key == KeyCode.BACKSPACE && _cursor_position > 0) // backspace
+                        if (args.key == KeyCode.BACKSPACE && _cursorPosition > 0) // backspace
                         {
                             StringBuilder sb = new StringBuilder(getText());
-                            setText(sb.deleteCharAt(_cursor_position - 1).toString());
-                            _cursor_position--;
+                            setText(sb.deleteCharAt(_cursorPosition - 1).toString());
+                            _cursorPosition--;
                             replaceCursor();
                         }
-                        if (args.key == KeyCode.DELETE && _cursor_position < getText().length()) // delete
+                        if (args.key == KeyCode.DELETE && _cursorPosition < getText().length()) // delete
                         {
                             StringBuilder sb = new StringBuilder(getText());
-                            setText(sb.deleteCharAt(_cursor_position).toString());
+                            setText(sb.deleteCharAt(_cursorPosition).toString());
                             replaceCursor();
                         }
                     }
@@ -195,34 +194,34 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                     unselectText();
             }
 
-            if (args.key == KeyCode.LEFT && _cursor_position > 0) // arrow left
+            if (args.key == KeyCode.LEFT && _cursorPosition > 0) // arrow left
             {
                 if (!_justSelected) {
-                    _cursor_position--;
+                    _cursorPosition--;
                     replaceCursor();
                 }
             }
-            if (args.key == KeyCode.RIGHT && _cursor_position < getText().length()) // arrow right
+            if (args.key == KeyCode.RIGHT && _cursorPosition < getText().length()) // arrow right
             {
                 if (!_justSelected) {
-                    _cursor_position++;
+                    _cursorPosition++;
                     replaceCursor();
                 }
             }
             if (args.key == KeyCode.END) // end
             {
-                _cursor_position = getText().length();
+                _cursorPosition = getText().length();
                 replaceCursor();
             }
             if (args.key == KeyCode.HOME) // home
             {
-                _cursor_position = 0;
+                _cursorPosition = 0;
                 replaceCursor();
             }
 
             if (_isSelect) {
-                if (_selectTo != _cursor_position) {
-                    _selectTo = _cursor_position;
+                if (_selectTo != _cursorPosition) {
+                    _selectTo = _cursorPosition;
                     makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
@@ -233,22 +232,22 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     private int cursorPosToCoord(int cPos, boolean isx) {
         int coord = 0;
-        if (_text_object.getLetPosArray() == null)
+        if (_textObject.getLetPosArray() == null)
             return coord;
 
         if (cPos > 0) {
-            coord = _text_object.getLetPosArray().get(cPos - 1);
-            if ((getTextWidth() >= _cursorXMax) || !_text_object.getTextAlignment().contains(ItemAlignment.RIGHT)) {
+            coord = _textObject.getLetPosArray().get(cPos - 1);
+            if ((getTextWidth() >= _cursorXMax) || !_textObject.getTextAlignment().contains(ItemAlignment.RIGHT)) {
                 coord += _cursor.getWidth();
             }
         }
 
         if (isx) {
             if (getLineXShift() + coord < 0) {
-                _text_object.setLineXShift(-coord);
+                _textObject.setLineXShift(-coord);
             }
             if (getLineXShift() + coord > _cursorXMax)
-                _text_object.setLineXShift(_cursorXMax - coord);
+                _textObject.setLineXShift(_cursorXMax - coord);
         }
 
         return getLineXShift() + coord;
@@ -257,23 +256,23 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void replaceCursor() {
         int len = getText().length();
 
-        if (_cursor_position > len) {
-            _cursor_position = len;
+        if (_cursorPosition > len) {
+            _cursorPosition = len;
             // replaceCursor();
         }
-        int pos = cursorPosToCoord(_cursor_position, true);
+        int pos = cursorPosToCoord(_cursorPosition, true);
 
         int w = getTextWidth();
 
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
             int xcp = getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
-                    - _text_object.getMargin().right - _cursor.getWidth();
-            if (_cursor_position == 0)
+                    - _textObject.getMargin().right - _cursor.getWidth();
+            if (_cursorPosition == 0)
                 xcp -= _cursor.getWidth();
             _cursor.setX(xcp);
         } else {
-            int cnt = getX() + getPadding().left + pos + _text_object.getMargin().left;
-            // if (_cursor_position > 0)
+            int cnt = getX() + getPadding().left + pos + _textObject.getMargin().left;
+            // if (_cursorPosition > 0)
             // cnt += _cursor.getWidth();
             _cursor.setX(cnt);
         }
@@ -296,9 +295,9 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 cancelJustSelected(); // _justSelected = false;
 
             StringBuilder sb = new StringBuilder(getText());
-            setText(sb.insert(_cursor_position, str).toString());
+            setText(sb.insert(_cursorPosition, str).toString());
 
-            _cursor_position++;
+            _cursorPosition++;
             replaceCursor();
         } finally {
             textInputLock.unlock();
@@ -328,36 +327,36 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             ial.add(ItemAlignment.LEFT);
             ial.add(ItemAlignment.VCENTER);
         }
-        _text_object.setTextAlignment(ial);
-        _substrate_text.setTextAlignment(ial);
+        _textObject.setTextAlignment(ial);
+        _substrateText.setTextAlignment(ial);
     }
 
     void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
-        _substrate_text.setMargin(margin);
+        _textObject.setMargin(margin);
+        _substrateText.setMargin(margin);
     }
 
     void setFont(Font font) {
-        _text_object.setFont(font);
-        _substrate_text.setFont(
-            GraphicsMathService.changeFontFamily(font.getFamily(), _substrate_text.getFont()));
+        _textObject.setFont(font);
+        _substrateText.setFont(
+                FontService.changeFontFamily(font.getFamily(), _substrateText.getFont()));
     }
 
     void setFontSize(int size) {
-        _text_object.setFontSize(size);
+        _textObject.setFontSize(size);
     }
 
     void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
+        _textObject.setFontStyle(style);
     }
 
     void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
-        _substrate_text.setFontFamily(font_family);
+        _textObject.setFontFamily(font_family);
+        _substrateText.setFontFamily(font_family);
     }
 
     Font getFont() {
-        return _text_object.getFont();
+        return _textObject.getFont();
     }
 
     private boolean _needShow = false;
@@ -375,23 +374,23 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void setText(String text) {
         textInputLock.lock();
         try {
-            if (_substrate_text.isVisible())
-                _substrate_text.setVisible(false);
+            if (_substrateText.isVisible())
+                _substrateText.setVisible(false);
             if (text == null || text.equals(""))
-                _substrate_text.setVisible(true);
+                _substrateText.setVisible(true);
 
             _pwd = text;
             if (_needShow) {
-                _text_object.setItemText(text);
+                _textObject.setItemText(text);
             } else {
                 StringBuilder txt = new StringBuilder();
                 for (char item : text.toCharArray()) {
-                    txt.append(_hide_sign);
+                    txt.append(_hideSign);
                 }
-                _text_object.setItemText(txt.toString());
+                _textObject.setItemText(txt.toString());
             }
 
-            _text_object.checkXShift(_cursorXMax);
+            _textObject.checkXShift(_cursorXMax);
         } finally {
             textInputLock.unlock();
         }
@@ -406,27 +405,27 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     void setForeground(Color color) {
-        _text_object.setForeground(color);
+        _textObject.setForeground(color);
     }
 
     void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     Color getForeground() {
-        return _text_object.getForeground();
+        return _textObject.getForeground();
     }
 
     boolean isEditable() {
@@ -449,44 +448,44 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     public void setWidth(int width) {
         super.setWidth(width);
         _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-                - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
-        _text_object.setAllowWidth(_cursorXMax);
-        _text_object.checkXShift(_cursorXMax); // _text_object.setLineXShift();
+                - _textObject.getMargin().left - _textObject.getMargin().right; // _cursorXMin;// ;
+        _textObject.setAllowWidth(_cursorXMax);
+        _textObject.checkXShift(_cursorXMax); // _textObject.setLineXShift();
 
-        _substrate_text.setAllowWidth(_cursorXMax);
-        _substrate_text.checkXShift(_cursorXMax);
+        _substrateText.setAllowWidth(_cursorXMax);
+        _substrateText.checkXShift(_cursorXMax);
 
         replaceCursor();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
+        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT))
             makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     public void initElements() {
         // adding
-        addItems(_substrate_text, _selectedArea, _text_object, _cursor);
+        addItems(_substrateText, _selectedArea, _textObject, _cursor);
         // getHandler().setFocusedItem(this);
 
         // _cursorXMin = getPadding().Left;
         // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left -
         // getPadding().right
-        // - _text_object.getMargin().left - _text_object.getMargin().right; //
+        // - _textObject.getMargin().left - _textObject.getMargin().right; //
         // _cursorXMin;// ;
-        // _text_object.setAllowWidth(_cursorXMax);
-        // _text_object.setLineXShift();
+        // _textObject.setAllowWidth(_cursorXMax);
+        // _textObject.setLineXShift();
 
-        // _substrate_text.setAllowWidth(_cursorXMax);
-        // _substrate_text.setLineXShift();
+        // _substrateText.setAllowWidth(_cursorXMax);
+        // _substrateText.setLineXShift();
 
-        _text_object.setCursorWidth(_cursor.getWidth());
-        _substrate_text.setCursorWidth(_cursor.getWidth());
+        _textObject.setCursorWidth(_cursor.getWidth());
+        _substrateText.setCursorWidth(_cursor.getWidth());
     }
 
     int getTextWidth() {
-        return _text_object.getWidth();
+        return _textObject.getWidth();
     }
 
     int getTextHeight() {
-        return _text_object.getHeight();
+        return _textObject.getHeight();
     }
 
     private void makeSelectedArea() {
@@ -516,18 +515,18 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         int width = toReal - fromReal + 1;
 
         int w = getTextWidth();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
-            _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right
+        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _textObject.getMargin().right
                     - _cursor.getWidth());
         else
-            _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
+            _selectedArea.setX(getX() + getPadding().left + fromReal + _textObject.getMargin().left);
         _selectedArea.setWidth(width);
     }
 
     private void unselectText() {
         _isSelect = false;
         _justSelected = true;
-        makeSelectedArea(_cursor_position, _cursor_position);
+        makeSelectedArea(_cursorPosition, _cursorPosition);
     }
 
     private void cancelJustSelected() {
@@ -553,7 +552,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             int toReal = Math.max(_selectFrom, _selectTo);
             StringBuilder sb = new StringBuilder(getText());
             setText(sb.delete(fromReal, toReal).toString()); // - fromReal
-            _cursor_position = fromReal;
+            _cursorPosition = fromReal;
             replaceCursor();
             if (_isSelect)
                 unselectText();
@@ -609,15 +608,15 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         }
         inner_style = style.getInnerStyle("substrate");
         if (inner_style != null) {
-            _substrate_text.setFont(inner_style.font);
-            _substrate_text.setForeground(inner_style.foreground);
+            _substrateText.setFont(inner_style.font);
+            _substrateText.setForeground(inner_style.foreground);
         }
     }
 
     private void selectAll() {
         _selectFrom = 0;
-        _cursor_position = getText().length();
-        _selectTo = _cursor_position;
+        _cursorPosition = getText().length();
+        _selectTo = _cursorPosition;
         replaceCursor();
 
         _isSelect = true;
@@ -625,46 +624,46 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     private int getLineXShift() {
-        return _text_object.getLineXShift();
+        return _textObject.getLineXShift();
     }
 
     void setSubstrateText(String substrateText) {
-        _substrate_text.setItemText(substrateText);
+        _substrateText.setItemText(substrateText);
     }
 
     void setSubstrateFontSize(int size) {
-        _substrate_text.setFontSize(size);
+        _substrateText.setFontSize(size);
     }
 
     void setSubstrateFontStyle(int style) {
-        _substrate_text.setFontStyle(style);
+        _substrateText.setFontStyle(style);
     }
 
     void setSubstrateForeground(Color foreground) {
-        _substrate_text.setForeground(foreground);
+        _substrateText.setForeground(foreground);
     }
 
     void setSubstrateForeground(int r, int g, int b) {
-        _substrate_text.setForeground(r, g, b);
+        _substrateText.setForeground(r, g, b);
     }
 
     void setSubstrateForeground(int r, int g, int b, int a) {
-        _substrate_text.setForeground(r, g, b, a);
+        _substrateText.setForeground(r, g, b, a);
     }
 
     void setSubstrateForeground(float r, float g, float b) {
-        _substrate_text.setForeground(r, g, b);
+        _substrateText.setForeground(r, g, b);
     }
 
     void setSubstrateForeground(float r, float g, float b, float a) {
-        _substrate_text.setForeground(r, g, b, a);
+        _substrateText.setForeground(r, g, b, a);
     }
 
     Color getSubstrateForeground() {
-        return _substrate_text.getForeground();
+        return _substrateText.getForeground();
     }
 
     String getSubstrateText() {
-        return _substrate_text.getItemText();
+        return _substrateText.getItemText();
     }
 }

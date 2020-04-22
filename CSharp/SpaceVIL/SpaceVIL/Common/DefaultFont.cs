@@ -45,7 +45,7 @@ namespace SpaceVIL.Common
                 AddFontFromMemory();
                 _defaultFont = new Font(_privateFontCollection.Families[0], _defFontSize, FontStyle.Regular);
             }
-            return GraphicsMathService.ChangeFontSize(size, _defaultFont);
+            return FontService.ChangeFontSize(size, _defaultFont);
         }
         internal Font GetDefaultFont(FontStyle style, int size)
         {
