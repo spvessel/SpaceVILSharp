@@ -77,6 +77,7 @@ namespace SpaceVIL
         internal bool MinimizeRequest = false;
         internal bool UpdateSizeRequest = false;
         internal bool UpdatePositionRequest = false;
+        internal bool FocusRequest = false;
 
         private float _itemPyramidLevel = 1.0f;
 
@@ -167,7 +168,7 @@ namespace SpaceVIL
             }
 
             DrawScene();
-            
+
             return true;
         }
 
@@ -332,7 +333,7 @@ namespace SpaceVIL
             _commonProcessor.WndProcessor.Focus(wnd, value);
         }
 
-        internal void SetWindowFocused()
+        internal void FocusWindow()
         {
             Glfw.FocusWindow(GLWHandler.GetWindowId());
         }
@@ -461,6 +462,11 @@ namespace SpaceVIL
 
         internal void DrawScene()
         {
+            if (FocusRequest)
+            {
+                FocusWindow();
+                FocusRequest = false;
+            }
             if (FullScreenRequest)
             {
                 FullScreen();

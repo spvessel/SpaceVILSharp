@@ -795,19 +795,16 @@ public abstract class CoreWindow {
     }
 
     void setFocus(Boolean value) {
-        if (_isFocused == value) {
-            return;
-        }
         _isFocused = value;
-        if (value) {
-            _windowLayout.setFocus();
-        }
     }
 
     /**
      * Sets the window focused.
      */
-    public void setFocus() {
+    public void focus() {
+        if (_isFocused)
+            return;
+
         _windowLayout.setFocus();
         _isFocused = true;
     }

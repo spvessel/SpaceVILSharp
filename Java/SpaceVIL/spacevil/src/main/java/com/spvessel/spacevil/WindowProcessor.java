@@ -148,18 +148,24 @@ final class WindowProcessor {
     void focus(long wnd, boolean value) {
         if (!_commonProcessor.handler.focusable)
             return;
+
         _commonProcessor.events.resetAllEvents();
         _commonProcessor.toolTip.initTimer(false);
+
         if (value) {
             if (_commonProcessor.handler.focusable) {
                 WindowsBox.setCurrentFocusedWindow(_commonProcessor.window);
+                _commonProcessor.window.setFocus(value);
                 _commonProcessor.handler.focused = value;
             }
         } else {
             if (_commonProcessor.window.isDialog) {
+                _commonProcessor.window.setFocus(true);
                 _commonProcessor.handler.focused = true;
             } else {
+                _commonProcessor.window.setFocus(value);
                 _commonProcessor.handler.focused = value;
+                
                 if (_commonProcessor.window.isOutsideClickClosable) {
                     _commonProcessor.resetItems();
                     _commonProcessor.window.close();

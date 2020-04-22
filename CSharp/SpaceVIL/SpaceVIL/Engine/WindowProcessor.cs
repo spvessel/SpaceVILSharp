@@ -51,7 +51,7 @@ namespace SpaceVIL
             if (height > _commonProcessor.Window.GetMaxHeight())
                 height = _commonProcessor.Window.GetMaxHeight();
 
-            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
+            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(),
                     (int)(width * scale.GetXScale()), (int)(height * scale.GetYScale()));
 
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
@@ -100,9 +100,9 @@ namespace SpaceVIL
             int width = _commonProcessor.Window.GetWidth();
             int height = _commonProcessor.Window.GetHeight();
 
-            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
+            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(),
                     (int)(width * scale.GetXScale()), (int)(height * scale.GetYScale()));
-                    
+
             _commonProcessor.InputLocker = false;
         }
 
@@ -135,23 +135,33 @@ namespace SpaceVIL
 
         internal void Focus(Int64 wnd, bool value)
         {
+            if (!_commonProcessor.Handler.Focusable)
+                return;
+
             _commonProcessor.Events.ResetAllEvents();
             _commonProcessor.Tooltip.InitTimer(false);
+
             if (value)
             {
                 if (_commonProcessor.Handler.Focusable)
                 {
                     WindowsBox.SetCurrentFocusedWindow(_commonProcessor.Window);
+                    _commonProcessor.Window.SetFocus(value);
                     _commonProcessor.Handler.Focused = value;
                 }
             }
             else
             {
                 if (_commonProcessor.Window.IsDialog)
+                {
+                    _commonProcessor.Window.SetFocus(true);
                     _commonProcessor.Handler.Focused = true;
+                }
                 else
                 {
+                    _commonProcessor.Window.SetFocus(value);
                     _commonProcessor.Handler.Focused = value;
+                    
                     if (_commonProcessor.Window.IsOutsideClickClosable)
                     {
                         _commonProcessor.ResetItems();

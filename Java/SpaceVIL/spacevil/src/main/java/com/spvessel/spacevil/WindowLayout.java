@@ -220,7 +220,7 @@ final class WindowLayout {
         }
         _engine.freeOnClose();
         if (currentPair != null && !currentPair.isClosed)
-            currentPair.setFocus();
+            currentPair.focus();
     }
 
     void destroyWindowsPair() {
@@ -247,7 +247,7 @@ final class WindowLayout {
 
     void setFocus() {
         setFocusable(true);
-        _engine.setWindowFocused();
+        _engine.focusRequest = true;
     }
 
     private Color _shadeColor = new Color(0, 0, 0, 200);

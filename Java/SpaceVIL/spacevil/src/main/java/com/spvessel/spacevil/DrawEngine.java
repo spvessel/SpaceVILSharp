@@ -78,6 +78,7 @@ final class DrawEngine {
     boolean minimizeRequest = false;
     boolean updateSizeRequest = false;
     boolean updatePositionRequest = false;
+    boolean focusRequest = false;
 
     private float _itemPyramidLevel = 1.0f;
 
@@ -372,7 +373,7 @@ final class DrawEngine {
         _commonProcessor.wndProcessor.focus(wnd, value);
     }
 
-    void setWindowFocused() {
+    void focusWindow() {
         glfwFocusWindow(glwHandler.getWindowId());
     }
 
@@ -479,6 +480,10 @@ final class DrawEngine {
     private VramFramebuffer _fboBlur = new VramFramebuffer();
 
     void drawScene() {
+        if (focusRequest) {
+            focusWindow();
+            focusRequest = false;
+        }
         if (fullScreenRequest) {
             fullScreen();
             fullScreenRequest = false;

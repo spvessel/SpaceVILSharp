@@ -252,7 +252,7 @@ namespace SpaceVIL
             }
             _engine.FreeOnClose();
             if (currentPair != null && !currentPair.IsClosed)
-                currentPair.SetFocus();
+                currentPair.Focus();
         }
 
         void DestroyWindowsPair()
@@ -285,7 +285,7 @@ namespace SpaceVIL
         internal void SetFocus()
         {
             SetFocusable(true);
-            _engine.SetWindowFocused();
+            _engine.FocusRequest = true;
         }
 
         private Color _shadeColor = Color.FromArgb(200, 0, 0, 0);

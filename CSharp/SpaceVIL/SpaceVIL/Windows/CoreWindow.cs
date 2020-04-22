@@ -706,22 +706,17 @@ namespace SpaceVIL
 
         internal void SetFocus(bool value)
         {
-            if (_isFocused == value)
-            {
-                return;
-            }
             _isFocused = value;
-            if (value)
-            {
-                _windowLayout.SetFocus();
-            }
         }
 
         /// <summary>
         /// Sets the window focused.
         /// </summary>
-        public void SetFocus()
+        public void Focus()
         {
+            if (_isFocused)
+                return;
+
             _windowLayout.SetFocus();
             _isFocused = true;
         }
