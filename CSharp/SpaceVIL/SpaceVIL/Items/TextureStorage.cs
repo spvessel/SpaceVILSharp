@@ -462,7 +462,8 @@ namespace SpaceVIL
             
             //line is not last is checked before call
             int currentLineVal = _lineBreakes[combinePos.Y];
-            int nextLineVal = (combinePos.Y < _lineBreakes.Count - 1) ? _lineBreakes[combinePos.Y + 1] : currentLineVal + 1;
+            int nextLineVal = (combinePos.Y < _lineBreakes.Count - 1) ? _lineBreakes[combinePos.Y + 1]
+                     : currentLineVal + 1;
 
             //???
             String currentText = GetTextInLine(combinePos.Y);
@@ -847,7 +848,7 @@ namespace SpaceVIL
             {
                 StringBuilder firstLinePartText = new StringBuilder(GetTextInLine(fromReal.Y).Substring(0, fromReal.X));
                 StringBuilder lastLinePartText = new StringBuilder(GetTextInLine(toReal.Y).Substring(toReal.X));
-                RemoveLines(fromReal.Y + 1, toReal.Y - 1);
+                RemoveLines(fromReal.Y + 1, toReal.Y); // - 1);
                 SetTextInLine(firstLinePartText.Append(lastLinePartText).ToString(), fromReal); //.y);
                 // _linesList[fromReal.Y].SetItemText(_linesList[fromReal.Y].GetItemText().Substring(0, fromReal.X));
                 // _linesList[fromReal.Y + 1].SetItemText(_linesList[fromReal.Y + 1].GetItemText().Substring(toReal.X));
@@ -1369,10 +1370,10 @@ namespace SpaceVIL
             _isUpdateTextureNeed = true;
         }
 
-        private Regex patternWordBounds = new Regex(@"\W|_");
         internal int[] FindWordBounds(SpaceVIL.Core.Point cursorPosition)
         {
-            //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
+            Regex patternWordBounds = new Regex(@"\W|_");
+            //С положением курсора должно быть все в порядке, не нужно проверять вроде бы
             String lineText = GetTextInLine(cursorPosition.Y);
             int index = cursorPosition.X;
 

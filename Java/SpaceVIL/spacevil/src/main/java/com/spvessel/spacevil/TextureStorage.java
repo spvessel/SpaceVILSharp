@@ -1193,11 +1193,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         setHeight(h);
         _isUpdateTextureNeed = true;
     }
-
-    private Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
-
+    
     int[] findWordBounds(Point cursorPosition) {
-        //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
+        Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
+        //С положением курсора должно быть все в порядке, не нужно проверять вроде бы
         String lineText = getTextInLine(cursorPosition.y);
         int index = cursorPosition.x;
 

@@ -74,21 +74,21 @@ public class InputTest extends ActiveWindow {
         layout.setPadding(2, 2, 2, 2);
         addItem(layout);
 
-//         PasswordLine password = new PasswordLine();
-//         password.setSubstrateText("Enter a password...");
-//        // password.setTextAlignment(ItemAlignment.RIGHT);
+         PasswordLine password = new PasswordLine();
+         password.setSubstrateText("Enter a password...");
+        // password.setTextAlignment(ItemAlignment.RIGHT);
 
-//         TextEdit te = new TextEdit();
-//         // te.setText("TextZaranee");
-//         te.setTextAlignment(ItemAlignment.RIGHT);
-//         // te.getSelectionArea().setBackground(Color.green);
-//         te.setSubstrateText("Write some text");
-//         // te.setMargin(0,0,150,0);
-//         // te.setFontSize(10);
-//         te.setWidth(300);
-//         te.setWidthPolicy(SizePolicy.EXPAND);
+         TextEdit te = new TextEdit();
+         // te.setText("TextZaranee");
+         te.setTextAlignment(ItemAlignment.RIGHT);
+         // te.getSelectionArea().setBackground(Color.green);
+         te.setSubstrateText("Write some text");
+         // te.setMargin(0,0,150,0);
+         // te.setFontSize(10);
+         te.setWidth(300);
+         te.setWidthPolicy(SizePolicy.EXPAND);
 
-//        TextArea tb = new TextArea();
+        TextArea tb = new TextArea();
 
         // TextView tb = new TextView();
         // tb.setScrollStepFactor(3f);
@@ -119,13 +119,13 @@ public class InputTest extends ActiveWindow {
                 SpinItem sp = new SpinItem();
                 sp.setParameters(1, -5.5, 7, 0.51);
 
-        layout.addItems(sp); //password,
-//        layout.addItem(te);
+        layout.addItems(password, sp);
+        layout.addItem(te);
 
-//        layout.addItem(tb);
-//        tb.setWrapText(true);
-//        tb.setStyle(Style.getTextAreaStyle());
-//        tb.setText(getBigText());
+        layout.addItem(tb);
+        tb.setWrapText(true);
+        tb.setStyle(Style.getTextAreaStyle());
+        tb.setText(getBigText());
 
         // ButtonCore bc = new ButtonCore("pizdec");
         // bc.setSize(150, 30);
@@ -225,7 +225,7 @@ public class InputTest extends ActiveWindow {
         // tb.setStyle(getTextAreaStyle());
         // tb.setWrapText(true);
         // tb.rewindText();
-//        tb.setFocus();
+        tb.setFocus();
 
         // tb.setBackground(0, 0, 0);
 
@@ -265,21 +265,21 @@ public class InputTest extends ActiveWindow {
         // effect2.setAlignment(ItemAlignment.RIGHT, ItemAlignment.VCENTER);
         // Effects.addEffect(bc2, effect2);
 
-//        tb.eventKeyPress.add((sender, args) -> {
-//            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.EQUAL) {
-//                int fontSize = tb.getFont().getSize();
-//                fontSize++;
-//                if (fontSize > 32)
-//                    return;
-//                tb.setFontSize(fontSize);
-//            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.MINUS) {
-//                int fontSize = tb.getFont().getSize();
-//                fontSize--;
-//                if (fontSize < 10)
-//                    return;
-//                tb.setFontSize(fontSize);
-//            }
-//        });
+        tb.eventKeyPress.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.EQUAL) {
+                int fontSize = tb.getFont().getSize();
+                fontSize++;
+                if (fontSize > 32)
+                    return;
+                tb.setFontSize(fontSize);
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.MINUS) {
+                int fontSize = tb.getFont().getSize();
+                fontSize--;
+                if (fontSize < 10)
+                    return;
+                tb.setFontSize(fontSize);
+            }
+        });
 
     }
 

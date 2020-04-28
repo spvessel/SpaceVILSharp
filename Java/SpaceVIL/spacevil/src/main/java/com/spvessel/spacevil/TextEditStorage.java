@@ -1,16 +1,17 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -35,8 +36,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
-    private List<KeyCode> ShiftValCodes;
-    private List<KeyCode> InsteadKeyMods;
+    private Set<KeyCode> _cursorControlKeys;
+    // private Set<KeyCode> InsteadKeyMods;
+    private Set<KeyCode> _serviceEditKeys;
 
     private Lock textInputLock = new ReentrantLock();
 
@@ -62,9 +64,12 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         eventScrollDown.add(this::onScrollDown);
         eventMouseDoubleClick.add(this::onMouseDoubleClick);
 
-        ShiftValCodes = new LinkedList<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
-        InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
-                KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
+        _cursorControlKeys = new HashSet<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
+        // InsteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
+        //         KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
+        
+        _serviceEditKeys = new HashSet<>(
+            Arrays.asList(KeyCode.BACKSPACE, KeyCode.DELETE, KeyCode.TAB));
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
@@ -230,66 +235,138 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if (!_isSelect && _justSelected) {
                 cancelJustSelected();
             }
+
+            boolean isCursorControlKey = _cursorControlKeys.contains(args.key);
+            boolean hasShift = args.mods.contains(KeyMods.SHIFT);
+            boolean hasControl = args.mods.contains(CommonService.getOsControlMod());
+
             if (!args.mods.contains(KeyMods.NO)) {
                 // Выделение не сбрасывается, проверяются сочетания
-                if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 1) {
-                    if (ShiftValCodes.contains(args.key)) {
-                        if (!_isSelect) {
-                            _isSelect = true;
-                            _selectFrom = _cursorPosition;
+                if (isCursorControlKey) {
+                    if (!_isSelect) {
+                        if (hasShift) {
+                            if ((args.mods.size() == 1) || ((args.mods.size() == 2) && hasControl)) {
+                                _isSelect = true;
+                                _selectFrom = _cursorPosition;
+                            }
                         }
+                    } else { //_isSelect
+                        if ((args.mods.size() == 1) && hasControl) {
+                            unselectText();
+                            cancelJustSelected();
+                        }
+                    }
+                }
+
+                // control + delete/backspace
+                if (hasControl && (args.mods.size() == 1)) {
+                    if (!_isSelect) {
+                        if (args.key == KeyCode.BACKSPACE) { //remove to left
+                            int[] wordBounds = findWordBounds();
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0]) {
+                                _selectFrom = _cursorPosition;
+                                _cursorPosition = wordBounds[0];
+//                                replaceCursor();
+                                _selectTo = _cursorPosition;
+                                cutText();
+                            } else {
+                                onBackSpaceInput();
+                            }
+                        } else if (args.key == KeyCode.DELETE) { //remove to right
+                            int[] wordBounds = findWordBounds();
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1]) {
+                                _selectFrom = _cursorPosition;
+                                _cursorPosition = wordBounds[1];
+//                                replaceCursor();
+                                _selectTo = _cursorPosition;
+                                cutText();
+                            } else {
+                                onDeleteInput();
+                            }
+                        }
+                    } else if (_isSelect && ((args.key == KeyCode.BACKSPACE) || (args.key == KeyCode.DELETE))) {
+                        cutText();
                     }
                 }
 
                 // alt, super ?
             } else {
-                if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
+                if (_serviceEditKeys.contains(args.key)) { //args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
                     if (_isSelect) {
                         privCutText();
                     } else {
-                        if (args.key == KeyCode.BACKSPACE && _cursorPosition > 0) // backspace
-                        {
-                            StringBuilder sb = new StringBuilder(privGetText());
-                            _cursorPosition--;
-                            privSetText(sb.deleteCharAt(_cursorPosition).toString());
-                            // replaceCursor();
+                        if (args.key == KeyCode.BACKSPACE) { // backspace
+                            onBackSpaceInput();
                         }
-                        if (args.key == KeyCode.DELETE && _cursorPosition < privGetText().length()) // delete
-                        {
-                            StringBuilder sb = new StringBuilder(privGetText());
-                            privSetText(sb.deleteCharAt(_cursorPosition).toString());
-                            // replaceCursor();
+                        if (args.key == KeyCode.DELETE) { // delete
+                            onDeleteInput();
                         }
                     }
-                } else if (_isSelect && !InsteadKeyMods.contains(args.key)) {
+
+                    if (args.key == KeyCode.TAB) {
+                        pasteText("    ");
+                    }
+
+                } else if (_isSelect) { //??? && !InsteadKeyMods.contains(args.key)) {
                     unselectText();
                     // cancelJustSelected();
                 }
             }
 
-            if (args.key == KeyCode.LEFT && _cursorPosition > 0) // arrow left
-            {
-                if (!_justSelected) {
-                    _cursorPosition--;
-                    replaceCursor();
+            if (isCursorControlKey) {
+                if (!args.mods.contains(KeyMods.ALT) && !args.mods.contains(KeyMods.SUPER)) {
+                    if (args.key == KeyCode.LEFT && _cursorPosition > 0) { // arrow left
+                        _cursorPosition = checkLineFits(_cursorPosition);
+
+                        boolean doUsual = true;
+
+                        if (hasControl) {
+                            int[] wordBounds = findWordBounds();
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0]) {
+                                _cursorPosition = wordBounds[0];
+                                replaceCursor();
+                                doUsual = false;
+                            }
+                        }
+
+                        if (!_justSelected && doUsual) {
+                            _cursorPosition--;
+                            replaceCursor();
+                        }
+                    }
+
+                    if (args.key == KeyCode.RIGHT && _cursorPosition < privGetText().length()) { // arrow right
+                        boolean doUsual = true;
+
+                        if (hasControl) {
+                            int[] wordBounds = findWordBounds();
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1]) {
+                                _cursorPosition = wordBounds[1];
+                                replaceCursor();
+                                doUsual = false;
+                            }
+                        }
+
+                        if (!_justSelected && doUsual) {
+                            _cursorPosition++;
+                            replaceCursor();
+                        }
+                    }
+
+                    if (args.key == KeyCode.END) { // end
+                        _cursorPosition = privGetText().length();
+                        replaceCursor();
+                    }
+
+                    if (args.key == KeyCode.HOME) { // home
+                        _cursorPosition = 0;
+                        replaceCursor();
+                    }
                 }
-            }
-            if (args.key == KeyCode.RIGHT && _cursorPosition < privGetText().length()) // arrow right
-            {
-                if (!_justSelected) {
-                    _cursorPosition++;
-                    replaceCursor();
-                }
-            }
-            if (args.key == KeyCode.END) // end
-            {
-                _cursorPosition = privGetText().length();
-                replaceCursor();
-            }
-            if (args.key == KeyCode.HOME) // home
-            {
-                _cursorPosition = 0;
-                replaceCursor();
             }
 
             if (_isSelect) {
@@ -301,6 +378,38 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         } finally {
             textInputLock.unlock();
         }
+    }
+
+    private void onBackSpaceInput() {
+        if (_cursorPosition > 0) // backspace
+        {
+            StringBuilder sb = new StringBuilder(privGetText());
+            _cursorPosition--;
+            privSetText(sb.deleteCharAt(_cursorPosition).toString());
+            // replaceCursor();
+        }
+    }
+
+    private void onDeleteInput() {
+        if (_cursorPosition < privGetText().length()) // delete
+        {
+            StringBuilder sb = new StringBuilder(privGetText());
+            privSetText(sb.deleteCharAt(_cursorPosition).toString());
+            // replaceCursor();
+        }
+    }
+
+    private int checkLineFits(int checkingPos) {
+        if (checkingPos < 0) {
+            checkingPos = 0;
+        }
+
+        int lineLength = privGetText().length();
+        if (checkingPos > lineLength) {
+            checkingPos = lineLength;
+        }
+
+        return checkingPos;
     }
 
     private int cursorPosToCoord(int cPos, boolean isx) {
@@ -737,6 +846,33 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         pasteText(text);
     }
 
+    private int[] findWordBounds() {
+        Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
+        //С положением курсора должно быть все в порядке, не нужно проверять вроде бы
+        String lineText = privGetText();
+        int index = _cursorPosition;
+
+        String testString = lineText.substring(index);
+        Matcher matcher = patternWordBounds.matcher(testString);
+
+        int begPt = 0;
+        int endPt = privGetText().length();
+
+        if (matcher.find()) {
+            endPt = index + matcher.start();
+        }
+
+        testString = lineText.substring(0, index);
+        matcher = patternWordBounds.matcher(testString);
+
+        while (matcher.find()) {
+            begPt = matcher.start() + 1;
+        }
+
+        return new int[] { begPt, endPt };
+    }
+
+    //--------------------------------------------------------
     private class TextEditState {
         String textState;
         int cursorState;

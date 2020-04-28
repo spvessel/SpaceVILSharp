@@ -60,7 +60,7 @@ namespace SpaceVIL
             {
                 string cut_str = textItem.CutText();
                 // Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
-                if (cut_str == null || cut_str == "")
+                if (cut_str == null || cut_str.Equals(""))
                     return;
 
                 CommonService.SetClipboardString(cut_str);

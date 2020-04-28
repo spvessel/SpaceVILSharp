@@ -336,7 +336,6 @@ namespace SpaceVIL
 
                 bool isCursorControlKey = _cursorControlKeys.Contains(args.Key);
                 bool hasShift = args.Mods.HasFlag(KeyMods.Shift);
-                // bool hasControl = args.Mods.HasFlag(KeyMods.Control);
                 bool hasControl = args.Mods.HasFlag(CommonService.GetOsControlMod());
 
                 if (args.Mods != 0)
@@ -366,6 +365,52 @@ namespace SpaceVIL
                         }
                     }
 
+                    // control + delete/backspace
+                    if (args.Mods == CommonService.GetOsControlMod())
+                    {
+                        if (!_isSelect)
+                        {
+                            if (args.Key == KeyCode.Backspace) //remove to left
+                            {
+                                int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[0])
+                                {
+                                    _selectFrom = new SpaceVIL.Core.Point(_cursorPosition);
+                                    _cursorPosition = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
+                                    // ReplaceCursor();
+                                    _selectTo = new SpaceVIL.Core.Point(_cursorPosition);
+                                    CutText();
+                                }
+                                else
+                                {
+                                    OnBackSpaceInput(args);
+                                }
+                            }
+                            else if (args.Key == KeyCode.Delete) //remove to right
+                            {
+                                int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[1])
+                                {
+                                    _selectFrom = new SpaceVIL.Core.Point(_cursorPosition);
+                                    _cursorPosition = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
+                                    // ReplaceCursor();
+                                    _selectTo = new SpaceVIL.Core.Point(_cursorPosition);
+                                    CutText();
+                                }
+                                else
+                                {
+                                    OnDeleteInput(args);
+                                }
+                            }
+                        }
+                        else if (_isSelect && ((args.Key == KeyCode.Backspace) || (args.Key == KeyCode.Delete)))
+                        {
+                            CutText();
+                        }
+                    }
+
                     //alt, super ?
                 }
                 else
@@ -381,32 +426,11 @@ namespace SpaceVIL
                             _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition);
                             if (args.Key == KeyCode.Backspace) //backspace
                             {
-                                if (_cursorPosition.X > 0)
-                                {
-                                    string sb = _textureStorage.GetTextInLine(_cursorPosition.Y);
-                                    _cursorPosition.X--;
-                                    SetTextInLine(sb.Remove(_cursorPosition.X, 1));
-                                }
-                                else if (_cursorPosition.Y > 0)
-                                {
-                                    _cursorPosition.Y--;
-                                    _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
-                                    _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
-                                    AddToUndoAndReplaceCursor();
-                                }
-                                // ReplaceCursor();
+                                OnBackSpaceInput(args);
                             }
                             if (args.Key == KeyCode.Delete) //delete
                             {
-                                if (_cursorPosition.X < GetLettersCountInLine(_cursorPosition.Y))
-                                {
-                                    SetTextInLine(_textureStorage.GetTextInLine(_cursorPosition.Y).Remove(_cursorPosition.X, 1));
-                                }
-                                else if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
-                                {
-                                    _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
-                                    AddToUndoAndReplaceCursor();
-                                }
+                                OnDeleteInput(args);
                             }
                         }
 
@@ -467,6 +491,7 @@ namespace SpaceVIL
                                 ReplaceCursor();
                             }
                         }
+
                         if (args.Key == KeyCode.Right) //arrow right
                         {
                             bool doUsual = true;
@@ -498,6 +523,7 @@ namespace SpaceVIL
                             }
 
                         }
+
                         if (args.Key == KeyCode.Up) //arrow up
                         {
                             if (!_justSelected)
@@ -510,6 +536,7 @@ namespace SpaceVIL
                                 ReplaceCursor();
                             }
                         }
+
                         if (args.Key == KeyCode.Down) //arrow down
                         {
                             if (!_justSelected)
@@ -541,6 +568,7 @@ namespace SpaceVIL
                                 ReplaceCursor();
                             }
                         }
+
                         if (args.Key == KeyCode.Home) //home
                         {
                             bool doUsual = true;
@@ -573,6 +601,37 @@ namespace SpaceVIL
             finally
             {
                 Monitor.Exit(_textureStorage.textInputLock);
+            }
+        }
+
+        private void OnBackSpaceInput(KeyArgs args)
+        {
+            if (_cursorPosition.X > 0)
+            {
+                string sb = _textureStorage.GetTextInLine(_cursorPosition.Y);
+                _cursorPosition.X--;
+                SetTextInLine(sb.Remove(_cursorPosition.X, 1));
+            }
+            else if (_cursorPosition.Y > 0)
+            {
+                _cursorPosition.Y--;
+                _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
+                _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
+                AddToUndoAndReplaceCursor();
+            }
+            // ReplaceCursor();
+        }
+
+        private void OnDeleteInput(KeyArgs args)
+        {
+            if (_cursorPosition.X < GetLettersCountInLine(_cursorPosition.Y))
+            {
+                SetTextInLine(_textureStorage.GetTextInLine(_cursorPosition.Y).Remove(_cursorPosition.X, 1));
+            }
+            else if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
+            {
+                _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
+                AddToUndoAndReplaceCursor();
             }
         }
 

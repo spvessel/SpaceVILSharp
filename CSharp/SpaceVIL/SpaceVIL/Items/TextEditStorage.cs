@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -32,8 +33,9 @@ namespace SpaceVIL
         private bool _isSelect = false;
         private bool _justSelected = false;
 
-        private List<KeyCode> ShiftValCodes;
-        private List<KeyCode> InsteadKeyMods;
+        private HashSet<KeyCode> _cursorControlKeys;
+        // private HashSet<KeyCode> InsteadKeyMods;
+        private HashSet<KeyCode> _serviceEditKeys;
 
         private readonly Object textInputLock = new Object();
 
@@ -60,9 +62,10 @@ namespace SpaceVIL
             EventScrollDown += OnScrollDown;
             EventMouseDoubleClick += OnMouseDoubleClick;
 
-            ShiftValCodes = new List<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };
-            InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
-                KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
+            _cursorControlKeys = new HashSet<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };
+            // InsteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
+            //     KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
+            _serviceEditKeys = new HashSet<KeyCode>() {KeyCode.Backspace, KeyCode.Delete, KeyCode.Tab};
 
             undoQueue = new LinkedList<TextEditState>();
             redoQueue = new LinkedList<TextEditState>();
@@ -237,77 +240,181 @@ namespace SpaceVIL
                     CancelJustSelected();
                 }
 
+                bool isCursorControlKey = _cursorControlKeys.Contains(args.Key);
+                bool hasShift = args.Mods.HasFlag(KeyMods.Shift);
+                bool hasControl = args.Mods.HasFlag(CommonService.GetOsControlMod());
+
                 if (args.Mods != 0)
                 {
                     //Выделение не сбрасывается, проверяются сочетания
-                    switch (args.Mods)
+                    if (isCursorControlKey)
                     {
-                        case KeyMods.Shift:
-                            if (ShiftValCodes.Contains(args.Key))
+                        if (!_isSelect)
+                        {
+                            if (hasShift)
                             {
-                                if (!_isSelect)
+                                if ((args.Mods == KeyMods.Shift) || (args.Mods == (CommonService.GetOsControlMod() | KeyMods.Shift)))
                                 {
                                     _isSelect = true;
                                     _selectFrom = _cursorPosition;
                                 }
                             }
-
-                            break;
-
-                            //alt, super ?
-                    }
-                }
-                else
-                {
-                    if (args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete)
-                    {
-                        if (_isSelect)
-                            PrivCutText();
-                        else
+                        }
+                        else //_isSelect
                         {
-                            if (args.Key == KeyCode.Backspace && _cursorPosition > 0)//backspace
+                            if (args.Mods == CommonService.GetOsControlMod())
                             {
-                                _cursorPosition--;
-                                PrivSetText(PrivGetText().Remove(_cursorPosition, 1));
-                                //ReplaceCursor();
-                            }
-                            if (args.Key == KeyCode.Delete && _cursorPosition < PrivGetText().Length)//delete
-                            {
-                                PrivSetText(PrivGetText().Remove(_cursorPosition, 1));
-                                //ReplaceCursor();
+                                UnselectText();
+                                CancelJustSelected();
                             }
                         }
                     }
-                    else
-                        if (_isSelect && !InsteadKeyMods.Contains(args.Key))
-                            UnselectText();
+
+                    // control + delete/backspace
+                    if (args.Mods == CommonService.GetOsControlMod())
+                    {
+                        if (!_isSelect)
+                        {
+                            if (args.Key == KeyCode.Backspace) //remove to left
+                            {
+                                int[] wordBounds = FindWordBounds();
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0])
+                                {
+                                    _selectFrom = _cursorPosition;
+                                    _cursorPosition = wordBounds[0];
+                                    // ReplaceCursor();
+                                    _selectTo = _cursorPosition;
+                                    CutText();
+                                }
+                                else
+                                {
+                                    OnBackSpaceInput();
+                                }
+                            }
+                            else if (args.Key == KeyCode.Delete) //remove to right
+                            {
+                                int[] wordBounds = FindWordBounds();
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1])
+                                {
+                                    _selectFrom = _cursorPosition;
+                                    _cursorPosition = wordBounds[1];
+                                    // ReplaceCursor();
+                                    _selectTo = _cursorPosition;
+                                    CutText();
+                                }
+                                else
+                                {
+                                    OnDeleteInput();
+                                }
+                            }
+                        }
+                        else if (_isSelect && ((args.Key == KeyCode.Backspace) || (args.Key == KeyCode.Delete)))
+                        {
+                            CutText();
+                        }
+                    }
+
+                    //alt, super ?
+                }
+                else
+                {
+                    if (_serviceEditKeys.Contains(args.Key)) //args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete)
+                    {
+                        if (_isSelect)
+                        {
+                            PrivCutText();
+                        }
+                        else
+                        {
+                            if (args.Key == KeyCode.Backspace) // backspace
+                            {
+                                OnBackSpaceInput();
+                            }
+                            if (args.Key == KeyCode.Delete) // delete
+                            {
+                                OnDeleteInput();
+                            }
+                        }
+
+                        if (args.Key == KeyCode.Tab)
+                        {
+                            PasteText("    ");
+                        }
+                    }
+                    else if (_isSelect) //??? && !InsteadKeyMods.Contains(args.Key))
+                    {
+                        UnselectText();
+                    }
                 }
 
-                if (args.Key == KeyCode.Left && _cursorPosition > 0)//arrow left
+                if (isCursorControlKey)
                 {
-                    if (!_justSelected)
+                    if (!args.Mods.HasFlag(KeyMods.Alt) && !args.Mods.HasFlag(KeyMods.Super))
                     {
-                        _cursorPosition--;
-                        ReplaceCursor();
+
+                        if (args.Key == KeyCode.Left && _cursorPosition > 0) // arrow left
+                        {
+                            _cursorPosition = CheckLineFits(_cursorPosition);  //NECESSARY!
+
+                            bool doUsual = true;
+
+                            if (hasControl)
+                            {
+                                int[] wordBounds = FindWordBounds();
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0])
+                                {
+                                    _cursorPosition = wordBounds[0];
+                                    ReplaceCursor();
+                                    doUsual = false;
+                                }
+                            }
+
+                            if (!_justSelected && doUsual)
+                            {
+                                _cursorPosition--;
+                                ReplaceCursor();
+                            }
+                        }
+
+                        if (args.Key == KeyCode.Right && _cursorPosition < PrivGetText().Length) // arrow right
+                        {
+                            bool doUsual = true;
+
+                            if (hasControl)
+                            {
+                                int[] wordBounds = FindWordBounds();
+
+                                if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1])
+                                {
+                                    _cursorPosition = wordBounds[1];
+                                    ReplaceCursor();
+                                    doUsual = false;
+                                }
+                            }
+
+                            if (!_justSelected && doUsual)
+                            {
+                                _cursorPosition++;
+                                ReplaceCursor();
+                            }
+                        }
+
+                        if (args.Key == KeyCode.End) // end
+                        {
+                            _cursorPosition = PrivGetText().Length;
+                            ReplaceCursor();
+                        }
+
+                        if (args.Key == KeyCode.Home) // home
+                        {
+                            _cursorPosition = 0;
+                            ReplaceCursor();
+                        }
+
                     }
-                }
-                if (args.Key == KeyCode.Right && _cursorPosition < PrivGetText().Length)//arrow right
-                {
-                    if (!_justSelected)
-                    {
-                        _cursorPosition++;
-                        ReplaceCursor();
-                    }
-                }
-                if (args.Key == KeyCode.End)//end
-                {
-                    _cursorPosition = PrivGetText().Length;
-                    ReplaceCursor();
-                }
-                if (args.Key == KeyCode.Home)//home
-                {
-                    _cursorPosition = 0;
-                    ReplaceCursor();
                 }
 
                 if (_isSelect)
@@ -323,6 +430,41 @@ namespace SpaceVIL
             {
                 Monitor.Exit(textInputLock);
             }
+        }
+
+        private void OnBackSpaceInput()
+        {
+            if (_cursorPosition > 0) // backspace
+            {
+                _cursorPosition--;
+                PrivSetText(PrivGetText().Remove(_cursorPosition, 1));
+                //ReplaceCursor();
+            }
+        }
+
+        private void OnDeleteInput()
+        {
+            if (_cursorPosition < PrivGetText().Length) // delete
+            {
+                PrivSetText(PrivGetText().Remove(_cursorPosition, 1));
+                //ReplaceCursor();
+            }
+        }
+
+        private int CheckLineFits(int checingPos)
+        {
+            if (checingPos < 0)
+            {
+                checingPos = 0;
+            }
+
+            int lineLength = PrivGetText().Length;
+            if (checingPos > lineLength)
+            {
+                checingPos = lineLength;
+            }
+
+            return checingPos;
         }
 
         private int CursorPosToCoord(int cPos, bool isx)
@@ -840,6 +982,43 @@ namespace SpaceVIL
             PasteText(text);
         }
 
+        private int[] FindWordBounds()
+        {
+            Regex patternWordBounds = new Regex(@"\W|_");
+            //С положением курсора должно быть все в порядке, не нужно проверять вроде бы
+            String lineText = PrivGetText();
+            int index = _cursorPosition;
+
+            String testString = lineText.Substring(index);
+            MatchCollection matcher = patternWordBounds.Matches(testString);
+
+            int begPt = 0;
+            int endPt = PrivGetText().Length;
+
+            if (matcher.Count > 0)
+            {
+                foreach (Match match in matcher)
+                {
+                    endPt = index + match.Index;
+                    break;
+                }
+            }
+
+            testString = lineText.Substring(0, index);
+            matcher = patternWordBounds.Matches(testString);
+
+            if (matcher.Count > 0)
+            {
+                foreach (Match match in matcher)
+                {
+                    begPt = match.Index + 1;
+                }
+            }
+
+            return new int[] { begPt, endPt };
+        }
+
+        //----------------------------------------------------------------------
         internal class TextEditState
         {
             internal String textState;

@@ -282,7 +282,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
             boolean isCursorControlKey = _cursorControlKeys.contains(args.key);
             boolean hasShift = args.mods.contains(KeyMods.SHIFT);
-            // boolean hasControl = args.mods.contains(KeyMods.CONTROL);
             boolean hasControl = args.mods.contains(CommonService.getOsControlMod());
 
             if (!args.mods.contains(KeyMods.NO)) {
@@ -304,6 +303,39 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                     }
                 }
 
+                // control + delete/backspace
+                if (hasControl && (args.mods.size() == 1)) {
+                    if (!_isSelect) {
+                        if (args.key == KeyCode.BACKSPACE) { //remove to left
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[0]) {
+                                _selectFrom = new Point(_cursorPosition);
+                                _cursorPosition = new Point(wordBounds[0], _cursorPosition.y);
+//                                replaceCursor();
+                                _selectTo = new Point(_cursorPosition);
+                                cutText();
+                            } else {
+                                onBackSpaceInput(args);
+                            }
+                        } else if (args.key == KeyCode.DELETE) { //remove to right
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
+
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[1]) {
+                                _selectFrom = new Point(_cursorPosition);
+                                _cursorPosition = new Point(wordBounds[1], _cursorPosition.y);
+//                                replaceCursor();
+                                _selectTo = new Point(_cursorPosition);
+                                cutText();
+                            } else {
+                                onDeleteInput(args);
+                            }
+                        }
+                    } else if (_isSelect && ((args.key == KeyCode.BACKSPACE) || (args.key == KeyCode.DELETE))) {
+                        cutText();
+                    }
+                }
+
                 // alt, super ?
             } else {
                 if (_serviceEditKeys.contains(args.key)) {
@@ -311,31 +343,12 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                         cutText();
                     } else {
                         _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
-                        if (args.key == KeyCode.BACKSPACE) // backspace
-                        {
-                            if (_cursorPosition.x > 0) {
-                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
-                                _cursorPosition.x--;
-                                setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
-                            } else if (_cursorPosition.y > 0) {
-                                _cursorPosition.y--;
-                                _cursorPosition.x = getLettersCountInLine(_cursorPosition.y);
-                                _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
-                                addToUndoAndReplaceCursor();
-                            }
-                            //                            replaceCursor();
+                        if (args.key == KeyCode.BACKSPACE) { // backspace
+                            onBackSpaceInput(args);
                         }
-                        if (args.key == KeyCode.DELETE) // delete
-                        {
-                            if (_cursorPosition.x < getLettersCountInLine(_cursorPosition.y)) {
-                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
-                                setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
-                            } else if (_cursorPosition.y < _textureStorage.getLinesCount() - 1) {
-                                _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
-                                addToUndoAndReplaceCursor();
-                            }
+                        if (args.key == KeyCode.DELETE) { // delete
+                            onDeleteInput(args);
                         }
-
                     }
 
                     if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
@@ -344,7 +357,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                         _cursorPosition.y++;
                         _cursorPosition.x = 0;
 
-                        ////                        replaceCursor();
                         addToUndoAndReplaceCursor();
                     }
 
@@ -360,8 +372,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             if (isCursorControlKey) {
                 if (!args.mods.contains(KeyMods.ALT) && !args.mods.contains(KeyMods.SUPER)) {
 
-                    if (args.key == KeyCode.LEFT) // arrow left
-                    {
+                    if (args.key == KeyCode.LEFT) { // arrow left
                         _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //NECESSARY!
 
                         boolean doUsual = true;
@@ -386,8 +397,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                             replaceCursor();
                         }
                     }
-                    if (args.key == KeyCode.RIGHT) // arrow right
-                    {
+
+                    if (args.key == KeyCode.RIGHT) { // arrow right
                         boolean doUsual = true;
 
                         if (hasControl) {
@@ -410,8 +421,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                             replaceCursor();
                         }
                     }
-                    if (args.key == KeyCode.UP) // arrow up
-                    {
+
+                    if (args.key == KeyCode.UP) { // arrow up
                         if (!_justSelected) {
                             if (_cursorPosition.y > 0) {
                                 _cursorPosition.y--;
@@ -420,8 +431,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                             replaceCursor();
                         }
                     }
-                    if (args.key == KeyCode.DOWN) // arrow down
-                    {
+
+                    if (args.key == KeyCode.DOWN) { // arrow down
                         if (!_justSelected) {
                             if (_cursorPosition.y < _textureStorage.getLinesCount() - 1) {
                                 _cursorPosition.y++;
@@ -431,8 +442,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                         }
                     }
 
-                    if (args.key == KeyCode.END) // end
-                    {
+                    if (args.key == KeyCode.END) { // end
                         boolean doUsual = true;
 
                         if (hasControl) {
@@ -447,8 +457,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                             replaceCursor();
                         }
                     }
-                    if (args.key == KeyCode.HOME) // home
-                    {
+
+                    if (args.key == KeyCode.HOME) { // home
                         boolean doUsual = true;
 
                         if (hasControl) {
@@ -473,6 +483,30 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             }
         } finally {
             _textureStorage.textInputLock.unlock();
+        }
+    }
+
+    private void onBackSpaceInput(KeyArgs args) {
+        if (_cursorPosition.x > 0) {
+            StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
+            _cursorPosition.x--;
+            setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
+        } else if (_cursorPosition.y > 0) {
+            _cursorPosition.y--;
+            _cursorPosition.x = getLettersCountInLine(_cursorPosition.y);
+            _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
+            addToUndoAndReplaceCursor();
+        }
+//        replaceCursor();
+    }
+
+    private void onDeleteInput(KeyArgs args) {
+        if (_cursorPosition.x < getLettersCountInLine(_cursorPosition.y)) {
+            StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
+            setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
+        } else if (_cursorPosition.y < _textureStorage.getLinesCount() - 1) {
+            _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
+            addToUndoAndReplaceCursor();
         }
     }
 
