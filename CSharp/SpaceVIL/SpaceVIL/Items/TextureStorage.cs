@@ -648,8 +648,12 @@ namespace SpaceVIL
             GetTextLine(cursorPos.Y).SetItemText(text); //_linesList[lineY].SetItemText(text);
             if (CheckIsWrap())
             {
+                SpaceVIL.Core.Point newPos = WrapCursorPosToReal(cursorPos);
                 WrapLine(cursorPos.Y);
-                SpaceVIL.Core.Point newPos = FindNewPosition(cursorPos);
+                // SpaceVIL.Core.Point newPos = FindNewPosition(cursorPos);
+                // cursorPos.X = newPos.X;
+                // cursorPos.Y = newPos.Y;
+                newPos = RealCursorPosToWrap(newPos);
                 cursorPos.X = newPos.X;
                 cursorPos.Y = newPos.Y;
             }

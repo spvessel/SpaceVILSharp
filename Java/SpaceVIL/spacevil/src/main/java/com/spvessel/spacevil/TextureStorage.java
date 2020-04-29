@@ -552,8 +552,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     void setTextInLine(String text, Point cursorPos) { //int lineY) {
         getTextLine(cursorPos.y).setItemText(text); //_linesList.get(lineY).setItemText(text);
         if (checkIsWrap()) {
+            Point newPos = wrapCursorPosToReal(cursorPos);
             wrapLine(cursorPos.y);
-            Point newPos = findNewPosition(cursorPos);
+//            Point newPos = findNewPosition(cursorPos);
+//            cursorPos.x = newPos.x;
+//            cursorPos.y = newPos.y;
+            newPos = realCursorPosToWrap(newPos);
             cursorPos.x = newPos.x;
             cursorPos.y = newPos.y;
         }
