@@ -662,7 +662,6 @@ namespace SpaceVIL
             if (!ogllRoot.IsInitialized())
                 ogllRoot.Initialize();
 
-
             IBaseItem oglItem = ogllRoot as IBaseItem;
             if (oglItem == null)
                 return;

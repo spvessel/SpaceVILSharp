@@ -390,6 +390,26 @@ public class ComboBox extends Prototype {
         return dropDownArea.getCurrentIndex();
     }
 
+    /**
+     * Getting current selected item in DropDown list.
+     * 
+     * @return Current selected item as
+     *         com.spvessel.spacevil.Core.InterfaceBaseItem.
+     */
+    public InterfaceBaseItem getSelectedItem() {
+        return dropDownArea.getSelectedItem();
+    }
+
+    /**
+     * Getting all existing options (list of com.spvessel.spacevil.InterfaceBaseItem
+     * objects).
+     * 
+     * @return Options as List&lt;com.spvessel.spacevil.InterfaceBaseItem&gt;
+     */
+    public List<InterfaceBaseItem> getListContent() {
+        return dropDownArea.getListContent();
+    }
+
     private void onSelectionChanged() {
         selection.setText(dropDownArea.getText());
         selectionChanged.execute();

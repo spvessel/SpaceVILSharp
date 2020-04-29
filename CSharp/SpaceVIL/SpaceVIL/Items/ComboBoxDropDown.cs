@@ -61,6 +61,15 @@ namespace SpaceVIL
         }
 
         /// <summary>
+        /// Getting current selected item in ItemList.
+        /// </summary>
+        /// <returns>Current selected item as SpaceVIL.Core.IBaseItem.</returns>
+        public IBaseItem GetSelectedItem()
+        {
+            return ItemList.GetSelectedItem();
+        }
+
+        /// <summary>
         /// Selecting an option from the list at the specified index.
         /// </summary>
         /// <param name="index">Index of option in the list.</param>
@@ -117,9 +126,9 @@ namespace SpaceVIL
         public ComboBoxDropDown()
         {
             SetItemName("ComboBoxDropDown_" + count++);
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
             SetPassEvents(false);
             SetVisible(false);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
         }
 
         private EventMouseMethodState linkEventScrollUp = null;
@@ -174,8 +183,9 @@ namespace SpaceVIL
                 {
                     if (ItemList.GetSelection() != _selectionIndexStore)
                     {
-                        OnSelectionChanged();
                         _selectionIndexStore = ItemList.GetSelection();
+                        OnSelectionChanged();
+                        Console.WriteLine(_selectionIndexStore);
                     }
                 };
                 ItemList.GetArea().EventKeyPress += (sender, args) =>
@@ -202,7 +212,8 @@ namespace SpaceVIL
         private void OnSelectionChanged()
         {
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
-            if (selection != null) {
+            if (selection != null)
+            {
                 _textSelection = selection.GetText();
             }
             Hide();
@@ -219,9 +230,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Getting all existing options (list of SpaceVIL.MenuItem objects).
+        /// Getting all existing options (list of SpaceVIL.IBaseItem objects).
         /// </summary>
-        /// <returns>Options as List&lt;SpaceVIL.MenuItem&gt;</returns>
+        /// <returns>Options as List&lt;SpaceVIL.IBaseItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             return ItemList.GetListContent();

@@ -349,6 +349,24 @@ namespace SpaceVIL
         }
 
         /// <summary>
+        /// Getting current selected item in DropDown list.
+        /// </summary>
+        /// <returns>Current selected item as SpaceVIL.Core.IBaseItem.</returns>
+        public IBaseItem GetSelectedItem()
+        {
+            return DropDownArea.GetSelectedItem();
+        }
+
+        /// <summary>
+        /// Getting all existing options (list of SpaceVIL.IBaseItem objects).
+        /// </summary>
+        /// <returns>Options as List&lt;SpaceVIL.IBaseItem&gt;</returns>
+        public List<IBaseItem> GetListContent()
+        {
+            return DropDownArea.GetListContent();
+        }
+
+        /// <summary>
         /// Setting style of the ComboBox.
         /// <para/> Inner styles: "selection", "dropdownbutton", "arrow", "dropdownarea".
         /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
