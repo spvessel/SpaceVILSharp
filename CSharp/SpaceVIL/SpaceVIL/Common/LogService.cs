@@ -524,7 +524,7 @@ namespace SpaceVIL.Common
     }
 
     [Flags]
-    public enum LogProps
+    internal enum LogProps
     {
         None = 0x00,
         Geometry = 0x01,
