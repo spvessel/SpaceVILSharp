@@ -80,6 +80,16 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
+     * Getting current selected item in itemList.
+     * 
+     * @return Current selected item as
+     *         com.spvessel.spacevil.Core.InterfaceBaseItem.
+     */
+    public InterfaceBaseItem getSelectedItem() {
+        return itemList.getSelectedItem();
+    }
+
+    /**
      * Selecting an option from the list at the specified index.
      * 
      * @param index Index of option in the list.
@@ -226,8 +236,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             // itemList.getArea().selectionChanged.add(() -> onSelectionChanged());
             itemList.getArea().eventMouseClick.add((sender, args) -> {
                 if (itemList.getSelection() != _selectionIndexStore) {
-                    onSelectionChanged();
                     _selectionIndexStore = itemList.getSelection();
+                    onSelectionChanged();
                 }
             });
 
@@ -266,10 +276,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Getting all existing options (list of com.spvessel.spacevil.MenuItem
+     * Getting all existing options (list of com.spvessel.spacevil.InterfaceBaseItem
      * objects).
      * 
-     * @return Options as List&lt;com.spvessel.spacevil.MenuItem&gt;
+     * @return Options as List&lt;com.spvessel.spacevil.InterfaceBaseItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
         return itemList.getListContent();
