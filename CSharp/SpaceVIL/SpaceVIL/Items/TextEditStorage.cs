@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -54,13 +55,14 @@ namespace SpaceVIL
             count++;
 
             EventMousePress += OnMousePressed;
+            EventMouseClick += OnMouseClick;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
             EventScrollUp += OnScrollUp;
             EventScrollDown += OnScrollDown;
-            EventMouseDoubleClick += OnMouseDoubleClick;
+            // EventMouseDoubleClick += OnMouseDoubleClick;
 
             _cursorControlKeys = new HashSet<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };
             // InsteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
@@ -83,10 +85,74 @@ namespace SpaceVIL
                 _cursor.SetVisible(false);
         }
         
-        private void OnMouseDoubleClick(object sender, MouseArgs args)
+        private Stopwatch _startTime = new Stopwatch();
+        private bool _isDoubleClick = false;
+        private int _previousClickPos = 0;
+
+        private void OnMouseClick(object sender, MouseArgs args)
         {
-            if (args.Button == MouseButton.ButtonLeft)
-                SelectAll();
+            Monitor.Enter(textInputLock);
+            try
+            {
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    int savePos = _cursorPosition;
+                    if (IsPosSame())
+                    {
+                        if (_startTime.ElapsedMilliseconds < 500)
+                        {
+                            if (_isDoubleClick) //triple click here
+                            {
+                                SelectAll();
+
+                                _isDoubleClick = false;
+                            }
+                            else //if double click
+                            {
+                                int[] wordBounds = FindWordBounds();
+
+                                if (wordBounds[0] != wordBounds[1])
+                                {
+                                    _isSelect = true;
+                                    _selectFrom = wordBounds[0];
+                                    _selectTo = wordBounds[1];
+                                    _cursorPosition = _selectTo;
+                                    ReplaceCursor();
+                                    MakeSelectedArea();
+                                }
+
+                                _isDoubleClick = true;
+                            }
+                        }
+                        else
+                        {
+                            _isDoubleClick = false;
+                        }
+                    }
+                    else
+                    {
+                        _isDoubleClick = false;
+                    }
+
+                    _previousClickPos = savePos;
+                    _startTime.Restart();
+                }
+                else
+                {
+                    _isDoubleClick = false;
+                }
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
+        }
+
+        private bool IsPosSame()
+        {
+            int tol = 5;
+            return ((_cursorPosition - tol <= _previousClickPos) && 
+                (_previousClickPos <= _cursorPosition + tol));
         }
 
         private void OnMousePressed(object sender, MouseArgs args)

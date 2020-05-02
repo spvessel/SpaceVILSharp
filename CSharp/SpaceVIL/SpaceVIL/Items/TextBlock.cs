@@ -77,10 +77,6 @@ namespace SpaceVIL
             _isWrapText = false;
         }
 
-        private Stopwatch _startTime = new Stopwatch();
-        private bool _isDoubleClick = false;
-        private SpaceVIL.Core.Point _previousClickPos = new SpaceVIL.Core.Point();
-
         private void OnMousePressed(object sender, MouseArgs args)
         {
             Monitor.Enter(_textureStorage.textInputLock);
@@ -101,6 +97,10 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
+
+        private Stopwatch _startTime = new Stopwatch();
+        private bool _isDoubleClick = false;
+        private SpaceVIL.Core.Point _previousClickPos = new SpaceVIL.Core.Point();
 
         private void OnMouseClick(object sender, MouseArgs args)
         {
@@ -165,45 +165,6 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
-
-        // private void OnDoubleClick(object sender, MouseArgs args)
-        // {
-        //     Monitor.Enter(_textureStorage.textInputLock);
-        //     try
-        //     {
-        //         if (args.Button == MouseButton.ButtonLeft)
-        //         {
-        //             ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
-        //             if (_isSelect)
-        //             {
-        //                 UnselectText();
-        //                 CancelJustSelected();
-        //             }
-        //             int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
-
-        //             if (wordBounds[0] != wordBounds[1])
-        //             {
-        //                 _isSelect = true;
-        //                 _selectFrom = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
-        //                 _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
-        //                 _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
-        //                 ReplaceCursor();
-        //                 MakeSelectedArea();
-        //             }
-
-        //             _startTime.Restart();
-        //             _isDoubleClick = true;
-        //         }
-        //         else
-        //         {
-        //             _isDoubleClick = false;
-        //         }
-        //     }
-        //     finally
-        //     {
-        //         Monitor.Exit(_textureStorage.textInputLock);
-        //     }
-        // }
 
         private bool IsPosSame()
         {

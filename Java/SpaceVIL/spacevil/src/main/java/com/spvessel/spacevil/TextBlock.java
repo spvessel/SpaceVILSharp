@@ -79,11 +79,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
         _isWrapText = false;
     }
-
-    private long _startTime = 0;
-    private boolean _isDoubleClick = false;
-    private Point _previousClickPos = new Point();
-
+    
     private void onMousePressed(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
@@ -94,12 +90,15 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                     cancelJustSelected();
                 }
             }
-
         } finally {
             _textureStorage.textInputLock.unlock();
         }
     }
-
+    
+    private long _startTime = 0;
+    private boolean _isDoubleClick = false;
+    private Point _previousClickPos = new Point();
+    
     private void onMouseClick(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
@@ -147,32 +146,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             _textureStorage.textInputLock.unlock();
         }
     }
-
-    // private void onDoubleClick(Object sender, MouseArgs args) {
-    //     _textureStorage.textInputLock.lock();
-    //     try {
-    //         if (args.button == MouseButton.BUTTON_LEFT) {
-
-    //             int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
-
-    //             if (wordBounds[0] != wordBounds[1]) {
-    //                 _isSelect = true;
-    //                 _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
-    //                 _selectTo = new Point(wordBounds[1], _cursorPosition.y);
-    //                 _cursorPosition = new Point(_selectTo);
-    //                 replaceCursor();
-    //                 makeSelectedArea();
-    //             }
-
-    //             _startTime = System.nanoTime();
-    //             _isDoubleClick = true;
-    //         } else {
-    //             _isDoubleClick = false;
-    //         }
-    //     } finally {
-    //         _textureStorage.textInputLock.unlock();
-    //     }
-    // }
 
     private boolean isPosSame() {
         Point pos1 = new Point(_cursorPosition);

@@ -56,13 +56,14 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         count++;
 
         eventMousePress.add(this::onMousePressed);
+        eventMouseClick.add(this::onMouseClick);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);
         eventTextInput.add(this::onTextInput);
         eventScrollUp.add(this::onScrollUp);
         eventScrollDown.add(this::onScrollDown);
-        eventMouseDoubleClick.add(this::onMouseDoubleClick);
+        // eventMouseDoubleClick.add(this::onMouseDoubleClick);
 
         _cursorControlKeys = new HashSet<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
         // InsteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
@@ -88,10 +89,57 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         }
     }
 
-    private void onMouseDoubleClick(Object sender, MouseArgs args) {
-        if (args.button == MouseButton.BUTTON_LEFT) {
-            selectAll();
+    private long _startTime = 0;
+    private boolean _isDoubleClick = false;
+    private int _previousClickPos = 0;
+
+    private void onMouseClick(Object sender, MouseArgs args) {
+        textInputLock.lock();
+        try {
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                int savePos = _cursorPosition;
+                if (isPosSame()) {
+                    if ((System.nanoTime() - _startTime) / 1000000 < 500) {
+                        if (_isDoubleClick) { //triple click here
+                            selectAll();
+
+                            _isDoubleClick = false;
+                        } else { //if double click
+                            int[] wordBounds = findWordBounds();
+
+                            if (wordBounds[0] != wordBounds[1]) {
+                                _isSelect = true;
+                                _selectFrom = wordBounds[0];
+                                _selectTo = wordBounds[1];
+                                _cursorPosition = _selectTo;
+                                replaceCursor();
+                                makeSelectedArea();
+                            }
+
+                            _isDoubleClick = true;
+                        }
+
+                    } else {
+                        _isDoubleClick = false;
+                    }
+                } else {
+                    _isDoubleClick = false;
+                }
+
+                _previousClickPos = savePos;
+                _startTime = System.nanoTime();
+            } else {
+                _isDoubleClick = false;
+            }
+        } finally {
+            textInputLock.unlock();
         }
+    }
+
+    private boolean isPosSame() {
+        int tol = 5;
+        return ((_cursorPosition - tol <= _previousClickPos) && 
+            (_previousClickPos <= _cursorPosition + tol));
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
