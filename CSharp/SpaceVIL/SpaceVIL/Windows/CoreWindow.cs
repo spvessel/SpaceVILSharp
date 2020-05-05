@@ -819,6 +819,23 @@ namespace SpaceVIL
             IsHidden = value;
         }
 
+        private bool _isMinimized = false;
+
+        /// <summary>
+        /// Return True if the current window is minimized or otherwise returns False.
+        /// <para/>Default: False.
+        /// </summary>
+        /// <returns>True: window is minimized. False: window is NOT minimized.</returns>
+        public bool IsMinimized()
+        {
+            return _isMinimized;
+        }
+
+        internal void SetMinimized(bool value)
+        {
+            _isMinimized = value;
+        }
+
         /// <summary>
         /// Lets to set the rendering frequency.
         /// Default: SpaceVIL.Core.RedrawFrequency.Low

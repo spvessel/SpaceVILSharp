@@ -89,8 +89,8 @@ namespace SpaceVIL
 
             if (_window == 0)
             {
-                LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
-                throw new SpaceVILException("SpaceVILException: Create window fail - " + GetCoreWindow().GetWindowTitle());
+                // LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
+                throw new SpaceVILException("Create window fail - " + GetCoreWindow().GetWindowTitle());
             }
 
             WindowManager.SetContextCurrent(_coreWindow);

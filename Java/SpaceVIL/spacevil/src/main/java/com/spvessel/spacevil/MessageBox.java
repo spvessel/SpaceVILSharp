@@ -1,7 +1,6 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -13,25 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * MessageBox - a modal window for displaying any messages with ability to reply to them. 
- * It supports custom toolbar to make user's reply flexible.
+ * MessageBox - a modal window for displaying any messages with ability to reply
+ * to them. It supports custom toolbar to make user's reply flexible.
  */
 public class MessageBox extends DialogWindow {
-    /**
-     * An event to describe the actions that must be performed after the window is closed.
-     * <p> Event type: com.spvessel.spacevil.Core.EventCommonMethod.
-     * <p> Function arguments: none.
-     */
-    public EventCommonMethod onCloseDialog = new EventCommonMethod();
-
     static int count = 0;
 
     private boolean _result = false;
 
     /**
      * Get MessageBox boolean result
-     * <p> Default: False
-     * @return True: OK button was clicked. False: Close button or Cancel button was clicked.
+     * <p>
+     * Default: False
+     * 
+     * @return True: OK button was clicked. False: Close button or Cancel button was
+     *         clicked.
      */
     public boolean getResult() {
         return _result;
@@ -42,6 +37,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting result from custom toolbar (if it was created).
+     * 
      * @return Id of clicked button (see addUserButton(ButtonCore button, int id)).
      */
     public int getUserButtonResult() {
@@ -58,7 +54,9 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting OK button for appearance customizing or assigning new actions.
-     * @return MessageBox's OK button as MessageBox's OK button as com.spvessel.spacevil.ButtonCore.
+     * 
+     * @return MessageBox's OK button as MessageBox's OK button as
+     *         com.spvessel.spacevil.ButtonCore.
      */
     public ButtonCore getOkButton() {
         return _okButton;
@@ -68,6 +66,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting CANCEL button for appearance customizing or assigning new actions.
+     * 
      * @return MessageBox's CANCEL button as com.spvessel.spacevil.ButtonCore.
      */
     public ButtonCore getCancelButton() {
@@ -104,8 +103,9 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Constructs a MessageBox with specified message and title.
+     * 
      * @param message Message to a user as java.lang.String.
-     * @param title Title of MessageBox as java.lang.String.
+     * @param title   Title of MessageBox as java.lang.String.
      */
     public MessageBox(String message, String title) {
         this();
@@ -116,6 +116,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Setting a text of message of MessageBox.
+     * 
      * @param text Text of message as java.lang.String.
      */
     public void setMessageText(String text) {
@@ -124,6 +125,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting the current text of message of MessageBox.
+     * 
      * @return The current text of message as java.lang.String.
      */
     public String getMessageText() {
@@ -132,6 +134,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Setting a text of title of MessageBox.
+     * 
      * @param title Text of title as java.lang.String.
      */
     public void setTitle(String title) {
@@ -140,6 +143,7 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Getting the current text of title of MessageBox.
+     * 
      * @return The current text of title as java.lang.String.
      */
     public String getTitle() {
@@ -247,7 +251,7 @@ public class MessageBox extends DialogWindow {
     @Override
     public void close() {
         super.close();
-        
+
         if (onCloseDialog != null) {
             onCloseDialog.execute();
         }
@@ -257,8 +261,9 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Adding a custom user button to toolbal with the specified ID.
+     * 
      * @param button User button as com.spvessel.spacevil.ButtonCore.
-     * @param id Button's ID as integer value.
+     * @param id     Button's ID as integer value.
      */
     public void addUserButton(ButtonCore button, int id) {
         if (id == -1 || id == 0 || id == 1) {
@@ -282,8 +287,11 @@ public class MessageBox extends DialogWindow {
     private Style _btnStyle = null;
 
     /**
-     * Getting the current style of a custom user button (that placed into user's toolbar).
-     * @return The current style of custom user button as com.spvessel.spacevil.Decorations.Style.
+     * Getting the current style of a custom user button (that placed into user's
+     * toolbar).
+     * 
+     * @return The current style of custom user button as
+     *         com.spvessel.spacevil.Decorations.Style.
      */
     public Style getDialogButtonStyle() {
         return _btnStyle;
@@ -291,7 +299,9 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Setting a style for a custom user button (that placed into user's toolbar).
-     * @param style A style for custom user button as com.spvessel.spacevil.Decorations.Style.
+     * 
+     * @param style A style for custom user button as
+     *              com.spvessel.spacevil.Decorations.Style.
      */
     public void setDialogButtonStyle(Style style) {
         _btnStyle = style;
@@ -299,42 +309,46 @@ public class MessageBox extends DialogWindow {
 
     /**
      * Setting a style for entire MessageBox.
-     * <p> Inner styles: "window", "message", "layout", "toolbar", "userbar" (custom toolbar), "button".
-     * @param style A style for MessageBox as com.spvessel.spacevil.Decorations.Style.
+     * <p>
+     * Inner styles: "window", "message", "layout", "toolbar", "userbar" (custom
+     * toolbar), "button".
+     * 
+     * @param style A style for MessageBox as
+     *              com.spvessel.spacevil.Decorations.Style.
      */
     public void setStyle(Style style) {
         if (style == null) {
             return;
         }
-        
-        Style inner_style = style.getInnerStyle("window");
-        if (inner_style != null) {
-            getLayout().getContainer().setStyle(inner_style);
-            setMinSize(inner_style.minWidth, inner_style.minHeight);
-            setSize(inner_style.width, inner_style.height);
+
+        Style innerStyle = style.getInnerStyle("window");
+        if (innerStyle != null) {
+            getLayout().getContainer().setStyle(innerStyle);
+            setMinSize(innerStyle.minWidth, innerStyle.minHeight);
+            setSize(innerStyle.width, innerStyle.height);
         }
 
-        inner_style = style.getInnerStyle("message");
-        if (inner_style != null) {
-            _msgLabel.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("message");
+        if (innerStyle != null) {
+            _msgLabel.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("layout");
-        if (inner_style != null) {
-            _msgLayout.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("layout");
+        if (innerStyle != null) {
+            _msgLayout.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("toolbar");
-        if (inner_style != null) {
-            _toolbar.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("toolbar");
+        if (innerStyle != null) {
+            _toolbar.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("userbar");
-        if (inner_style != null) {
-            _userbar.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("userbar");
+        if (innerStyle != null) {
+            _userbar.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("button");
-        if (inner_style != null) {
-            _btnStyle = inner_style.clone();
-            _okButton.setStyle(inner_style);
-            _cancel.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("button");
+        if (innerStyle != null) {
+            _btnStyle = innerStyle.clone();
+            _okButton.setStyle(innerStyle);
+            _cancel.setStyle(innerStyle);
         }
     }
 }

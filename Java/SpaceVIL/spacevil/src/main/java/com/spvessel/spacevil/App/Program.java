@@ -46,7 +46,7 @@ public class Program {
 
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class, getTextEditStyle());
 
-//        MainWindow mw = new MainWindow();
+       MainWindow mw = new MainWindow();
         // mw.setPosition(500, 500);
 
         // SettingsTest st = new SettingsTest();
@@ -83,7 +83,7 @@ public class Program {
         System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
 
         WindowManager.startWith(
-//                mw
+               mw
                 // dw
                 // , mw2
                 // st
@@ -91,7 +91,7 @@ public class Program {
                 // ft
                 // lt
                 // ct
-                 it
+                //  it
                 // tt
                 // con
                 // sat

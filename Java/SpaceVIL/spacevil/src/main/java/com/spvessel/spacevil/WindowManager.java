@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import java.util.Map;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -16,8 +17,10 @@ import com.spvessel.spacevil.Flags.RenderType;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * WindowManager is a static class that is designed to manage instances of a window and entire application. 
- * Provides control for changing render frequency, render type, vertical sync, adding/closing windows, exiting the app and more.
+ * WindowManager is a static class that is designed to manage instances of a
+ * window and entire application. Provides control for changing render
+ * frequency, render type, vertical sync, adding/closing windows, exiting the
+ * app and more.
  */
 public final class WindowManager {
 
@@ -34,15 +37,22 @@ public final class WindowManager {
     private static RedrawFrequency _frequency = RedrawFrequency.LOW;
 
     /**
-     * Setting the frequency of redrawing scene in idle state. 
-     * The higher the level, the more computer resources are used. 
-     * Default: SpaceVIL.Core.RedrawFrequency.Low
-     * <p>Can be: 
-     * <p>VERY_LOW - 1 frame per second, 
-     * <p>LOW - up to 10 frames per second, 
-     * <p>MEDIUM - up to 30 frames per second,
-     * <p>HIGH - up to 60 frames per second,
-     * <p>ULTRA - up to 120 frames per second,
+     * Setting the frequency of redrawing scene in idle state. The higher the level,
+     * the more computer resources are used. Default:
+     * SpaceVIL.Core.RedrawFrequency.Low
+     * <p>
+     * Can be:
+     * <p>
+     * VERY_LOW - 1 frame per second,
+     * <p>
+     * LOW - up to 10 frames per second,
+     * <p>
+     * MEDIUM - up to 30 frames per second,
+     * <p>
+     * HIGH - up to 60 frames per second,
+     * <p>
+     * ULTRA - up to 120 frames per second,
+     * 
      * @param value A frequency level as com.spvessel.spacevil.Flags.RedrawFrequency
      */
     public static void setRenderFrequency(RedrawFrequency value) {
@@ -67,7 +77,7 @@ public final class WindowManager {
             _lock.unlock();
         }
     }
-    
+
     private static float getCurrentFrequency() {
         _lock.lock();
         try {
@@ -80,10 +90,12 @@ public final class WindowManager {
             _lock.unlock();
         }
     }
-    
+
     /**
      * Getting the current render frequency.
-     * @return The current render frequency as com.spvessel.spacevil.Flags.RedrawFrequency.
+     * 
+     * @return The current render frequency as
+     *         com.spvessel.spacevil.Flags.RedrawFrequency.
      */
     public static RedrawFrequency getRenderFrequency() {
         _lock.lock();
@@ -102,10 +114,11 @@ public final class WindowManager {
     private static int _vsync = 1;
 
     /**
-     * Setting the vsync value. If value is 0 - vsync is OFF, if other value - vsync is ON. 
-     * The total amount of FPS calculated by the formula: 1.0 / Math.Abs(value) * DisplayRefreshRate, 
-     * so if value is 2 (or -2) and dysplay refresh rate is 60 then 1.0 / 2 * 60 = 30 fps.
-     * Default: 1 - ENABLE.
+     * Setting the vsync value. If value is 0 - vsync is OFF, if other value - vsync
+     * is ON. The total amount of FPS calculated by the formula: 1.0 /
+     * Math.Abs(value) * DisplayRefreshRate, so if value is 2 (or -2) and dysplay
+     * refresh rate is 60 then 1.0 / 2 * 60 = 30 fps. Default: 1 - ENABLE.
+     * 
      * @param value Value of vsync.
      */
     public static void enableVSync(int value) {
@@ -116,10 +129,11 @@ public final class WindowManager {
     }
 
     /**
-     * Getting the current vsync value. If value is 0 - vsync is OFF, if other value - vsync is ON. 
-     * The total amount of FPS calculated by the formula: 1.0 / Math.Abs(value) * DisplayRefreshRate, 
-     * so if value is 2 (or -2) and dysplay refresh rate is 60 then 1.0 / 2 * 60 = 30 fps.
-     * Default: 1 - ENABLE.
+     * Getting the current vsync value. If value is 0 - vsync is OFF, if other value
+     * - vsync is ON. The total amount of FPS calculated by the formula: 1.0 /
+     * Math.Abs(value) * DisplayRefreshRate, so if value is 2 (or -2) and dysplay
+     * refresh rate is 60 then 1.0 / 2 * 60 = 30 fps. Default: 1 - ENABLE.
+     * 
      * @return The current vsync value
      */
     public static int getVSyncValue() {
@@ -128,12 +142,18 @@ public final class WindowManager {
 
     /**
      * Setting the common render type. Default: SpaceVIL.Core.RenderType.Periodic.
-     * <p> Can be:
-     * <p> IfNeeded - the scene is redrawn only if any input event occurs (mouse move, mouse click, 
-     * keyboard key press, window resizing and etc.), 
-     * <p> Periodic - the scene is redrawn according to the current render frequency type 
-     * (See SetRenderFrequency(type)) in idle and every time when any input event occurs, 
-     * <p> Always - the scene is constantly being redrawn.
+     * <p>
+     * Can be:
+     * <p>
+     * IfNeeded - the scene is redrawn only if any input event occurs (mouse move,
+     * mouse click, keyboard key press, window resizing and etc.),
+     * <p>
+     * Periodic - the scene is redrawn according to the current render frequency
+     * type (See SetRenderFrequency(type)) in idle and every time when any input
+     * event occurs,
+     * <p>
+     * Always - the scene is constantly being redrawn.
+     * 
      * @param value A render type as com.spvessel.spacevil.Flags.RenderType.
      */
     public static void setRenderType(RenderType value) {
@@ -170,7 +190,9 @@ public final class WindowManager {
     private static boolean _isEmpty = true;
 
     /**
-     * Adding a window to rendering queue. After adding the window shows up immediately.
+     * Adding a window to rendering queue. After adding the window shows up
+     * immediately.
+     * 
      * @param wnd Any CoreWindow instance.
      */
     public static void addWindow(CoreWindow wnd) {
@@ -204,6 +226,7 @@ public final class WindowManager {
 
     /**
      * Closing the specified window if it exist in render queue.
+     * 
      * @param wnd Any CoreWindow instance.
      */
     public static void closeWindow(CoreWindow wnd) {
@@ -222,9 +245,16 @@ public final class WindowManager {
     private static EventCommonMethod waitfunc = new EventCommonMethod();
 
     private static void run() {
+        List<CoreWindow> initFailed = new ArrayList<>();
         for (CoreWindow wnd : _windows) {
-            initWindow(wnd);
+            if (!initWindow(wnd))
+                initFailed.add(wnd);
         }
+        for (CoreWindow wnd : initFailed) {
+            _windows.remove(wnd);
+        }
+        _isEmpty = _windows.isEmpty();
+
         if (waitfunc.size() == 0) {
             waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
         }
@@ -262,22 +292,26 @@ public final class WindowManager {
     private static void verifyToInitWindows() {
         while (!_listWaitigForInit.isEmpty()) {
             CoreWindow wnd = _listWaitigForInit.pollFirst();
-            initWindow(wnd);
-            _windows.add(wnd);
-        }
-    }
-
-    private static void initWindow(CoreWindow wnd) {
-        if (!_initializedWindows.containsKey(wnd)) {
-            if (wnd.initEngine()) {
-                _initializedWindows.put(wnd, true);
-                wnd.eventOnStart.execute();
+            if (initWindow(wnd)) {
+                _windows.add(wnd);
             }
         }
     }
 
+    private static boolean initWindow(CoreWindow wnd) {
+        if (!_initializedWindows.containsKey(wnd)) {
+            if (wnd.initEngine()) {
+                _initializedWindows.put(wnd, true);
+                wnd.eventOnStart.execute();
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Launching the applications and showing all specified windows.
+     * 
      * @param windows A sequence of any amount of CoreWindow instances.
      */
     public static void startWith(CoreWindow... windows) {
@@ -288,7 +322,8 @@ public final class WindowManager {
     }
 
     /**
-     * Exiting the current application. All windows will be closed and all their eventClose will be executed.
+     * Exiting the current application. All windows will be closed and all their
+     * eventClose will be executed.
      */
     public static void appExit() {
         _lock.lock();

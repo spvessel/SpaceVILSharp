@@ -9,6 +9,8 @@ namespace SpaceVIL.Core
     public class SpaceVILException : Exception
     {
         public SpaceVILException() { }
-        public SpaceVILException(string message) : base(message) { }
+        public SpaceVILException(string message) :
+            base("SpaceVILException: " + message)
+        { }
     }
 }

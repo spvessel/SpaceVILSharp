@@ -12,13 +12,6 @@ namespace SpaceVIL
     /// </summary>
     public class MessageBox : DialogWindow
     {
-        /// <summary>
-        /// An event to describe the actions that must be performed after the window is closed.
-        /// <para/> Event type: SpaceVIL.EventCommonMethod.
-        /// <para/> Function arguments: none.
-        /// </summary>
-        public EventCommonMethod OnCloseDialog;
-
         static int count = 0;
 
         private bool _result = false;
@@ -155,6 +148,8 @@ namespace SpaceVIL
 
         /// <summary>
         /// Initialize MessageBox window.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitWindow()
         {
@@ -344,21 +339,25 @@ namespace SpaceVIL
             {
                 _msgLabel.SetStyle(innerStyle);
             }
+            
             innerStyle = style.GetInnerStyle("layout");
             if (innerStyle != null)
             {
                 _msgLayout.SetStyle(innerStyle);
             }
+
             innerStyle = style.GetInnerStyle("toolbar");
             if (innerStyle != null)
             {
                 _toolbar.SetStyle(innerStyle);
             }
+
             innerStyle = style.GetInnerStyle("userbar");
             if (innerStyle != null)
             {
                 _userbar.SetStyle(innerStyle);
             }
+
             innerStyle = style.GetInnerStyle("button");
             if (innerStyle != null)
             {

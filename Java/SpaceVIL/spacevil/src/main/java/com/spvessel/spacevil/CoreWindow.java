@@ -906,6 +906,23 @@ public abstract class CoreWindow {
         isHidden = value;
     }
 
+    private boolean _isMinimized = false;
+
+    /**
+     * Return True if the current window is minimized or otherwise returns False.
+     * <p>
+     * Default: False.
+     * 
+     * @return True: window is minimized. False: window is NOT minimized.
+     */
+    public boolean isMinimized() {
+        return _isMinimized;
+    }
+
+    void setMinimized(boolean value) {
+        _isMinimized = value;
+    }
+
     /**
      * Lets to set the rendering frequency. Default:
      * com.spvessel.spacevil.Flags.RedrawFrequency.Low

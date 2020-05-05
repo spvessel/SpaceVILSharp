@@ -185,7 +185,6 @@ namespace SpaceVIL
                     {
                         _selectionIndexStore = ItemList.GetSelection();
                         OnSelectionChanged();
-                        Console.WriteLine(_selectionIndexStore);
                     }
                 };
                 ItemList.GetArea().EventKeyPress += (sender, args) =>

@@ -96,7 +96,13 @@ final class WindowProcessor {
     void minimizeWindow() {
         _commonProcessor.inputLocker = true;
         _commonProcessor.events.setEvent(InputEventType.WINDOW_MINIMIZE);
-        glfwIconifyWindow(_commonProcessor.handler.getWindowId());
+        if (!_commonProcessor.window.isMinimized()) {
+            glfwIconifyWindow(_commonProcessor.handler.getWindowId());
+            _commonProcessor.window.setMinimized(true);
+        } else {
+            glfwRestoreWindow(_commonProcessor.handler.getWindowId());
+            _commonProcessor.window.setMinimized(false);
+        }
         _commonProcessor.inputLocker = false;
     }
 
@@ -165,7 +171,7 @@ final class WindowProcessor {
             } else {
                 _commonProcessor.window.setFocus(value);
                 _commonProcessor.handler.focused = value;
-                
+
                 if (_commonProcessor.window.isOutsideClickClosable) {
                     _commonProcessor.resetItems();
                     _commonProcessor.window.close();

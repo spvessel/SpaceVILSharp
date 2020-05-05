@@ -77,7 +77,17 @@ namespace SpaceVIL
         {
             _commonProcessor.InputLocker = true;
             _commonProcessor.Events.SetEvent(InputEventType.WindowMinimize);
-            Glfw.IconifyWindow(_commonProcessor.Handler.GetWindowId());
+            if (!_commonProcessor.Window.IsMinimized())
+            {
+                Glfw.IconifyWindow(_commonProcessor.Handler.GetWindowId());
+                _commonProcessor.Window.SetMinimized(true);
+            }
+            else
+            {
+                Glfw.RestoreWindow(_commonProcessor.Handler.GetWindowId());
+                _commonProcessor.Window.SetMinimized(false);
+            }
+
             _commonProcessor.InputLocker = false;
         }
 
@@ -161,7 +171,7 @@ namespace SpaceVIL
                 {
                     _commonProcessor.Window.SetFocus(value);
                     _commonProcessor.Handler.Focused = value;
-                    
+
                     if (_commonProcessor.Window.IsOutsideClickClosable)
                     {
                         _commonProcessor.ResetItems();

@@ -98,22 +98,46 @@ public class FlowTest extends ActiveWindow {
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(this);
-            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
-            ButtonCore btnDontSave = new ButtonCore("Do not save");
-            btnDontSave.eventMouseClick.add((s, a) -> {
-                System.out.println("btnDontSave is chosen");
-            });
-            msg.addUserButton(btnDontSave, 2); // id must be > 1
-            msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-            });
-            msg.show(this);
+            // MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            // ButtonCore btnDontSave = new ButtonCore("Do not save");
+            // btnDontSave.eventMouseClick.add((s, a) -> {
+            // System.out.println("btnDontSave is chosen");
+            // });
+            // msg.addUserButton(btnDontSave, 2); // id must be > 1
+            // msg.onCloseDialog.add(() -> {
+            // System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+            // });
+            // msg.show(this);
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(this);
 
+            // InputBox ib = new InputBox("Enter password", "Enter");
+            // ib.onCloseDialog.add(() -> {
+            // System.out.println(ib.getResult());
+            // });
+            // ib.show();
+
             // LoadingScreen ls = new LoadingScreen();
             // ls.show(this);
+
+            // 1.
+            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
+            opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg");
+            opd.onCloseDialog.add(() -> {
+                System.out.println("Result? " + opd.getResult());
+            });
+            // opd.SetDefaultPath("D:\\");
+            opd.show(this);
+
+            // 2.
+            // OpenEntryBox opd = new OpenEntryBox("Open File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
+            // opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg");
+            // opd.onCloseDialog.add(() -> {
+            //     System.out.println("Result? " + opd.getResult());
+            // });
+            // opd.setDefaultPath("D:\\");
+            // opd.show();
         });
         // btn1.setCustomFigure(new CustomFigure(false,
         // GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));

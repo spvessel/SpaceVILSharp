@@ -187,7 +187,7 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
                 GLWHandler.ClearEventsCallbacks();
                 if (GLWHandler.GetWindowId() == 0)
                     GLWHandler.Destroy();
