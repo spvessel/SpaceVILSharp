@@ -11,7 +11,7 @@ import com.spvessel.spacevil.HorizontalStack;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.Prototype;
 import com.spvessel.spacevil.Core.EventCommonMethod;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
@@ -68,7 +68,7 @@ public class HistoryRecordItem extends Prototype {
 
         removeBtn.setBackground(120, 120, 120);
         removeBtn.setSize(10, 10);
-        removeBtn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
+        removeBtn.setCustomFigure(new Figure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
         removeBtn.addItemState(ItemStateType.HOVERED, new ItemState(new Color(232, 120, 120)));
 
         removeBtn.eventMouseClick.add((sender, args) -> remove());

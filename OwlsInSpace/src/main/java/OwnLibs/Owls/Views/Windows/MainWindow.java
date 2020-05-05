@@ -84,11 +84,11 @@ public class MainWindow extends ActiveWindow {
                 // right scaling
                 int windowWidth = 1300, windowHeight = 800;
                 Scale displayScale = DisplayService.getDisplayDpiScale();
-                int displayWidth = (int) (DisplayService.getDisplayWidth() * displayScale.getX());
-                int displayHeight = (int) (DisplayService.getDisplayHeight() * displayScale.getX());
-                if (windowWidth * displayScale.getX() > displayWidth)
+                int displayWidth = (int) (DisplayService.getDisplayWidth() * displayScale.getXScale());
+                int displayHeight = (int) (DisplayService.getDisplayHeight() * displayScale.getYScale());
+                if (windowWidth * displayScale.getXScale() > displayWidth)
                         windowWidth = (int) (windowWidth * 0.68);
-                if (windowHeight * displayScale.getY() > displayHeight)
+                if (windowHeight * displayScale.getYScale() > displayHeight)
                         windowHeight = (int) (windowHeight * 0.74);
 
                 setParameters("OwlWindow", "OwlWindow", windowWidth, windowHeight, false);
@@ -206,10 +206,10 @@ public class MainWindow extends ActiveWindow {
                 leftArea.setPadding(0, 0, 0, 0);
                 filesTree = new TreeView();
                 vSplitArea.assignLeftItem(leftArea); // treeStack);
-                filesTree.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                filesTree.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
                 // filesTree.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
                 filesTree.vScrollBar.setStyle(ElementsFactory.getVScrollBarStyle());
-                filesTree.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                filesTree.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
                 filesTree.hScrollBar.setStyle(ElementsFactory.getHScrollBarStyle());
                 filesTree.disableMenu(true);
                 filesTree.menu.setDrawable(false);
@@ -240,7 +240,7 @@ public class MainWindow extends ActiveWindow {
 
                 // codeArea = new TextArea();
                 workTabArea = new TabView();
-                workTabArea.setContentPolicy(SizePolicy.EXPAND);
+                workTabArea.setTabPolicy(SizePolicy.EXPAND);
                 homePage = new HomePage();
 
                 // codeVStack.addItems(kwFrame, codeArea);
@@ -254,8 +254,8 @@ public class MainWindow extends ActiveWindow {
 
                 // codeArea.setStyle(ElementsFactory.getTextAreaStyle());
                 // codeArea.setEditable(false);
-                // codeArea.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-                // codeArea.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                // codeArea.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+                // codeArea.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
                 // codeArea.disableMenu(true);
                 // codeArea.menu.setDrawable(false);
 
@@ -391,8 +391,8 @@ public class MainWindow extends ActiveWindow {
                 ElementsFactory.setButtonImage(backBtn, DefaultsService.getDefaultImage(EmbeddedImage.ARROW_LEFT,
                                 EmbeddedImageSize.SIZE_32X32));
                 kwResultsListBox.setVisible(false);
-                kwResultsListBox.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-                kwResultsListBox.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                kwResultsListBox.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+                kwResultsListBox.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
 
                 kwResultsListBox.eventMouseDoubleClick.add((s, a) -> {
                         InterfaceBaseItem selected = kwResultsListBox.getSelectedItem();

@@ -12,18 +12,22 @@ namespace SpaceVIL
     internal sealed class GLWHandler
     {
         ///////////////////////////////////////////////
-        Glfw.WindowSizeFunc ResizeCallback;
         Glfw.CursorPosFunc MouseMoveCallback;
         Glfw.MouseButtonFunc MouseClickCallback;
         Glfw.ScrollFunc MouseScrollCallback;
-        Glfw.WindowCloseFunc WindowCloseCallback;
-        Glfw.WindowPosFunc WindowPosCallback;
+
         Glfw.KeyFunc KeyPressCallback;
         Glfw.CharModsFunc KeyInputText;
+
+        Glfw.WindowCloseFunc WindowCloseCallback;
+        Glfw.WindowPosFunc WindowPosCallback;
         Glfw.WindowFocusFunc WindowFocusCallback;
-        Glfw.FramebufferSizeFunc FramebufferCallback;
+        Glfw.WindowSizeFunc WindowResizeCallback;
         Glfw.WindowRefreshFunc WindowRefreshCallback;
+        Glfw.WindowIconifyFunc WindowIconifyCallback;
+
         Glfw.DropFunc DropCallback;
+        Glfw.FramebufferSizeFunc FramebufferCallback;
         Glfw.WindowContentScaleFunc ContentScaleCallback;
         ///////////////////////////////////////////////
 
@@ -162,11 +166,12 @@ namespace SpaceVIL
             WindowCloseCallback = null;
             WindowPosCallback = null;
             WindowFocusCallback = null;
-            ResizeCallback = null;
+            WindowResizeCallback = null;
             FramebufferCallback = null;
             WindowRefreshCallback = null;
             DropCallback = null;
             ContentScaleCallback = null;
+            WindowIconifyCallback = null;
         }
 
         internal void SetCursorType(EmbeddedCursor type)
@@ -256,8 +261,8 @@ namespace SpaceVIL
         }
         internal void SetCallbackResize(Glfw.WindowSizeFunc function)
         {
-            ResizeCallback = function;
-            Glfw.SetWindowSizeCallback(_window, ResizeCallback);
+            WindowResizeCallback = function;
+            Glfw.SetWindowSizeCallback(_window, WindowResizeCallback);
         }
         internal void SetCallbackFramebuffer(Glfw.FramebufferSizeFunc function)
         {
@@ -278,6 +283,11 @@ namespace SpaceVIL
         {
             ContentScaleCallback = function;
             Glfw.SetWindowContentScaleCallback(_window, ContentScaleCallback);
+        }
+        internal void SetCallbackIconify(Glfw.WindowIconifyFunc function)
+        {
+            WindowIconifyCallback = function;
+            Glfw.SetWindowIconifyCallback(_window, WindowIconifyCallback);
         }
 
         internal void SetOpacity(float level)

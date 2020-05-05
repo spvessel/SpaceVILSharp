@@ -848,10 +848,10 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             nothingFlag = true;
             setText(tmpText.textState);
             _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
-            undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
-            undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
+            // undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
+            // undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
 
-            undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
+            // undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
             _textureStorage.setScrollYOffset(tmpText.scrollYOffset);
             //TODO here reverse
             if (isWrapText()) {
@@ -879,10 +879,10 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                 nothingFlag = true;
                 setText(tmpText.textState);
                 _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
-                undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
+                // undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
+                // undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
 
-                undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
+                // undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
                 _textureStorage.setScrollYOffset(tmpText.scrollYOffset);
                 //TODO here reverse
                 if (isWrapText()) {

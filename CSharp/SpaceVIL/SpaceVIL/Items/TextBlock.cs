@@ -1047,10 +1047,10 @@ namespace SpaceVIL
 
                 SetText(tmpText.textState);
                 _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                undoQueue.First.Value.cursorStateX = _cursorPosition.X;
-                undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
+                // undoQueue.First.Value.cursorStateX = _cursorPosition.X;
+                // undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
 
-                undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
+                // undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
                 _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
                 //TODO here reverse
                 if (IsWrapText())
@@ -1086,10 +1086,10 @@ namespace SpaceVIL
 
                     SetText(tmpText.textState);
                     _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                    undoQueue.First.Value.cursorStateX = _cursorPosition.X;
-                    undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
+                    // undoQueue.First.Value.cursorStateX = _cursorPosition.X;
+                    // undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
 
-                    undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
+                    // undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
                     _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
                     //TODO here reverse
                     if (IsWrapText())

@@ -3,9 +3,7 @@ package OwnLibs.Owls;
 import OwnLibs.Owls.Views.Items.*;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.KeyArgs;
-import com.spvessel.spacevil.Core.MouseArgs;
+import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Flags.*;
 
 import OwnLibs.Owls.Views.Windows.*;
@@ -446,7 +444,7 @@ public class Controller {
 
         TextArea textArea = ElementsFactory.getTextArea();
         textArea.eventMouseClick.add((sender, args) -> {
-            owlWindow.contextTextActions.setReturnFocus(textArea);
+            owlWindow.contextTextActions.returnFocus = textArea;
             owlWindow.contextTextActions.show(sender, args);
         });
 
@@ -726,7 +724,7 @@ public class Controller {
         }
 
         OpenEntryDialog opd = new OpenEntryDialog("Import File:", FileSystemEntryType.FILE,
-                OpenEntryDialog.OpenDialogType.OPEN);
+                OpenDialogType.OPEN);
         // opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp,
         // *.jpg);*.png,*.bmp,*.jpg");
         opd.onCloseDialog.add(() -> {
@@ -897,7 +895,7 @@ public class Controller {
     private void renameFile(FileEntryTreeItem renamedItem) {
         tmpItem = renamedItem;
 
-        if (renamedItem.isRoot) {
+        if (renamedItem.isRoot()) {
             workDirectory = renamedItem;
         } else {
             workDirectory = (FileEntryTreeItem) renamedItem.getParentBranch();

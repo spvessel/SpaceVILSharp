@@ -17,18 +17,22 @@ import java.nio.FloatBuffer;
 final class GLWHandler {
 
     ///////////////////////////////////////////////
-    private GLFWWindowSizeCallback resizeCallback;
     private GLFWCursorPosCallback mouseMoveCallback;
     private GLFWMouseButtonCallback mouseClickCallback;
     private GLFWScrollCallback mouseScrollCallback;
-    private GLFWWindowCloseCallback windowCloseCallback;
-    private GLFWWindowPosCallback windowPosCallback;
+
     private GLFWKeyCallback keyPressCallback;
     private GLFWCharModsCallback keyInputTextCallback;
+
+    private GLFWWindowSizeCallback windowResizeCallback;
+    private GLFWWindowCloseCallback windowCloseCallback;
+    private GLFWWindowPosCallback windowPosCallback;
     private GLFWWindowFocusCallback windowFocusCallback;
-    private GLFWFramebufferSizeCallback framebufferCallback;
     private GLFWWindowRefreshCallback windowRefreshCallback;
+    private GLFWWindowIconifyCallback windowIconifyCallback;
+
     private GLFWDropCallback dropCallback;
+    private GLFWFramebufferSizeCallback framebufferCallback;
     private GLFWWindowContentScaleCallback contentScaleCallback;
     ///////////////////////////////////////////////
 
@@ -181,12 +185,15 @@ final class GLWHandler {
         mouseScrollCallback = null;
         keyPressCallback = null;
         keyInputTextCallback = null;
+
         windowCloseCallback = null;
         windowPosCallback = null;
         windowFocusCallback = null;
-        resizeCallback = null;
-        framebufferCallback = null;
+        windowResizeCallback = null;
         windowRefreshCallback = null;
+        windowIconifyCallback = null;
+
+        framebufferCallback = null;
         dropCallback = null;
         contentScaleCallback = null;
     }
@@ -276,8 +283,13 @@ final class GLWHandler {
     }
 
     void setCallbackResize(GLFWWindowSizeCallback function) {
-        resizeCallback = function;
-        glfwSetWindowSizeCallback(_window, resizeCallback);
+        windowResizeCallback = function;
+        glfwSetWindowSizeCallback(_window, windowResizeCallback);
+    }
+
+    void setCallbackIconify(GLFWWindowIconifyCallback function) {
+        windowIconifyCallback = function;
+        glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
     }
 
     void setCallbackFramebuffer(GLFWFramebufferSizeCallback function) {

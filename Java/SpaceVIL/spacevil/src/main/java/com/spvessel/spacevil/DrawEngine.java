@@ -299,6 +299,14 @@ final class DrawEngine {
                 contentScale(window, xscale, yscale);
             }
         });
+
+        glwHandler.setCallbackIconify(new GLFWWindowIconifyCallback() {
+
+            @Override
+            public void invoke(long window, boolean value) {
+                iconify(window, value);
+            }
+        });
     }
 
     private void contentScale(long window, float x, float y) {
@@ -315,6 +323,10 @@ final class DrawEngine {
 
         // подписать на обновление при смене фактора масштабирования
         // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
+    }
+
+    private void iconify(long window, boolean value) {
+        _commonProcessor.window.setMinimized(value);
     }
 
     private void drop(long window, int count, long paths) {

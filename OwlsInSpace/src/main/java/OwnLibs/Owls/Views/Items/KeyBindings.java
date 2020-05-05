@@ -13,7 +13,7 @@ import com.spvessel.spacevil.Prototype;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
@@ -54,7 +54,7 @@ public class KeyBindings extends Prototype implements InterfaceFloating {
         closeBtn.setSize(12, 12);
         closeBtn.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
         closeBtn.setMargin(0, 5, 5, 0);
-        closeBtn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
+        closeBtn.setCustomFigure(new Figure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
         closeBtn.addItemState(ItemStateType.HOVERED, new ItemState(new Color(186, 95, 97)));
 
         HorizontalStack layout = new HorizontalStack();
@@ -110,7 +110,7 @@ public class KeyBindings extends Prototype implements InterfaceFloating {
     @Override
     public void hide() {
         setVisible(false);
-        getHandler().setFocus();
+        getHandler().focus();
     }
 
     @Override

@@ -224,8 +224,8 @@ public class ElementsFactory {
         tArea.setStyle(ElementsFactory.getTextAreaStyle());
         tArea.setWrapText(true);
         tArea.setEditable(false);
-        tArea.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        tArea.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        tArea.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        tArea.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
         tArea.disableMenu(true);
         tArea.menu.setDrawable(false);
 

@@ -10,7 +10,7 @@ import com.spvessel.spacevil.ListBox;
 import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Decorations.Style;
 // import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import OwnLibs.Owls.ElementsFactory;
 
@@ -49,7 +49,7 @@ public class HomePage extends HorizontalStack {
 
         historyLayout.setSpacing(0, 10);
         historyList.setBackground(57, 57, 57);
-        historyList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        historyList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         historyList.disableMenu(true);
         historyList.menu.setDrawable(false);
         historyList.vScrollBar.setStyle(ElementsFactory.getVScrollBarStyle());

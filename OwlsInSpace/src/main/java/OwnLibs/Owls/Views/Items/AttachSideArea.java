@@ -47,8 +47,8 @@ public class AttachSideArea extends SideArea {
 
         _contentList.setBackground(64, 64, 64);
         _contentList.setSelectionVisible(false);
-        _contentList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        _contentList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        _contentList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        _contentList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         _contentList.setMargin(10, 100, 10, 50);
         _contentList.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
 

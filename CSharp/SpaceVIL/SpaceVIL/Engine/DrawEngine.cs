@@ -245,6 +245,12 @@ namespace SpaceVIL
             GLWHandler.SetCallbackRefresh(Refresh);
             GLWHandler.SetCallbackDrop(Drop);
             GLWHandler.SetCallbackContentScale(ContentScale);
+            GLWHandler.SetCallbackIconify(Iconify);
+        }
+
+        private void Iconify(long window, bool value)
+        {
+            _commonProcessor.Window.SetMinimized(value);
         }
 
         private void ContentScale(Int64 wnd, float x, float y)
