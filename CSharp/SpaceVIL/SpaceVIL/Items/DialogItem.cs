@@ -84,10 +84,10 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            Style inner_style = style.GetInnerStyle("window");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("window");
+            if (innerStyle != null)
             {
-                Window.SetStyle(inner_style);
+                Window.SetStyle(innerStyle);
             }
         }
     }

@@ -6,11 +6,11 @@ import com.spvessel.spacevil.Flags.KeyCode;
 
 /**
  * Abstract class containing all common methods and properties for creating
- * modal window for file browsing.
+ * UI element for file browsing.
  */
 public abstract class OpenDialog extends DialogItem {
 
-    private TitleBar titleBar;
+    private TitleBar _titleBar;
 
     /**
      * Setting a title text of the dialog window.
@@ -18,7 +18,7 @@ public abstract class OpenDialog extends DialogItem {
      * @param title Title text.
      */
     public void setTitle(String title) {
-        titleBar.setText(title);
+        _titleBar.setText(title);
     }
 
     /**
@@ -27,7 +27,7 @@ public abstract class OpenDialog extends DialogItem {
      * @return Title text.
      */
     public String getTitle() {
-        return titleBar.getText();
+        return _titleBar.getText();
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class OpenDialog extends DialogItem {
     public OpenDialog() {
         setItemName("OpenDialog_" + count);
         count++;
-        titleBar = new TitleBar();
+        _titleBar = new TitleBar();
     }
 
     /**
@@ -50,16 +50,17 @@ public abstract class OpenDialog extends DialogItem {
         // important!
         super.initElements();
 
-        titleBar.getMaximizeButton().setVisible(false);
+        _titleBar.getMaximizeButton().setVisible(false);
 
         // adding toolbar
-        window.addItems(titleBar);
+        window.addItems(_titleBar);
 
-        titleBar.getCloseButton().eventMouseClick.clear();
-        titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
+        _titleBar.getCloseButton().eventMouseClick.clear();
+        _titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
             close();
         });
-        titleBar.eventMouseDoubleClick.add((sender, args) -> {
+        _titleBar.eventMouseDoubleClick.clear();
+        _titleBar.eventMouseDoubleClick.add((sender, args) -> {
             updateWindow();
         });
         eventKeyPress.add((sender, args) -> {

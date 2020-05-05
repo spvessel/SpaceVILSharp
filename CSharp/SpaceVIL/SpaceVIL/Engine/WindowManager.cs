@@ -70,7 +70,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-        
+
         private static float GetCurrentFrequency()
         {
             Monitor.Enter(_lock);
@@ -276,10 +276,17 @@ namespace SpaceVIL
 
         private static void Run()
         {
+            List<CoreWindow> initFailed = new List<CoreWindow>();
             foreach (CoreWindow wnd in _windows)
             {
-                InitWindow(wnd);
+                if (!InitWindow(wnd))
+                    initFailed.Add(wnd);
             }
+            foreach (var wnd in initFailed)
+            {
+                _windows.Remove(wnd);
+            }
+            _isEmpty = (_windows.Count == 0);
 
             if (waitfunc == null)
             {
@@ -325,12 +332,14 @@ namespace SpaceVIL
             while (_listWaitigForInit.Count > 0)
             {
                 CoreWindow wnd = _listWaitigForInit.Dequeue();
-                InitWindow(wnd);
-                _windows.Add(wnd);
+                if (InitWindow(wnd))
+                {
+                    _windows.Add(wnd);
+                }
             }
         }
 
-        private static void InitWindow(CoreWindow wnd)
+        private static bool InitWindow(CoreWindow wnd)
         {
             if (!_initializedWindows.ContainsKey(wnd))
             {
@@ -338,8 +347,10 @@ namespace SpaceVIL
                 {
                     _initializedWindows.Add(wnd, true);
                     wnd.EventOnStart?.Invoke();
+                    return true;
                 }
             }
+            return false;
         }
 
         /// <summary>
@@ -372,7 +383,7 @@ namespace SpaceVIL
         }
 
         private static CoreWindow _currentContextedWindow = null;
-        
+
         internal static void SetContextCurrent(CoreWindow window)
         {
             Monitor.Enter(_lock);

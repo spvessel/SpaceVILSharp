@@ -180,7 +180,7 @@ final class DrawEngine {
                 glfwSwapInterval(WindowManager.getVSyncValue());
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
             glwHandler.clearEventsCallbacks();
             if (glwHandler.getWindowId() == NULL)
                 glwHandler.destroy();

@@ -10,6 +10,6 @@ public class SpaceVILException extends RuntimeException {
     public SpaceVILException() { }
 
     public SpaceVILException(String message) {
-        super(message);
+        super("SpaceVILException: " + message);
     }
 }

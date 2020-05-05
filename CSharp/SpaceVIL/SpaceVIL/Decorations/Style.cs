@@ -2357,6 +2357,8 @@ namespace SpaceVIL.Decorations
 
          // window
          Style windowStyle = GetDialogItemStyle().GetInnerStyle("window");
+         windowStyle.SetSize(500, 700);
+         windowStyle.SetMinSize(400, 400);
          windowStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
          windowStyle.SetMargin(150, 20, 150, 20);
          style.AddInnerStyle("window", windowStyle);

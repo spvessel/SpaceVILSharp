@@ -6,7 +6,7 @@ namespace SpaceVIL
 {
     /// <summary>
     /// Abstract class containing all common methods and properties 
-    /// for creating modal window for file browsing.
+    /// for creating UI element for file browsing.
     /// </summary>
     public abstract class OpenDialog : DialogItem
     {
@@ -61,7 +61,7 @@ namespace SpaceVIL
             {
                 Close();
             };
-            _titleBar.EventMouseDoubleClick += (sender, args) =>
+            _titleBar.EventMouseDoubleClick = (sender, args) =>
             {
                 UpdateWindow();
             };

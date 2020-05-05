@@ -148,11 +148,11 @@ namespace SpaceVIL
             ItemsLayoutBox.AddItem(_layout, container, LayoutType.Static);
         }
 
-        internal static void RemoveWindow(CoreWindow _layout)
+        internal static void RemoveWindow(CoreWindow layout)
         {
-            windows.Remove(_layout);
-            windowsGuid.Remove(_layout.GetWindowGuid());
-            _layout.Release();
+            windows.Remove(layout);
+            windowsGuid.Remove(layout.GetWindowGuid());
+            layout.Release();
         }
 
         internal static void CreateWindowsPair(CoreWindow wnd)

@@ -42,7 +42,6 @@ namespace View
         }
 
         // event which will invoked when MyDialogBox is closed to perform actions.
-        public EventCommonMethod OnCloseDialog = null;
         CoreWindow _handler = null;
 
         // show the MyDialogBox.

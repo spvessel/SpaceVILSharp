@@ -17,42 +17,50 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Style is a class that describes the appearance of an element. Can contains Styles for inner items.
+ * Style is a class that describes the appearance of an element. Can contains
+ * Styles for inner items.
  */
 public class Style implements Cloneable {
     private Map<String, Style> _innerStyles = new HashMap<>();
 
     /**
      * Background color of an item's shape. Attention: this property is required.
-     * <p> This property is java.awt.Color.
+     * <p>
+     * This property is java.awt.Color.
      */
     public Color background;
 
     /**
-     * Color of an item's text. Can be used only if the item contains text and in this case 
-     * this property is required.
-     * <p> This property is java.awt.Color.
+     * Color of an item's text. Can be used only if the item contains text and in
+     * this case this property is required.
+     * <p>
+     * This property is java.awt.Color.
      */
     public Color foreground;
 
     /**
-     * Font of an item's text. Can be used only if the item contains text and in this case 
-     * this property is required.
-     * <p> This property is java.awt.Font
+     * Font of an item's text. Can be used only if the item contains text and in
+     * this case this property is required.
+     * <p>
+     * This property is java.awt.Font
      */
     public Font font = null;
 
     /**
-     * Width policy of an item's shape. Can be Fixed (shape not changes its size) or 
-     * Expand (shape is stretched to all available space). Attention: this property is required.
-     * <p> This property is com.spvessel.spacevil.Flags.SizePolicy.
+     * Width policy of an item's shape. Can be Fixed (shape not changes its size) or
+     * Expand (shape is stretched to all available space). Attention: this property
+     * is required.
+     * <p>
+     * This property is com.spvessel.spacevil.Flags.SizePolicy.
      */
     public SizePolicy widthPolicy;
 
     /**
-     * Height policy of an item's shape. Can be Fixed (shape not changes its size) or 
-     * Expand (shape is stretched to all available space). Attention: this property is required.
-     * <p> This property is com.spvessel.spacevil.Flags.SizePolicy.
+     * Height policy of an item's shape. Can be Fixed (shape not changes its size)
+     * or Expand (shape is stretched to all available space). Attention: this
+     * property is required.
+     * <p>
+     * This property is com.spvessel.spacevil.Flags.SizePolicy.
      */
     public SizePolicy heightPolicy;
 
@@ -63,13 +71,15 @@ public class Style implements Cloneable {
 
     /**
      * Minimum width of an item's shape (shape cannot be smaller this value).
-     * <p> Default: 0.
+     * <p>
+     * Default: 0.
      */
     public int minWidth;
 
     /**
      * Maximum width of an item's shape (shape cannot be bigger this value).
-     * <p> Default: 32767.
+     * <p>
+     * Default: 32767.
      */
     public int maxWidth;
 
@@ -80,61 +90,73 @@ public class Style implements Cloneable {
 
     /**
      * Minimum height of an item's shape (shape cannot be smaller this value).
-     * <p> Default: 0.
+     * <p>
+     * Default: 0.
      */
     public int minHeight;
 
     /**
      * Maximum height of an item's shape (shape cannot be bigget this value).
-     * <p> Default: 32767.
+     * <p>
+     * Default: 32767.
      */
     public int maxHeight;
 
     /**
-     * Alignment of an item's shape relative to its container. 
-     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
-     * Attention: this property is required.
-     * <p> This property is com.spvessel.spacevil.Flags.ItemAlignment.
+     * Alignment of an item's shape relative to its container. Combines with
+     * alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT,
+     * HCENTER, RIGHT). Attention: this property is required.
+     * <p>
+     * This property is com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public List<ItemAlignment> alignment;
 
     /**
-     * Alignment of an item's text. 
-     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
-     * Can be used only if the item contains text and in this case this property is required.
-     * <p> This property is com.spvessel.spacevil.Flags.ItemAlignment.
+     * Alignment of an item's text. Combines with alignment by vertically (TOP,
+     * VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). Can be used only if
+     * the item contains text and in this case this property is required.
+     * <p>
+     * This property is com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public List<ItemAlignment> textAlignment;
 
     /**
-     * X axis position of left-top cornet of an item's shape. This property itself is mostly ignored. 
-     * Used only when creating container-type items or with com.spvessel.spacevil.FreeArea.
+     * X axis position of left-top cornet of an item's shape. This property itself
+     * is mostly ignored. Used only when creating container-type items or with
+     * com.spvessel.spacevil.FreeArea.
      */
     public int x;
 
     /**
-     * Y axis position of left-top cornet of an item's shape. This property itself is mostly ignored. 
-     * Used only when creating container-type items or with com.spvessel.spacevil.FreeArea.
+     * Y axis position of left-top cornet of an item's shape. This property itself
+     * is mostly ignored. Used only when creating container-type items or with
+     * com.spvessel.spacevil.FreeArea.
      */
     public int y;
 
     private Map<ItemStateType, ItemState> _itemStates = new HashMap<>();
 
     /**
-     * Indents of an item to offset its children. Attention: this property is required.
-     * <p> This property is com.spvessel.spacevil.Decorations.Indents.
+     * Indents of an item to offset its children. Attention: this property is
+     * required.
+     * <p>
+     * This property is com.spvessel.spacevil.Decorations.Indents.
      */
     public Indents padding = new Indents();
 
     /**
-     * Indents between children of a container type item. It is used mainly in containers.
-     * <p> This property is com.spvessel.spacevil.Decorations.Spacing.
+     * Indents between children of a container type item. It is used mainly in
+     * containers.
+     * <p>
+     * This property is com.spvessel.spacevil.Decorations.Spacing.
      */
     public Spacing spacing = new Spacing();
 
     /**
-     * Indents of an item to offset itself relative to its container. Attention: this property is required.
-     * <p> This property is com.spvessel.spacevil.Decorations.Indents.
+     * Indents of an item to offset itself relative to its container. Attention:
+     * this property is required.
+     * <p>
+     * This property is com.spvessel.spacevil.Decorations.Indents.
      */
     public Indents margin = new Indents();
 
@@ -144,38 +166,46 @@ public class Style implements Cloneable {
     public CornerRadius borderRadius = new CornerRadius();
 
     /**
-     * Thickness of an item's border. 
-     * <p> Default: 0.
+     * Thickness of an item's border.
+     * <p>
+     * Default: 0.
      */
     public int borderThickness = 0;
 
     /**
-     * Color of an item's border. 
-     * <p> This property is java.awt.Color.
+     * Color of an item's border.
+     * <p>
+     * This property is java.awt.Color.
      */
     public Color borderFill = new Color(0, 0, 0, 0);
 
     /**
      * A form of an item's shape. If not assigned, the shape is rectangular.
-     * <p> Format: java.util.List&lt;float[]&gt;.
+     * <p>
+     * Format: java.util.List&lt;float[]&gt;.
      */
     public List<float[]> shape;// = new List<float[]>();
 
     /**
      * A flag that determines if the shape of an item can be changed or not.
-     * <p> True: if shape can not be resized. False: if shape can be resised. Default: False.
+     * <p>
+     * True: if shape can not be resized. False: if shape can be resised. Default:
+     * False.
      */
     public boolean isFixedShape = false;
 
     /**
-     * A storage of shapes for future use. Note: not supported in the current version!
-     * <p> Format: java.util.List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
+     * A storage of shapes for future use. Note: not supported in the current
+     * version!
+     * <p>
+     * Format: java.util.List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
      */
     public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
 
     /**
      * Blur radius of a shadow.
-     * <p> Min value: 0. Max value: 10. Default: 0.
+     * <p>
+     * Min value: 0. Max value: 10. Default: 0.
      */
     public int shadowRadius;
 
@@ -190,20 +220,24 @@ public class Style implements Cloneable {
     public int shadowYOffset;
 
     /**
-     * Drop shadow flag. True: allow shadow dropping. False: not allow shadow dropping.
-     * <p> Default: False.
+     * Drop shadow flag. True: allow shadow dropping. False: not allow shadow
+     * dropping.
+     * <p>
+     * Default: False.
      */
     public boolean isShadowDrop = false;
 
     /**
      * Color of a shadow.
-     * <p> This property is java.awt.Color.
+     * <p>
+     * This property is java.awt.Color.
      */
     public Color shadowColor;
 
     /**
      * A flag that determines if an item is visible or not.
-     * <p> True: if visible. False: if not visible. Default: True.
+     * <p>
+     * True: if visible. False: if not visible. Default: True.
      */
     public boolean isVisible;
 
@@ -220,7 +254,9 @@ public class Style implements Cloneable {
 
     /**
      * Setting this style for all items in sequence.
-     * @param items A sequence of items that are com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * 
+     * @param items A sequence of items that are
+     *              com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public void setStyle(InterfaceBaseItem... items) {
         for (InterfaceBaseItem item : items) {
@@ -230,7 +266,8 @@ public class Style implements Cloneable {
 
     /**
      * Setting size of an item's shape.
-     * @param width Width of a shape.
+     * 
+     * @param width  Width of a shape.
      * @param height Height of a shape.
      */
     public void setSize(int width, int height) {
@@ -239,8 +276,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting minimum size of an item's shape (shape can not be smaller than specified width and height).
-     * @param width Minimum width of a shape.
+     * Setting minimum size of an item's shape (shape can not be smaller than
+     * specified width and height).
+     * 
+     * @param width  Minimum width of a shape.
      * @param height Minimum height of a shape.
      */
     public void setMinSize(int width, int height) {
@@ -249,8 +288,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting maximim size of an item's shape (shape can not be bigger than specified width and height).
-     * @param width Maximim width of a shape.
+     * Setting maximim size of an item's shape (shape can not be bigger than
+     * specified width and height).
+     * 
+     * @param width  Maximim width of a shape.
      * @param height Maximim height of a shape.
      */
     public void setMaxSize(int width, int height) {
@@ -259,9 +300,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting the size policy of an item's shape. 
-     * Can be FIXED (shape not changes its size) or EXPAND (shape is stretched to all available space).
-     * @param widthPolicy Width policy of an item's shape.
+     * Setting the size policy of an item's shape. Can be FIXED (shape not changes
+     * its size) or EXPAND (shape is stretched to all available space).
+     * 
+     * @param widthPolicy  Width policy of an item's shape.
      * @param heightPolicy Height policy of an item's shape.
      */
     public void setSizePolicy(SizePolicy widthPolicy, SizePolicy heightPolicy) {
@@ -271,6 +313,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting background color of an item's shape in byte RGB format.
+     * 
      * @param r Red color component. Range: (0 - 255)
      * @param g Green color component. Range: (0 - 255)
      * @param b Blue color component. Range: (0 - 255)
@@ -281,6 +324,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting background color of an item's shape in byte RGBA format.
+     * 
      * @param r Red color component. Range: (0 - 255)
      * @param g Green color component. Range: (0 - 255)
      * @param b Blue color component. Range: (0 - 255)
@@ -292,6 +336,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting background color of an item's shape in float RGB format.
+     * 
      * @param r Red color component. Range: (0.0f - 1.0f)
      * @param g Green color component. Range: (0.0f - 1.0f)
      * @param b Blue color component. Range: (0.0f - 1.0f)
@@ -302,6 +347,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting background color of an item's shape in float RGBA format.
+     * 
      * @param r Red color component. Range: (0.0f - 1.0f)
      * @param g Green color component. Range: (0.0f - 1.0f)
      * @param b Blue color component. Range: (0.0f - 1.0f)
@@ -313,6 +359,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting text color of an item in byte RGB format.
+     * 
      * @param r Red color component. Range: (0 - 255)
      * @param g Green color component. Range: (0 - 255)
      * @param b Blue color component. Range: (0 - 255)
@@ -323,6 +370,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting text color of an item in byte RGBA format.
+     * 
      * @param r Red color component. Range: (0 - 255)
      * @param g Green color component. Range: (0 - 255)
      * @param b Blue color component. Range: (0 - 255)
@@ -334,6 +382,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting text color of an item in float RGB format.
+     * 
      * @param r Red color component. Range: (0.0f - 1.0f)
      * @param g Green color component. Range: (0.0f - 1.0f)
      * @param b Blue color component. Range: (0.0f - 1.0f)
@@ -344,6 +393,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting text color of an item in float RGBA format.
+     * 
      * @param r Red color component. Range: (0.0f - 1.0f)
      * @param g Green color component. Range: (0.0f - 1.0f)
      * @param b Blue color component. Range: (0.0f - 1.0f)
@@ -355,6 +405,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents of an item to offset its children.
+     * 
      * @param padding Padding indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setPadding(Indents padding) {
@@ -363,9 +414,10 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents of an item to offset its children.
-     * @param left Indent on the left.
-     * @param top Indent on the top.
-     * @param right Indent on the right.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
      * @param bottom Indent on the bottom.
      */
     public void setPadding(int left, int top, int right, int bottom) {
@@ -377,6 +429,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents of an item to offset itself relative to its container.
+     * 
      * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setMargin(Indents margin) {
@@ -385,9 +438,10 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents of an item to offset itself relative to its container.
-     * @param left Indent on the left.
-     * @param top Indent on the top.
-     * @param right Indent on the right.
+     * 
+     * @param left   Indent on the left.
+     * @param top    Indent on the top.
+     * @param right  Indent on the right.
      * @param bottom Indent on the bottom.
      */
     public void setMargin(int left, int top, int right, int bottom) {
@@ -399,6 +453,7 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents between children of a container type item.
+     * 
      * @param spacing Spacing as com.spvessel.spacevil.Decorations.Spacing.
      */
     public void setSpacing(Spacing spacing) {
@@ -407,8 +462,9 @@ public class Style implements Cloneable {
 
     /**
      * Setting indents between children of a container type item.
+     * 
      * @param horizontal Horizontal indent.
-     * @param vertical Vertical indent.
+     * @param vertical   Vertical indent.
      */
     public void setSpacing(int horizontal, int vertical) {
         spacing.horizontal = horizontal;
@@ -416,7 +472,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting border of an item's shape. Border consist of corner radiuses, thickness and color.
+     * Setting border of an item's shape. Border consist of corner radiuses,
+     * thickness and color.
+     * 
      * @param border Border as com.spvessel.spacevil.Decorations.Border.
      */
     public void setBorder(Border border) {
@@ -426,9 +484,12 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting border for an item's shape. Border consist of corner radiuses, thickness and color.
-     * @param fill Border color as java.awt.Color.
-     * @param radius Radiuses of an border corners as com.spvessel.spacevil.Decorations.CornerRadius.
+     * Setting border for an item's shape. Border consist of corner radiuses,
+     * thickness and color.
+     * 
+     * @param fill      Border color as java.awt.Color.
+     * @param radius    Radiuses of an border corners as
+     *                  com.spvessel.spacevil.Decorations.CornerRadius.
      * @param thickness Border thickness.
      */
     public void setBorder(Color fill, CornerRadius radius, int thickness) {
@@ -438,7 +499,8 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting shadow for an item's shape. 
+     * Setting shadow for an item's shape.
+     * 
      * @param shadow Shadow as com.spvessel.spacevil.Decorations.Shadow.
      */
     public void setShadow(Shadow shadow) {
@@ -449,9 +511,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Setting an Alignment of an item's shape relative to its container. 
-     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
-     * Attention: this property is required.
+     * Setting an Alignment of an item's shape relative to its container. Combines
+     * with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT,
+     * HCENTER, RIGHT). Attention: this property is required.
+     * 
      * @param alignment Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignment) {
@@ -459,9 +522,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Alignment of an item's text. 
-     * Combines with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). 
-     * Can be used only if the item contains text and in this case this property is required.
+     * Alignment of an item's text. Combines with alignment by vertically (TOP,
+     * VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). Can be used only if
+     * the item contains text and in this case this property is required.
+     * 
      * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
@@ -471,8 +535,8 @@ public class Style implements Cloneable {
     ////////////////////////////////////////////////////////////////
 
     /**
-     * Add inner primitives to the object (as decorations only). 
-     * Note: not supported in the current version!
+     * Add inner primitives to the object (as decorations only). Note: not supported
+     * in the current version!
      * 
      * @param shape Shape as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
@@ -485,8 +549,9 @@ public class Style implements Cloneable {
 
     /**
      * Assigning a style for an item's child by key name.
+     * 
      * @param keyName Key name of a child.
-     * @param style Style as com.spvessel.spacevil.Decorations.Style.
+     * @param style   Style as com.spvessel.spacevil.Decorations.Style.
      */
     public void addInnerStyle(String keyName, Style style) {
         if (_innerStyles.containsKey(keyName)) {
@@ -498,6 +563,7 @@ public class Style implements Cloneable {
 
     /**
      * Getting a child’s style by key name.
+     * 
      * @param keyName Key name of a child.
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
@@ -511,6 +577,7 @@ public class Style implements Cloneable {
 
     /**
      * Removing a child's style by its key name.
+     * 
      * @param keyName Key name of a child.
      */
     public void removeInnerStyle(String keyName) {
@@ -520,9 +587,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Adding visual state for an item. 
-     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
-     * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
+     * Adding visual state for an item.
+     * <p>
+     * Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * 
+     * @param type  Type as com.spvessel.spacevil.Flags.ItemStateType.
      * @param state Visual state as com.spvessel.spacevil.Decorations.ItemState.
      */
     public void addItemState(ItemStateType type, ItemState state) {
@@ -535,8 +604,10 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting visual state of an item by type. 
-     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * Getting visual state of an item by type.
+     * <p>
+     * Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * 
      * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
      * @return Visual state as com.spvessel.spacevil.Decorations.ItemState.
      */
@@ -549,6 +620,7 @@ public class Style implements Cloneable {
 
     /**
      * Getting all presented in the current style visual states of an item.
+     * 
      * @return Map of an ItemStateTypes and its ItemStates.
      */
     public Map<ItemStateType, ItemState> getAllStates() {
@@ -557,7 +629,9 @@ public class Style implements Cloneable {
 
     /**
      * Removing visual state of an item by type.
-     * <p> Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * <p>
+     * Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
+     * 
      * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
      */
     public void removeItemState(ItemStateType type) {
@@ -571,7 +645,9 @@ public class Style implements Cloneable {
 
     /**
      * Cloning the current style and returning a new deep copy of Style.
-     * @return Deep copy of current style as com.spvessel.spacevil.Decorations.Style.
+     * 
+     * @return Deep copy of current style as
+     *         com.spvessel.spacevil.Decorations.Style.
      */
     public Style clone() {
         Style style = new Style();
@@ -657,8 +733,12 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting a default common style. Properly filled in all the necessary properties.
-     * <p> Use this method to create instance of Style class instead of  using pure constructor (new Style()).
+     * Getting a default common style. Properly filled in all the necessary
+     * properties.
+     * <p>
+     * Use this method to create instance of Style class instead of using pure
+     * constructor (new Style()).
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getDefaultCommonStyle() {
@@ -681,7 +761,9 @@ public class Style implements Cloneable {
 
     // get default styles
     /**
-     * Getting default style for a ButtonCore item. Properly filled in all the necessary properties.
+     * Getting default style for a ButtonCore item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getButtonCoreStyle() {
@@ -717,7 +799,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ButtonToggle item. Properly filled in all the necessary properties.
+     * Getting default style for a ButtonToggle item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getButtonToggleStyle() {
@@ -749,8 +833,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a CheckBox item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "indicator", "text".
+     * Getting default style for a CheckBox item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "indicator", "text".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getCheckBoxStyle() {
@@ -783,9 +870,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a Indicator item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "marker".
-     * <p> This is part of CheckBox item style.
+     * Getting default style for a Indicator item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "marker".
+     * <p>
+     * This is part of CheckBox item style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getIndicatorStyle() {
@@ -824,7 +915,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a text type item. Attention: not all the necessary properties properly filled.
+     * Getting default style for a text type item. Attention: not all the necessary
+     * properties properly filled.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextLineStyle() {
@@ -839,8 +932,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ComboBox item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "selection", "dropdownbutton", "dropdownarea", "arrow".
+     * Getting default style for a ComboBox item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "selection", "dropdownbutton", "dropdownarea", "arrow".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getComboBoxStyle() {
@@ -899,10 +995,15 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ComboBoxDropDown item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "itemlist".
-     * <p> Inner styles for "itemlist": "vscrollbar", "hscrollbar", "menu".
-     * <p> This is part of ComboBox item style.
+     * Getting default style for a ComboBoxDropDown item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "itemlist".
+     * <p>
+     * Inner styles for "itemlist": "vscrollbar", "hscrollbar", "menu".
+     * <p>
+     * This is part of ComboBox item style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getComboBoxDropDownStyle() {
@@ -941,8 +1042,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a MenuItem item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "text", "arrow".
+     * Getting default style for a MenuItem item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "text", "arrow".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getMenuItemStyle() {
@@ -978,8 +1082,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ContextMenu item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "itemlist".
+     * Getting default style for a ContextMenu item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "itemlist".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getContextMenuStyle() {
@@ -999,7 +1106,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a FreeArea item. Properly filled in all the necessary properties.
+     * Getting default style for a FreeArea item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getFreeAreaStyle() {
@@ -1017,7 +1126,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a Frame item. Properly filled in all the necessary properties.
+     * Getting default style for a Frame item. Properly filled in all the necessary
+     * properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getFrameStyle() {
@@ -1033,7 +1144,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a Grid item. Properly filled in all the necessary properties.
+     * Getting default style for a Grid item. Properly filled in all the necessary
+     * properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getGridStyle() {
@@ -1048,10 +1161,15 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a HorizontalScrollBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "uparrow", "downarrow", "slider".
-     * <p> Inner styles for "slider": "track", "handler".
-     * <p> This is part of many items style.
+     * Getting default style for a HorizontalScrollBar item. Properly filled in all
+     * the necessary properties.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "slider".
+     * <p>
+     * Inner styles for "slider": "track", "handler".
+     * <p>
+     * This is part of many items style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalScrollBarStyle() {
@@ -1121,9 +1239,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting simplified style for a SimpleHorizontalScrollBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "uparrow", "downarrow", "slider".
-     * <p> Inner styles for "slider": "track", "handler".
+     * Getting simplified style for a SimpleHorizontalScrollBar item. Properly
+     * filled in all the necessary properties.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "slider".
+     * <p>
+     * Inner styles for "slider": "track", "handler".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSimpleHorizontalScrollBarStyle() {
@@ -1172,10 +1294,15 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a VerticalScrollBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "uparrow", "downarrow", "slider".
-     * <p> Inner styles for "slider": "track", "handler".
-     * <p> This is part of many items style.
+     * Getting default style for a VerticalScrollBar item. Properly filled in all
+     * the necessary properties.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "slider".
+     * <p>
+     * Inner styles for "slider": "track", "handler".
+     * <p>
+     * This is part of many items style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalScrollBarStyle() {
@@ -1243,9 +1370,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting simplified style for a SimpleVerticalScrollBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "uparrow", "downarrow", "slider".
-     * <p> Inner styles for "slider": "track", "handler".
+     * Getting simplified style for a SimpleVerticalScrollBar item. Properly filled
+     * in all the necessary properties.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "slider".
+     * <p>
+     * Inner styles for "slider": "track", "handler".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSimpleVerticalScrollBarStyle() {
@@ -1294,8 +1425,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a HorizontalSlider item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "track", "handler".
+     * Getting default style for a HorizontalSlider item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "track", "handler".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalSliderStyle() {
@@ -1332,8 +1466,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a VerticalSlider item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "track", "handler".
+     * Getting default style for a VerticalSlider item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "track", "handler".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalSliderStyle() {
@@ -1368,7 +1505,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a HorizontalStack item. Properly filled in all the necessary properties.
+     * Getting default style for a HorizontalStack item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalStackStyle() {
@@ -1386,7 +1525,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a VerticalStack item. Properly filled in all the necessary properties.
+     * Getting default style for a VerticalStack item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalStackStyle() {
@@ -1402,8 +1543,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a HorizontalSplitArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "splitholder".
+     * Getting default style for a HorizontalSplitArea item. Properly filled in all
+     * the necessary properties.
+     * <p>
+     * Inner styles: "splitholder".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getHorizontalSplitAreaStyle() {
@@ -1423,8 +1567,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a VerticalSplitArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "splitholder".
+     * Getting default style for a VerticalSplitArea item. Properly filled in all
+     * the necessary properties.
+     * <p>
+     * Inner styles: "splitholder".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getVerticalSplitAreaStyle() {
@@ -1444,7 +1591,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a Label item. Properly filled in all the necessary properties.
+     * Getting default style for a Label item. Properly filled in all the necessary
+     * properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getLabelStyle() {
@@ -1462,9 +1611,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ListArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "selection".
-     * <p> This is part of many items style.
+     * Getting default style for a ListArea item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "selection".
+     * <p>
+     * This is part of many items style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getListAreaStyle() {
@@ -1484,8 +1637,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ListBox item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * Getting default style for a ListBox item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getListBoxStyle() {
@@ -1518,6 +1674,7 @@ public class Style implements Cloneable {
 
     /**
      * Note: not supported in current version.
+     * 
      * @return default style for WContainer objects.
      */
     public static Style getWContainerStyle()// нужен ли?
@@ -1527,9 +1684,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a RadioButton item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "indicator", "text".
-     * <p> Inner styles of "indicator": "marker".
+     * Getting default style for a RadioButton item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "indicator", "text".
+     * <p>
+     * Inner styles of "indicator": "marker".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getRadioButtonStyle() {
@@ -1568,8 +1729,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a PasswordLine item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "showmarker", "textedit".
+     * Getting default style for a PasswordLine item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "showmarker", "textedit".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getPasswordLineStyle() {
@@ -1639,9 +1803,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TextEdit item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "text".
-     * <p> Inner styles for "text": "cursor", "selection", "substrate".
+     * Getting default style for a TextEdit item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "text".
+     * <p>
+     * Inner styles for "text": "cursor", "selection", "substrate".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextEditStyle() {
@@ -1721,9 +1889,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a sealed TextBlock item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "cursor", "selection".
-     * <p> This is part of TextArea item style as "textedit".
+     * Getting default style for a sealed TextBlock item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "cursor", "selection".
+     * <p>
+     * This is part of TextArea item style as "textedit".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextBlockStyle() {
@@ -1755,8 +1927,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TextArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "textedit", "vscrollbar", "hscrollbar", "menu".
+     * Getting default style for a TextArea item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "textedit", "vscrollbar", "hscrollbar", "menu".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextAreaStyle() {
@@ -1789,8 +1964,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TextView item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "selection".
+     * Getting default style for a TextView item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "selection".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTextViewStyle() {
@@ -1812,8 +1990,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a PopUpMessage item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "closebutton".
+     * Getting default style for a PopUpMessage item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "closebutton".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getPopUpMessageStyle() {
@@ -1852,8 +2033,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ProgressBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "progressbar".
+     * Getting default style for a ProgressBar item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "progressbar".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getProgressBarStyle() {
@@ -1878,8 +2062,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ToolTip item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "text".
+     * Getting default style for a ToolTip item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "text".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getToolTipStyle() {
@@ -1909,8 +2096,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TitleBar item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "closebutton", "minimizebutton", "maximizebutton", "title".
+     * Getting default style for a TitleBar item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "closebutton", "minimizebutton", "maximizebutton", "title".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTitleBarStyle() {
@@ -1991,8 +2181,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TreeView item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * Getting default style for a TreeView item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTreeViewStyle() {
@@ -2001,8 +2194,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TreeItem item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "indicator", "branchicon", "leaficon".
+     * Getting default style for a TreeItem item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "indicator", "branchicon", "leaficon".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTreeItemStyle() {
@@ -2058,12 +2254,15 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a SpinItem item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "uparrow", "downarrow", "buttonsarea", "textedit".
+     * Getting default style for a SpinItem item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "uparrow", "downarrow", "buttonsarea", "textedit".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSpinItemStyle() {
-        
+
         Style style = new Style();
         style.background = new Color(210, 210, 210);
         style.widthPolicy = SizePolicy.EXPAND;
@@ -2117,9 +2316,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a DialogItem item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "window".
-     * <p> This is part of OpenEntryDialog item style.
+     * Getting default style for a DialogItem item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "window".
+     * <p>
+     * This is part of OpenEntryDialog item style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getDialogItemStyle() {
@@ -2148,8 +2351,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a MessageItem item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "window", "button", "toolbar", "userbar", "message", "layout".
+     * Getting default style for a MessageItem item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "window", "button", "toolbar", "userbar", "message", "layout".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getMessageItemStyle() {
@@ -2212,7 +2418,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a window itself. Properly filled in all the necessary properties.
+     * Getting default style for a window itself. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getWindowContainerStyle() {
@@ -2229,8 +2437,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a FileSystemEntry item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "icon", "text".
+     * Getting default style for a FileSystemEntry item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "icon", "text".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getFileSystemEntryStyle() {
@@ -2260,10 +2471,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a OpenEntryDialog item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "window", "layout", "toolbar", "toolbarbutton", 
-     * "addressline", "filenameline", "list", "controlpanel", "okbutton", 
-     * "cancelbutton", "filter", "filtertext", "divider".
+     * Getting default style for a OpenEntryDialog item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "window", "layout", "toolbar", "toolbarbutton", "addressline",
+     * "filenameline", "list", "controlpanel", "okbutton", "cancelbutton", "filter",
+     * "filtertext", "divider".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getOpenEntryDialogStyle() {
@@ -2279,6 +2493,8 @@ public class Style implements Cloneable {
 
         // window
         Style windowStyle = getDialogItemStyle().getInnerStyle("window");
+        windowStyle.setSize(500, 700);
+        windowStyle.setMinSize(400, 400);
         windowStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         windowStyle.setMargin(150, 20, 150, 20);
         style.addInnerStyle("window", windowStyle);
@@ -2385,8 +2601,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a InputDialog item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "window", "button", "textedit", "layout", "toolbar".
+     * Getting default style for a InputDialog item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "window", "button", "textedit", "layout", "toolbar".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getInputDialogStyle() {
@@ -2443,7 +2662,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a SelectionItem item. Properly filled in all the necessary properties.
+     * Getting default style for a SelectionItem item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSelectionItemStyle() {
@@ -2457,9 +2678,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a WrapArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "selection".
-     * <p> This is part of WrapGrid item style as "area".
+     * Getting default style for a WrapArea item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "selection".
+     * <p>
+     * This is part of WrapGrid item style as "area".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getWrapAreaStyle() {
@@ -2479,9 +2704,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a WrapGrid item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "area", "vscrollbar", "hscrollbar".
-     * <p> Inner styles for "area": see Style.getWrapAreaStyle().
+     * Getting default style for a WrapGrid item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "area", "vscrollbar", "hscrollbar".
+     * <p>
+     * Inner styles for "area": see Style.getWrapAreaStyle().
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getWrapGridStyle() {
@@ -2507,8 +2736,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a SideArea item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "window", "closebutton".
+     * Getting default style for a SideArea item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "window", "closebutton".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getSideAreaStyle() {
@@ -2548,7 +2780,9 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a ImageItem item. Properly filled in all the necessary properties.
+     * Getting default style for a ImageItem item. Properly filled in all the
+     * necessary properties.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getImageItemStyle() {
@@ -2560,8 +2794,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a LoadingScreen item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "text", "image".
+     * Getting default style for a LoadingScreen item. Properly filled in all the
+     * necessary properties.
+     * <p>
+     * Inner styles: "text", "image".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getLoadingScreenStyle() {
@@ -2584,9 +2821,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a Tab item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "text", "closebutton", "view".
-     * <p> This is part of TabView item style as "tab".
+     * Getting default style for a Tab item. Properly filled in all the necessary
+     * properties.
+     * <p>
+     * Inner styles: "text", "closebutton", "view".
+     * <p>
+     * This is part of TabView item style as "tab".
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTabStyle() {
@@ -2633,8 +2874,11 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a TabBar item. Properly filled in all the necessary properties.
-     * <p> This is part of TabView item style.
+     * Getting default style for a TabBar item. Properly filled in all the necessary
+     * properties.
+     * <p>
+     * This is part of TabView item style.
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTabBarStyle() {
@@ -2644,9 +2888,13 @@ public class Style implements Cloneable {
     }
 
     /**
-     * Getting default style for a *** item. Properly filled in all the necessary properties.
-     * <p> Inner styles: "tabbar", "tab", "viewarea".
-     * <p> Inner styles for "tab": see Style.GetTabStyle().
+     * Getting default style for a *** item. Properly filled in all the necessary
+     * properties.
+     * <p>
+     * Inner styles: "tabbar", "tab", "viewarea".
+     * <p>
+     * Inner styles for "tab": see Style.GetTabStyle().
+     * 
      * @return Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static Style getTabViewStyle() {

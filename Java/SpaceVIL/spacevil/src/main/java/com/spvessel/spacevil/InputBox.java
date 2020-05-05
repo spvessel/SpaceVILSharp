@@ -3,17 +3,14 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.DialogItem;
 
 /**
- * InputDialog - an imitation of modal window for entering text and perform
- * assigned actions.
+ * InputBox - a dialog window for entering text and perform assigned actions.
  * <p>
  * Contains ACTION button, CANCEL button, titlebar.
- * <p>
- * Supports all events except drag and drop.
  */
-public class InputDialog extends DialogItem {
+public class InputBox extends DialogWindow {
+
     private String _inputResult = null;
 
     /**
@@ -31,7 +28,7 @@ public class InputDialog extends DialogItem {
     /**
      * Getting ACTION button for appearance customizing or assigning new actions.
      * 
-     * @return InputDialog's ACTION button as com.spvessel.spacevil.ButtonCore.
+     * @return InputBox's ACTION button as com.spvessel.spacevil.ButtonCore.
      */
     public ButtonCore getActionButton() {
         return _action;
@@ -40,7 +37,7 @@ public class InputDialog extends DialogItem {
     /**
      * Getting CANCEL button for appearance customizing or assigning new actions.
      * 
-     * @return InputDialog's CANCEL button as com.spvessel.spacevil.ButtonCore.
+     * @return InputBox's CANCEL button as com.spvessel.spacevil.ButtonCore.
      */
     public ButtonCore GetCancelButton() {
         return _cancel;
@@ -62,25 +59,25 @@ public class InputDialog extends DialogItem {
     private HorizontalStack _stack;
 
     /**
-     * Constructs a InputDialog with specified title and name of ACTION button.
+     * Constructs a InputBox with specified title and name of ACTION button.
      * 
-     * @param title      Title of InputDialog as java.lang.String.
+     * @param title      Title of InputBox as java.lang.String.
      * @param actionName Name of ACTION button as java.lang.String.
      */
-    public InputDialog(String title, String actionName) {
+    public InputBox(String title, String actionName) {
         this(title, actionName, "");
     }
 
     /**
-     * Constructs a InputDialog with specified default text, title and name of
-     * ACTION button.
+     * Constructs a InputBox with specified default text, title and name of ACTION
+     * button.
      * 
-     * @param title       Title of InputDialog as java.lang.String.
+     * @param title       Title of InputBox as java.lang.String.
      * @param actionName  Name of ACTION button as java.lang.String.
      * @param defaultText Default text of text field as java.lang.String.
      */
-    public InputDialog(String title, String actionName, String defaultText) {
-        setItemName("InputDialog");
+    public InputBox(String title, String actionName, String defaultText) {
+        setWindowName("InputBox");
         _layout = new Frame();
         _stack = new HorizontalStack();
         _title = new TitleBar(title);
@@ -88,7 +85,6 @@ public class InputDialog extends DialogItem {
         _cancel = new ButtonCore("Cancel");
         _input = new TextEdit();
         _input.setText(defaultText);
-        window.isLocked = true;
 
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
@@ -101,21 +97,22 @@ public class InputDialog extends DialogItem {
     }
 
     /**
-     * Initializing all elements in the InputDialog.
+     * Initializing all elements in the InputBox.
      * <p>
      * Notice: This method is mainly for overriding only. SpaceVIL calls this method
      * if necessary and no need to call it manually.
      */
     @Override
-    public void initElements() {
-        super.initElements();
+    public void initWindow() {
+        isBorderHidden = true;
+        isAlwaysOnTop = true;
 
         // title
         _title.getMinimizeButton().setVisible(false);
         _title.getMaximizeButton().setVisible(false);
 
         // adding
-        window.addItems(_title, _layout);
+        addItems(_title, _layout);
 
         // stack size
         int w = (_action.getWidth() + _action.getMargin().left + _action.getMargin().right);
@@ -136,10 +133,12 @@ public class InputDialog extends DialogItem {
             _inputResult = _input.getText();
             close();
         });
+
         _cancel.eventMouseClick.add((sender, args) -> {
             _inputResult = "";
             close();
         });
+
         _input.eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
                 _inputResult = _input.getText();
@@ -152,28 +151,25 @@ public class InputDialog extends DialogItem {
     }
 
     /**
-     * Shows InputDialog and attaches it to the specified window (see
-     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
-     * com.spvessel.spacevil.DialogWindow).
-     * 
-     * @param handler Window for attaching InputDialog.
+     * Show InputBox window.
      */
     @Override
-    public void show(CoreWindow handler) {
-        super.show(handler);
+    public void show() {
+        super.show();
+
         _input.setFocus();
         _input.selectAll();
     }
 
     /**
-     * Closes InputDialog.
+     * Closes InputBox window.
      */
     @Override
     public void close() {
+        super.close();
+
         if (onCloseDialog != null)
             onCloseDialog.execute();
-
-        super.close();
     }
 
     /**
@@ -184,19 +180,24 @@ public class InputDialog extends DialogItem {
     }
 
     /**
-     * Setting style of the InputDialog.
+     * Setting style of the InputBox.
      * <p>
-     * Inner styles: textedit", "layout", "toolbar", "button".
+     * Inner styles: "window", "textedit", "layout", "toolbar", "button".
      * 
      * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
-    @Override
     public void setStyle(Style style) {
         if (style == null)
             return;
-        super.setStyle(style);
 
-        Style innerStyle = style.getInnerStyle("button");
+        Style innerStyle = style.getInnerStyle("window");
+        if (innerStyle != null) {
+            getLayout().getContainer().setStyle(innerStyle);
+            setMinSize(innerStyle.minWidth, innerStyle.minHeight);
+            setSize(innerStyle.width, innerStyle.height);
+        }
+
+        innerStyle = style.getInnerStyle("button");
         if (innerStyle != null) {
             _action.setStyle(innerStyle);
             _cancel.setStyle(innerStyle);

@@ -14,6 +14,13 @@ namespace SpaceVIL
     public abstract class DialogWindow : CoreWindow
     {
         /// <summary>
+        /// An event to describe the actions that must be performed after the dialog is closed.
+        /// <para/> Event type: SpaceVIL.EventCommonMethod.
+        /// <para/> Function arguments: none.
+        /// </summary>
+        public EventCommonMethod OnCloseDialog;
+
+        /// <summary>
         /// Constructs a DialogWindow
         /// </summary>
         public DialogWindow() : base()
@@ -30,6 +37,15 @@ namespace SpaceVIL
         {
             InitWindow();
             base.Show();
+        }
+
+        /// <summary>
+        /// Closes dialog window and destroy it.
+        /// </summary>
+        public void CloseAndDestroy()
+        {
+            Close();
+            WindowsBox.RemoveWindow(this);
         }
     }
 }
