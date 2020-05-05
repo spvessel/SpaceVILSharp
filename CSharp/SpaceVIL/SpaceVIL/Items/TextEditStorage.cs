@@ -624,7 +624,7 @@ namespace SpaceVIL
                 {
                     _substrateText.SetVisible(false);
                 }
-                if (text == null || text.Equals(String.Empty))
+                if ((text == null) || text.Equals(String.Empty))
                 {
                     _substrateText.SetVisible(true);
                 }

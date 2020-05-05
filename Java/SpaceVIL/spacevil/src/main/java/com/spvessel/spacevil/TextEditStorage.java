@@ -429,8 +429,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void onBackSpaceInput() {
-        if (_cursorPosition > 0) // backspace
-        {
+        if (_cursorPosition > 0) { // backspace
             StringBuilder sb = new StringBuilder(privGetText());
             _cursorPosition--;
             privSetText(sb.deleteCharAt(_cursorPosition).toString());
@@ -439,8 +438,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void onDeleteInput() {
-        if (_cursorPosition < privGetText().length()) // delete
-        {
+        if (_cursorPosition < privGetText().length()) { // delete
             StringBuilder sb = new StringBuilder(privGetText());
             privSetText(sb.deleteCharAt(_cursorPosition).toString());
             // replaceCursor();
@@ -543,7 +541,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if (_substrateText.isVisible()) {
                 _substrateText.setVisible(false);
             }
-            if (text == null || text.equals("")) {
+            if ((text == null) || text.equals("")) {
                 _substrateText.setVisible(true);
             }
             // _textObject.setLineXShift(_lineXShift, getWidth());

@@ -70,7 +70,7 @@ namespace SpaceVIL
 
             undoQueue = new LinkedList<TextBlockState>();
             redoQueue = new LinkedList<TextBlockState>();
-            undoQueue.AddFirst(new TextBlockState(GetText(), _cursorPosition.X, _cursorPosition.Y));
+            undoQueue.AddFirst(new TextBlockState(GetText(), new SpaceVIL.Core.Point(_cursorPosition), GetScrollYOffset())); //.X, _cursorPosition.Y));
 
             SetCursor(EmbeddedCursor.IBeam);
 
@@ -652,50 +652,9 @@ namespace SpaceVIL
             }
         }
 
-        internal void SetLineSpacer(int lineSpacer)
-        {
-            _textureStorage.SetLineSpacer(lineSpacer);
-            _cursor.SetHeight(_textureStorage.GetCursorHeight());
-        }
-
-        internal int GetLineSpacer()
-        {
-            return _textureStorage.GetLineSpacer();
-        }
-
         internal string GetText()
         {
             return _textureStorage.GetWholeText();
-        }
-
-        internal void SetTextAlignment(ItemAlignment alignment)
-        {
-            //Ignore all changes for yet
-        }
-
-        internal void SetTextMargin(Indents margin)
-        {
-            _textureStorage.SetTextMargin(margin);
-            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
-            ReplaceCursor(); //???
-        }
-
-        internal Indents GetTextMargin()
-        {
-            return _textureStorage.GetTextMargin();
-        }
-
-        internal void SetFont(Font font)
-        {
-            _textureStorage.SetFont(font);
-            _cursor.SetHeight(_textureStorage.GetCursorHeight());
-            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
-            ReplaceCursor();
-        }
-
-        internal Font GetFont()
-        {
-            return _textureStorage.GetFont();
         }
 
         internal void SetText(String text)
@@ -745,15 +704,7 @@ namespace SpaceVIL
         {
             return _textureStorage.GetTextHeight();
         }
-        internal void SetForeground(Color color)
-        {
-            _textureStorage.SetForeground(color);
-        }
-
-        internal Color GetForeground()
-        {
-            return _textureStorage.GetForeground();
-        }
+        
         internal bool IsEditable
         {
             get { return _isEditable; }
@@ -1075,35 +1026,6 @@ namespace SpaceVIL
             }
         }
 
-        //style
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
-            {
-                return;
-            }
-            base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
-
-            _textureStorage.SetLineContainerAlignment(style.TextAlignment);
-
-            Style inner_style = style.GetInnerStyle("selection");
-            if (inner_style != null)
-            {
-                _selectedArea.SetStyle(inner_style);
-            }
-            inner_style = style.GetInnerStyle("cursor");
-            if (inner_style != null)
-            {
-                _cursor.SetStyle(inner_style);
-                if (_cursor.GetHeight() == 0)
-                {
-                    _cursor.SetHeight(_textureStorage.GetCursorHeight());
-                }
-            }
-        }
-
         private LinkedList<TextBlockState> undoQueue;
         private LinkedList<TextBlockState> redoQueue;
         private bool nothingFlag = false;
@@ -1127,6 +1049,9 @@ namespace SpaceVIL
                 _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
                 undoQueue.First.Value.cursorStateX = _cursorPosition.X;
                 undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
+
+                undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
+                _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
                 //TODO here reverse
                 if (IsWrapText())
                 {
@@ -1151,7 +1076,7 @@ namespace SpaceVIL
                 {
                     redoQueue.RemoveLast();
                 }
-                redoQueue.AddFirst(new TextBlockState(tmpText.textState, tmpText.cursorStateX, tmpText.cursorStateY));
+                redoQueue.AddFirst(new TextBlockState(tmpText)); //.textState, tmpText.cursorStateX, tmpText.cursorStateY));
 
                 tmpText = undoQueue.First.Value;
                 if (tmpText != null)
@@ -1163,6 +1088,9 @@ namespace SpaceVIL
                     _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
                     undoQueue.First.Value.cursorStateX = _cursorPosition.X;
                     undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
+
+                    undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
+                    _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
                     //TODO here reverse
                     if (IsWrapText())
                     {
@@ -1195,7 +1123,7 @@ namespace SpaceVIL
             {
                 realPos = _textureStorage.WrapCursorPosToReal(_cursorPosition);
             }
-            TextBlockState tbs = new TextBlockState(GetText(), _cursorPosition.X, _cursorPosition.Y);
+            TextBlockState tbs = new TextBlockState(GetText(), realPos, GetScrollYOffset()); //_cursorPosition.X, _cursorPosition.Y);
             // if (_isSelect) {
             //     tbs.fromSelectState = new SpaceVIL.Core.Point(_selectFrom);
             //     tbs.toSelectState = new SpaceVIL.Core.Point(_selectTo);
@@ -1315,21 +1243,31 @@ namespace SpaceVIL
             PrivPasteText(text); //PasteText
         }
 
-        internal class TextBlockState
+        private class TextBlockState
         {
             internal String textState;
             internal int cursorStateX;
             internal int cursorStateY;
+            internal int scrollYOffset;
             // internal SpaceVIL.Core.Point fromSelectState;
             // internal SpaceVIL.Core.Point toSelectState;
 
-            internal TextBlockState(String textState, int cursorStateX, int cursorStateY)
+            internal TextBlockState(String textState, SpaceVIL.Core.Point cursorState, int scrollYOffset)
             {
                 this.textState = textState;
-                this.cursorStateX = cursorStateX;
-                this.cursorStateY = cursorStateY;
+                this.cursorStateX = cursorState.X;
+                this.cursorStateY = cursorState.Y;
+                this.scrollYOffset = scrollYOffset;
                 // fromSelectState = new SpaceVIL.Core.Point(0, 0);
                 // toSelectState = new SpaceVIL.Core.Point(0, 0);
+            }
+
+            internal TextBlockState(TextBlockState tbs)
+            {
+                this.textState = tbs.textState;
+                this.cursorStateX = tbs.cursorStateX;
+                this.cursorStateY = tbs.cursorStateY;
+                this.scrollYOffset = tbs.scrollYOffset;
             }
         }
 
@@ -1424,6 +1362,87 @@ namespace SpaceVIL
         internal void SetScrollStepFactor(float value)
         {
             _textureStorage.SetScrollStepFactor(value);
+        }
+
+        //decorations-------------------------------------------------------------------------------------------------------
+        internal void SetLineSpacer(int lineSpacer)
+        {
+            _textureStorage.SetLineSpacer(lineSpacer);
+            _cursor.SetHeight(_textureStorage.GetCursorHeight());
+        }
+
+        internal int GetLineSpacer()
+        {
+            return _textureStorage.GetLineSpacer();
+        }
+
+        internal void SetTextAlignment(ItemAlignment alignment)
+        {
+            //Ignore all changes for yet
+        }
+
+        internal void SetTextMargin(Indents margin)
+        {
+            _textureStorage.SetTextMargin(margin);
+            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
+            ReplaceCursor(); //???
+        }
+
+        internal Indents GetTextMargin()
+        {
+            return _textureStorage.GetTextMargin();
+        }
+
+        internal void SetFont(Font font)
+        {
+            _textureStorage.SetFont(font);
+            _cursor.SetHeight(_textureStorage.GetCursorHeight());
+            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
+            ReplaceCursor();
+        }
+
+        internal Font GetFont()
+        {
+            return _textureStorage.GetFont();
+        }
+
+        internal void SetForeground(Color color)
+        {
+            _textureStorage.SetForeground(color);
+        }
+
+        internal Color GetForeground()
+        {
+            return _textureStorage.GetForeground();
+        }
+        
+        //style
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+            {
+                return;
+            }
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+
+            _textureStorage.SetLineContainerAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedArea.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("cursor");
+            if (inner_style != null)
+            {
+                _cursor.SetStyle(inner_style);
+                if (_cursor.GetHeight() == 0)
+                {
+                    _cursor.SetHeight(_textureStorage.GetCursorHeight());
+                }
+            }
         }
     }
 }

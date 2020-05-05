@@ -73,7 +73,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
-        undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursorPosition)));
+        undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursorPosition), getScrollYOffset()));
 
         setCursor(EmbeddedCursor.IBEAM);
 
@@ -529,46 +529,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         }
     }
 
-    void setLineSpacer(int lineSpacer) {
-        _textureStorage.setLineSpacer(lineSpacer);
-        _cursor.setHeight(_textureStorage.getCursorHeight());
-    }
-
-    int getLineSpacer() {
-        return _textureStorage.getLineSpacer();
-    }
-
     String getText() {
         return _textureStorage.getWholeText();
-    }
-
-    void setTextAlignment(ItemAlignment... alignment) {
-        setTextAlignment(Arrays.asList(alignment));
-    }
-
-    void setTextAlignment(List<ItemAlignment> alignment) {
-        // Ignore all changes for yet
-    }
-
-    void setTextMargin(Indents margin) {
-        _textureStorage.setTextMargin(margin);
-        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
-        replaceCursor(); //???
-    }
-
-    Indents getTextMargin() {
-        return _textureStorage.getTextMargin();
-    }
-
-    void setFont(Font font) {
-        _textureStorage.setFont(font);
-        _cursor.setHeight(_textureStorage.getCursorHeight());
-        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
-        replaceCursor();
-    }
-
-    Font getFont() {
-        return _textureStorage.getFont();
     }
 
     void setText(String text) {
@@ -582,7 +544,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             }
 
             _cursorPosition = _textureStorage.setText(text); //, _cursorPosition);
-            //            replacecursor();
+//            replacecursor();
             addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -605,14 +567,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
     int getTextHeight() {
         return _textureStorage.getTextHeight();
-    }
-
-    void setForeground(Color color) {
-        _textureStorage.setForeground(color);
-    }
-
-    Color getForeground() {
-        return _textureStorage.getForeground();
     }
 
     boolean isEditable() {
@@ -877,29 +831,6 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         }
     }
 
-    // style
-    @Override
-    public void setStyle(Style style) {
-        if (style == null) {
-            return;
-        }
-        super.setStyle(style);
-        setForeground(style.foreground);
-        setFont(style.font);
-        _textureStorage.setLineContainerAlignment(style.textAlignment);
-
-        Style inner_style = style.getInnerStyle("selection");
-        if (inner_style != null) {
-            _selectedArea.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("cursor");
-        if (inner_style != null) {
-            _cursor.setStyle(inner_style);
-            if (_cursor.getHeight() == 0) {
-                _cursor.setHeight(_textureStorage.getCursorHeight());
-            }
-        }
-    }
 
     private ArrayDeque<TextBlockState> undoQueue;
     private ArrayDeque<TextBlockState> redoQueue;
@@ -919,6 +850,9 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
             undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
             undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
+
+            undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
+            _textureStorage.setScrollYOffset(tmpText.scrollYOffset);
             //TODO here reverse
             if (isWrapText()) {
                 _cursorPosition = _textureStorage.realCursorPosToWrap(_cursorPosition);
@@ -938,7 +872,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                 redoQueue.pollLast();
             }
             redoQueue.addFirst(
-                    new TextBlockState(tmpText.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
+                    new TextBlockState(tmpText)); //.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
 
             tmpText = undoQueue.pollFirst();
             if (tmpText != null) {
@@ -947,6 +881,9 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                 _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
                 undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
                 undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
+
+                undoQueue.peekFirst().scrollYOffset = tmpText.scrollYOffset;
+                _textureStorage.setScrollYOffset(tmpText.scrollYOffset);
                 //TODO here reverse
                 if (isWrapText()) {
                     _cursorPosition = _textureStorage.realCursorPosToWrap(_cursorPosition);
@@ -972,7 +909,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         if (isWrapText()) {
             realPos = _textureStorage.wrapCursorPosToReal(_cursorPosition);
         }
-        TextBlockState tbs = new TextBlockState(getText(), realPos);
+        TextBlockState tbs = new TextBlockState(getText(), realPos, getScrollYOffset());
         // if (_isSelect) {
         // tbs.fromSelectState = new Point(_selectFrom);
         // tbs.toSelectState = new Point(_selectTo);
@@ -1083,16 +1020,25 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         String textState;
         int cursorStateX;
         int cursorStateY;
+        int scrollYOffset;
 
         // Point fromSelectState;
         // Point toSelectState;
 
-        TextBlockState(String textState, Point cursorState) {
+        TextBlockState(String textState, Point cursorState, int scrollYOffset) {
             this.textState = textState;
             this.cursorStateX = cursorState.x;
             this.cursorStateY = cursorState.y;
+            this.scrollYOffset = scrollYOffset;
             // fromSelectState = new Point(0, 0);
             // toSelectState = new Point(0, 0);
+        }
+
+        public TextBlockState(TextBlockState tbs) {
+            this.textState = tbs.textState;
+            this.cursorStateX = tbs.cursorStateX;
+            this.cursorStateY = tbs.cursorStateY;
+            this.scrollYOffset = tbs.scrollYOffset;
         }
     }
 
@@ -1173,5 +1119,76 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
     void setScrollStepFactor(float value) {
         _textureStorage.setScrollStepFactor(value);
+    }
+
+    //decorations-------------------------------------------------------------------------------------------------------
+    void setLineSpacer(int lineSpacer) {
+        _textureStorage.setLineSpacer(lineSpacer);
+        _cursor.setHeight(_textureStorage.getCursorHeight());
+    }
+
+    int getLineSpacer() {
+        return _textureStorage.getLineSpacer();
+    }
+
+    void setTextAlignment(ItemAlignment... alignment) {
+        setTextAlignment(Arrays.asList(alignment));
+    }
+
+    void setTextAlignment(List<ItemAlignment> alignment) {
+        // Ignore all changes for yet
+    }
+
+    void setTextMargin(Indents margin) {
+        _textureStorage.setTextMargin(margin);
+        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
+        replaceCursor(); //???
+    }
+
+    Indents getTextMargin() {
+        return _textureStorage.getTextMargin();
+    }
+
+    void setFont(Font font) {
+        _textureStorage.setFont(font);
+        _cursor.setHeight(_textureStorage.getCursorHeight());
+        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
+        replaceCursor();
+    }
+
+    Font getFont() {
+        return _textureStorage.getFont();
+    }
+
+    void setForeground(Color color) {
+        _textureStorage.setForeground(color);
+    }
+
+    Color getForeground() {
+        return _textureStorage.getForeground();
+    }
+
+    // style
+    @Override
+    public void setStyle(Style style) {
+        if (style == null) {
+            return;
+        }
+        super.setStyle(style);
+        setForeground(style.foreground);
+        setFont(style.font);
+        _textureStorage.setLineContainerAlignment(style.textAlignment);
+
+        Style inner_style = style.getInnerStyle("selection");
+        if (inner_style != null) {
+            _selectedArea.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("cursor");
+        if (inner_style != null) {
+            _cursor.setStyle(inner_style);
+            if (_cursor.getHeight() == 0) {
+                _cursor.setHeight(_textureStorage.getCursorHeight());
+            }
+        }
     }
 }
