@@ -896,7 +896,7 @@ public abstract class CoreWindow {
     }
 
     /**
-     * Hides of unhides the current window.
+     * Hides or unhides the current window.
      * 
      * @param value True: if you want to hide the window. False: if you want tu
      *              unhide the window.

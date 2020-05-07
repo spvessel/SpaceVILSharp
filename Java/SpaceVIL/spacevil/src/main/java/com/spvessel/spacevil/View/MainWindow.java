@@ -257,8 +257,11 @@ public class MainWindow extends ActiveWindow {
                 // MouseArgs margs = new MouseArgs();
                 // margs.button = MouseButton.BUTTON_RIGHT;
                 // menu.show(sender, margs);
-                System.out.println(isFocused());
-                focus();
+
+                // System.out.println(isFocused());
+                // focus();
+
+                setHidden(true);
             }
 
             // // if (args.key == KeyCode.V)
