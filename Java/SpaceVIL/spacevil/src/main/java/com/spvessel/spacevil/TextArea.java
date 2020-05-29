@@ -412,9 +412,18 @@ public class TextArea extends Prototype {
      * 
      * @param text Text as java.lang.String.
      */
-    public void setText(String text) {
+    public final void setText(String text) {
         _area.setText(text);
         updateElements(); // ??? Возможно нужно добавить еще что-то
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
     }
 
     /**

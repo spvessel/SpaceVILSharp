@@ -5,10 +5,7 @@ namespace SpaceVIL.Core
         internal int X { get; set; }
         internal int Y { get; set; }
 
-        internal Point() {
-            X = 0;
-            Y = 0;
-        }
+        internal Point() : this(0, 0) { }
 
         internal Point(int x, int y)
         {
@@ -16,10 +13,6 @@ namespace SpaceVIL.Core
             Y = y;
         }
 
-        internal Point(Point point)
-        {
-            X = point.X;
-            Y = point.Y;
-        }
+        internal Point(Point point) : this(point.X, point.Y) { }
     }
 }

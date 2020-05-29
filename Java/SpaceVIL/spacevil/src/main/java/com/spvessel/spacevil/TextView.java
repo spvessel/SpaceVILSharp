@@ -217,7 +217,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
      * 
      * @param text Text as java.lang.String.
      */
-    public void setText(String text) {
+    public final void setText(String text) {
         _textureStorage.textInputLock.lock();
         try {
             _cursorPosition = _textureStorage.setText(text);
@@ -225,6 +225,15 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         } finally {
             _textureStorage.textInputLock.unlock();
         }
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
     }
 
     int getTextWidth() {

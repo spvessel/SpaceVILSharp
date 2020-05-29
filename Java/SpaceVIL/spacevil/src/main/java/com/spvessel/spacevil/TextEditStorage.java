@@ -74,7 +74,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
-        undoQueue.addFirst(new TextEditState(getText(), _cursorPosition));
+        undoQueue.addFirst(new TextEditState("", 0, 0, 0, 0));
 
         setCursor(EmbeddedCursor.IBEAM);
     }
@@ -195,7 +195,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             sh = 0;
         }
 
-        _textObject.setLineXShift(sh);
+        setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
         if (_justSelected) {
@@ -223,7 +223,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             sh = _cursorXMax - w;
         }
 
-        _textObject.setLineXShift(sh);
+        setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
         if (_justSelected) {
@@ -314,9 +314,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0]) {
                                 _selectFrom = _cursorPosition;
-                                _cursorPosition = wordBounds[0];
+                                // _cursorPosition = wordBounds[0];
 //                                replaceCursor();
-                                _selectTo = _cursorPosition;
+                                _selectTo = wordBounds[0]; //_cursorPosition;
                                 cutText();
                             } else {
                                 onBackSpaceInput();
@@ -326,9 +326,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1]) {
                                 _selectFrom = _cursorPosition;
-                                _cursorPosition = wordBounds[1];
+                                // _cursorPosition = wordBounds[1];
 //                                replaceCursor();
-                                _selectTo = _cursorPosition;
+                                _selectTo = wordBounds[1]; //_cursorPosition;
                                 cutText();
                             } else {
                                 onDeleteInput();
@@ -386,7 +386,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                         }
                     }
 
-                    if (args.key == KeyCode.RIGHT && _cursorPosition < privGetText().length()) { // arrow right
+                    if (args.key == KeyCode.RIGHT && _cursorPosition < getLettersCount()) { // arrow right
                         boolean doUsual = true;
 
                         if (hasControl) {
@@ -406,7 +406,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                     }
 
                     if (args.key == KeyCode.END) { // end
-                        _cursorPosition = privGetText().length();
+                        _cursorPosition = getLettersCount();
                         replaceCursor();
                     }
 
@@ -431,16 +431,23 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private void onBackSpaceInput() {
         if (_cursorPosition > 0) { // backspace
             StringBuilder sb = new StringBuilder(privGetText());
+
+            // int prevPos = _cursorPosition;
+            TextEditState tes = createTextEditState();
+
             _cursorPosition--;
-            privSetText(sb.deleteCharAt(_cursorPosition).toString());
+            privSetText(sb.deleteCharAt(_cursorPosition).toString(), tes);
             // replaceCursor();
         }
     }
 
     private void onDeleteInput() {
-        if (_cursorPosition < privGetText().length()) { // delete
+        if (_cursorPosition < getLettersCount()) { // delete
+            // int prevPos = _cursorPosition;
+            TextEditState tes = createTextEditState();
+
             StringBuilder sb = new StringBuilder(privGetText());
-            privSetText(sb.deleteCharAt(_cursorPosition).toString());
+            privSetText(sb.deleteCharAt(_cursorPosition).toString(), tes);
             // replaceCursor();
         }
     }
@@ -450,12 +457,16 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             checkingPos = 0;
         }
 
-        int lineLength = privGetText().length();
+        int lineLength = getLettersCount();
         if (checkingPos > lineLength) {
             checkingPos = lineLength;
         }
 
         return checkingPos;
+    }
+
+    private int getLettersCount() {
+        return privGetText().length();
     }
 
     private int cursorPosToCoord(int cPos, boolean isx) {
@@ -473,10 +484,10 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         if (isx) {
             if (getLineXShift() + coord < 0) {
-                _textObject.setLineXShift(-coord);
+                setLineXShift(-coord);
             }
             if (getLineXShift() + coord > _cursorXMax) {
-                _textObject.setLineXShift(_cursorXMax - coord);
+                setLineXShift(_cursorXMax - coord);
             }
         }
 
@@ -484,7 +495,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void replaceCursor() {
-        int len = privGetText().length();
+        int len = getLettersCount();
 
         if (_cursorPosition > len) {
             _cursorPosition = len;
@@ -515,6 +526,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         }
         textInputLock.lock();
         try {
+            // int prevPos = _cursorPosition;
+            TextEditState tes = createTextEditState();
+
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32"));
 
@@ -528,14 +542,14 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
             StringBuilder sb = new StringBuilder(privGetText());
             _cursorPosition++;
-            privSetText(sb.insert(_cursorPosition - 1, str).toString());
+            privSetText(sb.insert(_cursorPosition - 1, str).toString(), tes);
             // replaceCursor();
         } finally {
             textInputLock.unlock();
         }
     }
 
-    private void privSetText(String text) {
+    private void privSetText(String text, TextEditState tes) {
         textInputLock.lock();
         try {
             if (_substrateText.isVisible()) {
@@ -544,26 +558,34 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if ((text == null) || text.equals("")) {
                 _substrateText.setVisible(true);
             }
-            // _textObject.setLineXShift(_lineXShift, getWidth());
+            // setLineXShift(_lineXShift, getWidth());
             _textObject.setItemText(text);
             _textObject.checkXShift(_cursorXMax);
             // _textObject.UpdateData(UpdateType.Critical); //Doing in the _textObject
 
-            // _cursorPosition = privGetText().length();
-            replaceCursor();
-
-            if (!nothingFlag) {
-                redoQueue = new ArrayDeque<>();
-            } else {
-                nothingFlag = false;
-            }
-            if (undoQueue.size() > queueCapacity) {
-                undoQueue.pollLast();
-            }
-            undoQueue.addFirst(new TextEditState(getText(), _cursorPosition));
+            // _cursorPosition = getLettersCount();
+            addToUndoAndReplaceCursor(tes);
         } finally {
             textInputLock.unlock();
         }
+    }
+
+    private void addToUndoAndReplaceCursor(TextEditState tes) {
+        replaceCursor();
+
+        if (!nothingFlag) {
+            redoQueue = new ArrayDeque<>();
+        } else {
+            nothingFlag = false;
+        }
+        if (undoQueue.size() > queueCapacity) {
+            undoQueue.pollLast();
+        }
+
+        tes.cursorStateAfter = _cursorPosition;
+        tes.lineXShiftAfter = getLineXShift();
+
+        undoQueue.addFirst(tes);
     }
 
     void setText(String text) {
@@ -571,8 +593,13 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             unselectText();
             cancelJustSelected();
         }
-        privSetText(text);
-        _cursorPosition = privGetText().length();
+
+        TextEditState tes = createTextEditState();
+        tes.selectFromState = 0;
+        tes.selectToState = getLettersCount();
+
+        privSetText(text, tes);
+        _cursorPosition = getLettersCount();
         replaceCursor();
     }
 
@@ -719,6 +746,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         }
         textInputLock.lock();
         try {
+            // int prevPos = _cursorPosition;
+            TextEditState tes = createTextEditState();
+
             if (_isSelect) {
                 privCutText();
             }
@@ -730,7 +760,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             String text = privGetText();
             String newText = text.substring(0, _cursorPosition) + pasteStr + text.substring(_cursorPosition);
             _cursorPosition += pasteStr.length();
-            privSetText(newText);
+            privSetText(newText, tes);
             // replaceCursor();
         } finally {
             textInputLock.unlock();
@@ -748,6 +778,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         }
         textInputLock.lock();
         try {
+            // int prevPos = _cursorPosition;
+            TextEditState tes = createTextEditState();
+
             if (_selectFrom == -1) {
                 _selectFrom = 0;
             }
@@ -762,7 +795,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             int toReal = Math.max(_selectFrom, _selectTo);
             StringBuilder sb = new StringBuilder(privGetText());
             _cursorPosition = fromReal;
-            privSetText(sb.delete(fromReal, toReal).toString()); // - fromReal
+            privSetText(sb.delete(fromReal, toReal).toString(), tes); // - fromReal
             replaceCursor();
             if (_isSelect) {
                 unselectText();
@@ -800,6 +833,10 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         return _textObject.getLineXShift();
     }
 
+    private void setLineXShift(int lineXShift) {
+        _textObject.setLineXShift(lineXShift);
+    }
+
     boolean isBeginning() {
         return (_cursorPosition == 0);
     }
@@ -809,7 +846,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         textInputLock.lock();
         try {
             _selectFrom = 0;
-            _cursorPosition = privGetText().length();
+            _cursorPosition = getLettersCount();
             _selectTo = _cursorPosition;
             replaceCursor();
             _isSelect = true;
@@ -821,59 +858,98 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
     private int queueCapacity = SpaceVILConstants.textUndoCapacity;
     private boolean nothingFlag = false;
+    private ArrayDeque<TextEditState> undoQueue;
+    private ArrayDeque<TextEditState> redoQueue;
+    
+    @Override
+    public void redo() {
+        if (redoQueue.size() == 0) {
+            return;
+        }
+    
+        TextEditState tmpText = redoQueue.pollFirst();
+        if (tmpText != null) {
+            nothingFlag = true;
+            TextEditState selectState = createTextEditState();
+            setText(tmpText.textState); //privSetText(tmpText.textState, _cursorPosition); //_cursorPosition doesn't matter
+            
+            //because of the setText
+            undoQueue.peekFirst().selectFromState = selectState.selectFromState;
+            undoQueue.peekFirst().selectToState = selectState.selectToState;
+            undoQueue.peekFirst().cursorState = selectState.cursorState;
+            undoQueue.peekFirst().lineXShift = selectState.lineXShift;
+
+            _cursorPosition = tmpText.cursorState; //After;
+
+            setLineXShift(tmpText.lineXShift);
+
+            if (tmpText.selectFromState != tmpText.selectToState) {
+                _selectFrom = tmpText.selectFromState;
+                _selectTo = tmpText.selectToState;
+                _cursorPosition = tmpText.selectToState;
+                _isSelect = true;
+                makeSelectedArea();
+            }
+
+            undoQueue.peekFirst().cursorStateAfter = _cursorPosition;
+            undoQueue.peekFirst().lineXShiftAfter = getLineXShift();
+
+            replaceCursor();
+        }
+    }
 
     @Override
     public void undo() {
-        undoAction();
-    }
-
-    private ArrayDeque<TextEditState> undoQueue;
-
-    private void undoAction() {
         if (undoQueue.size() == 1) {
             return;
         }
-
+    
         TextEditState tmpText = undoQueue.pollFirst();
         if (tmpText != null) {
             if (redoQueue.size() > queueCapacity) {
                 redoQueue.pollLast();
             }
-            redoQueue.addFirst(new TextEditState(tmpText.textState, tmpText.cursorState));
-
-            tmpText = undoQueue.pollFirst();
-            if (tmpText != null) {
+            redoQueue.addFirst(createTextEditState()); //new TextEditState(tmpText));
+            redoQueue.peekFirst().cursorState = tmpText.cursorStateAfter;
+            redoQueue.peekFirst().lineXShift = tmpText.lineXShiftAfter;
+    
+            // tmpText = undoQueue.pollFirst();
+            // if (tmpText != null) {
                 nothingFlag = true;
+                setText(tmpText.textState); //privSetText(tmpText.textState, _cursorPosition); //_cursorPosition doesn't matter
+                
+                //because of the setText
+                undoQueue.removeFirst();
+    
+                _cursorPosition = tmpText.cursorState; //redoQueue.peekFirst().cursorStateBefore; //tmpText.cursorState;
+    
+                setLineXShift(tmpText.lineXShift);
 
-                privSetText(tmpText.textState);
-                _cursorPosition = tmpText.cursorState;
-                undoQueue.peekFirst().cursorState = _cursorPosition;
+                if (tmpText.selectFromState != tmpText.selectToState) {
+                    _selectFrom = tmpText.selectFromState;
+                    _selectTo = tmpText.selectToState;
+                    _cursorPosition = tmpText.selectToState;
+                    _isSelect = true;
+                    makeSelectedArea();
+                }
+    
                 replaceCursor();
-            }
+            // }
         }
     }
 
-    @Override
-    public void redo() {
-        redoAction();
-    }
-
-    private ArrayDeque<TextEditState> redoQueue;
-
-    private void redoAction() {
-        if (redoQueue.size() == 0) {
-            return;
+    private TextEditState createTextEditState() {
+        int selectFromState = 0;
+        int selectToState = 0;
+        if (_isSelect) {
+            selectFromState = _selectFrom;
+            selectToState = _selectTo;
         }
 
-        TextEditState tmpText = redoQueue.pollFirst();
-        if (tmpText != null) {
-            nothingFlag = true;
-
-            privSetText(tmpText.textState);
-            _cursorPosition = tmpText.cursorState;
-            undoQueue.peekFirst().cursorState = _cursorPosition;
-            replaceCursor();
-        }
+        TextEditState tes = new TextEditState(getText(), _cursorPosition, getLineXShift(), 
+                    selectFromState, selectToState);
+        
+        return tes;
     }
 
     void setSubstrateText(String substrateText) {
@@ -888,7 +964,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     void appendText(String text) {
         unselectText();
         cancelJustSelected();
-        _cursorPosition = privGetText().length();
+        _cursorPosition = getLettersCount();
         pasteText(text);
     }
 
@@ -902,7 +978,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         Matcher matcher = patternWordBounds.matcher(testString);
 
         int begPt = 0;
-        int endPt = privGetText().length();
+        int endPt = getLettersCount();
 
         if (matcher.find()) {
             endPt = index + matcher.start();
@@ -922,11 +998,33 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private class TextEditState {
         String textState;
         int cursorState;
+        int cursorStateAfter;
+        int lineXShift;
+        int lineXShiftAfter;
+        int selectFromState;
+        int selectToState;
 
-        TextEditState(String textState, int cursorState) {
+        TextEditState(String textState, int cursorState, int lineXShift, int selectFromState, int selectToState) {
             this.textState = textState;
             this.cursorState = cursorState;
+            this.lineXShift = lineXShift;
+            this.selectFromState = selectFromState;
+            this.selectToState = selectToState;
+
+            this.cursorStateAfter = 0;
+            this.lineXShiftAfter = 0;
         }
+
+        // TextEditState(TextEditState tes) {
+        //     this.textState = tes.textState;
+        //     this.cursorState = tes.cursorState;
+        //     this.lineXShift = tes.lineXShift;
+        //     this.selectFromState = tes.selectFromState;
+        //     this.selectToState = tes.selectToState;
+
+        //     this.cursorStateAfter = tes.cursorStateAfter;
+        //     this.lineXShiftAfter = tes.lineXShiftAfter;
+        // }
     }
 
     //decorations-------------------------------------------------------------------------------------------------------

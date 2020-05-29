@@ -257,6 +257,15 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.Object.</param>
+        public virtual void SetText(object text)
+        {
+            SetText(text.ToString());
+        }
+
         internal int GetTextWidth()
         {
             return _textureStorage.GetWidth();

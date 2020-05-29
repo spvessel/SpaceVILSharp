@@ -78,15 +78,17 @@ public class InputTest extends ActiveWindow {
          password.setSubstrateText("Enter a password...");
         // password.setTextAlignment(ItemAlignment.RIGHT);
 
-         TextEdit te = new TextEdit();
-         // te.setText("TextZaranee");
-         te.setTextAlignment(ItemAlignment.RIGHT);
-         // te.getSelectionArea().setBackground(Color.green);
-         te.setSubstrateText("Write some text");
-         // te.setMargin(0,0,150,0);
-         // te.setFontSize(10);
-         te.setWidth(300);
-         te.setWidthPolicy(SizePolicy.EXPAND);
+        TextEdit te = new TextEdit();
+        layout.addItem(te);
+        // te.setText("TextZaranee");
+//         te.setTextAlignment(ItemAlignment.RIGHT);
+        // te.getSelectionArea().setBackground(Color.green);
+//        te.setEditable(false);
+        te.setText("Write123 45678 90-= qwert yu iop [] asdfghj kl;' zxcv bnm,./"); //Substrate
+        // te.setMargin(0,0,150,0);
+        // te.setFontSize(10);
+//        te.setWidth(300);
+//        te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
 
@@ -120,12 +122,12 @@ public class InputTest extends ActiveWindow {
                 sp.setParameters(1, -5.5, 7, 0.51);
 
         layout.addItems(password, sp);
-        layout.addItem(te);
+//        layout.addItem(te);
 
         layout.addItem(tb);
-        tb.setWrapText(true);
         tb.setStyle(Style.getTextAreaStyle());
         tb.setText(getBigText());
+        tb.setWrapText(true);
 
         // ButtonCore bc = new ButtonCore("pizdec");
         // bc.setSize(150, 30);
@@ -292,40 +294,40 @@ public class InputTest extends ActiveWindow {
         return "ajfh gajhdif uahwoieh foiawoe ifisdfghaoisiuehgi ouaoesijfoaiehfouia shueighaoweigh1"
                 + "ajfhgajhdif uahwoiehfoiaw oeifis dfghaoi siuehgiouaoesi jfoaiehfouiashu eighaoweigh2 "
                 + "ajfhg ajhdifuahwoiehf oiawoei fisdfghaois iuehgiouaoesijfo aiehfouiashueighaow eigh3 "
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh4 "
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh5\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh6\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajh difuahwoiehfoiawoe ifisdfghaoisiueh giouaoesijfoaiehf ouiashueighaoweigh4 "
+                + "ajfhgajhdifuahwoieh foiawoeifisdfgh aoisiuehgioua oesijf oaiehfoui ashueighaoweigh5\n"
+                + "ajfhgajhdi fuahwoiehfoiawoeifis dfghaoisiuehgioua oesijfoaiehfouiashue ighaoweigh6\n"
+                + "ajfhgajhdifu ahwoiehfoiawoeifisd fgh aoisiuehgiouaoesijfoaiehf ouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeif isdfghaoisiueh giouaoesij foaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdif uahwoiehfoiawoei  fisdfghaoisiuehgi ouaoesijfoaiehf ouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoe ifisdfghaoisiue hgiouaoesijfoaie hfouiashue ighaoweigh\n"
+                + "ajfhgajhdi fuahwoi ehfoiawoeifi sdfghaoisiuehgiouaoesij foaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdf ghaoi iuehgiouaoes ijfoaiehfouias hueighaoweigh\n"
+                + "ajfhgajhdi fuahwoiehfoiawoeifisdfghaoisiue hgiouaoesijfoaiehfou iashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdf ghaoisiuehgiouaoe sijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoieh foiawoeifis dfghaoisiuehgiouaoesijfoaieh fouiash ueighaoweigh\n"
+                + "ajfhg ajhdifuahw oiehfoiawoeifi sdfghaoi siuehgiouaoesijfoai ehfouias hueighaoweigh\n"
+                + "ajfhgajhdifuah woiehfoiawoei fisdfghaoisiuehgio uaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoie hfoiawoeifisdfghaoisiu ehgiouaoesijfoaiehfouiashueig haoweigh\n"
+                + "ajfhgajhd ifuahwoiehfoiawoeifisdfg haois iuehgiouaoesi jfoaiehfou iashueighaoweigh\n"
+                + "ajfhgajh difuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaieh fouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfo ia woeifisdfgha oisiuehgiou aoesijfoaiehfoui ashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiaw oeifisdfghao isiuehgiouao esijfoai ehfouias hueighaoweigh\n"
+                + "ajfhga jhdifuahwoiehfoiaw oeifisdfgh aoisiuehgi ouaoesijf oaiehfouias ueighaoweigh\n"
+                + "ajfhgajhdifuahwoieh foiawoeifisdfghaoisiuehgiouaoes ijfoaiehfouia shueighaoweigh\n"
+                + "ajfhgajhdifuah woiehfoiawoeifis dfghaoisiue hgioua oesijfoaiehfouiash ueighaoweigh\n"
+                + "ajfhgajhdifuah woiehfoiawoeif isdfghaoisi uehgiouaoesijf oaiehfouiashu eighaoweigh\n"
+                + "ajfhgaj hdifuahwoieh foiawoeifi sdfghaoisiuehgio uaoesijf oaiehfouiashue ighaoweigh\n"
+                + "ajfhgajhd ifuahwoi ehfoiawoeifisdfgh aoisiuehgiouaoesijf oaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoia woeifisdf ghaoisiuehgiou aoesijfoaiehfoui ashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoia woeifisdfghaoisiuehgi ouaoesijfoai ehfouiashueighaoweigh\n"
+                + "ajfhgajhdi fuahwoiehfoiawoeifisdf ghaoisiuehgi ouaoesijfoaie hfouiashueighaow eigh\n"
+                + "ajfhgajhdifuahwoie hfoiawoeifisdfghaoisiue hgiouaoesijfo aiehfouia shueighaoweigh\n"
+                + "ajfhgajhdifua hwoi ehfoiawoeifisdfghaoisiueh giouaoesijfoaie hfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijf oaiehfouiashueighaoweigh\n"
+                + "ajfhgaj hdifuahwoi ehfoiawoeifisd fghaoisiuehgiouaoe sijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoe ifisdfghaois iuehgiou aoesijfoaie hfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwo iehfoiawo eifisdfghaoi iuehgiouaoesijfoaie hfouiashueighaoweigh\n"
                 + "ajfhga jhdifuahwoieh foiawoeifisdfghaois iuehgiouaoesijfo aiehfouiashuei ghaoweigh\n" + "";
     }
 

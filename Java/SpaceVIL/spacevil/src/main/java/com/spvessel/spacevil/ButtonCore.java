@@ -156,6 +156,15 @@ public class ButtonCore extends Prototype {
     }
 
     /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
+    }
+
+    /**
      * Getting the current text of the ButtonCore.
      * 
      * @return Text as java.lang.String.

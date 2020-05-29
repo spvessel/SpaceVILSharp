@@ -572,7 +572,7 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
      * 
      * @param text Text as java.lang.String.
      */
-    public void setText(String text) {
+    public final void setText(String text) {
         // if (_isSelect || _justSelected) {
         // unselectText();
         // cancelJustSelected();
@@ -581,6 +581,15 @@ public class TextEdit extends Prototype { // implements InterfaceTextEditable, I
         // _cursor_position = privGetText().length();
         // replaceCursor();
         _textObject.setText(text);
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
     }
 
     /**

@@ -70,11 +70,12 @@ namespace SpaceVIL
 
             undoQueue = new LinkedList<TextBlockState>();
             redoQueue = new LinkedList<TextBlockState>();
-            undoQueue.AddFirst(new TextBlockState(GetText(), new SpaceVIL.Core.Point(_cursorPosition), GetScrollYOffset())); //.X, _cursorPosition.Y));
+            undoQueue.AddFirst(CreateTextBlockState("", new SpaceVIL.Core.Point(), new SpaceVIL.Core.Point()));
 
             SetCursor(EmbeddedCursor.IBeam);
 
             _isWrapText = false;
+            _startTime.Start();
         }
 
         private void OnMousePressed(object sender, MouseArgs args)
@@ -246,6 +247,21 @@ namespace SpaceVIL
             _cursor.SetX(_cursor.GetX() + diff);
         }
 
+        private SpaceVIL.Core.Point GetScrollOffset()
+        {
+            return new SpaceVIL.Core.Point(GetScrollXOffset(), GetScrollYOffset());
+        }
+
+        private void SetScrollOffset(SpaceVIL.Core.Point scrollOffset)
+        {
+            //хер знает, на самом деле
+            SetScrollXOffset(scrollOffset.X);
+            SetScrollYOffset(scrollOffset.Y);
+            // //!important to not call functions with checks
+            // _textureStorage.setScrollXOffset(scrollOffset.x);
+            // _textureStorage.setScrollYOffset(scrollOffset.y);            
+        }
+
         private void OnScrollUp(object sender, MouseArgs args)
         {
             _cursor.SetY(_textureStorage.ScrollBlockUp(_cursor.GetY()));
@@ -338,9 +354,9 @@ namespace SpaceVIL
                                 if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[0])
                                 {
                                     _selectFrom = new SpaceVIL.Core.Point(_cursorPosition);
-                                    _cursorPosition = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
+                                    // _cursorPosition = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
                                     // ReplaceCursor();
-                                    _selectTo = new SpaceVIL.Core.Point(_cursorPosition);
+                                    _selectTo = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y); //new SpaceVIL.Core.Point(_cursorPosition);
                                     CutText();
                                 }
                                 else
@@ -355,9 +371,9 @@ namespace SpaceVIL
                                 if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[1])
                                 {
                                     _selectFrom = new SpaceVIL.Core.Point(_cursorPosition);
-                                    _cursorPosition = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
+                                    // _cursorPosition = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
                                     // ReplaceCursor();
-                                    _selectTo = new SpaceVIL.Core.Point(_cursorPosition);
+                                    _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y); //new SpaceVIL.Core.Point(_cursorPosition);
                                     CutText();
                                 }
                                 else
@@ -397,12 +413,16 @@ namespace SpaceVIL
 
                         if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter) //enter
                         {
+                            SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+                            SpaceVIL.Core.Point prevOff = GetScrollOffset();
+                            TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff);
+
                             _textureStorage.BreakLine(_cursorPosition);
                             _cursorPosition.Y++;
                             _cursorPosition.X = 0;
 
                             //// ReplaceCursor();
-                            AddToUndoAndReplaceCursor();
+                            AddToUndoAndReplaceCursor(tbbs);
                         }
 
                         if (args.Key == KeyCode.Tab)
@@ -475,7 +495,7 @@ namespace SpaceVIL
                                 {
                                     _cursorPosition.X++;
                                 }
-                                else if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
+                                else if (_cursorPosition.Y < GetLinesCount() - 1)
                                 {
                                     _cursorPosition.Y++;
                                     _cursorPosition.X = 0;
@@ -502,7 +522,7 @@ namespace SpaceVIL
                         {
                             if (!_justSelected)
                             {
-                                if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
+                                if (_cursorPosition.Y < GetLinesCount() - 1)
                                 {
                                     _cursorPosition.Y++;
                                 }
@@ -517,7 +537,7 @@ namespace SpaceVIL
 
                             if (hasControl)
                             {
-                                int lineNum = _textureStorage.GetLinesCount() - 1;
+                                int lineNum = GetLinesCount() - 1;
                                 _cursorPosition = new SpaceVIL.Core.Point(GetLettersCountInLine(lineNum), lineNum);
                                 ReplaceCursor();
                                 doUsual = false;
@@ -567,9 +587,13 @@ namespace SpaceVIL
 
         private void OnBackSpaceInput(KeyArgs args)
         {
+            SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+            SpaceVIL.Core.Point prevOff = GetScrollOffset();
+            TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff);
+
             if (_cursorPosition.X > 0)
             {
-                string sb = _textureStorage.GetTextInLine(_cursorPosition.Y);
+                string sb = GetTextInLine(_cursorPosition.Y);
                 _cursorPosition.X--;
                 SetTextInLine(sb.Remove(_cursorPosition.X, 1));
             }
@@ -578,22 +602,28 @@ namespace SpaceVIL
                 _cursorPosition.Y--;
                 _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
                 _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
-                AddToUndoAndReplaceCursor();
+                // AddToUndoAndReplaceCursor();
             }
             // ReplaceCursor();
+            AddToUndoAndReplaceCursor(tbbs);
         }
 
         private void OnDeleteInput(KeyArgs args)
         {
+            SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+            SpaceVIL.Core.Point prevOff = GetScrollOffset();
+            TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff);
+
             if (_cursorPosition.X < GetLettersCountInLine(_cursorPosition.Y))
             {
-                SetTextInLine(_textureStorage.GetTextInLine(_cursorPosition.Y).Remove(_cursorPosition.X, 1));
+                SetTextInLine(GetTextInLine(_cursorPosition.Y).Remove(_cursorPosition.X, 1));
             }
-            else if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
+            else if (_cursorPosition.Y < GetLinesCount() - 1)
             {
                 _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
-                AddToUndoAndReplaceCursor();
+                // AddToUndoAndReplaceCursor();
             }
+            AddToUndoAndReplaceCursor(tbbs);
         }
 
         private void OnTextInput(object sender, TextInputArgs args)
@@ -605,13 +635,26 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                ignoreSetInLine = true;
+                SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+                SpaceVIL.Core.Point prevOff = GetScrollOffset();
+                SpaceVIL.Core.Point prevSelectFrom = null;
+                SpaceVIL.Core.Point prevSelectTo = null;
+
+                // ignoreSetInLine = true;
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
 
                 if (_isSelect || _justSelected)
                 {
-                    UnselectText();
+                    prevSelectFrom = new SpaceVIL.Core.Point(_selectFrom);
+                    prevSelectTo = new SpaceVIL.Core.Point(_selectTo);
+                }
+
+                TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff, prevSelectFrom, prevSelectTo);
+
+                if (_isSelect || _justSelected)
+                {
+                    // UnselectText(); //???
                     PrivCutText();
                 }
                 if (_justSelected)
@@ -621,11 +664,11 @@ namespace SpaceVIL
 
                 _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition);
 
-                string sb = _textureStorage.GetTextInLine(_cursorPosition.Y);
+                string sb = GetTextInLine(_cursorPosition.Y);
                 _cursorPosition.X++;
                 SetTextInLine(sb.Insert(_cursorPosition.X - 1, str));
 
-                AddToUndoAndReplaceCursor();
+                AddToUndoAndReplaceCursor(tbbs);
             }
             finally
             {
@@ -671,9 +714,17 @@ namespace SpaceVIL
                     CancelJustSelected();
                 }
 
+                SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+                SpaceVIL.Core.Point prevOff = GetScrollOffset();
+                int lineNum = GetLinesCount() - 1;
+
+                TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff, new SpaceVIL.Core.Point(0, 0),
+                        new SpaceVIL.Core.Point(GetLettersCountInLine(lineNum), lineNum));
+
                 _cursorPosition = _textureStorage.SetText(text); //, _cursorPosition);
+
                 // ReplaceCursor();
-                AddToUndoAndReplaceCursor();
+                AddToUndoAndReplaceCursor(tbbs);
             }
             finally
             {
@@ -681,18 +732,23 @@ namespace SpaceVIL
             }
         }
 
-        private void SetTextInLine(String text)
+        private string GetTextInLine(int lineNum)
+        {
+            return _textureStorage.GetTextInLine(lineNum);
+        }
+
+        private void SetTextInLine(string text)
         {
             _textureStorage.SetTextInLine(text, _cursorPosition); //.Y);
 
-            if (!ignoreSetInLine)
-            {
-                AddToUndoAndReplaceCursor();
-            }
-            else
-            {
-                ignoreSetInLine = false;
-            }
+            // if (!ignoreSetInLine)
+            // {
+            //     AddToUndoAndReplaceCursor();
+            // }
+            // else
+            // {
+            //     ignoreSetInLine = false;
+            // }
         }
 
         internal int GetTextWidth()
@@ -754,6 +810,11 @@ namespace SpaceVIL
         private int GetLettersCountInLine(int lineNum)
         {
             return _textureStorage.GetLettersCountInLine(lineNum);
+        }
+
+        private int GetLinesCount()
+        {
+            return _textureStorage.GetLinesCount();
         }
 
         private void MakeSelectedArea()
@@ -845,7 +906,7 @@ namespace SpaceVIL
                 string stmp;
                 if (fromReal.Y == toReal.Y)
                 {
-                    stmp = _textureStorage.GetTextInLine(fromReal.Y);
+                    stmp = GetTextInLine(fromReal.Y);
                     sb.Append(stmp.Substring(fromReal.X, toReal.X - fromReal.X));
                     return sb.ToString();
                 }
@@ -856,16 +917,16 @@ namespace SpaceVIL
                 //     sb.Append("\n");
                 // else
                 // {
-                //     stmp = _textureStorage.GetTextInLine(fromReal.Y);
+                //     stmp = GetTextInLine(fromReal.Y);
                 //     sb.Append(stmp.Substring(fromReal.X) + "\n");
                 // }
                 // for (int i = fromReal.Y + 1; i < toReal.Y; i++)
                 // {
-                //     stmp = _textureStorage.GetTextInLine(i);
+                //     stmp = GetTextInLine(i);
                 //     sb.Append(stmp + "\n");
                 // }
 
-                // stmp = _textureStorage.GetTextInLine(toReal.Y);
+                // stmp = GetTextInLine(toReal.Y);
                 // sb.Append(stmp.Substring(0, toReal.X));
 
                 return sb.ToString();
@@ -886,10 +947,24 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+                SpaceVIL.Core.Point prevOff = GetScrollOffset();
+                SpaceVIL.Core.Point prevSelectFrom = null;
+                SpaceVIL.Core.Point prevSelectTo = null;
+
+                if (_isSelect)
+                {
+                    prevSelectFrom = new SpaceVIL.Core.Point(_selectFrom);
+                    prevSelectTo = new SpaceVIL.Core.Point(_selectTo);
+                }
+
+                TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff, prevSelectFrom, prevSelectTo);
+
                 if (_isSelect)
                 {
                     PrivCutText();
                 }
+
                 if (pasteStr == null || pasteStr.Equals(""))
                 {
                     return;
@@ -899,7 +974,7 @@ namespace SpaceVIL
                 _cursorPosition = _textureStorage.PasteText(pasteStr, _cursorPosition);
 
                 // ReplaceCursor();
-                AddToUndoAndReplaceCursor();
+                AddToUndoAndReplaceCursor(tbbs);
             }
             finally
             {
@@ -962,8 +1037,16 @@ namespace SpaceVIL
             {
                 return "";
             }
+
+            SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+            SpaceVIL.Core.Point prevOff = GetScrollOffset();
+            SpaceVIL.Core.Point prevSelectFrom = new SpaceVIL.Core.Point(_selectFrom);
+            SpaceVIL.Core.Point prevSelectTo = new SpaceVIL.Core.Point(_selectTo);
+            TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff, prevSelectFrom, prevSelectTo);
+
             String ans = PrivCutText();
-            AddToUndoAndReplaceCursor();
+
+            AddToUndoAndReplaceCursor(tbbs);
             return ans;
         }
 
@@ -990,6 +1073,12 @@ namespace SpaceVIL
 
         internal void ClearText()
         {
+            SpaceVIL.Core.Point prevPos = new SpaceVIL.Core.Point(_cursorPosition);
+            SpaceVIL.Core.Point prevOff = GetScrollOffset();
+            int lineNum = GetLinesCount() - 1;
+            TextBlockState tbbs = CreateTextBlockState(GetText(), prevPos, prevOff, new SpaceVIL.Core.Point(0, 0),
+                new SpaceVIL.Core.Point(GetLettersCountInLine(lineNum), lineNum));
+
             _textureStorage.Clear();
             _cursorPosition.X = 0;
             _cursorPosition.Y = 0;
@@ -1003,7 +1092,7 @@ namespace SpaceVIL
             }
 
             // ReplaceCursor();
-            AddToUndoAndReplaceCursor();
+            AddToUndoAndReplaceCursor(tbbs);
         }
 
         public void SelectAll()
@@ -1011,9 +1100,8 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                _selectFrom.X = 0;
-                _selectFrom.Y = 0;
-                _cursorPosition.Y = _textureStorage.GetLinesCount() - 1;
+                _selectFrom = new SpaceVIL.Core.Point();
+                _cursorPosition.Y = GetLinesCount() - 1;
                 _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
                 _selectTo = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
                 ReplaceCursor();
@@ -1030,7 +1118,7 @@ namespace SpaceVIL
         private LinkedList<TextBlockState> redoQueue;
         private bool nothingFlag = false;
         private int queueCapacity = SpaceVILConstants.TextUndoCapacity;
-        private bool ignoreSetInLine = false;
+        // private bool ignoreSetInLine = false;
 
         public void Redo()
         {
@@ -1044,19 +1132,43 @@ namespace SpaceVIL
             {
                 redoQueue.RemoveFirst();
                 nothingFlag = true;
-
+                TextBlockState selectState = CreateTextBlockState();
                 SetText(tmpText.textState);
-                _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                // undoQueue.First.Value.cursorStateX = _cursorPosition.X;
-                // undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
 
-                // undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
-                _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
-                //TODO here reverse
+                //due to the SetText
+                undoQueue.First.Value.selectFromState = selectState.selectFromState;
+                undoQueue.First.Value.selectToState = selectState.selectToState;
+                undoQueue.First.Value.cursorState = selectState.cursorState;
+                undoQueue.First.Value.scrollOffset = selectState.scrollOffset;
+
+                RealVarsToWrap(tmpText);
+                _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorState);
+
+                //???_textureStorage.SetScrollYOffset
+                SetScrollOffset(tmpText.scrollOffset);
+
+                if (IsStateHasSelection(tmpText))
+                {
+                    _selectFrom = tmpText.selectFromState;
+                    _selectTo = tmpText.selectToState;
+                    _cursorPosition = new SpaceVIL.Core.Point(tmpText.selectToState);
+                    _isSelect = true;
+                    MakeSelectedArea();
+                }                
+                // //TODO here reverse
+                // if (IsWrapText())
+                // {
+                //     _cursorPosition = _textureStorage.RealCursorPosToWrap(_cursorPosition);
+                // }
+
+                SpaceVIL.Core.Point cursorStateAfter = new SpaceVIL.Core.Point(_cursorPosition);
                 if (IsWrapText())
                 {
-                    _cursorPosition = _textureStorage.RealCursorPosToWrap(_cursorPosition);
+                    cursorStateAfter = _textureStorage.WrapCursorPosToReal(cursorStateAfter);
                 }
+                undoQueue.First.Value.cursorStateAfter = cursorStateAfter;
+                undoQueue.First.Value.scrollOffset = GetScrollOffset();
+
                 ReplaceCursor();
             }
         }
@@ -1076,32 +1188,114 @@ namespace SpaceVIL
                 {
                     redoQueue.RemoveLast();
                 }
-                redoQueue.AddFirst(new TextBlockState(tmpText)); //.textState, tmpText.cursorStateX, tmpText.cursorStateY));
+                redoQueue.AddFirst(CreateTextBlockState()); //new TextBlockState(tmpText));
+                redoQueue.First.Value.cursorState = new SpaceVIL.Core.Point(tmpText.cursorStateAfter);
+                redoQueue.First.Value.scrollOffset = new SpaceVIL.Core.Point(tmpText.scrollOffset);
 
-                tmpText = undoQueue.First.Value;
-                if (tmpText != null)
-                {
-                    undoQueue.RemoveFirst();
+                // tmpText = undoQueue.First.Value;
+                // if (tmpText != null)
+                // {
+                //     undoQueue.RemoveFirst();
                     nothingFlag = true;
-
                     SetText(tmpText.textState);
-                    _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                    // undoQueue.First.Value.cursorStateX = _cursorPosition.X;
-                    // undoQueue.First.Value.cursorStateY = _cursorPosition.Y;
 
-                    // undoQueue.First.Value.scrollYOffset = tmpText.scrollYOffset;
-                    _textureStorage.SetScrollYOffset(tmpText.scrollYOffset);
-                    //TODO here reverse
-                    if (IsWrapText())
+                    //due to the SetText
+                    undoQueue.RemoveFirst();
+
+                    RealVarsToWrap(tmpText);
+
+                    _cursorPosition = new SpaceVIL.Core.Point(tmpText.cursorState);
+
+                    //???_textureStorage.SetScrollYOffset
+                    SetScrollOffset(tmpText.scrollOffset);
+
+                    if (IsStateHasSelection(tmpText))
                     {
-                        _cursorPosition = _textureStorage.RealCursorPosToWrap(_cursorPosition);
+                        _selectFrom = tmpText.selectFromState;
+                        _selectTo = tmpText.selectToState;
+                        _cursorPosition = new SpaceVIL.Core.Point(tmpText.selectToState);
+                        _isSelect = true;
+                        MakeSelectedArea();
                     }
+
+                    // //TODO here reverse
+                    // if (IsWrapText())
+                    // {
+                    //     _cursorPosition = _textureStorage.RealCursorPosToWrap(_cursorPosition);
+                    // }
+
                     ReplaceCursor();
-                }
+                // }
             }
         }
 
-        private void AddToUndoAndReplaceCursor()
+        private bool IsStateHasSelection(TextBlockState tbs)
+        {
+            if (tbs.selectFromState == null || tbs.selectToState == null)
+            {
+                return false;
+            }
+            return ((tbs.selectFromState.X != tbs.selectToState.X) || (tbs.selectFromState.Y != tbs.selectToState.Y));
+        }
+
+        private TextBlockState CreateTextBlockState(string textState, SpaceVIL.Core.Point cursorState, 
+                    SpaceVIL.Core.Point scrollOffset, SpaceVIL.Core.Point selectFromState, SpaceVIL.Core.Point selectToState)
+        {
+            TextBlockState tbbs = new TextBlockState(textState, cursorState, scrollOffset, selectFromState, selectToState);
+            WrapVarsToReal(tbbs);
+            return tbbs;
+        }
+
+        private TextBlockState CreateTextBlockState(string textState, SpaceVIL.Core.Point cursorState, 
+                    SpaceVIL.Core.Point scrollOffset)
+        {
+            return CreateTextBlockState(textState, cursorState, scrollOffset, null, null);
+        }
+
+        private TextBlockState CreateTextBlockState()
+        {
+            SpaceVIL.Core.Point selectFromState = null;
+            SpaceVIL.Core.Point selectToState = null;
+            if (_isSelect) {
+                selectFromState = new SpaceVIL.Core.Point(_selectFrom);
+                selectToState = new SpaceVIL.Core.Point(_selectTo);
+            }
+            SpaceVIL.Core.Point scrollOffset = GetScrollOffset();
+            return CreateTextBlockState(GetText(), new SpaceVIL.Core.Point(_cursorPosition), scrollOffset, selectFromState, selectToState);
+        }
+
+        private void WrapVarsToReal(TextBlockState tbbs)
+        {
+            if (!IsWrapText())
+            {
+                return;
+            }
+
+            tbbs.cursorState = _textureStorage.WrapCursorPosToReal(tbbs.cursorState);
+            if (tbbs.selectFromState != null) {
+                tbbs.selectFromState = _textureStorage.WrapCursorPosToReal(tbbs.selectFromState);
+            }
+            if (tbbs.selectToState != null) {
+                tbbs.selectToState = _textureStorage.WrapCursorPosToReal(tbbs.selectToState);
+            }
+        }
+
+        private void RealVarsToWrap(TextBlockState tbbs)
+        {
+            if (!IsWrapText()) {
+                return;
+            }
+
+            tbbs.cursorState = _textureStorage.RealCursorPosToWrap(tbbs.cursorState);
+            if (tbbs.selectFromState != null) {
+                tbbs.selectFromState = _textureStorage.RealCursorPosToWrap(tbbs.selectFromState);
+            }
+            if (tbbs.selectToState != null) {
+                tbbs.selectToState = _textureStorage.RealCursorPosToWrap(tbbs.selectToState);
+            }
+        }
+
+        private void AddToUndoAndReplaceCursor(TextBlockState tbbs)
         {
             ReplaceCursor();
             if (!nothingFlag)
@@ -1117,18 +1311,17 @@ namespace SpaceVIL
             {
                 undoQueue.RemoveLast();
             }
+
             //TODO here forward
-            SpaceVIL.Core.Point realPos = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
+            SpaceVIL.Core.Point realPosAfter = new SpaceVIL.Core.Point(_cursorPosition);
             if (IsWrapText())
             {
-                realPos = _textureStorage.WrapCursorPosToReal(_cursorPosition);
+                realPosAfter = _textureStorage.WrapCursorPosToReal(_cursorPosition);
             }
-            TextBlockState tbs = new TextBlockState(GetText(), realPos, GetScrollYOffset()); //_cursorPosition.X, _cursorPosition.Y);
-            // if (_isSelect) {
-            //     tbs.fromSelectState = new SpaceVIL.Core.Point(_selectFrom);
-            //     tbs.toSelectState = new SpaceVIL.Core.Point(_selectTo);
-            // }
-            undoQueue.AddFirst(tbs);
+            tbbs.cursorStateAfter = realPosAfter;
+            tbbs.scrollOffsetAfter = GetScrollOffset();
+
+            undoQueue.AddFirst(tbbs);
             TextChanged?.Invoke();
         }
 
@@ -1238,7 +1431,7 @@ namespace SpaceVIL
         {
             UnselectText();
             CancelJustSelected();
-            int lineNum = _textureStorage.GetLinesCount() - 1;
+            int lineNum = GetLinesCount() - 1;
             _cursorPosition = new SpaceVIL.Core.Point(GetLettersCountInLine(lineNum), lineNum);
             PrivPasteText(text); //PasteText
         }
@@ -1246,29 +1439,33 @@ namespace SpaceVIL
         private class TextBlockState
         {
             internal String textState;
-            internal int cursorStateX;
-            internal int cursorStateY;
-            internal int scrollYOffset;
-            // internal SpaceVIL.Core.Point fromSelectState;
-            // internal SpaceVIL.Core.Point toSelectState;
+            internal SpaceVIL.Core.Point cursorState;
+            internal SpaceVIL.Core.Point cursorStateAfter;
+            internal SpaceVIL.Core.Point scrollOffset;
+            internal SpaceVIL.Core.Point scrollOffsetAfter;
+            internal SpaceVIL.Core.Point selectFromState;
+            internal SpaceVIL.Core.Point selectToState;
 
-            internal TextBlockState(String textState, SpaceVIL.Core.Point cursorState, int scrollYOffset)
+            internal TextBlockState(String textState, SpaceVIL.Core.Point cursorState, SpaceVIL.Core.Point scrollOffset,
+                        SpaceVIL.Core.Point selectFromState, SpaceVIL.Core.Point selectToState)
             {
                 this.textState = textState;
-                this.cursorStateX = cursorState.X;
-                this.cursorStateY = cursorState.Y;
-                this.scrollYOffset = scrollYOffset;
-                // fromSelectState = new SpaceVIL.Core.Point(0, 0);
-                // toSelectState = new SpaceVIL.Core.Point(0, 0);
+                this.cursorState = cursorState;
+                this.scrollOffset = scrollOffset;
+                this.selectFromState = selectFromState;
+                this.selectToState = selectToState;
+
+                this.cursorStateAfter = new SpaceVIL.Core.Point(0, 0);
+                this.scrollOffsetAfter = new SpaceVIL.Core.Point(0, 0);
             }
 
-            internal TextBlockState(TextBlockState tbs)
-            {
-                this.textState = tbs.textState;
-                this.cursorStateX = tbs.cursorStateX;
-                this.cursorStateY = tbs.cursorStateY;
-                this.scrollYOffset = tbs.scrollYOffset;
-            }
+            // internal TextBlockState(TextBlockState tbs)
+            // {
+            //     this.textState = tbs.textState;
+            //     this.cursorStateX = tbs.cursorStateX;
+            //     this.cursorStateY = tbs.cursorStateY;
+            //     this.scrollYOffset = tbs.scrollYOffset;
+            // }
         }
 
         internal void RewindText()
@@ -1279,7 +1476,7 @@ namespace SpaceVIL
 
         //Wrap Text Stuff---------------------------------------------------------------------------------------------------
 
-        private bool _isWrapText;
+        private bool _isWrapText = false;
 
         public bool IsWrapText()
         {

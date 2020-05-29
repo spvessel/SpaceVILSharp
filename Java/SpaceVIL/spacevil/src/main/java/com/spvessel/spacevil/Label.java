@@ -201,7 +201,7 @@ public class Label extends Prototype implements InterfaceVLayout {
      * 
      * @param text Text as java.lang.String.
      */
-    public void setText(String text) {
+    public final void setText(String text) {
         if (text == null) {
             text = "";
         }
@@ -240,6 +240,15 @@ public class Label extends Prototype implements InterfaceVLayout {
         setTextAlignment(_textObjects.get(0).getTextAlignment());
         setTextMargin(_textObjects.get(0).getMargin());
         setFont(getFont());
+    }
+
+    /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
     }
 
     /**

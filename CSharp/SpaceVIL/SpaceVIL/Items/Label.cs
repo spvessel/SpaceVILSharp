@@ -248,6 +248,16 @@ namespace SpaceVIL
             SetTextMargin(_textObjects[0].GetMargin());
             SetFont(GetFont());
         }
+
+        /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.Object.</param>
+        public virtual void SetText(object text)
+        {
+            SetText(text.ToString());
+        }
+
         /// <summary>
         /// Getting the current text of the Label.
         /// </summary>

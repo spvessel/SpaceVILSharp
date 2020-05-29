@@ -180,6 +180,14 @@ namespace SpaceVIL
             _textObject.SetItemText(text);
         }
         /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.Object.</param>
+        public virtual void SetText(object text)
+        {
+            SetText(text.ToString());
+        }
+        /// <summary>
         /// Getting the current text of the ButtonToggle.
         /// </summary>
         /// <returns>Text as System.String.</returns>

@@ -195,6 +195,15 @@ public class CheckBox extends Prototype {
     }
 
     /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
+    }
+
+    /**
      * Getting the current text of the CheckBox.
      * 
      * @return Text as java.lang.String.

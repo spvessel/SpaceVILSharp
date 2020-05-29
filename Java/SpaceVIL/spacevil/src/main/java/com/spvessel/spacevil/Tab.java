@@ -319,6 +319,15 @@ public class Tab extends Prototype implements InterfaceDraggable {
     }
 
     /**
+     * Setting the text.
+     * 
+     * @param text Text as java.lang.Object.
+     */
+    public void setText(Object text) {
+        setText(text.toString());
+    }
+
+    /**
      * Getting the current text of the Tab.
      * 
      * @return Text as java.lang.String.

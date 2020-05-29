@@ -594,6 +594,15 @@ namespace SpaceVIL
             _textObject.SetText(text);
         }
 
+        /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.Object.</param>
+        public virtual void SetText(object text)
+        {
+            SetText(text.ToString());
+        }
+
         // private String PrivGetText()
         // {
         //     return _text_object.GetItemText();

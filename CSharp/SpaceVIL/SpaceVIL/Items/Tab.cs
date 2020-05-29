@@ -289,6 +289,7 @@ namespace SpaceVIL
         {
             return _textLabel.GetFont();
         }
+
         /// <summary>
         /// Setting the text.
         /// </summary>
@@ -298,6 +299,16 @@ namespace SpaceVIL
             _textLabel.SetText(text);
             UpdateTabWidth();
         }
+
+        /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.Object.</param>
+        public virtual void SetText(object text)
+        {
+            SetText(text.ToString());
+        }
+
         /// <summary>
         /// Getting the current text of the Tab.
         /// </summary>
