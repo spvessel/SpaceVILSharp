@@ -183,8 +183,8 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 1; j++) {
                     ResizableItem frame = new ResizableItem();
                     // frame.setShadow(10, 5, 5, Color.RED);
                     // frame.setShadowExtension(20, 20);
@@ -194,9 +194,9 @@ public class FlowTest extends ActiveWindow {
                     frame.setSize(200, 200);
                     frame.setPosition(10 + i * 210, 10 + j * 210);
                     flow.addItem(frame);
-                    // Graph graph = getGraph();
-                    // graph.setPadding(5, 5, 5, 5);
-                    // frame.addItem(graph);
+                    Graph graph = getGraph();
+                    graph.setPadding(5, 5, 5, 5);
+                    frame.addItem(graph);
                     // OpenGLLayer ogl = new OpenGLLayer();
                     // ogl.setMargin(0, 30, 0, 0);
                     // frame.addItem(ogl);
@@ -465,7 +465,7 @@ public class FlowTest extends ActiveWindow {
         // graph_points.setLineColor(new Color(218, 82, 160, 255));
         graph_points.setLineColor(new Color(100, 100, 100, 255));
         graph_points.setPointColor(new Color(10, 162, 232));
-        graph_points.setPointThickness(20.0f);
+        graph_points.setPointThickness(1.0f);
         graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         // List<float[]> crd = new List<float[]>();
@@ -476,36 +476,43 @@ public class FlowTest extends ActiveWindow {
         // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
         // 0, 0));
 
-        if (koh.isEmpty()) {
-            Point point1 = new Point(200, 200);
-            Point point2 = new Point(500, 200);
-            Point point3 = new Point(350, 400);
-            fractalKoh(koh, point1, point2, point3, 4);
-            fractalKoh(koh, point2, point3, point1, 4);
-            fractalKoh(koh, point3, point1, point2, 4);
+        // if (koh.isEmpty()) {
+        //     Point point1 = new Point(200, 200);
+        //     Point point2 = new Point(500, 200);
+        //     Point point3 = new Point(350, 400);
+        //     fractalKoh(koh, point1, point2, point3, 4);
+        //     fractalKoh(koh, point2, point3, point1, 4);
+        //     fractalKoh(koh, point3, point1, point2, 4);
 
-            point1 = new Point(100, 100);
-            point2 = new Point(250, 100);
-            point3 = new Point(175, 200);
-            List<float[]> koh2 = new LinkedList<>();
-            fractalKoh(koh2, point1, point2, point3, 4);
-            fractalKoh(koh2, point2, point3, point1, 4);
-            fractalKoh(koh2, point3, point1, point2, 4);
-            koh2 = GraphicsMathService.moveShape(koh2, 175, 135);
+        //     point1 = new Point(100, 100);
+        //     point2 = new Point(250, 100);
+        //     point3 = new Point(175, 200);
+        //     List<float[]> koh2 = new LinkedList<>();
+        //     fractalKoh(koh2, point1, point2, point3, 4);
+        //     fractalKoh(koh2, point2, point3, point1, 4);
+        //     fractalKoh(koh2, point3, point1, point2, 4);
+        //     koh2 = GraphicsMathService.moveShape(koh2, 175, 135);
 
-            point1 = new Point(50, 50);
-            point2 = new Point(125, 50);
-            point3 = new Point(87, 100);
-            List<float[]> koh3 = new LinkedList<>();
-            fractalKoh(koh3, point1, point2, point3, 3);
-            fractalKoh(koh3, point2, point3, point1, 3);
-            fractalKoh(koh3, point3, point1, point2, 3);
-            koh3 = GraphicsMathService.moveShape(koh3, 262, 200);
+        //     point1 = new Point(50, 50);
+        //     point2 = new Point(125, 50);
+        //     point3 = new Point(87, 100);
+        //     List<float[]> koh3 = new LinkedList<>();
+        //     fractalKoh(koh3, point1, point2, point3, 3);
+        //     fractalKoh(koh3, point2, point3, point1, 3);
+        //     fractalKoh(koh3, point3, point1, point2, 3);
+        //     koh3 = GraphicsMathService.moveShape(koh3, 262, 200);
 
-            koh.addAll(koh2);
-            koh.addAll(koh3);
-            System.out.println(koh.size());
-        }
+        //     koh.addAll(koh2);
+        //     koh.addAll(koh3);
+        //     System.out.println(koh.size());
+        // }
+
+        koh.add(new float [] {0, 1});
+        koh.add(new float [] {1, 2});
+        koh.add(new float [] {2, 3});
+        koh.add(new float [] {3, 4});
+        koh.add(new float [] {4, 5});
+        koh.add(new float [] {5, 6});
 
         graph_points.setPointsCoord(koh);
 
@@ -525,8 +532,8 @@ public class FlowTest extends ActiveWindow {
         // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
         // graph_points.getPointThickness()));
         //
-        graph_points.setPointShape(GraphicsMathService.getCross(graph_points.getPointThickness(),
-                graph_points.getPointThickness(), 1, 45));
+        // graph_points.setPointShape(GraphicsMathService.getCross(graph_points.getPointThickness(),
+        //         graph_points.getPointThickness(), 1, 45));
 
         // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
         // graph_points.getPointThickness() / 2.0f, 8));

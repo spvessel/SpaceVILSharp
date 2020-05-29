@@ -810,7 +810,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Hides of unhides the current window.
+        /// Hides or unhides the current window.
         /// </summary>
         /// <param name="value">True: if you want to hide the window. False: if you want tu unhide the window.</param>
         public void SetHidden(bool value)
