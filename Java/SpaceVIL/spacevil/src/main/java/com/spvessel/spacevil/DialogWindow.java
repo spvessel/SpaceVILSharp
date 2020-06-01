@@ -38,12 +38,4 @@ public abstract class DialogWindow extends CoreWindow {
         initWindow();
         super.show();
     }
-
-    /**
-     * Closes dialog window and destroy it.
-     */
-    public void closeAndDestroy() {
-        close();
-        WindowsBox.removeWindow(this);
-    }
 }

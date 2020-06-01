@@ -38,14 +38,5 @@ namespace SpaceVIL
             InitWindow();
             base.Show();
         }
-
-        /// <summary>
-        /// Closes dialog window and destroy it.
-        /// </summary>
-        public void CloseAndDestroy()
-        {
-            Close();
-            WindowsBox.RemoveWindow(this);
-        }
     }
 }

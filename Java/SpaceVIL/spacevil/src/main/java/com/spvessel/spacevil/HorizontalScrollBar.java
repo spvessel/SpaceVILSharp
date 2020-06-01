@@ -40,26 +40,6 @@ public class HorizontalScrollBar extends HorizontalStack {
 
         slider.handler.orientation = Orientation.HORIZONTAL;
 
-        InterfaceMouseMethodState up_click = (sender, args) -> {
-            float value = slider.getCurrentValue();
-            value -= slider.getStep();
-            if (value < slider.getMinValue())
-                value = slider.getMinValue();
-            slider.setCurrentValue(value);
-        };
-        upArrow.eventMouseClick.add(up_click);
-        eventScrollUp.add(up_click);
-
-        InterfaceMouseMethodState down_click = (sender, args) -> {
-            float value = slider.getCurrentValue();
-            value += slider.getStep();
-            if (value > slider.getMaxValue())
-                value = slider.getMaxValue();
-            slider.setCurrentValue(value);
-        };
-        downArrow.eventMouseClick.add(down_click);
-        eventScrollDown.add(down_click);
-
         setStyle(DefaultsService.getDefaultStyle(HorizontalScrollBar.class));
     }
 
@@ -76,6 +56,26 @@ public class HorizontalScrollBar extends HorizontalStack {
         slider.isFocusable = false;
         slider.handler.isFocusable = false;
         addItems(upArrow, slider, downArrow);
+
+        InterfaceMouseMethodState upScroll = (sender, args) -> {
+            float value = slider.getCurrentValue();
+            value -= slider.getStep();
+            if (value < slider.getMinValue())
+                value = slider.getMinValue();
+            slider.setCurrentValue(value);
+        };
+        upArrow.eventMouseClick.add(upScroll);
+        eventScrollUp.add(upScroll);
+
+        InterfaceMouseMethodState downScroll = (sender, args) -> {
+            float value = slider.getCurrentValue();
+            value += slider.getStep();
+            if (value > slider.getMaxValue())
+                value = slider.getMaxValue();
+            slider.setCurrentValue(value);
+        };
+        downArrow.eventMouseClick.add(downScroll);
+        eventScrollDown.add(downScroll);
     }
 
     /**
@@ -102,17 +102,17 @@ public class HorizontalScrollBar extends HorizontalStack {
             return;
         super.setStyle(style);
 
-        Style inner_style = style.getInnerStyle("uparrow");
-        if (inner_style != null) {
-            upArrow.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("uparrow");
+        if (innerStyle != null) {
+            upArrow.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("downarrow");
-        if (inner_style != null) {
-            downArrow.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("downarrow");
+        if (innerStyle != null) {
+            downArrow.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("slider");
-        if (inner_style != null) {
-            slider.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("slider");
+        if (innerStyle != null) {
+            slider.setStyle(innerStyle);
         }
     }
 }

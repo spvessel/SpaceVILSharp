@@ -84,7 +84,7 @@ public class MainWindow extends ActiveWindow {
         }
         if (iBig != null && iSmall != null)
             setIcon(iBig, iSmall);
-        
+
         Frame layout = new Frame();
         layout.setBackground(70, 70, 70);
         layout.setBorderRadius(10);
@@ -160,21 +160,22 @@ public class MainWindow extends ActiveWindow {
         btn_label.setShadowExtension(4, 4);
         btn_label.setBorderRadius(6);
         // InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-        //     setShadeColor(new Color(100, 100, 100, 125));
-        //     MessageBox msg = new MessageBox("Send result?", "Message:");
-        //     ButtonCore btnDontSave = new ButtonCore("Do not save");
-        //     btnDontSave.eventMouseClick.add((s, a) -> {
-        //         System.out.println("btnDontSave is chosen");
-        //     });
-        //     msg.addUserButton(btnDontSave, 2); // id must be > 1
-        //     msg.onCloseDialog.add(() -> {
-        //         System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-        //     });
-        //     msg.show();
+        // setShadeColor(new Color(100, 100, 100, 125));
+        // MessageBox msg = new MessageBox("Send result?", "Message:");
+        // ButtonCore btnDontSave = new ButtonCore("Do not save");
+        // btnDontSave.eventMouseClick.add((s, a) -> {
+        // System.out.println("btnDontSave is chosen");
+        // });
+        // msg.addUserButton(btnDontSave, 2); // id must be > 1
+        // msg.onCloseDialog.add(() -> {
+        // System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+        // });
+        // msg.show();
 
-        //     // MessageItem ms = new MessageItem("Send result?", "Message:");
-        //     // ms.show(this);
-        //     System.out.println(btn_label.isFocusable + " " + getFocusedItem().getItemName());
+        // // MessageItem ms = new MessageItem("Send result?", "Message:");
+        // // ms.show(this);
+        // System.out.println(btn_label.isFocusable + " " +
+        // getFocusedItem().getItemName());
         // };
         // btn_label.eventMouseClick.add(btn_action_click);
         btn_label.isFocusable = false;
@@ -192,7 +193,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setCursor(iS, 64, 64);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowsBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
-        
+
         ButtonCore btn_complex = new ButtonCore("Complex");
         btn_complex.setFont(font);
         btn_complex.setToolTip("Show Complex window.");
@@ -261,33 +262,41 @@ public class MainWindow extends ActiveWindow {
                 // System.out.println(isFocused());
                 // focus();
 
-                setHidden(true);
+                // setHidden(true);
             }
 
             // // if (args.key == KeyCode.V)
             // // CommonService.setClipboardString("SetClipBoardString");
             // if (args.key == KeyCode.C)
-            //     System.out.println(CommonService.getClipboardString());
+            // System.out.println(CommonService.getClipboardString());
             // if (args.key == KeyCode.F)
-            //     System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            // System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
             // // if (args.key == KeyCode.R)
-            // //     ItemsRefreshManager.printSizeOfShapes();
+            // // ItemsRefreshManager.printSizeOfShapes();
 
         });
 
+        MessageBox msg = new MessageBox("Choose one of this:", "Message:");
         eventKeyRelease.add((sender, args) -> {
             // System.out.println("root is focused");
-            if (args.key == KeyCode.ALPHA1) {
-                WindowManager.setRenderType(RenderType.IF_NEEDED);
+            // if (args.key == KeyCode.ALPHA1) {
+            // WindowManager.setRenderType(RenderType.IF_NEEDED);
+            // }
+            // if (args.key == KeyCode.ALPHA2) {
+            // WindowManager.setRenderType(RenderType.PERIODIC);
+            // }
+            // if (args.key == KeyCode.ALPHA3) {
+            // WindowManager.setRenderType(RenderType.ALWAYS);
+            // }
+            // if (args.key == KeyCode.P)
+            // System.out.println(getWorkArea().toString());
+            if (args.key == KeyCode.MENU) {
+                ButtonCore btnDontSave = new ButtonCore("Do not save");
+                msg.addUserButton(btnDontSave, 2); // id must be > 1
+                // ButtonCore btnDontSave2 = new ButtonCore("Do not save");
+                // msg.addUserButton(btnDontSave2, 3); // id must be > 1
+                msg.show();
             }
-            if (args.key == KeyCode.ALPHA2) {
-                WindowManager.setRenderType(RenderType.PERIODIC);
-            }
-            if (args.key == KeyCode.ALPHA3) {
-                WindowManager.setRenderType(RenderType.ALWAYS);
-            }
-            if (args.key == KeyCode.P)
-                System.out.println(getWorkArea().toString());
         });
         // WindowManager.enableVSync(0);
         // WindowManager.setRenderType(RenderType.ALWAYS);
@@ -428,7 +437,7 @@ public class MainWindow extends ActiveWindow {
         image.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         image.setMargin(2, 0, 0, 0);
         image.keepAspectRatio(true);
-        
+
         return image;
     }
 }

@@ -2390,15 +2390,15 @@ public class Style implements Cloneable {
         toolbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         toolbarStyle.setSpacing(10, 0);
         toolbarStyle.setPadding(0, 0, 0, 0);
-        toolbarStyle.setMargin(0, 0, 0, 0);
+        toolbarStyle.setMargin(0, 0, 10, 0);
         style.addInnerStyle("toolbar", toolbarStyle);
 
         Style userbarStyle = getHorizontalStackStyle();
-        userbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        userbarStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         userbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         userbarStyle.setSpacing(10, 0);
         userbarStyle.setPadding(0, 0, 0, 0);
-        userbarStyle.setMargin(0, 0, 0, 0);
+        userbarStyle.setMargin(25, 0, 30, 0);
         style.addInnerStyle("userbar", userbarStyle);
 
         Style msgStyle = getLabelStyle();
@@ -2627,18 +2627,18 @@ public class Style implements Cloneable {
         windowStyle.setBackground(45, 45, 45);
         style.addInnerStyle("window", windowStyle);
 
-        Style okStyle = getButtonCoreStyle();
-        okStyle.setBackground(100, 255, 150);
-        okStyle.foreground = Color.black;
-        okStyle.setSize(100, 30);
-        okStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        okStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
-        okStyle.setMargin(0, 0, 0, 0);
-        okStyle.borderRadius = new CornerRadius();
-        okStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
-        okStyle.isShadowDrop = true;
-        okStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
-        style.addInnerStyle("button", okStyle);
+        Style btnStyle = getButtonCoreStyle();
+        btnStyle.setBackground(100, 255, 150);
+        btnStyle.foreground = Color.black;
+        btnStyle.setSize(100, 30);
+        btnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        btnStyle.setMargin(0, 0, 0, 0);
+        btnStyle.borderRadius = new CornerRadius();
+        btnStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
+        btnStyle.isShadowDrop = true;
+        btnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+        style.addInnerStyle("button", btnStyle);
 
         Style textStyle = getTextEditStyle();
         textStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);

@@ -95,6 +95,7 @@ public class FlowTest extends ActiveWindow {
         btn1.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         ItemState hovered = new ItemState(new Color(255, 255, 255, 125));
         btn1.addItemState(ItemStateType.HOVERED, hovered);
+        OpenEntryBox opb = new OpenEntryBox("Open File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(this);
@@ -122,22 +123,22 @@ public class FlowTest extends ActiveWindow {
             // ls.show(this);
 
             // 1.
-            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
-            opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg");
-            opd.onCloseDialog.add(() -> {
-                System.out.println("Result? " + opd.getResult());
-            });
-            // opd.SetDefaultPath("D:\\");
-            opd.show(this);
-
-            // 2.
-            // OpenEntryBox opd = new OpenEntryBox("Open File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
+            // OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
             // opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg");
             // opd.onCloseDialog.add(() -> {
             //     System.out.println("Result? " + opd.getResult());
             // });
-            // opd.setDefaultPath("D:\\");
-            // opd.show();
+            // // opd.SetDefaultPath("D:\\");
+            // opd.show(this);
+
+            // 2.
+            
+            opb.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg");
+            opb.onCloseDialog.add(() -> {
+                System.out.println("Result? " + opb.getResult());
+            });
+            opb.setDefaultPath("D:\\");
+            opb.show();
         });
         // btn1.setCustomFigure(new CustomFigure(false,
         // GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));

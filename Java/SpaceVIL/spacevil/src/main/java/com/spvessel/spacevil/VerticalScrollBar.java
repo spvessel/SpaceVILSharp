@@ -44,27 +44,6 @@ public class VerticalScrollBar extends VerticalStack {
         // Slider
         slider.handler.orientation = Orientation.VERTICAL;
 
-        // Arrows
-        InterfaceMouseMethodState up_click = (sender, args) -> {
-            float value = slider.getCurrentValue();
-            value -= slider.getStep();
-            if (value < slider.getMinValue())
-                value = slider.getMinValue();
-            slider.setCurrentValue(value);
-        };
-        upArrow.eventMouseClick.add(up_click);
-        eventScrollUp.add(up_click);
-
-        InterfaceMouseMethodState down_click = (sender, args) -> {
-            float value = slider.getCurrentValue();
-            value += slider.getStep();
-            if (value > slider.getMaxValue())
-                value = slider.getMaxValue();
-            slider.setCurrentValue(value);
-        };
-        downArrow.eventMouseClick.add(down_click);
-        eventScrollDown.add(down_click);
-
         setStyle(DefaultsService.getDefaultStyle(VerticalScrollBar.class));
     }
 
@@ -81,6 +60,27 @@ public class VerticalScrollBar extends VerticalStack {
         slider.isFocusable = false;
         slider.handler.isFocusable = false;
         addItems(upArrow, slider, downArrow);
+
+        // Arrows
+        InterfaceMouseMethodState upScroll = (sender, args) -> {
+            float value = slider.getCurrentValue();
+            value -= slider.getStep();
+            if (value < slider.getMinValue())
+                value = slider.getMinValue();
+            slider.setCurrentValue(value);
+        };
+        upArrow.eventMouseClick.add(upScroll);
+        eventScrollUp.add(upScroll);
+
+        InterfaceMouseMethodState downScroll = (sender, args) -> {
+            float value = slider.getCurrentValue();
+            value += slider.getStep();
+            if (value > slider.getMaxValue())
+                value = slider.getMaxValue();
+            slider.setCurrentValue(value);
+        };
+        downArrow.eventMouseClick.add(downScroll);
+        eventScrollDown.add(downScroll);
     }
 
     /**

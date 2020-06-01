@@ -57,7 +57,7 @@ namespace SpaceVIL
         /// <returns>Index of the current selected option</returns>
         public int GetCurrentIndex()
         {
-            return ItemList.GetSelection();
+            return _selectionIndexStore;
         }
 
         /// <summary>
@@ -78,6 +78,7 @@ namespace SpaceVIL
             InitElements();
 
             ItemList.SetSelection(index);
+            _selectionIndexStore = index;
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
             {

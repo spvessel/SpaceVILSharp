@@ -76,7 +76,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * @return Index of the current selected option
      */
     public int getCurrentIndex() {
-        return itemList.getSelection();
+        return _selectionIndexStore;
     }
 
     /**
@@ -95,11 +95,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * @param index Index of option in the list.
      */
     public void setCurrentIndex(int index) {
-        // if (!_init) {
         initElements();
-        // }
 
         itemList.setSelection(index);
+        _selectionIndexStore = index;
         if (itemList.getSelectedItem() instanceof MenuItem) {
             MenuItem selection = (MenuItem) itemList.getSelectedItem();
             _textSelection = selection.getText();

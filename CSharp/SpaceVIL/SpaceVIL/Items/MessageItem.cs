@@ -326,7 +326,6 @@ namespace SpaceVIL
             if (innerStyle != null)
             {
                 _msgLabel.SetStyle(innerStyle);
-                Console.WriteLine(_msgLabel.GetMargin().Bottom);
             }
             innerStyle = style.GetInnerStyle("layout");
             if (innerStyle != null)
