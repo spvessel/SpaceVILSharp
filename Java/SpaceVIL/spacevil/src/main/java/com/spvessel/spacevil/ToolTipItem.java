@@ -75,8 +75,9 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
     @Override
     public void addItems(InterfaceBaseItem... items) {
-        if (isInit)
+        if (isInit) {
             return;
+        }
         for (InterfaceBaseItem item : items) {
             _queue.add(item);
         }
@@ -88,8 +89,9 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
         locker.lock();
         try {
             if (value) {
-                if (_stop != null)
+                if (_stop != null) {
                     return;
+                }
                 ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         visibleSelf();
@@ -99,8 +101,9 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
                 _stop.start();
             } else {
                 setVisible(value);
-                if (_stop == null)
+                if (_stop == null) {
                     return;
+                }
                 _stop.stop();
                 _stop = null;
             }
@@ -112,8 +115,9 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
     private void visibleSelf() {
         locker.lock();
         try {
-            if (_stop == null)
+            if (_stop == null) {
                 return;
+            }
             setVisible(true);
             _stop.stop();
             _stop = null;
@@ -193,13 +197,15 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
 
         Style innerStyle = style.getInnerStyle("text");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _textObject.setStyle(innerStyle);
+        }
 
         setForeground(style.foreground);
         setFont(style.font);

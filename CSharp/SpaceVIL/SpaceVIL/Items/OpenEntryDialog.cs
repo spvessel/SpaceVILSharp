@@ -98,9 +98,13 @@ namespace SpaceVIL
             _controlPanel = new Frame();
 
             if (dialogType == OpenDialogType.Save)
+            {
                 _btnOpen = new ButtonCore("Save");
+            }
             else
+            {
                 _btnOpen = new ButtonCore("Open");
+            }
 
             _btnCancel = new ButtonCore("Cancel");
 
@@ -113,12 +117,14 @@ namespace SpaceVIL
         /// <param name="title">Title text.</param>
         /// <param name="entryType">Entry type as SpaceVIL.Core.FileSystemEntryType.</param>
         public OpenEntryDialog(String title, FileSystemEntryType entryType) : this(title, entryType, OpenDialogType.Open) { }
+        
         /// <summary>
         /// Constructs OpenEntryDialog with title text. Entry type is FileSystemEntryType.File. 
         /// Dialog type is OpenDialogType.Open.
         /// </summary>
         /// <param name="title">Title text.</param>
         public OpenEntryDialog(String title) : this(title, FileSystemEntryType.File) { }
+        
         /// <summary>
         /// Initializing all elements in the OpenEntryDialog.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -137,7 +143,9 @@ namespace SpaceVIL
             else
             {
                 if (_dialogType == OpenDialogType.Save)
+                {
                     _fileName.SetText("new_file");
+                }
                 _filterList = new ContextMenu(GetHandler());
                 _filterList.ActiveButton = MouseButton.ButtonLeft;
                 AddFilterExtensions("All files (*.*);*.*");
@@ -200,7 +208,9 @@ namespace SpaceVIL
                 {
                     String result = input.GetResult();
                     if (result == null)
+                    {
                         return;
+                    }
                     try
                     {
                         System.IO.File.Move(_addressLine.GetText() + Path.DirectorySeparatorChar + ((FileSystemEntry)_fileList.GetSelectedItem()).GetText(),
@@ -240,7 +250,9 @@ namespace SpaceVIL
                 }
             };
             if (_filterList != null)
+            {
                 FillFilterList();
+            }
             RefreshFolder();
         }
 
@@ -253,7 +265,9 @@ namespace SpaceVIL
             FileInfo[] files = d.GetFiles();
 
             if (_fileList == null)
+            {
                 return;
+            }
 
             // Maybe need some sorting
             if (dirs != null)
@@ -261,7 +275,9 @@ namespace SpaceVIL
                 foreach (DirectoryInfo dir in dirs)
                 {
                     if (!_btnShowHidden.IsToggled() && dir.Attributes.HasFlag(FileAttributes.Hidden))
+                    {
                         continue;
+                    }
 
                     FileSystemEntry fi = new FileSystemEntry(FileSystemEntryType.Directory, dir.Name);
                     fi.SetIcon(new Bitmap(_folder), 16, 16);
@@ -286,10 +302,14 @@ namespace SpaceVIL
                 foreach (FileInfo f in files)
                 {
                     if (!_btnShowHidden.IsToggled() && f.Attributes.HasFlag(FileAttributes.Hidden))
+                    {
                         continue;
+                    }
 
                     if (CheckExtensionFilter(f))
+                    {
                         continue;
+                    }
 
                     FileSystemEntry fi = new FileSystemEntry(FileSystemEntryType.File, f.Name);
                     fi.SetIcon(new Bitmap(_file), 16, 16);
@@ -306,7 +326,9 @@ namespace SpaceVIL
                     fi.EventKeyRelease += (sender, args) =>
                     {
                         if (args.Key == KeyCode.Enter)
+                        {
                             Open();
+                        }
                     };
                 }
             }
@@ -345,7 +367,9 @@ namespace SpaceVIL
             if (name.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
                 if (ind <= 1 || name.Substring(ind - 1, 1).Equals(":"))
+                {
                     return;
+                }
                 name = name.Substring(0, name.Length - 1);
                 ind = name.LastIndexOf(Path.DirectorySeparatorChar);
             }
@@ -379,9 +403,13 @@ namespace SpaceVIL
         {
             String name = _addressLine.GetText();
             if (name.EndsWith(Path.DirectorySeparatorChar.ToString()) || name.EndsWith("/"))
+            {
                 _addressLine.SetText(name + fse.GetText());
+            }
             else
+            {
                 _addressLine.SetText(name + Path.DirectorySeparatorChar + fse.GetText());
+            }
 
             _filesTrack.Push(_addressLine.GetText());
             RefreshFolder();
@@ -390,7 +418,9 @@ namespace SpaceVIL
         private void SetNameLine(FileSystemEntry fse)
         {
             if (_fileName.GetText().Equals(fse.GetText()))
+            {
                 return;
+            }
             _fileName.SetText(fse.GetText());
         }
         /// <summary>
@@ -425,22 +455,30 @@ namespace SpaceVIL
                 String key = line[0];
                 String regex = line[1].ToLower().Replace("*", "").Replace(" ", "");
                 if (_extensionFilter.ContainsKey(key))
+                {
                     _extensionFilter[key] = regex.Split(',');
+                }
                 else
+                {
                     _extensionFilter.Add(key, regex.Split(','));
+                }
             }
         }
 
         private bool CheckExtensionFilter(FileInfo f)
         {
             if (_extensionFilter.Count == 0)
+            {
                 return false;
+            }
 
             String name = f.Name.ToLower();
             foreach (String item in _extensionFilter[_filterText.GetText()])
             {
                 if (name.EndsWith(item) || item.Equals("."))
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -485,7 +523,9 @@ namespace SpaceVIL
                 {
                     String result = input.GetResult();
                     if (result == null)
+                    {
                         return;
+                    }
 
                     if ("File".Equals(entry.GetText()))
                     {
@@ -561,11 +601,15 @@ namespace SpaceVIL
                 {
                     _result = _addressLine.GetText();
                     if (selection != null)
+                    {
                         _result += Path.DirectorySeparatorChar + selection.GetText();
+                    }
                 }
             }
             else if (_dialogType == OpenDialogType.Save)
+            {
                 _result = _addressLine.GetText() + Path.DirectorySeparatorChar + _fileName.GetText();
+            }
             Close();
         }
         /// <summary>
@@ -588,20 +632,32 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
+
             // toolbar
             Style innerStyle = style.GetInnerStyle("window");
             if (innerStyle != null)
+            {
                 Window.SetStyle(innerStyle);
+            }
+
             // layout
             innerStyle = style.GetInnerStyle("layout");
             if (innerStyle != null)
+            {
                 _layout.SetStyle(innerStyle);
+            }
+            
             // toolbar
             innerStyle = style.GetInnerStyle("toolbar");
             if (innerStyle != null)
+            {
                 _toolbar.SetStyle(innerStyle);
+            }
+            
             // buttoncore
             innerStyle = style.GetInnerStyle("toolbarbutton");
             if (innerStyle != null)
@@ -614,36 +670,58 @@ namespace SpaceVIL
                 _btnRefresh.SetStyle(innerStyle);
                 _btnUpward.SetStyle(innerStyle);
             }
+
             // buttontogle
             innerStyle = style.GetInnerStyle("buttonhidden");
             if (innerStyle != null)
+            {
                 _btnShowHidden.SetStyle(innerStyle);
+            }
+
             // addressline
             innerStyle = style.GetInnerStyle("addressline");
             if (innerStyle != null)
+            {
                 _addressLine.SetStyle(innerStyle);
+            }
+            
             // filename
             innerStyle = style.GetInnerStyle("filenameline");
             if (innerStyle != null)
+            {
                 _fileName.SetStyle(innerStyle);
+            }
+            
             // listbox
             innerStyle = style.GetInnerStyle("list");
             if (innerStyle != null)
+            {
                 _fileList.SetStyle(innerStyle);
+            }
+            
             // controlpanel
             innerStyle = style.GetInnerStyle("controlpanel");
             if (innerStyle != null)
+            {
                 _controlPanel.SetStyle(innerStyle);
+            }
+
             // ok, cancel
             innerStyle = style.GetInnerStyle("okbutton");
             if (innerStyle != null)
+            {
                 _btnOpen.SetStyle(innerStyle);
+            }
             innerStyle = style.GetInnerStyle("cancelbutton");
             if (innerStyle != null)
+            {
                 _btnCancel.SetStyle(innerStyle);
+            }
             innerStyle = style.GetInnerStyle("filter");
             if (innerStyle != null)
+            {
                 _btnFilter.SetStyle(innerStyle);
+            }
             innerStyle = style.GetInnerStyle("filtertext");
             if (innerStyle != null)
             {
@@ -652,7 +730,9 @@ namespace SpaceVIL
             }
             innerStyle = style.GetInnerStyle("divider");
             if (innerStyle != null)
+            {
                 _dividerStyle = innerStyle;
+            }
         }
     }
 }

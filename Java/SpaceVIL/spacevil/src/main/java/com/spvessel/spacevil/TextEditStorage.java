@@ -168,7 +168,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                     _selectFrom = _cursorPosition;
                 } else {
                     _selectTo = _cursorPosition;
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                    makeSelectedArea();
                 }
             }
         } finally {
@@ -201,7 +201,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         if (_justSelected) {
             cancelJustSelected();
         }
-        makeSelectedArea(); //_selectFrom, _selectTo);
+        makeSelectedArea();
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
@@ -229,7 +229,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         if (_justSelected) {
             cancelJustSelected();
         }
-        makeSelectedArea(); //_selectFrom, _selectTo);
+        makeSelectedArea();
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
@@ -271,9 +271,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         textInputLock.lock();
         try {
-//            if (args == null)
-//                return;
-
             TextShortcutProcessor.processShortcut(this, args);
 
             if (!_isEditable) {
@@ -420,7 +417,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if (_isSelect) {
                 if (_selectTo != _cursorPosition) {
                     _selectTo = _cursorPosition;
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                    makeSelectedArea();
                 }
             }
         } finally {
@@ -499,7 +496,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         if (_cursorPosition > len) {
             _cursorPosition = len;
-            // replaceCursor();
         }
         int pos = cursorPosToCoord(_cursorPosition, true);
 
@@ -514,8 +510,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             _cursor.setX(xcp);
         } else {
             int cnt = getX() + getPadding().left + pos + _textObject.getMargin().left;
-            // if (_cursorPosition > 0)
-            // cnt += _cursor.getWidth();
             _cursor.setX(cnt);
         }
     }
@@ -533,7 +527,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             String str = new String(input, Charset.forName("UTF-32"));
 
             if (_isSelect || _justSelected) {
-                unselectText();// privCutText();
+                unselectText();
                 privCutText();
             }
             if (_justSelected) {
@@ -558,10 +552,9 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if ((text == null) || text.equals("")) {
                 _substrateText.setVisible(true);
             }
-            // setLineXShift(_lineXShift, getWidth());
+            
             _textObject.setItemText(text);
             _textObject.checkXShift(_cursorXMax);
-            // _textObject.UpdateData(UpdateType.Critical); //Doing in the _textObject
 
             // _cursorPosition = getLettersCount();
             addToUndoAndReplaceCursor(tes);
@@ -642,13 +635,11 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         replaceCursor();
         if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT)) {
-            makeSelectedArea(); //_selectFrom, _selectTo);
+            //TODO WTF???
+            makeSelectedArea();
         }
     }
 
-    /**
-     * Initialization and adding of all elements in the TextEdit
-     */
     @Override
     public void initElements() {
         addItems(_substrateText, _selectedArea, _textObject, _cursor);
@@ -779,14 +770,15 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         textInputLock.lock();
         try {
             // int prevPos = _cursorPosition;
-            TextEditState tes = createTextEditState();
-
             if (_selectFrom == -1) {
                 _selectFrom = 0;
             }
             if (_selectTo == -1) {
                 _selectTo = 0;
             }
+            
+            TextEditState tes = createTextEditState();
+            
             String str = privGetSelectedText();
             if (_selectFrom == _selectTo) {
                 return str;
@@ -800,7 +792,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             if (_isSelect) {
                 unselectText();
             }
-            cancelJustSelected(); // _justSelected = false;
+            cancelJustSelected();
             return str;
         } finally {
             textInputLock.unlock();
@@ -819,8 +811,8 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void cancelJustSelected() {
-        _selectFrom = -1;// 0;
-        _selectTo = -1;// 0;
+        _selectFrom = -1;
+        _selectTo = -1;
         _justSelected = false;
     }
 
@@ -850,7 +842,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             _selectTo = _cursorPosition;
             replaceCursor();
             _isSelect = true;
-            makeSelectedArea(); //_selectFrom, _selectTo);
+            makeSelectedArea();
         } finally {
             textInputLock.unlock();
         }
@@ -954,7 +946,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
     void setSubstrateText(String substrateText) {
         _substrateText.setItemText(substrateText);
-        // _substrateText.checkXShift(_cursorXMax);
     }
 
     String getSubstrateText() {
@@ -1014,17 +1005,6 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             this.cursorStateAfter = 0;
             this.lineXShiftAfter = 0;
         }
-
-        // TextEditState(TextEditState tes) {
-        //     this.textState = tes.textState;
-        //     this.cursorState = tes.cursorState;
-        //     this.lineXShift = tes.lineXShift;
-        //     this.selectFromState = tes.selectFromState;
-        //     this.selectToState = tes.selectToState;
-
-        //     this.cursorStateAfter = tes.cursorStateAfter;
-        //     this.lineXShiftAfter = tes.lineXShiftAfter;
-        // }
     }
 
     //decorations-------------------------------------------------------------------------------------------------------
@@ -1102,6 +1082,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         return _substrateText.getForeground();
     }
 
+    //style
     @Override
     public void setStyle(Style style) {
         if (style == null) {

@@ -45,7 +45,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Setting alignment of a the text. 
+        /// Setting alignment of a PasswordLine text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
         /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
@@ -53,8 +53,9 @@ namespace SpaceVIL
         {
             _textEncrypt.SetTextAlignment(alignment);
         }
+
         /// <summary>
-        /// Setting alignment of the text. 
+        /// Setting alignment of a PasswordLine text. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
         /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
@@ -62,14 +63,25 @@ namespace SpaceVIL
         {
             _textEncrypt.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Getting alignment of a PasswordLine text. 
+        /// </summary>
+        /// <returns>Text alignment as SpaceVIL.Core.ItemAlignment.</returns>
+        public ItemAlignment GetTextAlignment()
+        {
+            return _textEncrypt.GetTextAlignment();
+        }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to this PasswordLine.
         /// </summary>
         /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
-            _textEncrypt.SetMargin(margin);
+            _textEncrypt.SetTextMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to PasswordLine.
         /// </summary>
@@ -79,8 +91,9 @@ namespace SpaceVIL
         /// <param name="bottom">Indent on the bottom.</param>
         public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
-            _textEncrypt.SetMargin(left, top, right, bottom);
+            SetTextMargin(new Indents(left, top, right, bottom));
         }
+
         /// <summary>
         /// Getting indents of the text.
         /// </summary>
@@ -89,6 +102,7 @@ namespace SpaceVIL
         {
             return _textEncrypt.GetTextMargin();
         }
+
         /// <summary>
         /// Setting font of the text.
         /// </summary>
@@ -97,6 +111,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text.
         /// </summary>
@@ -105,6 +120,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the text.
         /// </summary>
@@ -113,6 +129,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetFontStyle(style);
         }
+
         /// <summary>
         /// Setting new font family of the text.
         /// </summary>
@@ -121,6 +138,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetFontFamily(fontFamily);
         }
+
         /// <summary>
         /// Getting the current font of the text.
         /// </summary>
@@ -147,6 +165,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of a PasswordLine in byte RGB format.
         /// </summary>
@@ -155,8 +174,9 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
-            _textEncrypt.SetForeground(r, g, b);
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a PasswordLine in byte RGBA format.
         /// </summary>
@@ -166,8 +186,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
-            _textEncrypt.SetForeground(r, g, b, a);
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Setting text color of a PasswordLine in float RGB format.
         /// </summary>
@@ -176,8 +197,9 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
-            _textEncrypt.SetForeground(r, g, b);
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting text color of a PasswordLine in float RGBA format.
         /// </summary>
@@ -187,8 +209,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
-            _textEncrypt.SetForeground(r, g, b, a);
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Getting current text color.
         /// </summary>
@@ -299,6 +322,7 @@ namespace SpaceVIL
                 _textEncrypt.SetStyle(inner_style);
             }
         }
+
         /// <summary>
         /// Setting the substrate text 
         /// (hint under main text, when you start typing substrate becomes invisible).
@@ -308,6 +332,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetSubstrateText(substrateText);
         }
+
         /// <summary>
         /// Setting font size of the substrate text 
         /// (hint under main text, when you start typing substrate becomes invisible).
@@ -318,6 +343,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetSubstrateFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the substrate text 
         /// (hint under main text, when you start typing substrate becomes invisible).
@@ -328,6 +354,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetSubstrateFontStyle(style);
         }
+
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine.
@@ -337,6 +364,7 @@ namespace SpaceVIL
         {
             _textEncrypt.SetSubstrateForeground(color);
         }
+
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine in byte RGB format.
@@ -346,8 +374,9 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetSubstrateForeground(int r, int g, int b)
         {
-            _textEncrypt.SetSubstrateForeground(r, g, b);
+            SetSubstrateForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color of a PasswordLine in byte RGBA format.
@@ -358,8 +387,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SeSubstratetForeground(int r, int g, int b, int a)
         {
-            _textEncrypt.SetSubstrateForeground(r, g, b, a);
+            SetSubstrateForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible)color of a PasswordLine in float RGB format.
@@ -369,8 +399,9 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetSubstrateForeground(float r, float g, float b)
         {
-            _textEncrypt.SetSubstrateForeground(r, g, b);
+            SetSubstrateForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
+
         /// <summary>
         /// Setting substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible)color of a PasswordLine in float RGBA format.
@@ -381,8 +412,9 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetSubstrateForeground(float r, float g, float b, float a)
         {
-            _textEncrypt.SetSubstrateForeground(r, g, b, a);
+            SetSubstrateForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+
         /// <summary>
         /// Getting current substrate text (hint under main text, when you start 
         /// typing substrate becomes invisible) color.
@@ -392,6 +424,7 @@ namespace SpaceVIL
         {
             return _textEncrypt.GetSubstrateForeground();
         }
+
         /// <summary>
         /// Getting substrate text 
         /// (hint under main text, when you start typing substrate becomes invisible).

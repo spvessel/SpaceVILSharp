@@ -127,13 +127,13 @@ abstract class TextItem extends Primitive {
         return _textAlignment;
     }
 
-    public void setTextAlignment(ItemAlignment... value) {
-        setTextAlignment(Arrays.asList(value));
+    public void setTextAlignment(ItemAlignment... alignment) {
+        setTextAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(value));
     }
 
-    public void setTextAlignment(List<ItemAlignment> list) {
-        if (list != null && !_textAlignment.equals(list)) {
-            _textAlignment = list;
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        if (alignment != null && !_textAlignment.equals(alignment)) {
+            _textAlignment = alignment;
         }
     }
 }

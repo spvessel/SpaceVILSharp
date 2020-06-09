@@ -489,11 +489,12 @@ namespace SpaceVIL
         /// <param name="alignment">Alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetAlignment(params ItemAlignment[] alignment)
         {
-            ItemAlignment common = alignment.ElementAt(0);
-            if (alignment.Length > 1)
-                for (int i = 1; i < alignment.Length; i++)
-                    common |= alignment.ElementAt(i);
-            SetAlignment(common);
+            // ItemAlignment common = alignment.ElementAt(0);
+            // if (alignment.Length > 1)
+            //     for (int i = 1; i < alignment.Length; i++)
+            //         common |= alignment.ElementAt(i);
+            // SetAlignment(common);
+            SetAlignment(BaseItemStatics.ComposeFlags(alignment));
         }
         /// <summary>
         /// Getting an alignment of an item's shape relative to its container. 

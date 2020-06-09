@@ -31,8 +31,9 @@ public final class ToolTip {
      * @param style  Style as com.spvessel.spacevil.Decorations.Style.
      */
     public static void setStyle(CoreWindow window, Style style) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setStyle(style);
     }
@@ -48,8 +49,9 @@ public final class ToolTip {
      * @param ms     Waiting time in milliseconds.
      */
     public static void setTimeOut(CoreWindow window, int ms) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setTimeOut(ms);
     }
@@ -63,8 +65,9 @@ public final class ToolTip {
      * @return Current waiting time in milliseconds.
      */
     public static int getTimeOut(CoreWindow window) {
-        if (window == null)
+        if (window == null) {
             return -1;
+        }
         ToolTipItem toolTip = getToolTip(window);
         return toolTip.getTimeOut();
     }
@@ -78,8 +81,9 @@ public final class ToolTip {
      * @param color Background color as java.awt.Color.
      */
     public static void setBackground(CoreWindow window, Color color) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setBackground(color);
     }
@@ -93,8 +97,9 @@ public final class ToolTip {
      * @param color Text color as java.awt.Color.
      */
     public static void setForeground(CoreWindow window, Color color) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setForeground(color);
     }
@@ -108,8 +113,9 @@ public final class ToolTip {
      * @param font Font as java.awt.Font.
      */
     public static void setFont(CoreWindow window, Font font) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setFont(font);
     }
@@ -123,8 +129,9 @@ public final class ToolTip {
      * @param border Border as com.spvessel.spacevil.Decorations.Border.
      */
     public static void setBorder(CoreWindow window, Border border) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setBorder(border);
     }
@@ -138,8 +145,9 @@ public final class ToolTip {
      * @param shadow Shadow as com.spvessel.spacevil.Decorations.Shadow.
      */
     public static void setShadow(CoreWindow window, Shadow shadow) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setShadow(shadow.getRadius(), shadow.getXOffset(), shadow.getYOffset(), shadow.getColor());
     }
@@ -155,8 +163,9 @@ public final class ToolTip {
      * @param value  True: shadow is visible. False: shadow is invisible.
      */
     public static void setShadowDrop(CoreWindow window, boolean value) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.setShadowDrop(value);
     }
@@ -171,8 +180,9 @@ public final class ToolTip {
      *               com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     public static void addItems(CoreWindow window, InterfaceBaseItem... items) {
-        if (window == null)
+        if (window == null) {
             return;
+        }
         ToolTipItem toolTip = getToolTip(window);
         toolTip.addItems(items);
     }

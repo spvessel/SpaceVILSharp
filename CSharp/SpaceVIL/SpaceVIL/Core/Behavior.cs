@@ -12,19 +12,27 @@ namespace SpaceVIL.Core
         public void SetAlignment(ItemAlignment alignment)
         {
             if (alignment.HasFlag(ItemAlignment.Left) && alignment.HasFlag(ItemAlignment.Right))
+            {
                 alignment &= ~ItemAlignment.Right;
+            }
             if (alignment.HasFlag(ItemAlignment.Top) && alignment.HasFlag(ItemAlignment.Bottom))
+            {
                 alignment &= ~ItemAlignment.Bottom;
+            }
 
             if(alignment.HasFlag(ItemAlignment.HCenter))
             {
                 if (alignment.HasFlag(ItemAlignment.Left) || alignment.HasFlag(ItemAlignment.Right))
+                {
                     alignment &= ~(ItemAlignment.Left | ItemAlignment.Right);
+                }
             }
             if (alignment.HasFlag(ItemAlignment.VCenter))
             {
                 if (alignment.HasFlag(ItemAlignment.Top) || alignment.HasFlag(ItemAlignment.Bottom))
+                {
                     alignment &= ~(ItemAlignment.Top | ItemAlignment.Bottom);
+                }
             }
             _alignment = alignment;
         }

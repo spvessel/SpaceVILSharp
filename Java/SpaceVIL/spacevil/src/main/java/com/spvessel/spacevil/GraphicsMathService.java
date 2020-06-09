@@ -33,8 +33,7 @@ public final class GraphicsMathService {
         float r = 0, g = 0, b = 0, a = 0.0f;
 
         for (Color item : colors) {
-            if (item == null || item.getAlpha() == 0)
-            {
+            if (item == null || item.getAlpha() == 0) {
                 continue;
             }
 
@@ -107,8 +106,9 @@ public final class GraphicsMathService {
 
     static List<float[]> toGL(InterfaceBaseItem item, CoreWindow handler) // where TLayout : VisualItem
     {
-        if (item.getTriangles() == null)
+        if (item.getTriangles() == null) {
             return null;
+        }
 
         List<float[]> result = new LinkedList<>();
 

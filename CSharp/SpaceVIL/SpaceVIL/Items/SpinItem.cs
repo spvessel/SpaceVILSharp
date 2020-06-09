@@ -150,7 +150,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
             Style innerStyle = style.GetInnerStyle("buttonsarea");
             if (innerStyle != null)
@@ -191,12 +193,22 @@ namespace SpaceVIL
         /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
-            ItemAlignment common = alignment[0];
-            foreach (var a in alignment)
-            {
-                common |= a;
-            }
-            _textInput.SetTextAlignment(common);
+            // ItemAlignment common = alignment[0];
+            // foreach (var a in alignment)
+            // {
+            //     common |= a;
+            // }
+            // _textInput.SetTextAlignment(common);
+            _textInput.SetTextAlignment(BaseItemStatics.ComposeFlags(alignment));
+        }
+
+        /// <summary>
+        /// Getting alignment of a SpinItem text. 
+        /// </summary>
+        /// <returns>Text alignment as SpaceVIL.Core.ItemAlignment.</returns>
+        public ItemAlignment GetTextAlignment()
+        {
+            return _textInput.GetTextAlignment();
         }
 
         /// <summary>
@@ -205,7 +217,7 @@ namespace SpaceVIL
         /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
-            _textInput.SetMargin(margin);
+            _textInput.SetTextMargin(margin);
         }
 
         /// <summary>
@@ -217,7 +229,17 @@ namespace SpaceVIL
         /// <param name="bottom">Indent on the bottom.</param>
         public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
-            _textInput.SetMargin(left, top, right, bottom);
+            // _textInput.SetTextMargin(left, top, right, bottom);
+            SetTextMargin(new Indents(left, top, right, bottom));
+        }
+
+        /// <summary>
+        /// Getting indents of the text.
+        /// </summary>
+        /// <returns>Indents as SpaceVIL.Decorations.Indents.</returns>
+        public Indents GetTextMargin()
+        {
+            return _textInput.GetTextMargin();
         }
 
         /// <summary>
@@ -237,7 +259,7 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public override void SetBackground(int r, int g, int b)
         {
-            _textInput.SetBackground(r, g, b);
+            SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         /// <summary>
@@ -249,7 +271,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public override void SetBackground(int r, int g, int b, int a)
         {
-            _textInput.SetBackground(r, g, b, a);
+            SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         /// <summary>
@@ -260,7 +282,7 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public override void SetBackground(float r, float g, float b)
         {
-            _textInput.SetBackground(r, g, b);
+            SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         /// <summary>
@@ -272,7 +294,7 @@ namespace SpaceVIL
         /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public override void SetBackground(float r, float g, float b, float a)
         {
-            _textInput.SetBackground(r, g, b, a);
+            SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         /// <summary>

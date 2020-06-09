@@ -491,7 +491,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     void setTextAlignment(ItemAlignment... alignment) {
-        setTextAlignment(Arrays.asList(alignment));
+        setTextAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
     }
 
     void setTextAlignment(List<ItemAlignment> alignment) {

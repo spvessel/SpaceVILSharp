@@ -141,26 +141,29 @@ namespace SpaceVIL
         {
             return _textAlignment;
         }
-        public void SetTextAlignment(ItemAlignment value)
+        public void SetTextAlignment(ItemAlignment alignment)
         {
-            if (!_textAlignment.Equals(value))
+            if (!_textAlignment.Equals(alignment))
             {
-                _textAlignment = value;
+                _textAlignment = alignment;
             }
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             if (alignment == null)
-                return;
-            ItemAlignment common = alignment.ElementAt(0);
-            if (alignment.Length > 1)
             {
-                for (int i = 1; i < alignment.Length; i++)
-                {
-                    common |= alignment.ElementAt(i);
-                }
+                return;
             }
-            SetTextAlignment(common);
+            // ItemAlignment common = alignment.ElementAt(0);
+            // if (alignment.Length > 1)
+            // {
+            //     for (int i = 1; i < alignment.Length; i++)
+            //     {
+            //         common |= alignment.ElementAt(i);
+            //     }
+            // }
+            // SetTextAlignment(common);
+            SetTextAlignment(BaseItemStatics.ComposeFlags(alignment));
         }
     }
 }

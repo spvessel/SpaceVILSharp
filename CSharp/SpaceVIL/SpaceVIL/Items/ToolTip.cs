@@ -24,7 +24,9 @@ namespace SpaceVIL
         public static void SetStyle(CoreWindow window, Style style)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetStyle(style);
         }
@@ -39,7 +41,9 @@ namespace SpaceVIL
         public static void SetTimeOut(CoreWindow window, int milliseconds)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetTimeOut(milliseconds);
         }
@@ -53,7 +57,9 @@ namespace SpaceVIL
         public static int GetTimeOut(CoreWindow window)
         {
             if (window == null)
+            {
                 return -1;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             return toolTip.GetTimeOut();
         }
@@ -67,7 +73,9 @@ namespace SpaceVIL
         public static void SetBackground(CoreWindow window, Color color)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetBackground(color);
         }
@@ -81,7 +89,9 @@ namespace SpaceVIL
         public static void SetForeground(CoreWindow window, Color color)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetForeground(color);
         }
@@ -95,7 +105,9 @@ namespace SpaceVIL
         public static void SetFont(CoreWindow window, Font font)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetFont(font);
         }
@@ -109,7 +121,9 @@ namespace SpaceVIL
         public static void SetBorder(CoreWindow window, Border border)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetBorder(border);
         }
@@ -123,7 +137,9 @@ namespace SpaceVIL
         public static void SetShadow(CoreWindow window, Shadow shadow)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetShadow(shadow.GetRadius(), shadow.GetXOffset(), shadow.GetYOffset(), shadow.GetColor());
         }
@@ -139,7 +155,9 @@ namespace SpaceVIL
         public static void SetShadowDrop(CoreWindow window, bool value)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.SetShadowDrop(value);
         }
@@ -153,7 +171,9 @@ namespace SpaceVIL
         public static void AddItems(CoreWindow window, params IBaseItem[] items)
         {
             if (window == null)
+            {
                 return;
+            }
             ToolTipItem toolTip = GetToolTip(window);
             toolTip.AddItems(items);
         }

@@ -8,7 +8,6 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -154,8 +153,9 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
         
         Style innerStyle = style.getInnerStyle("buttonsarea");
@@ -194,7 +194,16 @@ public class SpinItem extends Prototype {
      *                  com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _textInput.setTextAlignment(Arrays.asList(alignment));
+        setTextAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
+    }
+
+    /**
+     * Getting alignment of a SpinItem text.
+     * 
+     * @return Text alignment as List of com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public List<ItemAlignment> getTextAlignment() {
+        return _textInput.getTextAlignment();
     }
 
     /**
@@ -203,7 +212,7 @@ public class SpinItem extends Prototype {
      * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        _textInput.setMargin(margin);
+        _textInput.setTextMargin(margin);
     }
 
     /**
@@ -215,7 +224,17 @@ public class SpinItem extends Prototype {
      * @param bottom Indent on the bottom.
      */
     public void setTextMargin(int left, int top, int right, int bottom) {
-        _textInput.setMargin(left, top, right, bottom);
+        // _textInput.setTextMargin(left, top, right, bottom);
+        setTextMargin(new Indents(left, top, right, bottom));
+    }
+
+    /**
+     * Getting indents of the text.
+     * 
+     * @return Indents as com.spvessel.spacevil.Decorations.Indents.
+     */
+    public Indents getTextMargin() {
+        return _textInput.getTextMargin();
     }
 
     /**
@@ -237,7 +256,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(int r, int g, int b) {
-        _textInput.setBackground(r, g, b);
+        setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -250,7 +269,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(int r, int g, int b, int a) {
-        _textInput.setBackground(r, g, b, a);
+        setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**
@@ -262,7 +281,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(float r, float g, float b) {
-        _textInput.setBackground(r, g, b);
+        setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -275,7 +294,7 @@ public class SpinItem extends Prototype {
      */
     @Override
     public void setBackground(float r, float g, float b, float a) {
-        _textInput.setBackground(r, g, b, a);
+        setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**

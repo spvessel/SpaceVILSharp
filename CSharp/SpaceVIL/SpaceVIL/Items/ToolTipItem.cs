@@ -63,7 +63,9 @@ namespace SpaceVIL
         public override void AddItems(params IBaseItem[] items)
         {
             if (IsInit)
+            {
                 return;
+            }
             foreach (IBaseItem item in items)
             {
                 _queue.Enqueue(item);
@@ -75,10 +77,14 @@ namespace SpaceVIL
             if (value)
             {
                 if (_stop != null)
+                {
                     return;
+                }
 
                 if (_timeout == 0)
+                {
                     SetVisible(true);
+                }
                 else
                 {
 
@@ -92,7 +98,9 @@ namespace SpaceVIL
                 SetVisible(false);
 
                 if (_stop == null)
+                {
                     return;
+                }
 
                 _stop.Stop();
                 _stop.Dispose();
@@ -166,7 +174,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
 
             Style innerStyle = style.GetInnerStyle("text");

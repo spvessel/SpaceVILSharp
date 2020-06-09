@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.SpaceVILConstants;
 import com.spvessel.spacevil.Common.DisplayService;
 
 import java.awt.*;

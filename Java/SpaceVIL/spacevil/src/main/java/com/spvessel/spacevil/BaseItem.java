@@ -542,7 +542,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * @param alignment Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignment) {
-        setAlignment(Arrays.asList(alignment));
+        setAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
     }
 
     /**

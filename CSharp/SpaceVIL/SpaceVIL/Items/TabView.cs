@@ -163,7 +163,9 @@ namespace SpaceVIL
         public void AddTab(Tab tab)
         {
             if (_tabBar.TabMapView.ContainsKey(tab))
+            {
                 return;
+            }
 
             _tabBar.TabMapView.Add(tab, tab.View);
             _viewArea.AddItem(tab.View);
@@ -186,7 +188,9 @@ namespace SpaceVIL
         public void AddTabs(params Tab[] tabs)
         {
             foreach (Tab tab in tabs)
+            {
                 AddTab(tab);
+            }
         }
 
         /// <summary>
@@ -306,15 +310,21 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
 
             Style innerStyle = style.GetInnerStyle("tabbar");
             if (innerStyle != null)
+            {
                 _tabBar.SetStyle(innerStyle);
+            }
             innerStyle = style.GetInnerStyle("viewarea");
             if (innerStyle != null)
+            {
                 _viewArea.SetStyle(innerStyle);
+            }
         }
     }
 }

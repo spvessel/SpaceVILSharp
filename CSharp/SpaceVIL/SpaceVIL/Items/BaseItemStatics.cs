@@ -297,5 +297,18 @@ namespace SpaceVIL
 
             return result;
         }
+
+        internal static ItemAlignment ComposeFlags(ItemAlignment[] flagsArray)
+        {
+            ItemAlignment common = flagsArray.ElementAt(0);
+            if (flagsArray.Length > 1)
+            {
+                for (int i = 1; i < flagsArray.Length; i++)
+                {
+                    common |= flagsArray.ElementAt(i);
+                }
+            }
+            return common;
+        }
     }
 }

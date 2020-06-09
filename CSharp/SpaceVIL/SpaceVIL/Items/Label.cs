@@ -92,15 +92,16 @@ namespace SpaceVIL
         /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
-            ItemAlignment common = alignment.ElementAt(0);
-            if (alignment.Length > 1)
-            {
-                for (int i = 1; i < alignment.Length; i++)
-                {
-                    common |= alignment.ElementAt(i);
-                }
-            }
-            SetTextAlignment(common);
+            // ItemAlignment common = alignment.ElementAt(0);
+            // if (alignment.Length > 1)
+            // {
+            //     for (int i = 1; i < alignment.Length; i++)
+            //     {
+            //         common |= alignment.ElementAt(i);
+            //     }
+            // }
+            // SetTextAlignment(common);
+            SetTextAlignment(BaseItemStatics.ComposeFlags(alignment));
         }
         /// <summary>
         /// Getting alignment of a Label text. 

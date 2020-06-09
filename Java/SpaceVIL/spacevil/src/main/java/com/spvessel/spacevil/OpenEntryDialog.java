@@ -110,10 +110,11 @@ public class OpenEntryDialog extends OpenDialog {
         _fileName = new TextEdit();
         _controlPanel = new Frame();
 
-        if (dialogType == OpenDialogType.SAVE)
+        if (dialogType == OpenDialogType.SAVE) {
             _btnOpen = new ButtonCore("Save");
-        else
+        } else {
             _btnOpen = new ButtonCore("Open");
+        }
 
         _btnCancel = new ButtonCore("Cancel");
 
@@ -159,8 +160,9 @@ public class OpenEntryDialog extends OpenDialog {
             _btnFilter.setVisible(false);
             _filterText.setVisible(false);
         } else {
-            if (_dialogType == OpenDialogType.SAVE)
+            if (_dialogType == OpenDialogType.SAVE) {
                 _fileName.setText("new_file");
+            }
             _filterList = new ContextMenu(getHandler());
             _filterList.activeButton = MouseButton.BUTTON_LEFT;
             addFilterExtensions("All files (*.*);*.*");
@@ -227,8 +229,9 @@ public class OpenEntryDialog extends OpenDialog {
             input.selectAll();
             input.onCloseDialog.add(() -> {
                 String result = input.getResult();
-                if (result == null)
+                if (result == null) {
                     return;
+                }
                 File file = new File(_addressLine.getText() + File.separator
                         + ((FileSystemEntry) _fileList.getSelectedItem()).getText());
                 File newFile = new File(_addressLine.getText() + File.separator + result);
@@ -262,8 +265,9 @@ public class OpenEntryDialog extends OpenDialog {
                 pathBackward();
             }
         });
-        if (_filterList != null)
+        if (_filterList != null) {
             fillFilterList();
+        }
         refreshFolder();
     }
 
@@ -272,13 +276,15 @@ public class OpenEntryDialog extends OpenDialog {
 
         File fileFolder = new File(path);
         File[] files = fileFolder.listFiles();
-        if (_fileList == null || files == null)
+        if (_fileList == null || files == null) {
             return;
+        }
 
         // Maybe need some sorting
         for (File f : files) {
-            if (!_btnShowHidden.isToggled() && f.isHidden())
+            if (!_btnShowHidden.isToggled() && f.isHidden()) {
                 continue;
+            }
             FileSystemEntry fi;
             if (f.isDirectory()) {
                 fi = new FileSystemEntry(FileSystemEntryType.DIRECTORY, f.getName());
@@ -297,12 +303,14 @@ public class OpenEntryDialog extends OpenDialog {
 
         if (_entryType == FileSystemEntryType.FILE) {
             for (File f : files) {
-                if (!_btnShowHidden.isToggled() && f.isHidden())
+                if (!_btnShowHidden.isToggled() && f.isHidden()) {
                     continue;
+                }
                 FileSystemEntry fi;
                 if (!f.isDirectory()) {
-                    if (checkExtensionFilter(f))
+                    if (checkExtensionFilter(f)) {
                         continue;
+                    }
 
                     fi = new FileSystemEntry(FileSystemEntryType.FILE, f.getName());
                     fi.setIcon(_file, 16, 16);
@@ -315,8 +323,9 @@ public class OpenEntryDialog extends OpenDialog {
                         open();
                     });
                     fi.eventKeyRelease.add((sender, args) -> {
-                        if (args.key == KeyCode.ENTER)
+                        if (args.key == KeyCode.ENTER) {
                             open();
+                        }
                     });
                 }
             }
@@ -348,10 +357,10 @@ public class OpenEntryDialog extends OpenDialog {
         int ind = name.lastIndexOf(File.separator);
         int firstInd = name.indexOf(File.separator);
         if (name.endsWith(File.separator)) {
-            if (ind <= 1 || name.substring(ind - 1, ind).equals(":"))
+            if (ind <= 1 || name.substring(ind - 1, ind).equals(":")) {
                 return;
+            }
             name = name.substring(0, name.length() - 1);
-            System.out.println(name);
             ind = name.lastIndexOf(File.separator);
         }
 
@@ -375,18 +384,20 @@ public class OpenEntryDialog extends OpenDialog {
 
     private void setAddressLine(FileSystemEntry fse) {
         String name = _addressLine.getText();
-        if (name.endsWith(File.separator) || name.endsWith("/"))
+        if (name.endsWith(File.separator) || name.endsWith("/")) {
             _addressLine.setText(name + fse.getText());
-        else
+        } else {
             _addressLine.setText(name + File.separator + fse.getText());
+        }
 
         _filesTrack.push(_addressLine.getText());
         refreshFolder();
     }
 
     private void setNameLine(FileSystemEntry fse) {
-        if (_fileName.getText().equals(fse.getText()))
+        if (_fileName.getText().equals(fse.getText())) {
             return;
+        }
         _fileName.setText(fse.getText());
     }
 
@@ -421,20 +432,23 @@ public class OpenEntryDialog extends OpenDialog {
             String[] line = exts[i].split(";");
             String key = line[0];
             String regex = line[1].toLowerCase().replaceAll("[!*]", "").replaceAll("\\s", "");
-            if (_extensionFilter.containsKey(key))
+            if (_extensionFilter.containsKey(key)) {
                 _extensionFilter.replace(key, regex.split(","));
-            else
+            } else {
                 _extensionFilter.put(key, regex.split(","));
+            }
         }
     }
 
     private boolean checkExtensionFilter(File f) {
-        if (_extensionFilter.size() == 0)
+        if (_extensionFilter.size() == 0) {
             return false;
+        }
         String name = f.getName().toLowerCase();
         for (String item : _extensionFilter.get(_filterText.getText())) {
-            if (name.endsWith(item) || item.equals("."))
+            if (name.endsWith(item) || item.equals(".")) {
                 return false;
+            }
         }
         return true;
     }
@@ -470,15 +484,17 @@ public class OpenEntryDialog extends OpenDialog {
             input.selectAll();
             input.onCloseDialog.add(() -> {
                 String result = input.getResult();
-                if (result == null)
+                if (result == null) {
                     return;
+                }
 
                 if ("File".equals(entry.getText())) {
                     File file = new File(_addressLine.getText() + File.separator + result);
                     if (!file.exists()) {
                         try {
-                            if (file.createNewFile())
+                            if (file.createNewFile()) {
                                 refreshFolder();
+                            }
                         } catch (Exception e) {
                             PopUpMessage popError = new PopUpMessage("Failed to create file.");
                             popError.show(getHandler());
@@ -525,11 +541,13 @@ public class OpenEntryDialog extends OpenDialog {
                 _result = _addressLine.getText() + File.separator + selection.getText();
             } else if (_entryType == FileSystemEntryType.DIRECTORY) {
                 _result = _addressLine.getText();
-                if (selection != null)
+                if (selection != null) {
                     _result += File.separator + selection.getText();
+                }
             }
-        } else if (_dialogType == OpenDialogType.SAVE)
+        } else if (_dialogType == OpenDialogType.SAVE) {
             _result = _addressLine.getText() + File.separator + _fileName.getText();
+        }
 
         close();
     }
@@ -558,21 +576,29 @@ public class OpenEntryDialog extends OpenDialog {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
+
         // toolbar
         Style innerStyle = style.getInnerStyle("window");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             window.setStyle(innerStyle);
+        }
+
         // layout
         innerStyle = style.getInnerStyle("layout");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _layout.setStyle(innerStyle);
+        }
+
         // toolbar
         innerStyle = style.getInnerStyle("toolbar");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _toolbar.setStyle(innerStyle);
+        }
+
         // buttoncore
         innerStyle = style.getInnerStyle("toolbarbutton");
         if (innerStyle != null) {
@@ -584,43 +610,58 @@ public class OpenEntryDialog extends OpenDialog {
             _btnRename.setStyle(innerStyle);
             _btnRefresh.setStyle(innerStyle);
         }
+
         // buttontogle
         innerStyle = style.getInnerStyle("buttonhidden");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _btnShowHidden.setStyle(innerStyle);
+        }
+
         // addressline
         innerStyle = style.getInnerStyle("addressline");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _addressLine.setStyle(innerStyle);
+        }
+
         // filename
         innerStyle = style.getInnerStyle("filenameline");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _fileName.setStyle(innerStyle);
+        }
+
         // listbox
         innerStyle = style.getInnerStyle("list");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _fileList.setStyle(innerStyle);
+        }
+
         // controlpanel
         innerStyle = style.getInnerStyle("controlpanel");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _controlPanel.setStyle(innerStyle);
+        }
+
         // ok, cancel
         innerStyle = style.getInnerStyle("okbutton");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _btnOpen.setStyle(innerStyle);
+        }
         innerStyle = style.getInnerStyle("cancelbutton");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _btnCancel.setStyle(innerStyle);
+        }
         innerStyle = style.getInnerStyle("filter");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _btnFilter.setStyle(innerStyle);
+        }
         innerStyle = style.getInnerStyle("filtertext");
         if (innerStyle != null) {
             _filterText.setStyle(innerStyle);
             updateFilterText();
         }
         innerStyle = style.getInnerStyle("divider");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _dividerStyle = innerStyle;
+        }
     }
 }

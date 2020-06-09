@@ -26,7 +26,9 @@ namespace SpaceVIL
             foreach (Side side in sides)
             {
                 if (!_sidesExclude.Contains(side))
+                {
                     _sidesExclude.Add(side);
+                }
             }
         }
 
@@ -144,16 +146,24 @@ namespace SpaceVIL
             if (_sides.HasFlag(Side.Left) || _sides.HasFlag(Side.Right))
             {
                 if (_sides.HasFlag(Side.Top) || _sides.HasFlag(Side.Bottom))
+                {
                     SetCursor(EmbeddedCursor.Crosshair);
+                }
                 else
+                {
                     SetCursor(EmbeddedCursor.ResizeX);
+                }
             }
             else if (_sides.HasFlag(Side.Top) || _sides.HasFlag(Side.Bottom))
             {
                 if (_sides.HasFlag(Side.Left) || _sides.HasFlag(Side.Right))
+                {
                     SetCursor(EmbeddedCursor.Crosshair);
+                }
                 else
+                {
                     SetCursor(EmbeddedCursor.ResizeY);
+                }
             }
             else
             {
@@ -164,7 +174,9 @@ namespace SpaceVIL
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
             if (IsLocked)
+            {
                 return;
+            }
 
             _globalX = GetX();
             _globalY = GetY();
@@ -190,7 +202,9 @@ namespace SpaceVIL
         protected virtual void OnDragging(IItem sender, MouseArgs args)
         {
             if (IsLocked)
+            {
                 return;
+            }
 
             int offset_x;
             int offset_y;
@@ -214,7 +228,9 @@ namespace SpaceVIL
 
                 case false:
                     if (!IsXResizable && !IsYResizable)
+                    {
                         break;
+                    }
 
                     int x_handler = GetX();
                     int y_handler = GetY();
@@ -235,7 +251,9 @@ namespace SpaceVIL
                     if (_sides.HasFlag(Side.Right))
                     {
                         if (!(args.Position.GetX() < GetMinWidth() && GetWidth() == GetMinWidth()))
+                        {
                             w = x_release - x_handler;
+                        }
                     }
                     if (_sides.HasFlag(Side.Top))
                     {
@@ -249,7 +267,9 @@ namespace SpaceVIL
                     if (_sides.HasFlag(Side.Bottom))
                     {
                         if (!(args.Position.GetY() < GetMinHeight() && GetHeight() == GetMinHeight()))
+                        {
                             h = y_release - y_handler;
+                        }
                     }
 
                     if (_sides != 0)
@@ -267,9 +287,13 @@ namespace SpaceVIL
                             flag = true;
                         }
                         if (IsYResizable && h != GetHeight())
+                        {
                             SetHeight(h);
+                        }
                         if (flag)
+                        {
                             SizeChanged?.Invoke();
+                        }
                     }
                     SetConfines();
                     break;

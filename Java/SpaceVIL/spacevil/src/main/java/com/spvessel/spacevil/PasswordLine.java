@@ -72,12 +72,22 @@ public class PasswordLine extends HorizontalStack {
     }
 
     /**
+     * Getting alignment of a PasswordLine text.
+     * 
+     * @return Text alignment as List of com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public List<ItemAlignment> getTextAlignment() {
+        return _textEncrypt.getTextAlignment();
+    }
+
+
+    /**
      * Setting indents for the text to offset text relative to PasswordLine.
      * 
      * @param margin Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public void setTextMargin(Indents margin) {
-        _textEncrypt.setMargin(margin);
+        _textEncrypt.setTextMargin(margin);
     }
 
     /**
@@ -89,7 +99,8 @@ public class PasswordLine extends HorizontalStack {
      * @param bottom Indent on the bottom.
      */
     public void setTextMargin(int left, int top, int right, int bottom) {
-        _textEncrypt.setMargin(left, top, right, bottom);
+        // _textEncrypt.setTextMargin(left, top, right, bottom);
+        setTextMargin(new Indents(left, top, right, bottom));
     }
 
     /**
@@ -98,7 +109,7 @@ public class PasswordLine extends HorizontalStack {
      * @return Indents as com.spvessel.spacevil.Decorations.Indents.
      */
     public Indents getTextMargin() {
-        return _textEncrypt.getMargin();
+        return _textEncrypt.getTextMargin();
     }
 
     /**
@@ -172,7 +183,7 @@ public class PasswordLine extends HorizontalStack {
      * @param b Blue color component. Range: (0 - 255)
      */
     public void setForeground(int r, int g, int b) {
-        _textEncrypt.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -184,7 +195,7 @@ public class PasswordLine extends HorizontalStack {
      * @param a Alpha color component. Range: (0 - 255)
      */
     public void setForeground(int r, int g, int b, int a) {
-        _textEncrypt.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**
@@ -195,7 +206,7 @@ public class PasswordLine extends HorizontalStack {
      * @param b Blue color component. Range: (0.0f - 1.0f)
      */
     public void setForeground(float r, float g, float b) {
-        _textEncrypt.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -207,7 +218,7 @@ public class PasswordLine extends HorizontalStack {
      * @param a Alpha color component. Range: (0.0f - 1.0f)
      */
     public void setForeground(float r, float g, float b, float a) {
-        _textEncrypt.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**
@@ -372,7 +383,7 @@ public class PasswordLine extends HorizontalStack {
      * @param b Blue color component. Range: (0 - 255)
      */
     public void setSubstrateForeground(int r, int g, int b) {
-        _textEncrypt.setSubstrateForeground(r, g, b);
+        setSubstrateForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -385,7 +396,7 @@ public class PasswordLine extends HorizontalStack {
      * @param a Alpha color component. Range: (0 - 255)
      */
     public void setSubstratetForeground(int r, int g, int b, int a) {
-        _textEncrypt.setSubstrateForeground(r, g, b, a);
+        setSubstrateForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**
@@ -397,7 +408,7 @@ public class PasswordLine extends HorizontalStack {
      * @param b Blue color component. Range: (0.0f - 1.0f)
      */
     public void setSubstrateForeground(float r, float g, float b) {
-        _textEncrypt.setSubstrateForeground(r, g, b);
+        setSubstrateForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     /**
@@ -410,7 +421,7 @@ public class PasswordLine extends HorizontalStack {
      * @param a Alpha color component. Range: (0.0f - 1.0f)
      */
     public void setSubstrateForeground(float r, float g, float b, float a) {
-        _textEncrypt.setSubstrateForeground(r, g, b, a);
+        setSubstrateForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     /**

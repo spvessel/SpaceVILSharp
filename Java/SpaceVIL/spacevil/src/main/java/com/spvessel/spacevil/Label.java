@@ -82,7 +82,7 @@ public class Label extends Prototype implements InterfaceVLayout {
      * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        setTextAlignment(Arrays.asList(alignment));
+        setTextAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
     }
 
     /**

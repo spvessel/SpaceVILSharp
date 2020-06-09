@@ -89,7 +89,9 @@ namespace SpaceVIL
         public ContextMenu(CoreWindow handler, params MenuItem[] items) : this(handler)
         {
             foreach (MenuItem item in items)
+            {
                 AddItem(item);
+            }
         }
 
         /// <summary>
@@ -142,15 +144,21 @@ namespace SpaceVIL
             {
                 ContextMenu menu = context_menu as ContextMenu;
                 if (menu != null && !menu.Equals(this))
+                {
                     menu.Hide();
+                }
             }
         }
 
         private void OnSelectionChanged(MenuItem sender)
         {
             if (sender != null)
+            {
                 if (sender.IsActionItem)
+                {
                     return;
+                }
+            }
 
             HideDependentMenus();
             Hide();
@@ -229,18 +237,28 @@ namespace SpaceVIL
                     tmp += m.GetTextWidth() + m.GetPadding().Left + m.GetPadding().Right + m.GetTextMargin().Left
                         + m.GetTextMargin().Right;
                     if (m.IsActionItem)
+                    {
                         tmp += m.GetArrow().GetWidth() + m.GetArrow().GetMargin().Left + m.GetArrow().GetMargin().Right;
+                    }
                 }
                 else
+                {
                     tmp = tmp + item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
+                }
 
                 if (width < tmp)
+                {
                     width = tmp;
+                }
             }
             if (height == 0)
+            {
                 height = GetHeight();
+            }
             else
+            {
                 height -= ItemList.GetArea().GetSpacing().Vertical;
+            }
 
             SetSize(width, height);
         }
@@ -256,7 +274,9 @@ namespace SpaceVIL
             if (args.Button == ActiveButton)
             {
                 if (!_init)
+                {
                     InitElements();
+                }
                 if (!_added)
                 {
                     UpdateSize();
@@ -264,7 +284,9 @@ namespace SpaceVIL
                 }
                 Prototype tmp = sender as Prototype;
                 if (tmp != null)
+                {
                     _sender = tmp;
+                }
 
                 //проверка снизу
                 if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
@@ -366,7 +388,9 @@ namespace SpaceVIL
                             menu_item.Hide();
                         }
                         else
+                        {
                             return false;
+                        }
                     }
                 }
             }
@@ -381,7 +405,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
 
             Style innerStyle = style.GetInnerStyle("itemlist");

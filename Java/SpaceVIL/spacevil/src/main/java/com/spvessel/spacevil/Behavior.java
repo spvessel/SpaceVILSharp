@@ -17,8 +17,9 @@ class Behavior implements InterfaceBehavior {
     }
 
     public void setAlignment(List<ItemAlignment> alignment) {
-        if (_alignment != null && _alignment.equals(alignment))
+        if (_alignment != null && _alignment.equals(alignment)) {
             return;
+        }
 
         if (alignment == null) {
             _alignment = new LinkedList<>();
@@ -33,18 +34,24 @@ class Behavior implements InterfaceBehavior {
         ItemAlignment _vcenter = null;
 
         for (ItemAlignment var : alignment) {
-            if (var.equals(ItemAlignment.LEFT))
+            if (var.equals(ItemAlignment.LEFT)) {
                 _left = var;
-            if (var.equals(ItemAlignment.RIGHT))
+            }
+            if (var.equals(ItemAlignment.RIGHT)) {
                 _right = var;
-            if (var.equals(ItemAlignment.TOP))
+            }
+            if (var.equals(ItemAlignment.TOP)) {
                 _top = var;
-            if (var.equals(ItemAlignment.BOTTOM))
+            }
+            if (var.equals(ItemAlignment.BOTTOM)) {
                 _bottom = var;
-            if (var.equals(ItemAlignment.HCENTER))
+            }
+            if (var.equals(ItemAlignment.HCENTER)) {
                 _hcenter = var;
-            if (var.equals(ItemAlignment.VCENTER))
+            }
+            if (var.equals(ItemAlignment.VCENTER)) {
                 _vcenter = var;
+            }
         }
 
         if (_left != null && _right != null) {
@@ -55,24 +62,26 @@ class Behavior implements InterfaceBehavior {
             alignment.remove(ItemAlignment.BOTTOM);
         }
         if (_hcenter != null) {
-            if (alignment.contains(ItemAlignment.LEFT))
+            if (alignment.contains(ItemAlignment.LEFT)) {
                 alignment.remove(ItemAlignment.LEFT);
-            if (alignment.contains(ItemAlignment.RIGHT))
+            }
+            if (alignment.contains(ItemAlignment.RIGHT)) {
                 alignment.remove(ItemAlignment.RIGHT);
+            }
         }
         if (_vcenter != null) {
-            if (alignment.contains(ItemAlignment.TOP))
+            if (alignment.contains(ItemAlignment.TOP)) {
                 alignment.remove(ItemAlignment.TOP);
-            if (alignment.contains(ItemAlignment.BOTTOM))
+            }
+            if (alignment.contains(ItemAlignment.BOTTOM)) {
                 alignment.remove(ItemAlignment.BOTTOM);
+            }
         }
 
         _alignment = alignment;
     }
     public void setAlignment(ItemAlignment... alignment) {
-//        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-//        setAlignment(list);
-        setAlignment(Arrays.asList(alignment));
+        setAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
     }
 
     public SizePolicy _w_policy = SizePolicy.FIXED;

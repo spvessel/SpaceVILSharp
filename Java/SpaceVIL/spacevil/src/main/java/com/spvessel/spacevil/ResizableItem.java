@@ -34,8 +34,9 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
      */
     public void excludeSides(Side... sides) {
         for (Side side : sides) {
-            if (!_sidesExclude.contains(side))
+            if (!_sidesExclude.contains(side)) {
                 _sidesExclude.add(side);
+            }
         }
     }
 
@@ -159,22 +160,26 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         getSides(args.position.getX() - getX(), args.position.getY() - getY());
 
         if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT)) {
-            if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM))
+            if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM)) {
                 setCursor(EmbeddedCursor.CROSSHAIR);
-            else
+            } else {
                 setCursor(EmbeddedCursor.RESIZE_X);
+            }
         } else if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM)) {
-            if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT))
+            if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT)) {
                 setCursor(EmbeddedCursor.CROSSHAIR);
-            else
+            } else {
                 setCursor(EmbeddedCursor.RESIZE_Y);
-        } else
+            }
+        } else {
             setCursor(DefaultsService.getDefaultCursor());
+        }
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
-        if (isLocked)
+        if (isLocked) {
             return;
+        }
 
         _pressedX = args.position.getX();
         _pressedY = args.position.getY();
@@ -195,8 +200,9 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     }
 
     protected void onDragging(InterfaceItem sender, MouseArgs args) {
-        if (isLocked)
+        if (isLocked) {
             return;
+        }
 
         int offset_x;
         int offset_y;
@@ -215,8 +221,9 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
 
         else {
-            if (!isXResizable && !isYResizable)
+            if (!isXResizable && !isYResizable) {
                 return;
+            }
 
             int x_handler = getX();
             int y_handler = getY();
@@ -262,10 +269,12 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
                     setWidth(w);
                     flag = true;
                 }
-                if (isYResizable && h != getHeight())
+                if (isYResizable && h != getHeight()) {
                     setHeight(h);
-                if (flag)
+                }
+                if (flag) {
                     sizeChanged.execute();
+                }
             }
             setConfines();
         }

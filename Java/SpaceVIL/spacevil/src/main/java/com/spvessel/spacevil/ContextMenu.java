@@ -114,8 +114,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     public ContextMenu(CoreWindow handler, MenuItem... items) {
         this(handler);
-        for (MenuItem item : items)
+        for (MenuItem item : items) {
             addItem(item);
+        }
     }
 
     /**
@@ -169,8 +170,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     private void onSelectionChanged(InterfaceBaseItem sender) {
         if (sender instanceof MenuItem) {
             MenuItem menu = (MenuItem) sender;
-            if (menu.isActionItem)
+            if (menu.isActionItem) {
                 return;
+            }
         }
 
         hide();
@@ -239,8 +241,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 if (menu_item.isActionItem) {
                     if (menu_item.isReadyToClose(args)) {
                         menu_item.hide();
-                    } else
+                    } else {
                         return false;
+                    }
                 }
             }
         }
@@ -260,18 +263,22 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 MenuItem m = (MenuItem) item;
                 tmp += m.getTextWidth() + m.getPadding().left + m.getPadding().right + m.getTextMargin().left
                         + m.getTextMargin().right;
-                if (m.isActionItem)
+                if (m.isActionItem) {
                     tmp += m.getArrow().getWidth() + m.getArrow().getMargin().left + m.getArrow().getMargin().right;
-            } else
+                }
+            } else {
                 tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
+            }
 
-            if (width < tmp)
+            if (width < tmp) {
                 width = tmp;
+            }
         }
-        if (height == 0)
+        if (height == 0) {
             height = getHeight();
-        else
+        } else {
             height -= itemList.getArea().getSpacing().vertical;
+        }
         setSize(width, height);
     }
 
@@ -284,15 +291,17 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.equals(activeButton)) {
-            if (!_init)
+            if (!_init) {
                 initElements();
+            }
             if (!_added) {
                 updateSize();
                 _added = true;
             }
 
-            if (sender instanceof Prototype)
+            if (sender instanceof Prototype) {
                 _sender = (Prototype) sender;
+            }
 
             // проверка снизу
             if (args.position.getY() + getHeight() > getHandler().getHeight()) {
@@ -375,8 +384,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
 
         Style innerStyle = style.getInnerStyle("itemlist");

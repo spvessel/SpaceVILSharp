@@ -168,8 +168,9 @@ public class TabView extends VerticalStack {
      * @param tab The new tab as com.spvessel.spacevil.Tab.
      */
     public void addTab(Tab tab) {
-        if (_tabBar.tabMapView.containsKey(tab))
+        if (_tabBar.tabMapView.containsKey(tab)) {
             return;
+        }
 
         _tabBar.tabMapView.put(tab, tab.view);
         _viewArea.addItem(tab.view);
@@ -318,16 +319,19 @@ public class TabView extends VerticalStack {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
 
         super.setStyle(style);
 
         Style innerStyle = style.getInnerStyle("tabbar");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _tabBar.setStyle(innerStyle);
+        }
         innerStyle = style.getInnerStyle("viewarea");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             _viewArea.setStyle(innerStyle);
+        }
     }
 }

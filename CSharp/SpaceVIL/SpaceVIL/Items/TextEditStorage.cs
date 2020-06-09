@@ -81,9 +81,13 @@ namespace SpaceVIL
         {
             base.SetFocused(value);
             if (IsFocused() && _isEditable)
+            {
                 _cursor.SetVisible(true);
+            }
             else
+            {
                 _cursor.SetVisible(false);
+            }
         }
         
         private Stopwatch _startTime = new Stopwatch();
@@ -194,7 +198,7 @@ namespace SpaceVIL
                     else
                     {
                         _selectTo = _cursorPosition;
-                        MakeSelectedArea(); //_selectFrom, _selectTo);
+                        MakeSelectedArea();
                     }
                 }
             }
@@ -208,9 +212,15 @@ namespace SpaceVIL
         {
             int w = GetTextWidth();
 
-            if (w < _cursorXMax) return;
+            if (w < _cursorXMax)
+            {
+                return;
+            }
             int sh = GetLineXShift();
-            if (sh >= 0) return;
+            if (sh >= 0)
+            {
+                return;
+            }
 
             int curPos = _cursor.GetX();
             int curCoord = curPos - sh;
@@ -221,36 +231,44 @@ namespace SpaceVIL
             SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
-            // curPos = _cursor.GetX() - curPos;
-            // _selectedArea.SetX(_selectedArea.GetX() + curPos);
             if (_justSelected)
+            {
                 CancelJustSelected();
-            MakeSelectedArea(); //_selectFrom, _selectTo);
+            }
+            MakeSelectedArea();
         }
 
         private void OnScrollDown(object sender, MouseArgs args)
         {
             int w = GetTextWidth();
 
-            if (w < _cursorXMax) return;
+            if (w < _cursorXMax)
+            {
+                return;
+            }
             int sh = GetLineXShift();
-            if (w + sh <= _cursorXMax) return;
+            if (w + sh <= _cursorXMax)
+            {
+                return;
+            }
 
             int curPos = _cursor.GetX();
             int curCoord = curPos - sh;
 
             sh -= scrollStep;
             if (w + sh < _cursorXMax)
+            {
                 sh = _cursorXMax - w;
+            }
 
             SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
-            // curPos = _cursor.GetX() - curPos;
-            // _selectedArea.SetX(_selectedArea.GetX() + curPos);
             if (_justSelected)
+            {
                 CancelJustSelected();
-            MakeSelectedArea(); //_selectFrom, _selectTo);
+            }
+            MakeSelectedArea();
         }
 
         private void ReplaceCursorAccordingCoord(int realPos)
@@ -279,8 +297,13 @@ namespace SpaceVIL
             for (int i = 0; i < lineLetPos.Count; i++)
             {
                 if (lineLetPos[i] + GetLineXShift() <= coordX + 3)
+                {
                     pos = i + 1;
-                else break;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             return pos;
@@ -623,7 +646,6 @@ namespace SpaceVIL
                 _cursorPosition++;
                 PrivSetText(PrivGetText().Insert(_cursorPosition - 1, str), tes);
                 //ReplaceCursor();
-                //Console.WriteLine("input in TextEdit " + _cursorPosition);
             }
             finally
             {
@@ -735,7 +757,7 @@ namespace SpaceVIL
             _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right
                     - _textObject.GetMargin().Left - _textObject.GetMargin().Right; // _cursorXMin;// ;
             _textObject.SetAllowWidth(_cursorXMax);
-            _textObject.CheckXShift(_cursorXMax); //_text_object.SetLineXShift();
+            _textObject.CheckXShift(_cursorXMax);
 
             _substrateText.SetAllowWidth(_cursorXMax);
             _substrateText.CheckXShift(_cursorXMax);
@@ -743,6 +765,7 @@ namespace SpaceVIL
             ReplaceCursor();
             if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right))
             {
+                //TODO WTF???
                 MakeSelectedArea();
             }
         }
@@ -750,11 +773,6 @@ namespace SpaceVIL
         public override void InitElements()
         {
             AddItems(_substrateText, _selectedArea, _textObject, _cursor);
-
-            // _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right
-            //         - _text_object.GetMargin().Left - _text_object.GetMargin().Right; // _cursorXMin;// ;
-            // _text_object.SetAllowWidth(_cursorXMax);
-            // _text_object.SetLineXShift();
 
             int scctp = _textObject.GetFontDims().lineSpacer; //[0];
             if (scctp > scrollStep)
@@ -911,8 +929,6 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                TextEditState tes = CreateTextEditState();
-
                 if (_selectFrom == -1)
                 {
                     _selectFrom = 0;
@@ -921,6 +937,8 @@ namespace SpaceVIL
                 {
                     _selectTo = 0;
                 }
+
+                TextEditState tes = CreateTextEditState();
 
                 string str = PrivGetSelectedText();
                 if (_selectFrom == _selectTo)
@@ -1216,6 +1234,7 @@ namespace SpaceVIL
             _textObject.SetMargin(margin);
             _substrateText.SetMargin(margin);
         }
+
         internal Indents GetTextMargin() {
             return _textObject.GetMargin();
         }
@@ -1225,19 +1244,23 @@ namespace SpaceVIL
             _textObject.SetFont(font);
             _substrateText.SetFont(FontService.ChangeFontFamily(font.FontFamily, _substrateText.GetFont())); //new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
         }
+
         internal void SetFontSize(int size)
         {
             _textObject.SetFontSize(size);
         }
+
         internal void SetFontStyle(FontStyle style)
         {
             _textObject.SetFontStyle(style);
         }
+
         internal void SetFontFamily(FontFamily font_family)
         {
             _textObject.SetFontFamily(font_family);
             _substrateText.SetFontFamily(font_family);
         }
+
         internal Font GetFont()
         {
             return _textObject.GetFont();

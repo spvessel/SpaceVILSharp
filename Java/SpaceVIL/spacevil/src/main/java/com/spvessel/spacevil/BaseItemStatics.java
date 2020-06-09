@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,15 +27,19 @@ final class BaseItemStatics {
         boolean vLayout = parent instanceof InterfaceVLayout;
         boolean grid = parent instanceof InterfaceFreeLayout;
 
-        if (!hLayout && !vLayout && !grid)
+        if (!hLayout && !vLayout && !grid) {
             updateBehavior(item);
+        }
 
-        if (hLayout)
+        if (hLayout) {
             ((InterfaceHLayout) parent).updateLayout();
-        if (vLayout)
+        }
+        if (vLayout) {
             ((InterfaceVLayout) parent).updateLayout();
-        if (grid)
+        }
+        if (grid) {
             ((InterfaceFreeLayout) parent).updateLayout();
+        }
     }
 
     static void updateHLayout(InterfaceBaseItem item) {
@@ -47,13 +52,16 @@ final class BaseItemStatics {
             boolean hLayout = parent instanceof InterfaceHLayout;
             boolean grid = parent instanceof InterfaceFreeLayout;
 
-            if (!hLayout && !grid)
+            if (!hLayout && !grid) {
                 updateBehavior(item);
+            }
 
-            if (hLayout)
+            if (hLayout) {
                 ((InterfaceHLayout) parent).updateLayout();
-            if (grid)
+            }
+            if (grid) {
                 ((InterfaceFreeLayout) parent).updateLayout();
+            }
         }
     }
 
@@ -66,28 +74,33 @@ final class BaseItemStatics {
             boolean vLayout = parent instanceof InterfaceVLayout;
             boolean grid = parent instanceof InterfaceFreeLayout;
 
-            if (!vLayout && !grid)
+            if (!vLayout && !grid) {
                 updateBehavior(item);
+            }
 
-            if (vLayout)
+            if (vLayout) {
                 ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
+            }
+            if (grid) {
                 ((InterfaceFreeLayout) parent).updateLayout();
+            }
         }
     }
 
     static void castToUpdateBehavior(InterfaceBaseItem item) {
-        if (item instanceof Prototype)
+        if (item instanceof Prototype) {
             updateBehavior(((Prototype) item).getCore());
-        else
+        } else {
             updateBehavior(item);
+        }
     }
 
     static void castToUpdateGeometry(InterfaceBaseItem item) {
-        if (item instanceof Prototype)
+        if (item instanceof Prototype) {
             updateGeometry(((Prototype) item).getCore());
-        else
+        } else {
             updateGeometry(item);
+        }
     }
 
     static void updateGeometry(InterfaceBaseItem item) {
@@ -99,8 +112,9 @@ final class BaseItemStatics {
 
     static void updateBehavior(InterfaceBaseItem item) {
         Prototype parent = item.getParent();
-        if (parent == null)
+        if (parent == null) {
             return;
+        }
 
         if (item instanceof VisualItem) {
             updatePrototypeBehavior(item, parent);
@@ -142,8 +156,9 @@ final class BaseItemStatics {
 
     static void updateGeometryAttr(InterfaceBaseItem item, GeometryEventType type, int value) {
         Prototype parent = item.getParent();
-        if (parent == null)
+        if (parent == null) {
             return;
+        }
 
         if (item instanceof VisualItem) {
             updatePrototypeGeometryAttr(item, parent, type, value);
@@ -262,8 +277,9 @@ final class BaseItemStatics {
     }
 
     static List<float[]> updateShape(InterfaceBaseItem item) {
-        if (item == null)
+        if (item == null) {
             return null;
+        }
         return updateShape(item.getTriangles(), item.getWidth(), item.getHeight());
     }
 
@@ -292,5 +308,9 @@ final class BaseItemStatics {
         }
 
         return result;
+    }
+
+    static <T> List<T> composeFlags(T[] flagsArray) {
+        return Arrays.asList(flagsArray);
     }
 }
