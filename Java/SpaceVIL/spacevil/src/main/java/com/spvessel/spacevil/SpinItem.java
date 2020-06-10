@@ -18,19 +18,22 @@ import java.util.List;
  */
 public class SpinItem extends Prototype {
     private static int count = 0;
-    private HorizontalStack _horzStack = new HorizontalStack();
-    private VerticalStack _vertStack = new VerticalStack();
-    private TextEditRestricted _textInput = new TextEditRestricted();
+    private HorizontalStack _horzStack; // = new HorizontalStack();
+    private VerticalStack _vertStack; // = new VerticalStack();
+    private TextEditRestricted _textInput; // = new TextEditRestricted();
 
     /**
      * Increment value button.
      */
-    public ButtonCore upButton = new ButtonCore();
+    public ButtonCore upButton; // = new ButtonCore();
 
     /**
      * Decrement value button.
      */
-    public ButtonCore downButton = new ButtonCore();
+    public ButtonCore downButton; // = new ButtonCore();
+
+    private CustomShape _upArrow;
+    private CustomShape _downArrow;
 
     /**
      * Default SpinItem constructor.
@@ -38,19 +41,29 @@ public class SpinItem extends Prototype {
     public SpinItem() {
         setItemName("SpinItem_" + count);
         count++;
+
+        _horzStack = new HorizontalStack();
+        _vertStack = new VerticalStack();
+        _textInput = new TextEditRestricted();
+        upButton = new ButtonCore();
+        downButton = new ButtonCore();
+        _upArrow = new CustomShape();
+        _downArrow = new CustomShape();
+        
+
         _horzStack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         _textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-
-        setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
-
+        
         upButton.isFocusable = false;
         upButton.eventMouseClick.add(this::onUpClick);
-
+        
         downButton.isFocusable = false;
         downButton.eventMouseClick.add(this::onDownClick);
-
+        
         eventScrollUp.add(this::onUpClick);
         eventScrollDown.add(this::onDownClick);
+        
+        setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
     }
 
     @Override
@@ -142,6 +155,8 @@ public class SpinItem extends Prototype {
         addItem(_horzStack);
         _horzStack.addItems(_textInput, _vertStack);
         _vertStack.addItems(upButton, downButton);
+        upButton.addItem(_upArrow);
+        downButton.addItem(_downArrow);
     }
 
     /**
@@ -162,14 +177,27 @@ public class SpinItem extends Prototype {
         if (innerStyle != null) {
             _vertStack.setStyle(innerStyle);
         }
-        innerStyle = style.getInnerStyle("uparrow");
+
+        innerStyle = style.getInnerStyle("uparrowbutton");
         if (innerStyle != null) {
             upButton.setStyle(innerStyle);
         }
-        innerStyle = style.getInnerStyle("downarrow");
+
+        innerStyle = style.getInnerStyle("uparrow");
+        if (innerStyle != null) {
+            _upArrow.setStyle(innerStyle);
+        }
+        
+        innerStyle = style.getInnerStyle("downarrowbutton");
         if (innerStyle != null) {
             downButton.setStyle(innerStyle);
         }
+        
+        innerStyle = style.getInnerStyle("downarrow");
+        if (innerStyle != null) {
+            _downArrow.setStyle(innerStyle);
+        }
+
         innerStyle = style.getInnerStyle("textedit");
         if (innerStyle != null) {
             _textInput.setStyle(innerStyle);

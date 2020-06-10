@@ -2148,37 +2148,53 @@ namespace SpaceVIL.Decorations
          style.MinHeight = 10;
          style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-         Style uparrowStyle = GetButtonCoreStyle();
-         uparrowStyle.WidthPolicy = SizePolicy.Expand;
-         uparrowStyle.HeightPolicy = SizePolicy.Expand;
-         uparrowStyle.SetMargin(4, 4, 4, 5);
-         uparrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
-         uparrowStyle.Alignment = ItemAlignment.Top | ItemAlignment.VCenter;
-         uparrowStyle.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 0);
-         uparrowStyle.IsFixedShape = true;
+         Style uparrowButtonStyle = GetButtonCoreStyle();
+         uparrowButtonStyle.WidthPolicy = SizePolicy.Expand;
+         uparrowButtonStyle.HeightPolicy = SizePolicy.Expand;
+         uparrowButtonStyle.Background = Color.FromArgb(255, 181, 111); //Color.FromArgb(255, 50, 50, 50);
+         uparrowButtonStyle.Alignment = ItemAlignment.Top | ItemAlignment.VCenter;
+         uparrowButtonStyle.IsFixedShape = true;
 
          ItemState hovered = new ItemState();
-         hovered.Background = Color.FromArgb(30, 255, 255, 255);
-         uparrowStyle.AddItemState(ItemStateType.Hovered, hovered);
+         hovered.Background = Color.FromArgb(80, 255, 255, 255);
+         uparrowButtonStyle.AddItemState(ItemStateType.Hovered, hovered);
 
-         style.AddInnerStyle("uparrow", uparrowStyle);
+         style.AddInnerStyle("uparrowbutton", uparrowButtonStyle);
 
-         Style downarrowStyle = GetButtonCoreStyle();
-         downarrowStyle.WidthPolicy = SizePolicy.Expand;
-         downarrowStyle.HeightPolicy = SizePolicy.Expand;
-         downarrowStyle.SetMargin(4, 5, 4, 4);
-         downarrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
-         downarrowStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.VCenter;
-         downarrowStyle.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 180);
-         downarrowStyle.IsFixedShape = true;
-         downarrowStyle.AddItemState(ItemStateType.Hovered, hovered);
-         style.AddInnerStyle("downarrow", downarrowStyle);
+         Style upArrowStyle = new Style();
+         upArrowStyle.Width = 14;
+         upArrowStyle.Height = 6;
+         upArrowStyle.WidthPolicy = SizePolicy.Fixed;
+         upArrowStyle.HeightPolicy = SizePolicy.Fixed;
+         upArrowStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+         upArrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
+         upArrowStyle.Shape = GraphicsMathService.GetTriangle(angle: 0);
+         style.AddInnerStyle("uparrow", upArrowStyle);
+
+         Style downarrowButtonStyle = GetButtonCoreStyle();
+         downarrowButtonStyle.WidthPolicy = SizePolicy.Expand;
+         downarrowButtonStyle.HeightPolicy = SizePolicy.Expand;
+         downarrowButtonStyle.Background = Color.FromArgb(255, 181, 111); //Color.FromArgb(255, 50, 50, 50);
+         downarrowButtonStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.VCenter;
+         downarrowButtonStyle.IsFixedShape = true;
+         downarrowButtonStyle.AddItemState(ItemStateType.Hovered, hovered);
+         style.AddInnerStyle("downarrowbutton", downarrowButtonStyle);
+
+         Style downArrowStyle = new Style();
+         downArrowStyle.Width = 14;
+         downArrowStyle.Height = 6;
+         downArrowStyle.WidthPolicy = SizePolicy.Fixed;
+         downArrowStyle.HeightPolicy = SizePolicy.Fixed;
+         downArrowStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+         downArrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
+         downArrowStyle.Shape = GraphicsMathService.GetTriangle(angle: 180);
+         style.AddInnerStyle("downarrow", downArrowStyle);
 
          Style btnsArea = GetVerticalStackStyle();
          btnsArea.WidthPolicy = SizePolicy.Fixed;
          btnsArea.HeightPolicy = SizePolicy.Expand;
          btnsArea.Width = 20;
-         btnsArea.Background = Color.FromArgb(255, 255, 181, 111);
+         // btnsArea.Background = Color.FromArgb(255, 255, 181, 111);
          btnsArea.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
          style.AddInnerStyle("buttonsarea", btnsArea);
 

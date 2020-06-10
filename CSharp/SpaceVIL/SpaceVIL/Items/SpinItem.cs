@@ -16,19 +16,22 @@ namespace SpaceVIL
     public class SpinItem : Prototype
     {
         static int count = 0;
-        private HorizontalStack _horzStack = new HorizontalStack();
-        private VerticalStack _vertStack = new VerticalStack();
-        private TextEditRestricted _textInput = new TextEditRestricted();
+        private HorizontalStack _horzStack; // = new HorizontalStack();
+        private VerticalStack _vertStack; // = new VerticalStack();
+        private TextEditRestricted _textInput; // = new TextEditRestricted();
 
         /// <summary>
         /// Increment value button.
         /// </summary>
-        public ButtonCore UpButton = new ButtonCore();
+        public ButtonCore UpButton; // = new ButtonCore();
 
         /// <summary>
         /// Decrement value button.
         /// </summary>
-        public ButtonCore DownButton = new ButtonCore();
+        public ButtonCore DownButton; // = new ButtonCore();
+
+        private CustomShape _upArrow;
+        private CustomShape _downArrow;
 
         /// <summary>
         /// Default SpinItem constructor.
@@ -37,10 +40,17 @@ namespace SpaceVIL
         {
             SetItemName("SpinItem_" + count);
             count++;
+
+            _horzStack = new HorizontalStack();
+            _vertStack = new VerticalStack();
+            _textInput = new TextEditRestricted();
+            UpButton = new ButtonCore();
+            DownButton = new ButtonCore();
+            _upArrow = new CustomShape();
+            _downArrow = new CustomShape();
+
             _horzStack.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
 
             UpButton.IsFocusable = false;
             UpButton.EventMouseClick += OnUpClick;
@@ -50,6 +60,8 @@ namespace SpaceVIL
 
             EventScrollUp = OnUpClick;
             EventScrollDown = OnDownClick;
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
         }
 
         /// <summary>
@@ -140,6 +152,8 @@ namespace SpaceVIL
             AddItem(_horzStack);
             _horzStack.AddItems(_textInput, _vertStack);
             _vertStack.AddItems(UpButton, DownButton);
+            UpButton.AddItem(_upArrow);
+            DownButton.AddItem(_downArrow);
         }
 
         /// <summary>
@@ -159,16 +173,31 @@ namespace SpaceVIL
             {
                 _vertStack.SetStyle(innerStyle);
             }
-            innerStyle = style.GetInnerStyle("uparrow");
+
+            innerStyle = style.GetInnerStyle("uparrowbutton");
             if (innerStyle != null)
             {
                 UpButton.SetStyle(innerStyle);
             }
-            innerStyle = style.GetInnerStyle("downarrow");
+
+            innerStyle = style.GetInnerStyle("uparrow");
+            if (innerStyle != null)
+            {
+                _upArrow.SetStyle(innerStyle);
+            }
+
+            innerStyle = style.GetInnerStyle("downarrowbutton");
             if (innerStyle != null)
             {
                 DownButton.SetStyle(innerStyle);
             }
+
+            innerStyle = style.GetInnerStyle("downarrow");
+            if (innerStyle != null)
+            {
+                _downArrow.SetStyle(innerStyle);
+            }
+
             innerStyle = style.GetInnerStyle("textedit");
             if (innerStyle != null)
             {

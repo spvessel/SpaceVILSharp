@@ -316,8 +316,9 @@ public class ComboBox extends Prototype {
         dropDownArea.selectionChanged.add(() -> onSelectionChanged());
 
         if (preItemList != null) {
-            for (MenuItem item : preItemList)
+            for (MenuItem item : preItemList) {
                 dropDownArea.addItem(item);
+            }
             preItemList = null;
         }
     }
@@ -358,10 +359,11 @@ public class ComboBox extends Prototype {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        if (item instanceof MenuItem)
+        if (item instanceof MenuItem) {
             dropDownArea.addItem(item);
-        else
+        } else {
             super.addItem(item);
+        }
     }
 
     /**
@@ -433,26 +435,31 @@ public class ComboBox extends Prototype {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
 
         super.setStyle(style);
 
         Style innerStyle = style.getInnerStyle("selection");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             selection.setStyle(innerStyle);
+        }
 
         innerStyle = style.getInnerStyle("dropdownbutton");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             dropDown.setStyle(innerStyle);
+        }
 
         innerStyle = style.getInnerStyle("arrow");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             arrow.setStyle(innerStyle);
+        }
 
         innerStyle = style.getInnerStyle("dropdownarea");
-        if (innerStyle != null)
+        if (innerStyle != null) {
             dropDownArea.setStyle(innerStyle);
+        }
 
         setForeground(style.foreground);
         setFont(style.font);

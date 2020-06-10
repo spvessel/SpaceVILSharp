@@ -19,14 +19,17 @@ namespace SpaceVIL
         internal ButtonCore DropDown;
         internal CustomShape Arrow;
         internal ComboBoxDropDown DropDownArea;
+
         /// <summary>
         /// Event that is invoked when one of the options is selected.
         /// </summary>
         public EventCommonMethod SelectionChanged;
+        
         /// <summary>
         /// Property that allows to specify what item will be focused after drop-down list is closed.
         /// </summary>
         public Prototype ReturnFocus = null;
+        
         /// <summary>
         /// Disposing ComboBox resources if it was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
@@ -69,7 +72,9 @@ namespace SpaceVIL
         private void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
+            {
                 EventMouseClick?.Invoke(this, new MouseArgs());
+            }
         }
 
         /// <summary>
@@ -81,6 +86,7 @@ namespace SpaceVIL
         {
             Selection.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting alignment of an ComboBox text of selected option. 
         /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
@@ -90,6 +96,7 @@ namespace SpaceVIL
         {
             Selection.SetTextAlignment(alignment);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to ComboBox.
         /// </summary>
@@ -98,6 +105,7 @@ namespace SpaceVIL
         {
             Selection.SetTextMargin(margin);
         }
+
         /// <summary>
         /// Setting indents for the text to offset text relative to ComboBox.
         /// </summary>
@@ -118,6 +126,7 @@ namespace SpaceVIL
         {
             Selection.SetFont(font);
         }
+
         /// <summary>
         /// Setting font size of the text of selected option.
         /// </summary>
@@ -126,6 +135,7 @@ namespace SpaceVIL
         {
             Selection.SetFontSize(size);
         }
+
         /// <summary>
         /// Setting font style of the text of selected option.
         /// </summary>
@@ -134,6 +144,7 @@ namespace SpaceVIL
         {
             Selection.SetFontStyle(style);
         }
+
         /// <summary>
         /// Setting new font family of the text of selected option.
         /// </summary>
@@ -142,6 +153,7 @@ namespace SpaceVIL
         {
             Selection.SetFontFamily(fontFamily);
         }
+
         /// <summary>
         /// Getting the current font of the text of selected option.
         /// </summary>
@@ -150,6 +162,7 @@ namespace SpaceVIL
         {
             return Selection.GetFont();
         }
+
         /// <summary>
         /// Setting the text of selected option.
         /// </summary>
@@ -158,6 +171,7 @@ namespace SpaceVIL
         {
             Selection.SetText(text);
         }
+
         /// <summary>
         /// Setting the text.
         /// </summary>
@@ -166,6 +180,7 @@ namespace SpaceVIL
         {
             SetText(text.ToString());
         }
+
         /// <summary>
         /// Getting the current text  of selected option.
         /// </summary>
@@ -174,6 +189,7 @@ namespace SpaceVIL
         {
             return Selection.GetText();
         }
+
         /// <summary>
         /// Getting the text width (useful when you need resize ComboBox by text width).
         /// </summary>
@@ -182,6 +198,7 @@ namespace SpaceVIL
         {
             return Selection.GetTextWidth();
         }
+
         /// <summary>
         /// Getting the text height (useful when you need resize ComboBox by text height).
         /// </summary>
@@ -190,6 +207,7 @@ namespace SpaceVIL
         {
             return Selection.GetTextHeight();
         }
+
         /// <summary>
         /// Setting text color of selected option.
         /// </summary>
@@ -198,6 +216,7 @@ namespace SpaceVIL
         {
             Selection.SetForeground(color);
         }
+
         /// <summary>
         /// Setting text color of selected option in byte RGB format.
         /// </summary>
@@ -208,6 +227,7 @@ namespace SpaceVIL
         {
             Selection.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of selected option in byte RGBA format.
         /// </summary>
@@ -219,6 +239,7 @@ namespace SpaceVIL
         {
             Selection.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Setting text color of selected option in float RGB format.
         /// </summary>
@@ -229,6 +250,7 @@ namespace SpaceVIL
         {
             Selection.SetForeground(r, g, b);
         }
+
         /// <summary>
         /// Setting text color of selected option in float RGBA format.
         /// </summary>
@@ -240,6 +262,7 @@ namespace SpaceVIL
         {
             Selection.SetForeground(r, g, b, a);
         }
+
         /// <summary>
         /// Getting current text color of selected option.
         /// </summary>
@@ -267,7 +290,9 @@ namespace SpaceVIL
             if (preItemList != null)
             {
                 foreach (MenuItem item in preItemList)
+                {
                     DropDownArea.AddItem(item);
+                }
                 preItemList = null;
             }
         }
@@ -313,9 +338,13 @@ namespace SpaceVIL
         public override void AddItem(IBaseItem item)
         {
             if (item is MenuItem)
+            {
                 DropDownArea.AddItem(item);
+            }
             else
+            {
                 base.AddItem(item);
+            }
         }
 
         /// <summary>
@@ -342,6 +371,7 @@ namespace SpaceVIL
             Selection.SetText(DropDownArea.GetText());
             SelectionChanged?.Invoke();
         }
+
         /// <summary>
         /// Getting index of selected option in the drop-down list.
         /// </summary>
@@ -382,25 +412,35 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
 
             base.SetStyle(style);
 
             Style innerStyle = style.GetInnerStyle("selection");
             if (innerStyle != null)
+            {
                 Selection.SetStyle(innerStyle);
+            }
 
             innerStyle = style.GetInnerStyle("dropdownbutton");
             if (innerStyle != null)
+            {
                 DropDown.SetStyle(innerStyle);
+            }
 
             innerStyle = style.GetInnerStyle("arrow");
             if (innerStyle != null)
+            {
                 Arrow.SetStyle(innerStyle);
+            }
 
             innerStyle = style.GetInnerStyle("dropdownarea");
             if (innerStyle != null)
+            {
                 DropDownArea.SetStyle(innerStyle);
+            }
 
             SetForeground(style.Foreground);
             SetFont(style.Font);

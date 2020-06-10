@@ -2271,37 +2271,53 @@ public class Style implements Cloneable {
         style.minHeight = 10;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style uparrowStyle = getButtonCoreStyle();
-        uparrowStyle.widthPolicy = SizePolicy.EXPAND;
-        uparrowStyle.heightPolicy = SizePolicy.EXPAND;
-        uparrowStyle.setMargin(4, 4, 4, 5);
-        uparrowStyle.background = new Color(50, 50, 50, 255);
-        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        uparrowStyle.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 0);
-        uparrowStyle.isFixedShape = true;
+        Style uparrowButtonStyle = getButtonCoreStyle();
+        uparrowButtonStyle.widthPolicy = SizePolicy.EXPAND;
+        uparrowButtonStyle.heightPolicy = SizePolicy.EXPAND;
+        uparrowButtonStyle.background = new Color(255, 181, 111); //new Color(50, 50, 50, 255);
+        uparrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrowButtonStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowButtonStyle.addItemState(ItemStateType.HOVERED, hovered);
 
-        style.addInnerStyle("uparrow", uparrowStyle);
+        style.addInnerStyle("uparrowbutton", uparrowButtonStyle);
+        
+        Style upArrowStyle = new Style();
+        upArrowStyle.width = 14;
+        upArrowStyle.height = 6;
+        upArrowStyle.widthPolicy = SizePolicy.FIXED;
+        upArrowStyle.heightPolicy = SizePolicy.FIXED;
+        upArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        upArrowStyle.background = new Color(50, 50, 50);
+        upArrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 0);
+        style.addInnerStyle("uparrow", upArrowStyle);
 
-        Style downarrowStyle = getButtonCoreStyle();
-        downarrowStyle.widthPolicy = SizePolicy.EXPAND;
-        downarrowStyle.heightPolicy = SizePolicy.EXPAND;
-        downarrowStyle.setMargin(4, 5, 4, 4);
-        downarrowStyle.background = new Color(50, 50, 50, 255);
-        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
-        downarrowStyle.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 180);
-        downarrowStyle.isFixedShape = true;
-        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
-        style.addInnerStyle("downarrow", downarrowStyle);
+        Style downarrowButtonStyle = getButtonCoreStyle();
+        downarrowButtonStyle.widthPolicy = SizePolicy.EXPAND;
+        downarrowButtonStyle.heightPolicy = SizePolicy.EXPAND;
+        downarrowButtonStyle.background = new Color(255, 181, 111); //new Color(50, 50, 50, 255);
+        downarrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrowButtonStyle.isFixedShape = true;
+        downarrowButtonStyle.addItemState(ItemStateType.HOVERED, hovered);
+        style.addInnerStyle("downarrowbutton", downarrowButtonStyle);
+
+        Style downArrowStyle = new Style();
+        downArrowStyle.width = 14;
+        downArrowStyle.height = 6;
+        downArrowStyle.widthPolicy = SizePolicy.FIXED;
+        downArrowStyle.heightPolicy = SizePolicy.FIXED;
+        downArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        downArrowStyle.background = new Color(50, 50, 50);
+        downArrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
+        style.addInnerStyle("downarrow", downArrowStyle);
 
         Style btnsArea = getVerticalStackStyle();
         btnsArea.widthPolicy = SizePolicy.FIXED;
         btnsArea.heightPolicy = SizePolicy.EXPAND;
         btnsArea.width = 20;
-        btnsArea.background = new Color(255, 181, 111);
+        // btnsArea.background = new Color(210, 210, 210); //new Color(255, 181, 111);
         btnsArea.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
         style.addInnerStyle("buttonsarea", btnsArea);
 
