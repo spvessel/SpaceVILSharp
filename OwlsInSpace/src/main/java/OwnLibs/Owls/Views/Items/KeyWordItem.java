@@ -29,7 +29,7 @@ public class KeyWordItem extends Label {
     }
 
     @Override
-    public void setText(String text) {
+    public void setText(Object text) {
         super.setText(text);
         setWidth(getTextWidth() + 10);
     }
