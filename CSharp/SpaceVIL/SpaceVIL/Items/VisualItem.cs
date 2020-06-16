@@ -155,12 +155,12 @@ namespace SpaceVIL
             {
                 if (item == null)
                 {
-                    Console.WriteLine("Trying to add null item");
+                    Console.WriteLine("SpaceVILWarning: Trying to add null item!");
                     return;
                 }
                 if (item.Equals(this))
                 {
-                    Console.WriteLine("Trying to add current item in himself.");
+                    Console.WriteLine("SpaceVILWarning: Trying to add current item in himself.");
                     return;
                 }
                 item.SetHandler(GetHandler());

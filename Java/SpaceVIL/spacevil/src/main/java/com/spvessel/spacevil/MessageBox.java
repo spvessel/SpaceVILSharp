@@ -32,8 +32,8 @@ public class MessageBox extends DialogWindow {
         return _result;
     }
 
-    Map<ButtonCore, Integer> _userMap = new HashMap<>();
-    ButtonCore _userButtonResult = null;
+    private Map<Integer, ButtonCore> _userMap = new HashMap<>();
+    private int _userButtonResult = -1;
 
     /**
      * Getting result from custom toolbar (if it was created).
@@ -41,10 +41,7 @@ public class MessageBox extends DialogWindow {
      * @return Id of clicked button (see addUserButton(ButtonCore button, int id)).
      */
     public int getUserButtonResult() {
-        if (_userButtonResult != null && _userMap.containsKey(_userButtonResult)) {
-            return _userMap.get(_userButtonResult);
-        }
-        return -1;
+        return _userButtonResult;
     }
 
     private TitleBar _titleBar;
@@ -161,7 +158,7 @@ public class MessageBox extends DialogWindow {
         // adding toolbar
         _titleBar.getMaximizeButton().setVisible(false);
 
-        int w_global = 0;
+        int wGlobal = 0;
 
         // toolbar size
         int w = _okButton.getWidth() + _okButton.getMargin().left + _okButton.getMargin().right;
@@ -169,7 +166,7 @@ public class MessageBox extends DialogWindow {
             w = w * 2 + 10;
         }
         _toolbar.setSize(w, _okButton.getHeight() + _okButton.getMargin().top + _okButton.getMargin().bottom);
-        w_global += w;
+        wGlobal += w;
 
         boolean isEmpty = true;
         w = _userbar.getPadding().left + _userbar.getPadding().right;
@@ -181,26 +178,25 @@ public class MessageBox extends DialogWindow {
             w -= _userbar.getSpacing().horizontal;
         }
         _userbar.setSize(w, _toolbar.getHeight());
-        w_global += (w + _toolbar.getMargin().left + _toolbar.getMargin().right + 50);
-        w_global += (_userbar.getMargin().left + _userbar.getMargin().right);
 
-        setMinWidth(w_global);
-        if (getWidth() < w_global) {
-            setWidth(w_global);
+        wGlobal += _toolbar.getMargin().left + _toolbar.getMargin().right;
+        wGlobal += _userbar.getMargin().left + _userbar.getMargin().right + _userbar.getWidth();
+        wGlobal += _msgLayout.getPadding().left + _msgLayout.getPadding().right;
+
+        if (getWidth() < wGlobal) {
+            setWidth(wGlobal);
         }
-        int w_text = _msgLabel.getTextWidth() + _msgLayout.getMargin().left + _msgLayout.getMargin().right
+        int wText = _msgLabel.getTextWidth() + _msgLayout.getMargin().left + _msgLayout.getMargin().right
                 + _msgLayout.getPadding().left + _msgLayout.getPadding().right + _msgLabel.getMargin().left
                 + _msgLabel.getMargin().right + _msgLabel.getPadding().left + _msgLabel.getPadding().right + 10;
-        if (getWidth() < w_text) {
-            setWidth(w_text);
+        if (getWidth() < wText) {
+            setWidth(wText);
         }
         addItems(_titleBar, _msgLayout);
         getLayout().getContainer().update(GeometryEventType.RESIZE_WIDTH, 0);
 
         if (!isEmpty) {
             _toolbar.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
-            int right = _toolbar.getWidth() + _toolbar.getMargin().left + _toolbar.getMargin().right + 10;
-            _userbar.setMargin(0, 0, right / 2, 0);
             _msgLayout.addItems(_msgLabel, _userbar, _toolbar);
         } else {
             _msgLayout.addItems(_msgLabel, _toolbar);
@@ -212,26 +208,31 @@ public class MessageBox extends DialogWindow {
                 _userbar.addItem(btn);
             }
         }
+
         _toolbar.addItems(_okButton, _cancel);
-        _userMap.put(_okButton, 1);
-        _userMap.put(_titleBar.getCloseButton(), 0);
-        _userMap.put(_cancel, -1);
+
+        setMinWidth(wGlobal);
+
+        tryAdd(_userMap, 1, _okButton);
+        tryAdd(_userMap, 0, _titleBar.getCloseButton());
+        tryAdd(_userMap, -1, _cancel);
         // buttons
         _okButton.setItemName("OK");
         _okButton.eventMouseClick.add((sender, args) -> {
-            _userButtonResult = _okButton;
+            _userButtonResult = 1;
             _result = true;
-            close();
-        });
-        _cancel.setItemName("Cancel");
-        _cancel.eventMouseClick.add((sender, args) -> {
-            _userButtonResult = _cancel;
             close();
         });
 
         _titleBar.getCloseButton().eventMouseClick.clear();
         _titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
-            _userButtonResult = _titleBar.getCloseButton();
+            _userButtonResult = 0;
+            close();
+        });
+
+        _cancel.setItemName("Cancel");
+        _cancel.eventMouseClick.add((sender, args) -> {
+            _userButtonResult = -1;
             close();
         });
     }
@@ -270,13 +271,24 @@ public class MessageBox extends DialogWindow {
             return;
         }
 
-        button.setStyle(_btnStyle);
-        _userMap.put(button, id);
+        if (!tryAdd(_userMap, id, button))
+            return;
+
         _queue.add(button);
+
+        button.setStyle(_btnStyle);
         button.eventMouseClick.add((sender, args) -> {
-            _userButtonResult = button;
+            _userButtonResult = id;
             close();
         });
+    }
+
+    private boolean tryAdd(Map<Integer, ButtonCore> map, int id, ButtonCore btn) {
+        if (map.containsKey(id))
+            return false;
+
+        map.put(id, btn);
+        return true;
     }
 
     private ButtonCore getButton(String name) {

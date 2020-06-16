@@ -2275,15 +2275,15 @@ namespace SpaceVIL.Decorations
          toolbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
          toolbarStyle.SetSpacing(10, 0);
          toolbarStyle.SetPadding(0, 0, 0, 0);
-         toolbarStyle.SetMargin(0, 0, 0, 0);
+         toolbarStyle.SetMargin(0, 0, 10, 0);
          style.AddInnerStyle("toolbar", toolbarStyle);
 
          Style userbarStyle = GetHorizontalStackStyle();
-         userbarStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+         userbarStyle.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
          userbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
          userbarStyle.SetSpacing(10, 0);
          userbarStyle.SetPadding(0, 0, 0, 0);
-         userbarStyle.SetMargin(0, 0, 0, 0);
+         userbarStyle.SetMargin(25, 0, 30, 0);
          style.AddInnerStyle("userbar", userbarStyle);
 
          Style msgStyle = GetLabelStyle();
@@ -2506,18 +2506,18 @@ namespace SpaceVIL.Decorations
          windowStyle.SetBackground(45, 45, 45);
          style.AddInnerStyle("window", windowStyle);
 
-         Style okStyle = GetButtonCoreStyle();
-         okStyle.SetBackground(100, 255, 150);
-         okStyle.Foreground = Color.Black;
-         okStyle.SetSize(100, 30);
-         okStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-         okStyle.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
-         okStyle.SetMargin(0, 0, 0, 0);
-         okStyle.BorderRadius = new CornerRadius();
-         okStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
-         okStyle.IsShadowDrop = true;
-         okStyle.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
-         style.AddInnerStyle("button", okStyle);
+         Style btnStyle = GetButtonCoreStyle();
+         btnStyle.SetBackground(100, 255, 150);
+         btnStyle.Foreground = Color.Black;
+         btnStyle.SetSize(100, 30);
+         btnStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+         btnStyle.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
+         btnStyle.SetMargin(0, 0, 0, 0);
+         btnStyle.BorderRadius = new CornerRadius();
+         btnStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
+         btnStyle.IsShadowDrop = true;
+         btnStyle.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
+         style.AddInnerStyle("button", btnStyle);
 
          Style textStyle = GetTextEditStyle();
          textStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Top);

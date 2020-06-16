@@ -42,25 +42,6 @@ namespace SpaceVIL
             //Slider
             Slider.Handler.Orientation = Orientation.Vertical;
 
-            //Arrows
-            UpArrow.EventMouseClick += (sender, args) =>
-            {
-                float value = Slider.GetCurrentValue();
-                value -= Slider.GetStep();
-                if (value < Slider.GetMinValue())
-                    value = Slider.GetMinValue();
-                Slider.SetCurrentValue(value);
-            };
-
-            DownArrow.EventMouseClick += (sender, args) =>
-            {
-                float value = Slider.GetCurrentValue();
-                value += Slider.GetStep();
-                if (value > Slider.GetMaxValue())
-                    value = Slider.GetMaxValue();
-                Slider.SetCurrentValue(value);
-            };
-
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalScrollBar)));
         }
 
@@ -78,9 +59,28 @@ namespace SpaceVIL
             //Adding
             AddItems(UpArrow, Slider, DownArrow);
 
-            //connections
-            EventScrollUp += UpArrow.EventMouseClick.Invoke;
-            EventScrollDown += DownArrow.EventMouseClick.Invoke;
+            //Arrows
+            EventMouseMethodState upScroll = (sender, args) =>
+            {
+                float value = Slider.GetCurrentValue();
+                value -= Slider.GetStep();
+                if (value < Slider.GetMinValue())
+                    value = Slider.GetMinValue();
+                Slider.SetCurrentValue(value);
+            };
+            UpArrow.EventMouseClick += upScroll;
+            EventScrollUp += upScroll;
+
+            EventMouseMethodState downScroll = (sender, args) =>
+            {
+                float value = Slider.GetCurrentValue();
+                value += Slider.GetStep();
+                if (value > Slider.GetMaxValue())
+                    value = Slider.GetMaxValue();
+                Slider.SetCurrentValue(value);
+            };
+            DownArrow.EventMouseClick += downScroll;
+            EventScrollDown += downScroll;
         }
 
         /// <summary>
