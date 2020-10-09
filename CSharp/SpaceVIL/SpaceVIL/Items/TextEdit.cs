@@ -152,7 +152,6 @@ namespace SpaceVIL
         /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
-            // return _text_object.GetFont();
             return _textObject.GetFont();
         }
 
@@ -180,7 +179,6 @@ namespace SpaceVIL
         /// <returns>Text as System.String.</returns>
         public String GetText()
         {
-            // return PrivGetText();
             return _textObject.GetText();
         }
 
@@ -224,7 +222,6 @@ namespace SpaceVIL
         /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
-            // _text_object.SetForeground(r, g, b);
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
 

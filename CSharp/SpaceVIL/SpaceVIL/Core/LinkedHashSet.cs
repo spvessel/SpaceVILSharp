@@ -23,15 +23,15 @@ namespace SpaceVIL
 
         public LinkedHashSet(IEnumerable<T> e) : this()
         {
-            addEnumerable(e);
+            AddEnumerable(e);
         }
 
         public LinkedHashSet(int initialCapacity, IEnumerable<T> e) : this(initialCapacity)
         {
-            addEnumerable(e);
+            AddEnumerable(e);
         }
 
-        private void addEnumerable(IEnumerable<T> e)
+        private void AddEnumerable(IEnumerable<T> e)
         {
             foreach (T t in e)
             {

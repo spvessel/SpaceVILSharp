@@ -48,7 +48,7 @@ public class InputTest extends ActiveWindow {
         _infoOutput.setAlignment(ItemAlignment.BOTTOM);
         _infoOutput.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
         _infoOutput.setPadding(0, 0, 0, 3);
-        addItem(_infoOutput);
+//        addItem(_infoOutput);
 
         eventKeyPress.add((sender, args) -> {
             // if (args.key == KeyCode.V)
@@ -60,6 +60,9 @@ public class InputTest extends ActiveWindow {
             if (args.key == KeyCode.F11)
                 toggleFullScreen();
         });
+
+        Label label = new Label();
+        label.setAlignment();
 
         VerticalStack layout = new VerticalStack();
         ///////////////////////////////////////////////////////////////////////
@@ -73,12 +76,14 @@ public class InputTest extends ActiveWindow {
         layout.setSpacing(6, 30);
         layout.setPadding(2, 2, 2, 2);
         addItem(layout);
+        layout.addItem(_infoOutput);
 
          PasswordLine password = new PasswordLine();
          password.setSubstrateText("Enter a password...");
         // password.setTextAlignment(ItemAlignment.RIGHT);
 
-        TextEdit te = new TextEdit();
+       TextEdit te = new TextEdit();
+        // TextEditTest te = new TextEditTest();
         layout.addItem(te);
         // te.setText("TextZaranee");
 //         te.setTextAlignment(ItemAlignment.RIGHT);

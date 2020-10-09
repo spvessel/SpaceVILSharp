@@ -97,7 +97,7 @@ namespace SpaceVIL
         /// Assign item on the left area of the VerticalSplitArea.
         /// </summary>
         /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
-        public void AssignLeftItem(IBaseItem item)
+        public void SetLeftItem(IBaseItem item)
         {
             AddItem(item);
             _leftBlock = item;
@@ -109,7 +109,7 @@ namespace SpaceVIL
         /// Assign item on the right area of the VerticalSplitArea.
         /// </summary>
         /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
-        public void AssignRightItem(IBaseItem item)
+        public void SetRightItem(IBaseItem item)
         {
             AddItem(item);
             _rightBlock = item;

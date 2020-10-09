@@ -101,7 +101,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
-    public void assignTopItem(InterfaceBaseItem item) {
+    public void setTopItem(InterfaceBaseItem item) {
         addItem(item);
         _topBlock = item;
         _tMin = _topBlock.getMinHeight();
@@ -113,7 +113,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
-    public void assignBottomItem(InterfaceBaseItem item) {
+    public void setBottomItem(InterfaceBaseItem item) {
         addItem(item);
         _bottomBlock = item;
         _bMin = _bottomBlock.getMinHeight();

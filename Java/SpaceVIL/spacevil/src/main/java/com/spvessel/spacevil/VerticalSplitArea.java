@@ -101,7 +101,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
-    public void assignLeftItem(InterfaceBaseItem item) {
+    public void setLeftItem(InterfaceBaseItem item) {
         addItem(item);
         _leftBlock = item;
         _lMin = _leftBlock.getMinWidth();
@@ -113,7 +113,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
-    public void assignRightItem(InterfaceBaseItem item) {
+    public void setRightItem(InterfaceBaseItem item) {
         addItem(item);
         _rightBlock = item;
         _rMin = _rightBlock.getMinWidth();

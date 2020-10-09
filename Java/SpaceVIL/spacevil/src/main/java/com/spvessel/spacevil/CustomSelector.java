@@ -10,7 +10,7 @@ class CustomSelector extends Primitive {
     /**
      * Constructs a CustomSelector
      */
-    public CustomSelector() {
+    CustomSelector() {
         super("CustomSelector_" + count);
         count++;
     }
@@ -18,7 +18,7 @@ class CustomSelector extends Primitive {
     /**
      * Make CustomSelector's rectangles with left top and right bottom points
      */
-    public void setRectangles(List<Point> points) {
+    void setRectangles(List<Point> points) {
         List<float[]> triangles = new LinkedList<>();
         int w1 = 0, w2 = 0;
         int h1 = 0, h2 = 0;
@@ -52,7 +52,7 @@ class CustomSelector extends Primitive {
     /**
      * Shift selector on Y direction
      */
-    public void shiftAreaY(int yShift) {
+    void shiftAreaY(int yShift) {
         List<float[]> triangles = getTriangles();
         if (triangles == null || triangles.size() == 0)
             return;
@@ -67,7 +67,7 @@ class CustomSelector extends Primitive {
     /**
      * Shift selector on X direction
      */
-    public void shiftAreaX(int xShift) {
+    void shiftAreaX(int xShift) {
         List<float[]> triangles = getTriangles();
         if (triangles == null || triangles.size() == 0)
             return;

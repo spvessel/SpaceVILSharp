@@ -60,6 +60,7 @@ public class Program {
         // SideAreaTest sat = new SideAreaTest();
         // DPIAnalysis dpi = new DPIAnalysis();
 //        OpenGLTest oglt = new OpenGLTest();
+        JsonTest jt = new JsonTest();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -87,10 +88,10 @@ public class Program {
                 // dw
                 // , mw2
                 // st
-                // im
-                // ft
+//                 im
+//                 ft
                 // lt
-                // ct
+//                 ct
                   it
                 // tt
                 // con
@@ -98,6 +99,7 @@ public class Program {
                 // et
                 // pt
                 // oglt
+//                jt
                 );
     }
 

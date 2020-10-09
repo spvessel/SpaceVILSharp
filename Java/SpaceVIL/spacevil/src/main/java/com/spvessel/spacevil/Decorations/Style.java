@@ -11,6 +11,7 @@ import com.spvessel.spacevil.SpaceVILConstants;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
@@ -518,7 +519,18 @@ public class Style implements Cloneable {
      * @param alignment Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignment) {
-        this.alignment = Arrays.asList(alignment);
+        setAlignment(Arrays.asList(alignment)); //this.alignment = Arrays.asList(alignment);
+    }
+
+    /**
+     * Setting an Alignment of an item's shape relative to its container. Combines
+     * with alignment by vertically (TOP, VCENTER, BOTTOM) and horizontally (LEFT,
+     * HCENTER, RIGHT). Attention: this property is required.
+     * 
+     * @param alignment Alignment as List of com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public void setAlignment(List<ItemAlignment> alignment) {
+        this.alignment = new ArrayList<>(alignment); //Arrays.asList(alignment);
     }
 
     /**
@@ -529,7 +541,18 @@ public class Style implements Cloneable {
      * @param alignment Text alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        this.textAlignment = Arrays.asList(alignment);
+        setTextAlignment(Arrays.asList(alignment)); //this.textAlignment = Arrays.asList(alignment);
+    }
+
+    /**
+     * Alignment of an item's text. Combines with alignment by vertically (TOP,
+     * VCENTER, BOTTOM) and horizontally (LEFT, HCENTER, RIGHT). Can be used only if
+     * the item contains text and in this case this property is required.
+     * 
+     * @param alignment Text alignment as List of com.spvessel.spacevil.Flags.ItemAlignment.
+     */
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        this.textAlignment = new ArrayList<>(alignment); //Arrays.asList(alignment);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -672,15 +695,17 @@ public class Style implements Cloneable {
         style.setMinSize(minWidth, minHeight);
 
         if (alignment != null) {
-            ItemAlignment[] list = new ItemAlignment[alignment.size()];
-            alignment.toArray(list);
-            style.setAlignment(list);
+            // ItemAlignment[] list = new ItemAlignment[alignment.size()];
+            // alignment.toArray(list);
+            // style.setAlignment(list);
+            style.setAlignment(alignment);
         }
 
         if (textAlignment != null) {
-            ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
-            textAlignment.toArray(textlist);
-            style.setTextAlignment(textlist);
+            // ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
+            // textAlignment.toArray(textlist);
+            // style.setTextAlignment(textlist);
+            style.setTextAlignment(textAlignment);
         }
 
         if (padding != null) {
@@ -1821,10 +1846,11 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.FIXED;
 
         Style textStyle = new Style();
-        textStyle.background = new Color(0, 0, 0, 0);
+        textStyle.height = 30; //here
+        textStyle.background = new Color(210, 210, 210); //here
         textStyle.foreground = new Color(70, 70, 70);
         textStyle.font = DefaultsService.getDefaultFont(16);
-        textStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        textStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED); //here
         textStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         textStyle.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         textStyle.padding = new Indents(5, 0, 5, 0);

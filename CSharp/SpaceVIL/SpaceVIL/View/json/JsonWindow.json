@@ -1,0 +1,74 @@
+{
+  "WindowName": "JsonTest",
+  "WindowTitle": "JsonTest",
+  "Size": [
+    800,
+    800
+  ],
+  "MinSize": [
+    50,
+    100
+  ],
+  "Background": [
+    45,
+    45,
+    45
+  ],
+  "VerticalStack": {
+    "Background": [
+      70,
+      70,
+      70
+    ],
+    "Spacing": {
+      "horizontal": 6,
+      "vertical": 30
+    },
+    "Padding": {
+      "left": 2,
+      "top": 2,
+      "right": 2,
+      "bottom": 2
+    },
+    "Label": {
+      "Text": "0 lines  0 characters",
+      "Height": 25,
+      "HeightPolicy": "Fixed",
+      "Background": [
+        13,
+        176,
+        255
+      ],
+      "Foreground": [
+        210,
+        210,
+        210
+      ],
+      "FontSize": 18,
+      "FontStyle": "Italic",
+      "Alignment": "Bottom",
+      "TextAlignment": [
+        "HCenter",
+        "Bottom"
+      ],
+      "Padding": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 3
+      }
+    },
+    "PasswordLine": {
+      "SubstrateText": "Enter a password..."
+    },
+    "TextEdit": {
+      "Text": "Write123 4:5678 90-= qwert yu\" iop [] asdfghj kl;' zxcv bnm,./"
+    },
+    "TextEdit": {
+      "Text": "Write123 4:5678 90-= "
+    },
+    "TextArea": {
+      "WrapText": true
+    }
+  }
+}

@@ -115,13 +115,13 @@ public class ComplexTest extends ActiveWindow {
         split_area.setSplitPosition(300);
         addItem(split_area);
 
-        split_area.assignLeftItem(treeview);
+        split_area.setLeftItem(treeview);
 
         ImageItem img = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.IMPORT, EmbeddedImageSize.SIZE_32X32), false);
         img.keepAspectRatio(true);
         img.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        split_area.assignRightItem(wrap);
+        split_area.setRightItem(wrap);
 
         for (int i = 0; i < 5; i++) {
             wrap.addItem(getButton("Wrap" + count++, 100, 100, SizePolicy.EXPAND));
