@@ -1,0 +1,33 @@
+{
+    "Style": {
+        "background": [
+            13,
+            176,
+            255
+        ],
+        "foreground": [
+            1,
+            132,
+            132
+        ],
+        "font": {
+            "Size": 16
+        },
+        "widthPolicy": "Fixed",
+        "heightPolicy": "Fixed",
+        "width": 150,
+        "height": 50,
+        "alignment": [
+            "Right",
+            "Bottom"
+        ],
+        "textAlignment": [
+            "HCenter",
+            "VCenter"
+        ],
+        "margin": {
+            "right": 10,
+            "bottom": 10
+        }
+    }
+}
