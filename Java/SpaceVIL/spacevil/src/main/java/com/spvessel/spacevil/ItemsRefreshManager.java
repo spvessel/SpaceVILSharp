@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceImageItem;
-import com.spvessel.spacevil.Core.InterfaceTextContainer;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IImageItem;
+import com.spvessel.spacevil.Core.ITextContainer;
 
 /**
  * ItemsRefreshManager is a manager that allows you to add an item of a certain type to the queue for a forced refresh. 
@@ -23,11 +23,11 @@ public final class ItemsRefreshManager {
     private static Lock _lockTextObject = new ReentrantLock();
     private static Lock _lockImageObject = new ReentrantLock();
 
-    private static Set<InterfaceBaseItem> _shapes = new HashSet<>();
-    private static Set<InterfaceTextContainer> _texts = new HashSet<>();
-    private static Set<InterfaceImageItem> _images = new HashSet<>();
+    private static Set<IBaseItem> _shapes = new HashSet<>();
+    private static Set<ITextContainer> _texts = new HashSet<>();
+    private static Set<IImageItem> _images = new HashSet<>();
 
-    private static VisualItem castVisualItem(InterfaceBaseItem item) {
+    private static VisualItem castVisualItem(IBaseItem item) {
         VisualItem vi = null;
         if (item instanceof VisualItem) {
             vi = (VisualItem) item;
@@ -39,11 +39,11 @@ public final class ItemsRefreshManager {
      * Adding an IBaseItem implementation to the queue for a forced refresh.
      * <p> Tips: use this function only if you want to refresh shape of an item, 
      * ITextContainer and IImageItem are not shapes.
-     * @param item An item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item An item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if adding is successfull. False: if an item is already in the refresh queue.
      */
-    public static boolean setRefreshShape(InterfaceBaseItem item) {
-        if (item instanceof InterfaceTextContainer
+    public static boolean setRefreshShape(IBaseItem item) {
+        if (item instanceof ITextContainer
                 // || !item.isVisible() || !item.isDrawable()
                 // || (item.getBackground().getAlpha() == 0)
                 ) {
@@ -66,11 +66,11 @@ public final class ItemsRefreshManager {
     /**
      * Adding an ITextContainer implementation to the queue for a forced refresh.
      * <p> Tips: use this function only if you want to refresh text of an item, 
-     * InterfaceBaseItem and InterfaceImageItem are not text.
-     * @param item An item as com.spvessel.spacevil.Core.InterfaceTextContainer.
+     * IBaseItem and IImageItem are not text.
+     * @param item An item as com.spvessel.spacevil.Core.ITextContainer.
      * @return True: if adding is successfull. False: if an item is already in the refresh queue.
      */
-    public static boolean setRefreshText(InterfaceTextContainer item) {
+    public static boolean setRefreshText(ITextContainer item) {
         _lockTextObject.lock();
         try {
             return _texts.add(item);
@@ -82,11 +82,11 @@ public final class ItemsRefreshManager {
     /**
      * Adding an IImageItem implementation to the queue for a forced refresh.
      * <p> Tips: use this function only if you want to refresh image of an item, 
-     * InterfaceBaseItem and InterfaceTextContainer are not images.
-     * @param item An item as com.spvessel.spacevil.Core.InterfaceImageItem.
+     * IBaseItem and ITextContainer are not images.
+     * @param item An item as com.spvessel.spacevil.Core.IImageItem.
      * @return True: if adding is successfull. False: if an item is already in the refresh queue.
      */
-    public static boolean setRefreshImage(InterfaceImageItem item) {
+    public static boolean setRefreshImage(IImageItem item) {
         _lockImageObject.lock();
         try {
             return _images.add(item);
@@ -96,7 +96,7 @@ public final class ItemsRefreshManager {
     }
 
     //IS SECTION
-    static boolean isRefreshShape(InterfaceBaseItem item) {
+    static boolean isRefreshShape(IBaseItem item) {
         _lockShapeObject.lock();
         try {
             return _shapes.contains(item);
@@ -105,7 +105,7 @@ public final class ItemsRefreshManager {
         }
     }
 
-    static boolean isRefreshText(InterfaceTextContainer item) {
+    static boolean isRefreshText(ITextContainer item) {
         _lockTextObject.lock();
         try {
             return _texts.contains(item);
@@ -114,7 +114,7 @@ public final class ItemsRefreshManager {
         }
     }
 
-    static boolean isRefreshImage(InterfaceImageItem item) {
+    static boolean isRefreshImage(IImageItem item) {
         _lockImageObject.lock();
         try {
             return _images.contains(item);
@@ -124,7 +124,7 @@ public final class ItemsRefreshManager {
     }
 
     // REMOVE SECTION
-    static boolean removeShape(InterfaceBaseItem item) {
+    static boolean removeShape(IBaseItem item) {
         _lockShapeObject.lock();
         try {
             return _shapes.remove(item);
@@ -133,7 +133,7 @@ public final class ItemsRefreshManager {
         }
     }
 
-    static boolean removeText(InterfaceTextContainer item) {
+    static boolean removeText(ITextContainer item) {
         _lockTextObject.lock();
         try {
             return _texts.remove(item);
@@ -142,7 +142,7 @@ public final class ItemsRefreshManager {
         }
     }
 
-    static boolean removeImage(InterfaceImageItem item) {
+    static boolean removeImage(IImageItem item) {
         _lockImageObject.lock();
         try {
             return _images.remove(item);
@@ -152,7 +152,7 @@ public final class ItemsRefreshManager {
     }
 
     // static void printSizeOfShapes() {
-    //     for (InterfaceBaseItem item : _shapes) {
+    //     for (IBaseItem item : _shapes) {
     //         System.out.println(item.getItemName() + " " + (item instanceof Prototype) + " " + (item.getBackground().getAlpha() == 0));
     //     }
     //     System.out.println("Shapes: " + _shapes.size());

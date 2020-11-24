@@ -11,6 +11,14 @@ namespace SpaceVIL
     /// </summary>
     public abstract class CoreWindow
     {
+        static CoreWindow()
+        {
+            if (!Common.CommonService.InitSpaceVILComponents())
+            {
+                throw new SpaceVILException("SpaceVIL initializing failed!");
+            }
+        }
+
         private static int _count = 0;
         private Guid windowGuid;
 

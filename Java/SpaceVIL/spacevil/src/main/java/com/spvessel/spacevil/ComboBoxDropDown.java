@@ -7,11 +7,11 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceItem;
-import com.spvessel.spacevil.Core.InterfaceKeyMethodState;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IItem;
+import com.spvessel.spacevil.Core.IKeyMethodState;
+import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
@@ -25,7 +25,7 @@ import com.spvessel.spacevil.Flags.VisibilityPolicy;
  * usual way (ComboBox.GetItems() does not return ComboBoxDropDown), they just
  * connected with each other. Used for selecting option from the list.
  * ComboBoxDropDown is a floating item (see
- * com.spvessel.spacevil.Core.InterfaceFloating and enum
+ * com.spvessel.spacevil.Core.IFloating and enum
  * com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside
  * the ComboBoxDropDown area.
  * <p>
@@ -35,7 +35,7 @@ import com.spvessel.spacevil.Flags.VisibilityPolicy;
  * <p>
  * Notice: All floating items render above all others items.
  */
-public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
+public class ComboBoxDropDown extends Prototype implements IFloating {
 
     ComboBox parent = null;
 
@@ -83,9 +83,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * Getting current selected item in itemList.
      * 
      * @return Current selected item as
-     *         com.spvessel.spacevil.Core.InterfaceBaseItem.
+     *         com.spvessel.spacevil.Core.IBaseItem.
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         return itemList.getSelectedItem();
     }
 
@@ -105,7 +105,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         }
     }
 
-    private List<InterfaceBaseItem> _queue = new LinkedList<>();
+    private List<IBaseItem> _queue = new LinkedList<>();
 
     private static int count = 0;
 
@@ -115,14 +115,14 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * <p>
      * Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_LEFT.
      */
-    public MouseButton activeButton = MouseButton.BUTTON_LEFT;
+    public MouseButton activeButton = MouseButton.ButtonLeft;
 
     private boolean _init = false;
     private boolean _ouside = true;
 
     /**
      * Returns True if ComboBoxDropDown (see
-     * com.spvessel.spacevil.Core.InterfaceFloating) should closes when mouse click
+     * com.spvessel.spacevil.Core.IFloating) should closes when mouse click
      * outside the area of ComboBoxDropDown otherwise returns False.
      * 
      * @return True: if ComboBoxDropDown closes when mouse click outside the area.
@@ -162,8 +162,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private EventKeyMethodState linkEventKeyPress = new EventKeyMethodState();
 
     private void disableAdditionalControls() {
-        itemList.setVScrollBarPolicy(VisibilityPolicy.NEVER);
-        itemList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.Never);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.Never);
         if (itemList.eventScrollUp.size() != 0) {
             itemList.eventScrollUp.clear();
         }
@@ -179,40 +179,40 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     private void enableAdditionalControls() {
-        itemList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
-        itemList.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.AsNeeded);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.AsNeeded);
 
-        for (InterfaceMouseMethodState action : linkEventScrollUp.getActions()) {
+        for (IMouseMethodState action : linkEventScrollUp.getActions()) {
             itemList.eventScrollUp.add(action);
         }
 
-        for (InterfaceMouseMethodState action : linkEventScrollDown.getActions()) {
+        for (IMouseMethodState action : linkEventScrollDown.getActions()) {
             itemList.eventScrollDown.add(action);
         }
 
-        for (InterfaceMouseMethodState action : linkEventMouseClick.getActions()) {
+        for (IMouseMethodState action : linkEventMouseClick.getActions()) {
             itemList.eventMouseClick.add(action);
         }
 
-        for (InterfaceKeyMethodState action : linkEventKeyPress.getActions()) {
+        for (IKeyMethodState action : linkEventKeyPress.getActions()) {
             itemList.eventKeyPress.add(action);
         }
     }
 
     private void saveAdditionalControls() {
-        for (InterfaceMouseMethodState action : itemList.eventScrollUp.getActions()) {
+        for (IMouseMethodState action : itemList.eventScrollUp.getActions()) {
             linkEventScrollUp.add(action);
         }
 
-        for (InterfaceMouseMethodState action : itemList.eventScrollDown.getActions()) {
+        for (IMouseMethodState action : itemList.eventScrollDown.getActions()) {
             linkEventScrollDown.add(action);
         }
 
-        for (InterfaceMouseMethodState action : itemList.eventMouseClick.getActions()) {
+        for (IMouseMethodState action : itemList.eventMouseClick.getActions()) {
             linkEventMouseClick.add(action);
         }
 
-        for (InterfaceKeyMethodState action : itemList.eventKeyPress.getActions()) {
+        for (IKeyMethodState action : itemList.eventKeyPress.getActions()) {
             linkEventKeyPress.add(action);
         }
     }
@@ -241,13 +241,13 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             });
 
             itemList.getArea().eventKeyPress.add((sender, args) -> {
-                if (args.key == KeyCode.ESCAPE) {
+                if (args.key == KeyCode.Escape) {
                     hide();
-                } else if (args.key == KeyCode.ENTER && args.mods.contains(KeyMods.NO)) {
+                } else if (args.key == KeyCode.Enter && args.mods.contains(KeyMods.No)) {
                     onSelectionChanged();
                 }
             });
-            for (InterfaceBaseItem item : _queue) {
+            for (IBaseItem item : _queue) {
                 itemList.addItem(item);
             }
             _queue = null;
@@ -275,23 +275,23 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Getting all existing options (list of com.spvessel.spacevil.InterfaceBaseItem
+     * Getting all existing options (list of com.spvessel.spacevil.Core.IBaseItem
      * objects).
      * 
-     * @return Options as List&lt;com.spvessel.spacevil.InterfaceBaseItem&gt;
+     * @return Options as List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public List<InterfaceBaseItem> getListContent() {
+    public List<IBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
     /**
-     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * Adding option (or any com.spvessel.spacevil.Core.IBaseItem
      * implementation) to the ComboBoxDropDown.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         if (_init) {
             itemList.addItem(item);
         } else {
@@ -300,24 +300,24 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * Removing option (or any com.spvessel.spacevil.Core.IBaseItem
      * implementation) from the ComboBoxDropDown.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return itemList.removeItem(item);
     }
 
     private void updateSize() {
         int height = itemList.getPadding().top + itemList.getPadding().bottom;
         int width = getWidth();
-        List<InterfaceBaseItem> list = itemList.getListContent();
-        for (InterfaceBaseItem item : list) {
-            InterfaceBaseItem wrapper = itemList.getWrapper(item);
+        List<IBaseItem> list = itemList.getListContent();
+        for (IBaseItem item : list) {
+            IBaseItem wrapper = itemList.getWrapper(item);
             height += (wrapper.getHeight() + itemList.getArea().getSpacing().vertical);
 
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
@@ -352,7 +352,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * @param args   Mouse click arguments (cursor position, mouse button, mouse
      *               button press/release, etc.).
      */
-    public void show(InterfaceItem sender, MouseArgs args) {
+    public void show(IItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
             initElements();
             setVisible(true);

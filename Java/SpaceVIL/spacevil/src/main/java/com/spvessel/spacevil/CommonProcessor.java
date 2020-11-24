@@ -10,13 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.lwjgl.glfw.GLFW.*;
+import com.spvessel.spacevil.internal.Wrapper.GlfwWrapper;
 
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.InputEventType;
 
 final class CommonProcessor {
@@ -44,7 +45,10 @@ final class CommonProcessor {
     Position ptrClick = new Position();
     InputDeviceEvent events;
 
+    GlfwWrapper glfw = null;
+
     CommonProcessor() {
+        glfw = GlfwWrapper.get();
         this.events = new InputDeviceEvent();
         margs = new MouseArgs();
         margs.clear();
@@ -67,11 +71,11 @@ final class CommonProcessor {
         inputLocker = true;
         underHoveredItems.clear();
 
-        List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
+        List<IBaseItem> layout_box_of_items = new LinkedList<IBaseItem>();
         layout_box_of_items.add(rootContainer);
         layout_box_of_items.addAll(getInnerItems(rootContainer, xpos, ypos));
 
-        for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(guid)) {
+        for (IBaseItem item : ItemsLayoutBox.getLayoutFloatItems(guid)) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
             layout_box_of_items.add(item);
@@ -83,15 +87,15 @@ final class CommonProcessor {
 
         List<Prototype> queue = new LinkedList<>();
 
-        for (InterfaceBaseItem item : layout_box_of_items) {
+        for (IBaseItem item : layout_box_of_items) {
             if (item instanceof Prototype) {
                 Prototype prototype = (Prototype) item;
                 if (prototype.getHoverVerification(xpos, ypos)) {
                     queue.add(prototype);
                 } else {
                     prototype.setMouseHover(false);
-                    if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
-                        InterfaceFloating floatItem = (InterfaceFloating) item;
+                    if (item instanceof IFloating && action == InputEventType.MousePress) {
+                        IFloating floatItem = (IFloating) item;
                         if (floatItem.isOutsideClickClosable()) {
                             if (item instanceof ContextMenu) {
                                 ContextMenu cmToClose = (ContextMenu) item;
@@ -109,13 +113,13 @@ final class CommonProcessor {
 
         if (queue.size() > 0) {
             if (hoveredItem != null && hoveredItem != queue.get(queue.size() - 1))
-                manager.assignActionsForSender(InputEventType.MOUSE_LEAVE, margs, hoveredItem, underFocusedItems,
+                manager.assignActionsForSender(InputEventType.MouseLeave, margs, hoveredItem, underFocusedItems,
                         false);
 
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
             CommonService.currentCursor = hoveredItem.getCursor();
-            glfwSetCursor(handler.getWindowId(), CommonService.currentCursor.getCursor());
+            glfw.SetCursor(handler.getWindowId(), CommonService.currentCursor.getCursor());
 
             if (window.isBorderHidden && window.isResizable && !window.isMaximized) {
                 int handlerContainerWidth = rootContainer.getWidth();
@@ -131,15 +135,17 @@ final class CommonProcessor {
                         && ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance);
 
                 if (cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop) {
-                    handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
+                    handler.setCursorType(EmbeddedCursor.Crosshair.getValue());
                 } else {
                     if (xpos > handlerContainerWidth - SpaceVILConstants.borderCursorTolerance
-                            || xpos <= SpaceVILConstants.borderCursorTolerance)
-                        handler.setCursorType(GLFW_HRESIZE_CURSOR);
+                            || xpos <= SpaceVILConstants.borderCursorTolerance) {
+                        handler.setCursorType(EmbeddedCursor.ResizeX.getValue());
+                    }
 
                     if (ypos > handlerContainerHeight - SpaceVILConstants.borderCursorTolerance
-                            || ypos <= SpaceVILConstants.borderCursorTolerance)
-                        handler.setCursorType(GLFW_VRESIZE_CURSOR);
+                            || ypos <= SpaceVILConstants.borderCursorTolerance) {
+                        handler.setCursorType(EmbeddedCursor.ResizeY.getValue());
+                    }
                 }
             }
 
@@ -150,21 +156,21 @@ final class CommonProcessor {
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;
                 item.setMouseHover(true);
-                if (!item.isPassEvents(InputEventType.MOUSE_HOVER))
+                if (!item.isPassEvents(InputEventType.MouseHover))
                     break;
             }
-            manager.assignActionsForHoveredItem(InputEventType.MOUSE_HOVER, margs, hoveredItem, underHoveredItems,
+            manager.assignActionsForHoveredItem(InputEventType.MouseHover, margs, hoveredItem, underHoveredItems,
                     false);
             return true;
         } else
             return false;
     }
 
-    private List<InterfaceBaseItem> getInnerItems(Prototype root) {
-        List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
-        List<InterfaceBaseItem> root_items = root.getItems();
+    private List<IBaseItem> getInnerItems(Prototype root) {
+        List<IBaseItem> list = new LinkedList<IBaseItem>();
+        List<IBaseItem> root_items = root.getItems();
 
-        for (InterfaceBaseItem item : root_items) {
+        for (IBaseItem item : root_items) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
             if (item instanceof Prototype) {
@@ -178,11 +184,11 @@ final class CommonProcessor {
         return list;
     }
 
-    private List<InterfaceBaseItem> getInnerItems(Prototype root, float xpos, float ypos) {
-        List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
-        List<InterfaceBaseItem> rootItems = root.getItems();
+    private List<IBaseItem> getInnerItems(Prototype root, float xpos, float ypos) {
+        List<IBaseItem> list = new LinkedList<IBaseItem>();
+        List<IBaseItem> rootItems = root.getItems();
 
-        for (InterfaceBaseItem item : rootItems) {
+        for (IBaseItem item : rootItems) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
             if (item instanceof Prototype) {
@@ -205,7 +211,7 @@ final class CommonProcessor {
                 boolean found = type.isInstance(item);
                 if (found) {
                     wanted = item;
-                    if (wanted instanceof InterfaceFloating)
+                    if (wanted instanceof IFloating)
                         return wanted;
                 }
             } catch (ClassCastException cce) {

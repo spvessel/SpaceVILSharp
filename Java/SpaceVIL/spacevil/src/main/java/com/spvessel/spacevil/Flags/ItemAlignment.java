@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: LEFT, TOP, RIGHT, BOTTOM, HCENTER, VCENTER.
  */
 public enum ItemAlignment {
-    LEFT, TOP, RIGHT, BOTTOM, HCENTER, VCENTER
+    Left, Top, Right, Bottom, HCenter, VCenter
 }

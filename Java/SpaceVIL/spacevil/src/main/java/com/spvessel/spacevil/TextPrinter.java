@@ -1,8 +1,8 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceTextImage;
+import com.spvessel.spacevil.Core.ITextImage;
 
-class TextPrinter implements InterfaceTextImage {
+class TextPrinter implements ITextImage {
     private byte[] texture = null;
     private int xShift = 0;
     private int yShift = 0;

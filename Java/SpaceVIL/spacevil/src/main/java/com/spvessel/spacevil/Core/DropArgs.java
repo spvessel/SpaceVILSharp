@@ -7,7 +7,7 @@ import com.spvessel.spacevil.Prototype;
 /**
  * A class that describe mouse "drag and drop" input (file system).
  */
-public final class DropArgs implements InterfaceInputEventArgs {
+public final class DropArgs implements IInputEventArgs {
     /**
      * An item on which the drop event occurs.
      */

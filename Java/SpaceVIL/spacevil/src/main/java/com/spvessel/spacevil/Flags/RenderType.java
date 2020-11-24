@@ -9,16 +9,16 @@ public enum RenderType {
      * The scene is redrawn only if any input event occurs (mouse move, mouse click, 
      * keyboard key press, window resizing and etc.).
      */
-    IF_NEEDED,
+    IfNeeded,
     
     /**
      * The scene is redrawn according to the current render frequency type 
      * (See setRenderFrequency(type)) in idle and every time when any input event occurs.
      */
-    PERIODIC,
+    Periodic,
     
     /**
      * The scene is constantly being redrawn.
      */
-    ALWAYS
+    Always
 }

@@ -259,7 +259,7 @@ public class PasswordLine extends HorizontalStack {
     public void initElements() {
         addItems(_textEncrypt, _showPwdBtn);
 
-        ImageItem eye = new ImageItem(DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32));
+        ImageItem eye = new ImageItem(DefaultsService.getDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size64x64));
         eye.keepAspectRatio(true);
         Color eyeBtnShadeColor = new Color(80, 80, 80);
         eye.setColorOverlay(eyeBtnShadeColor);

@@ -70,12 +70,12 @@ public class LoadingScreen extends Prototype {
         _loadIcon = new ImageItem();
         if (_loadIcon.getImage() == null)
             _loadIcon
-                    .setImage(DefaultsService.getDefaultImage(EmbeddedImage.LOAD_CIRCLE, EmbeddedImageSize.SIZE_64X64));
+                    .setImage(DefaultsService.getDefaultImage(EmbeddedImage.LoadCircle, EmbeddedImageSize.Size64x64));
         _textObject = new Label("0%");
         setStyle(DefaultsService.getDefaultStyle(LoadingScreen.class));
 
         eventKeyPress.add((s, a) -> {
-            if (a.key == KeyCode.ESCAPE && a.mods.contains(KeyMods.SHIFT))
+            if (a.key == KeyCode.Escape && a.mods.contains(KeyMods.Shift))
                 setToClose();
         });
     }
@@ -163,8 +163,8 @@ public class LoadingScreen extends Prototype {
         _handler.addItem(this);
         _handler.setFocusedItem(this);
         RedrawFrequency tmp = _handler.getRenderFrequency();
-        if (tmp != RedrawFrequency.HIGH)
-            _handler.setRenderFrequency(RedrawFrequency.HIGH);
+        if (tmp != RedrawFrequency.High)
+            _handler.setRenderFrequency(RedrawFrequency.High);
         Thread thread = new Thread(() -> {
             int alpha = 360;
             while (!isOnClose()) {
@@ -178,7 +178,7 @@ public class LoadingScreen extends Prototype {
                 }
             }
             Close();
-            if (tmp != RedrawFrequency.HIGH)
+            if (tmp != RedrawFrequency.High)
                 _handler.setRenderFrequency(tmp);
         });
         thread.start();

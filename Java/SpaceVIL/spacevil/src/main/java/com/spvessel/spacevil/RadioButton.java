@@ -67,8 +67,8 @@ public class RadioButton extends Prototype {
         setText(text);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (eventMouseClick != null && (args.key == KeyCode.ENTER || args.key == KeyCode.SPACE)) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (eventMouseClick != null && (args.key == KeyCode.Enter || args.key == KeyCode.Space)) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }
@@ -304,7 +304,7 @@ public class RadioButton extends Prototype {
     public void initElements() {
         // events
         _indicator.getIndicatorMarker().eventToggle = null;
-        InterfaceMouseMethodState btn_click = (sender, args) -> {
+        IMouseMethodState btn_click = (sender, args) -> {
             if (_indicator.getIndicatorMarker().isToggled())
                 return;
             _indicator.getIndicatorMarker().setToggled(!_indicator.getIndicatorMarker().isToggled());
@@ -335,9 +335,9 @@ public class RadioButton extends Prototype {
      * @param value True: if you want  to be checked. False: if you want
      *               to be unchecked.
      */
-    private void uncheckOthers(InterfaceItem sender) {
-        List<InterfaceBaseItem> items = getParent().getItems();
-        for (InterfaceBaseItem item : items) {
+    private void uncheckOthers(IItem sender) {
+        List<IBaseItem> items = getParent().getItems();
+        for (IBaseItem item : items) {
             if (item instanceof RadioButton && !item.equals(this)) {
                 ((RadioButton) item).getIndicator().getIndicatorMarker().setToggled(false);
             }

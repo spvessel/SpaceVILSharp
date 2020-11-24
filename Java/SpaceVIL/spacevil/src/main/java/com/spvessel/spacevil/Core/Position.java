@@ -3,7 +3,7 @@ package com.spvessel.spacevil.Core;
 /**
  * Position is a class representing the location of a 2D coordinate integer point.
  */
-public class Position implements InterfacePosition {
+public class Position implements IPosition {
     /**
      * Default Position constructor.
      */

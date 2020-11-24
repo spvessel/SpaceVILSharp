@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace SpaceVIL.Decorations
 {
@@ -17,12 +12,7 @@ namespace SpaceVIL.Decorations
         /// <summary>
         /// Getting backgroud color of the item of current state as System.Drawing.Color.
         /// </summary>
-        public Color Background; // = Color.LightGray;
-
-        // public Color Foreground = Color.Black;
-        // public string Text = null;
-        // public string ImageUri = null;
-        // public bool IsVisible = true;
+        public Color Background;
 
         /// <summary>
         /// Getting border of the item of current state as SpaceVIL.Decorations.Border.

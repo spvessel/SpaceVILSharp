@@ -2,8 +2,8 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.Side;
@@ -21,7 +21,7 @@ import java.util.List;
  * <p>
  * Supports all events including drag and drop.
  */
-public class ResizableItem extends Prototype implements InterfaceDraggable {
+public class ResizableItem extends Prototype implements IDraggable {
 
     private List<Side> _sidesExclude = new LinkedList<>();
 
@@ -144,14 +144,14 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
      */
     public ResizableItem() {
         setItemName("ResizableItem_" + count++);
-        setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
 
         eventMousePress.add(this::onMousePress);
         eventMouseDrag.add(this::onDragging);
         eventMouseHover.add(this::onHover);
     }
 
-    protected void onHover(InterfaceItem sender, MouseArgs args) {
+    protected void onHover(IItem sender, MouseArgs args) {
         if (isLocked) {
             setCursor(DefaultsService.getDefaultCursor());
             return;
@@ -159,24 +159,24 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
         getSides(args.position.getX() - getX(), args.position.getY() - getY());
 
-        if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT)) {
-            if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM)) {
-                setCursor(EmbeddedCursor.CROSSHAIR);
+        if (_sides.contains(Side.Left) || _sides.contains(Side.Right)) {
+            if (_sides.contains(Side.Top) || _sides.contains(Side.Bottom)) {
+                setCursor(EmbeddedCursor.Crosshair);
             } else {
-                setCursor(EmbeddedCursor.RESIZE_X);
+                setCursor(EmbeddedCursor.ResizeX);
             }
-        } else if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM)) {
-            if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT)) {
-                setCursor(EmbeddedCursor.CROSSHAIR);
+        } else if (_sides.contains(Side.Top) || _sides.contains(Side.Bottom)) {
+            if (_sides.contains(Side.Left) || _sides.contains(Side.Right)) {
+                setCursor(EmbeddedCursor.Crosshair);
             } else {
-                setCursor(EmbeddedCursor.RESIZE_Y);
+                setCursor(EmbeddedCursor.ResizeY);
             }
         } else {
             setCursor(DefaultsService.getDefaultCursor());
         }
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    protected void onMousePress(IItem sender, MouseArgs args) {
         if (isLocked) {
             return;
         }
@@ -199,7 +199,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    protected void onDragging(IItem sender, MouseArgs args) {
         if (isLocked) {
             return;
         }
@@ -232,33 +232,33 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             int w = getWidth();
             int h = getHeight();
 
-            if (_sides.contains(Side.LEFT)) {
+            if (_sides.contains(Side.Left)) {
                 if (!(getMinWidth() == getWidth() && (args.position.getX() - _pressedX) >= 0)) {
                     int diff = _globalX - x_release;
                     x_handler = _globalX - diff;
                     w = _width + diff;
                 }
             }
-            if (_sides.contains(Side.RIGHT)) {
+            if (_sides.contains(Side.Right)) {
                 if (!(args.position.getX() < getMinWidth() && getWidth() == getMinWidth())) {
                     w = args.position.getX() - getX();
                 }
             }
-            if (_sides.contains(Side.TOP)) {
+            if (_sides.contains(Side.Top)) {
                 if (!(getMinHeight() == getHeight() && (args.position.getY() - _pressedY) >= 0)) {
                     int diff = _globalY - y_release;
                     y_handler = _globalY - diff;
                     h = _height + diff;
                 }
             }
-            if (_sides.contains(Side.BOTTOM)) {
+            if (_sides.contains(Side.Bottom)) {
                 if (!(args.position.getY() < getMinHeight() && getHeight() == getMinHeight())) {
                     h = args.position.getY() - getY();
                 }
             }
 
             if (_sides.size() != 0) {
-                if (_sides.contains(Side.LEFT) || _sides.contains(Side.TOP)) {
+                if (_sides.contains(Side.Left) || _sides.contains(Side.Top)) {
                     setX(x_handler);
                     setY(y_handler);
                     positionChanged.execute();
@@ -308,18 +308,18 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     void getSides(float xpos, float ypos) {
         _sides.clear();
-        if (xpos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.LEFT)) {
-            _sides.add(Side.LEFT);
+        if (xpos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.Left)) {
+            _sides.add(Side.Left);
         }
-        if (xpos >= getWidth() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.RIGHT)) {
-            _sides.add(Side.RIGHT);
+        if (xpos >= getWidth() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.Right)) {
+            _sides.add(Side.Right);
         }
 
-        if (ypos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.TOP)) {
-            _sides.add(Side.TOP);
+        if (ypos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.Top)) {
+            _sides.add(Side.Top);
         }
-        if (ypos >= getHeight() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.BOTTOM)) {
-            _sides.add(Side.BOTTOM);
+        if (ypos >= getHeight() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.Bottom)) {
+            _sides.add(Side.Bottom);
         }
     }
 }

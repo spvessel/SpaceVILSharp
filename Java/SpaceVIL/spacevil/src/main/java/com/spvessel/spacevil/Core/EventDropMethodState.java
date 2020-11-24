@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class EventDropMethodState {
 
-    List<InterfaceDropMethodState> events;
+    List<IDropMethodState> events;
     
-    public List<InterfaceDropMethodState> getActions() {
+    public List<IDropMethodState> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventDropMethodState {
         return events.size();
     }
     
-    public void add(InterfaceDropMethodState action) {
+    public void add(IDropMethodState action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceDropMethodState action) {
+    public boolean remove(IDropMethodState action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -39,10 +39,10 @@ public class EventDropMethodState {
         events.clear();
     }
 
-    public void execute(InterfaceItem sender, DropArgs args) {
+    public void execute(IItem sender, DropArgs args) {
         if (events == null)
             return;
-        for (InterfaceDropMethodState action : events) {
+        for (IDropMethodState action : events) {
             action.execute(sender, args);
         }
     }

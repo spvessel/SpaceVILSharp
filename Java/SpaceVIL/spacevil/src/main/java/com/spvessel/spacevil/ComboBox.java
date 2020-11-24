@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -84,8 +84,8 @@ public class ComboBox extends Prototype {
         preItemList = Arrays.asList(items);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (args.key == KeyCode.Enter && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }
@@ -311,7 +311,7 @@ public class ComboBox extends Prototype {
         dropDown.addItem(arrow);
 
         // dropDownArea
-        ItemsLayoutBox.addItem(getHandler(), dropDownArea, LayoutType.FLOATING);
+        ItemsLayoutBox.addItem(getHandler(), dropDownArea, LayoutType.Floating);
         dropDownArea.parent = this;
         dropDownArea.selectionChanged.add(() -> onSelectionChanged());
 
@@ -333,7 +333,7 @@ public class ComboBox extends Prototype {
             dropDownArea.setPosition(getX(), getY() + getHeight());
             dropDownArea.setWidth(selection.getWidth());
             MouseArgs args = new MouseArgs();
-            args.button = MouseButton.BUTTON_LEFT;
+            args.button = MouseButton.ButtonLeft;
             dropDownArea.show(this, args);
         }
     }
@@ -355,10 +355,10 @@ public class ComboBox extends Prototype {
      * Adding item to ComboBox. If item is com.spvessel.spacevil.MenuItem then it is
      * added to the drop-down list as an option.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         if (item instanceof MenuItem) {
             dropDownArea.addItem(item);
         } else {
@@ -370,12 +370,12 @@ public class ComboBox extends Prototype {
      * Removing item from ComboBox. If item is com.spvessel.spacevil.MenuItem then
      * it is removed from the drop-down list.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return dropDownArea.removeItem(item);
     }
 
@@ -405,19 +405,19 @@ public class ComboBox extends Prototype {
      * Getting current selected item in DropDown list.
      * 
      * @return Current selected item as
-     *         com.spvessel.spacevil.Core.InterfaceBaseItem.
+     *         com.spvessel.spacevil.Core.IBaseItem.
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         return dropDownArea.getSelectedItem();
     }
 
     /**
-     * Getting all existing options (list of com.spvessel.spacevil.InterfaceBaseItem
+     * Getting all existing options (list of com.spvessel.spacevil.Core.IBaseItem
      * objects).
      * 
-     * @return Options as List&lt;com.spvessel.spacevil.InterfaceBaseItem&gt;
+     * @return Options as List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public List<InterfaceBaseItem> getListContent() {
+    public List<IBaseItem> getListContent() {
         return dropDownArea.getListContent();
     }
 

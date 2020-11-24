@@ -1,0 +1,154 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "sandbox/1.0.0": {
+        "dependencies": {
+          "GlmNet": "0.7.0",
+          "SharpGLCore": "2.4.0",
+          "System.Drawing.Common": "5.0.0",
+          "SpaceVIL": "1.0.0.0"
+        },
+        "runtime": {
+          "sandbox.dll": {}
+        }
+      },
+      "GlmNet/0.7.0": {
+        "runtime": {
+          "lib/net40/GlmNet.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "Microsoft.NETCore.Platforms/5.0.0": {},
+      "Microsoft.Win32.SystemEvents/5.0.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
+      "SharpGL/2.4.0": {
+        "runtime": {
+          "lib/net40/SharpGL.SceneGraph.dll": {
+            "assemblyVersion": "2.4.0.0",
+            "fileVersion": "2.4.0.0"
+          },
+          "lib/net40/SharpGL.dll": {
+            "assemblyVersion": "2.4.0.0",
+            "fileVersion": "2.4.0.0"
+          }
+        }
+      },
+      "SharpGLCore/2.4.0": {
+        "dependencies": {
+          "SharpGL": "2.4.0"
+        }
+      },
+      "System.Drawing.Common/5.0.0": {
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "5.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "rid": "unix",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          },
+          "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
+      "SpaceVIL/1.0.0.0": {
+        "runtime": {
+          "SpaceVIL.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "sandbox/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlmNet/0.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g3EFJOV89dWppRVT5PJ8nVYWSEIoB4yqqEZy71ryb3mfxSGrvwqxsF+XbK+J0jUgSwRIYEWHqodvtd3LchlE+w==",
+      "path": "glmnet/0.7.0",
+      "hashPath": "glmnet.0.7.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "hashPath": "microsoft.netcore.platforms.5.0.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.SystemEvents/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Bh6blKG8VAKvXiLe2L+sEsn62nc1Ij34MrNxepD2OCrS5cpCwQa9MeLyhVQPQ/R4Wlzwuy6wMK8hLb11QPDRsQ==",
+      "path": "microsoft.win32.systemevents/5.0.0",
+      "hashPath": "microsoft.win32.systemevents.5.0.0.nupkg.sha512"
+    },
+    "SharpGL/2.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LfsXqvSdggeZjhG5JoE8+vnHS0VxQHdtFfb/q78vpba3sXj0spl7oP4XGMwwBWLlp0kaHQGD9q2QrmHg8QNmbA==",
+      "path": "sharpgl/2.4.0",
+      "hashPath": "sharpgl.2.4.0.nupkg.sha512"
+    },
+    "SharpGLCore/2.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2Ns0vnAZ2rbmv9CUfCTcNiRerKJPa23IRthAiva8Sp0dRj7luSx6ro+bGIBK/MErIGqyxhb1zCQ3cSi0R57uMw==",
+      "path": "sharpglcore/2.4.0",
+      "hashPath": "sharpglcore.2.4.0.nupkg.sha512"
+    },
+    "System.Drawing.Common/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SztFwAnpfKC8+sEKXAFxCBWhKQaEd97EiOL7oZJZP56zbqnLpmxACWA8aGseaUExciuEAUuR9dY8f7HkTRAdnw==",
+      "path": "system.drawing.common/5.0.0",
+      "hashPath": "system.drawing.common.5.0.0.nupkg.sha512"
+    },
+    "SpaceVIL/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

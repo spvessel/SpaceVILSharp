@@ -68,8 +68,8 @@ public class CheckBox extends Prototype {
         setText(text);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (eventMouseClick != null && (args.key == KeyCode.ENTER || args.key == KeyCode.SPACE)) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (eventMouseClick != null && (args.key == KeyCode.Enter || args.key == KeyCode.Space)) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }
@@ -304,7 +304,7 @@ public class CheckBox extends Prototype {
     @Override
     public void initElements() {
         _indicator.getIndicatorMarker().eventToggle.clear();
-        InterfaceMouseMethodState btn_click = (sender, args) -> _indicator.getIndicatorMarker()
+        IMouseMethodState btn_click = (sender, args) -> _indicator.getIndicatorMarker()
                 .setToggled(!_indicator.getIndicatorMarker().isToggled());
         eventMouseClick.add(btn_click);
 

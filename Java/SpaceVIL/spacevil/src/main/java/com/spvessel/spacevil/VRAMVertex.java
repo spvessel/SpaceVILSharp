@@ -3,10 +3,8 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
+import static com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper.*;
 
 final class VramVertex extends AbstractVramResource {
     private float[] _vbo_data;
@@ -26,11 +24,11 @@ final class VramVertex extends AbstractVramResource {
     void genBuffers(float[] vertices) {
         length = vertices.length / 2;
         // Vertices
-        VBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
+        VBO = gl.GenBuffer();
+        gl.BindBuffer(GL_ARRAY_BUFFER, VBO);
+        gl.BufferDataf(GL_ARRAY_BUFFER, vertices.length * 4, vertices, GL_STATIC_DRAW);
+        gl.VertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+        gl.EnableVertexAttribArray(0);
     }
 
     void genBuffers(List<float[]> vertices) {
@@ -42,30 +40,30 @@ final class VramVertex extends AbstractVramResource {
             _vbo_data[index + 0] = vertices.get(i)[0];
             _vbo_data[index + 1] = vertices.get(i)[1];
         }
-        VBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, _vbo_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
+        VBO = gl.GenBuffer();
+        gl.BindBuffer(GL_ARRAY_BUFFER, VBO);
+        gl.BufferDataf(GL_ARRAY_BUFFER, _vbo_data.length * 4, _vbo_data, GL_STATIC_DRAW);
+        gl.VertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+        gl.EnableVertexAttribArray(0);
     }
 @Override
     public void draw() {
-        glDrawArrays(type, 0, length);
-        glDisableVertexAttribArray(0);
+        gl.DrawArrays(type, 0, length);
+        gl.DisableVertexAttribArray(0);
     }
 @Override
     public void clear() {
-        glDeleteBuffers(VBO);
+        gl.DeleteBuffer(VBO);
         _vbo_data = null;
     }
 @Override
     public void bind() {
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
+        gl.BindBuffer(GL_ARRAY_BUFFER, VBO);
+        gl.VertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+        gl.EnableVertexAttribArray(0);
     }
 @Override
     public void unbind() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        gl.BindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }

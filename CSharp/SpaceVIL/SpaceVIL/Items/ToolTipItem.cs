@@ -87,8 +87,7 @@ namespace SpaceVIL
                 }
                 else
                 {
-
-                    _stop = new System.Timers.Timer(_timeout);
+                    _stop = new Timer(_timeout);
                     _stop.Elapsed += (sender, e) => VisibleSelf();
                     _stop.Start();
                 }

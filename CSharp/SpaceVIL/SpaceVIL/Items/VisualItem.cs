@@ -325,22 +325,22 @@ namespace SpaceVIL
             this.border = border;
         }
 
-        internal Border GetBorderDirect()
+        internal Border GetBorder()
         {
             return border;
         }
 
         internal void SetBorder(Border border)
         {
-            this.border = border;
+            this.border = border.Clone();
             GetState(ItemStateType.Base).Border = this.border;
             UpdateState();
         }
 
-        internal void SetBorderFill(Color fill)
+        internal void SetBorderFill(Color color)
         {
-            border.SetFill(fill);
-            GetState(ItemStateType.Base).Border.SetFill(fill);
+            border.SetColor(color);
+            GetState(ItemStateType.Base).Border.SetColor(color);
             UpdateState();
         }
         internal virtual void SetBorderFill(int r, int g, int b)
@@ -382,13 +382,14 @@ namespace SpaceVIL
         }
         internal Color GetBorderFill()
         {
-            return border.GetFill();
+            return border.GetColor();
         }
 
-
-        internal void SetBorder(Color fill, CornerRadius radius, int thickness)
+        internal void SetBorder(Color color, CornerRadius radius, int thickness)
         {
-            border = new Border(fill, radius, thickness);
+            border.SetColor(color);
+            border.SetRadius(radius);
+            border.SetThickness(thickness);
             GetState(ItemStateType.Base).Border = border;
             UpdateState();
         }

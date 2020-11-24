@@ -1,21 +1,20 @@
 package com.spvessel.spacevil.Flags;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
  * Enum of keyboard modifiers.
  */
 public enum KeyMods {
-    NO(0),
-    SHIFT(1),
-    CONTROL(2),
-    ALT(4),
+    No(0),
+    Shift(1),
+    Control(2),
+    Alt(4),
     /**
      * Can be Windows key (in WinOS), Command key (in MacOS)
      */
-    SUPER(8);
+    Super(8);
 
     private final int mods;
 
@@ -32,7 +31,7 @@ public enum KeyMods {
             if (k.getValue() == mod)
                 return k;
         }
-        return NO;
+        return No;
     }
 
     public static List<KeyMods> getEnums(int mod) {
@@ -44,7 +43,7 @@ public enum KeyMods {
         if (list.size() > 0)
             return list;
 
-        list.add(KeyMods.NO);
+        list.add(KeyMods.No);
         return list;
     }
 }

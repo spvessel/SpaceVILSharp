@@ -2,7 +2,9 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
@@ -69,8 +71,8 @@ public class TextArea extends Prototype {
      */
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
 
-    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
-    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
+    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AsNeeded;
+    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AsNeeded;
 
     /**
      * Getting vertical scroll bar visibility policy.
@@ -92,13 +94,13 @@ public class TextArea extends Prototype {
     public void setVScrollBarPolicy(VisibilityPolicy policy) {
         _vScrollBarPolicy = policy;
 
-        if (policy == VisibilityPolicy.NEVER) {
+        if (policy == VisibilityPolicy.Never) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AsNeeded) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.ALWAYS) {
+        } else if (policy == VisibilityPolicy.Always) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -131,13 +133,13 @@ public class TextArea extends Prototype {
     public void setHScrollBarPolicy(VisibilityPolicy policy) {
         _hScrollBarPolicy = policy;
 
-        if (policy == VisibilityPolicy.NEVER) {
+        if (policy == VisibilityPolicy.Never) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AsNeeded) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.ALWAYS) {
+        } else if (policy == VisibilityPolicy.Always) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -215,14 +217,14 @@ public class TextArea extends Prototype {
             vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
             v_size = 0;
             vScrollBar.slider.setCurrentValue(0);
-            if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getVScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 vScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+        if (getVScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -258,14 +260,14 @@ public class TextArea extends Prototype {
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
             h_size = 0;
             hScrollBar.slider.setCurrentValue(0);
-            if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getHScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 hScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+        if (getHScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -400,8 +402,8 @@ public class TextArea extends Prototype {
             menu.eventMouseClick.add((sender, args) -> {
                 _menu.show(sender, args);
             });
-            _menu.activeButton = MouseButton.BUTTON_LEFT;
-            _menu.setShadow(10, 0, 0, Color.black);
+            _menu.activeButton = MouseButton.ButtonLeft;
+            Effects.addEffect(_menu, new Shadow(10));
         }
 
         updateElements();

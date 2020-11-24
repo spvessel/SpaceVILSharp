@@ -6,5 +6,5 @@ package com.spvessel.spacevil.Flags;
  * Values: SMOOTH, ROUGH.
  */
 public enum ImageQuality {
-    SMOOTH, ROUGH
+    Smooth, Rough
 }

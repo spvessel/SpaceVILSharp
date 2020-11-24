@@ -3,9 +3,9 @@ package com.spvessel.spacevil;
 import java.util.Map;
 
 import com.spvessel.spacevil.Core.EventCommonMethod;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFreeLayout;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFreeLayout;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
@@ -23,8 +23,8 @@ import java.util.List;
  * <p>
  * Supports all events except drag and drop.
  */
-public class WrapArea extends Prototype implements InterfaceFreeLayout {
-    Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
+public class WrapArea extends Prototype implements IFreeLayout {
+    Map<IBaseItem, SelectionItem> _mapContent = new HashMap<>();
 
     /**
      * Event that is invoked when one of the element is selected.
@@ -115,9 +115,9 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     /**
      * Getting selected item.
      * 
-     * @return Selected item as com.spvessel.spacevil.Core.InterfaceBaseItem
+     * @return Selected item as com.spvessel.spacevil.Core.IBaseItem
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         if (_selectionItem != null)
             return _selectionItem.getContent();
         return null;
@@ -146,8 +146,8 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     private void unselectOthers(SelectionItem sender) {
-        List<InterfaceBaseItem> items = getItems();
-        for (InterfaceBaseItem item : items) {
+        List<IBaseItem> items = getItems();
+        for (IBaseItem item : items) {
             if (!item.equals(sender)) {
                 ((SelectionItem) item).setSelected(false);
             }
@@ -223,28 +223,28 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         eventKeyPress.add(this::onKeyPress);
     }
 
-    void onMouseClick(InterfaceItem sender, MouseArgs args) {
+    void onMouseClick(IItem sender, MouseArgs args) {
     }
 
-    void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
+    void onMouseDoubleClick(IItem sender, MouseArgs args) {
     }
 
-    void onMouseHover(InterfaceItem sender, MouseArgs args) {
+    void onMouseHover(IItem sender, MouseArgs args) {
     }
 
-    void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    void onKeyPress(IItem sender, KeyArgs args) {
         int index = _selection;
         int x, y;
-        if (orientation == Orientation.HORIZONTAL) {
+        if (orientation == Orientation.Horizontal) {
             x = _selection % columns;
             y = _selection / columns;
         } else {
             x = _selection / rows;
             y = _selection % rows;
         }
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
         switch (args.key) {
-            case UP:
+            case Up:
                 y--;
                 if (y < 0)
                     y = 0;
@@ -252,7 +252,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                 if (index != _selection)
                     setSelection(index);
                 break;
-            case DOWN:
+            case Down:
                 y++;
                 if (y >= rows)
                     y = rows - 1;
@@ -263,7 +263,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                     setSelection(index);
                 break;
 
-            case LEFT:
+            case Left:
                 x--;
                 if (x < 0)
                     x = 0;
@@ -271,7 +271,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                 if (index != _selection)
                     setSelection(index);
                 break;
-            case RIGHT:
+            case Right:
                 x++;
                 if (x >= columns)
                     x = columns - 1;
@@ -281,7 +281,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                 if (index != _selection)
                     setSelection(index);
                 break;
-            case ESCAPE:
+            case Escape:
                 unselect();
                 break;
             default:
@@ -290,23 +290,23 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     private int getIndexByCoord(int x, int y) {
-        if (orientation == Orientation.HORIZONTAL) {
+        if (orientation == Orientation.Horizontal) {
             return (x + y * columns);
         } else {
             return (y + x * rows);
         }
     }
 
-    private SelectionItem getWrapper(InterfaceBaseItem item) {
+    private SelectionItem getWrapper(IBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
         wrapper.setStyle(_selectedStyle);
         wrapper.setToggleVisible(_isSelectionVisible);
         wrapper.setSize(_cellWidth, _cellHeight);
-        wrapper.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        wrapper.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         wrapper.eventMouseClick.add((sender, args) -> {
             int index = 0;
             _selectionItem = _mapContent.get(item);
-            for (InterfaceBaseItem var : getItems()) {
+            for (IBaseItem var : getItems()) {
                 if (var.equals(_selectionItem)) {
                     _selection = index;
                     selectionChanged.execute();
@@ -321,11 +321,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     /**
      * Insert item into the WrapArea by index.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         SelectionItem wrapper = getWrapper(item);
         super.insertItem(wrapper, index);
         _mapContent.put(item, wrapper);
@@ -338,10 +338,10 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     /**
      * Adding item to the WrapArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         SelectionItem wrapper = getWrapper(item);
         super.addItem(wrapper);
         _mapContent.put(item, wrapper);
@@ -352,11 +352,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
      * Adding all elements in the WrapArea from the given list.
      * 
      * @param content List of items as
-     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *                List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public void setListContent(List<InterfaceBaseItem> content) {
+    public void setListContent(List<IBaseItem> content) {
         removeAllItems();
-        for (InterfaceBaseItem item : content) {
+        for (IBaseItem item : content) {
             SelectionItem wrapper = getWrapper(item);
             super.addItem(wrapper);
             _mapContent.put(item, wrapper);
@@ -368,12 +368,12 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     /**
      * Removing the specified item from the WrapArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean restore = false;
         SelectionItem currentSelection = null;
 
@@ -421,7 +421,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
 
     private void removeAllItems() {
         unselect();
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
 
         if (list == null || list.size() == 0)
             return;
@@ -457,7 +457,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     }
 
     // update content position
-    Orientation orientation = Orientation.HORIZONTAL;
+    Orientation orientation = Orientation.Horizontal;
     private long _yOffset = 0;
     private long _xOffset = 0;
 
@@ -467,7 +467,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
      * @return Scroll offset.
      */
     public long getScrollOffset() {
-        if (orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.Horizontal)
             return _yOffset;
         else
             return _xOffset;
@@ -479,7 +479,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
      * @param value Scroll offset.
      */
     public void setScrollOffset(long value) {
-        if (orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.Horizontal)
             _yOffset = value;
         else
             _xOffset = value;
@@ -490,11 +490,11 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceFreeLayout).
+     * com.spvessel.spacevil.Core.IFreeLayout).
      */
     // Update Layout
     public void updateLayout() {
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
         if (list == null || list.size() == 0 || _isUpdating)
             return;
         _isUpdating = true;
@@ -502,7 +502,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         long offset = (-1) * getScrollOffset();
         long x = getX() + getPadding().left;
         long y = getY() + getPadding().top;
-        if (orientation == Orientation.HORIZONTAL) {
+        if (orientation == Orientation.Horizontal) {
             // update
             long globalY = y + offset;
             int w = getWidth() - getPadding().left - getPadding().right;
@@ -524,7 +524,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                     xOffset = freeSpace / (columns - 1);
             }
 
-            for (InterfaceBaseItem item : list) {
+            for (IBaseItem item : list) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
@@ -559,7 +559,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                 row--;
             rows = row + 1;
 
-        } else if (orientation == Orientation.VERTICAL) {
+        } else if (orientation == Orientation.Vertical) {
             // update
             long globalX = x + offset;
             int h = getHeight() - getPadding().top - getPadding().bottom;
@@ -581,7 +581,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
                     yOffset = freeSpace / (rows - 1);
             }
 
-            for (InterfaceBaseItem item : list) {
+            for (IBaseItem item : list) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
@@ -638,8 +638,8 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         Style inner_style = style.getInnerStyle("selection");
         if (inner_style != null) {
             _selectedStyle = inner_style.clone();
-            List<InterfaceBaseItem> list = getItems();
-            for (InterfaceBaseItem item : list) {
+            List<IBaseItem> list = getItems();
+            for (IBaseItem item : list) {
                 item.setStyle(_selectedStyle);
             }
         }

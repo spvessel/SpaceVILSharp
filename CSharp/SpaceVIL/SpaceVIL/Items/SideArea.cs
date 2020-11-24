@@ -20,6 +20,15 @@ namespace SpaceVIL
         static int count = 0;
         private bool _init = false;
 
+        private readonly Color _shadowColor = Color.FromArgb(150, 0, 0, 0);
+        private readonly int _shadowRadius = 5;
+        private readonly int _shadowIndent = 3;
+
+        private Shadow _shadowLeftArea = null;
+        private Shadow _shadowTopArea = null;
+        private Shadow _shadowRightArea = null;
+        private Shadow _shadowBottomArea = null;
+
         private ButtonCore _close;
         /// <summary>
         /// Resizable container area of SideArea.
@@ -57,11 +66,8 @@ namespace SpaceVIL
             Window.IsXResizable = false;
             Window.IsYResizable = false;
             Window.ClearExcludedSides();
-
-            Color shadowColor = Color.FromArgb(150, 0, 0, 0);
-            int shadowRadius = 5;
-            int shadowIndent = 3;
-
+            Effects.ClearEffects(Window, EffectType.Shadow);
+            
             switch (_attachSide)
             {
                 case Side.Left:
@@ -70,7 +76,7 @@ namespace SpaceVIL
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Left, Side.Bottom, Side.Top);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Window.SetShadow(shadowRadius, shadowIndent, 0, shadowColor);
+                    Effects.AddEffect(Window, _shadowLeftArea);
                     break;
 
                 case Side.Top:
@@ -79,7 +85,7 @@ namespace SpaceVIL
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Top);
                     Window.SetAlignment(ItemAlignment.Top);
-                    Window.SetShadow(shadowRadius, 0, shadowIndent, shadowColor);
+                    Effects.AddEffect(Window, _shadowTopArea);
                     break;
 
                 case Side.Right:
@@ -87,8 +93,8 @@ namespace SpaceVIL
                     Window.SetWidthPolicy(SizePolicy.Fixed);
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Right, Side.Bottom, Side.Top);
-                    Window.SetShadow(shadowRadius, -shadowIndent, 0, shadowColor);
                     Window.SetAlignment(ItemAlignment.Right);
+                    Effects.AddEffect(Window, _shadowRightArea);
                     break;
 
                 case Side.Bottom:
@@ -96,14 +102,14 @@ namespace SpaceVIL
                     Window.SetHeightPolicy(SizePolicy.Fixed);
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Bottom);
-                    Window.SetShadow(shadowRadius, 0, -shadowIndent, shadowColor);
                     Window.SetAlignment(ItemAlignment.Bottom);
+                    Effects.AddEffect(Window, _shadowBottomArea);
                     break;
 
                 default:
                     Window.SetWidth(_size);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Window.SetShadow(shadowRadius, shadowIndent, 0, shadowColor);
+                    Effects.AddEffect(Window, _shadowLeftArea);
                     break;
             }
         }
@@ -147,6 +153,11 @@ namespace SpaceVIL
         public SideArea(CoreWindow handler, Side attachSide)
         {
             ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
+
+            _shadowLeftArea = new Shadow(_shadowRadius, new Position(_shadowIndent, 0), _shadowColor);
+            _shadowTopArea = new Shadow(_shadowRadius, new Position(0, _shadowIndent), _shadowColor);
+            _shadowRightArea = new Shadow(_shadowRadius, new Position(-_shadowIndent, 0), _shadowColor);
+            _shadowBottomArea = new Shadow(_shadowRadius, new Position(0, -_shadowIndent), _shadowColor);
 
             SetItemName("SideArea_" + count++);
             _close = new ButtonCore();

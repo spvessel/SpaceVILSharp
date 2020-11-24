@@ -66,14 +66,14 @@ public abstract class OpenDialog extends DialogItem {
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.R && args.mods.contains(CommonService.getOsControlMod()))
                 updateWindow();
-            else if (args.key == KeyCode.ESCAPE)
+            else if (args.key == KeyCode.Escape)
                 close();
         });
     }
 
     private void updateWindow() {
-        window.update(GeometryEventType.RESIZE_HEIGHT, 0);
-        window.update(GeometryEventType.RESIZE_WIDTH, 0);
+        window.update(GeometryEventType.ResizeHeight, 0);
+        window.update(GeometryEventType.ResizeWidth, 0);
     }
 
     /**

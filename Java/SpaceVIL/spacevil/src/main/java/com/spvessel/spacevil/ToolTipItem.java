@@ -1,9 +1,9 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -26,7 +26,7 @@ import javax.swing.Timer;
  * cannot work with this class directly. Use com.spvessel.spacevil.ToolTip
  * instead.
  */
-public final class ToolTipItem extends Prototype implements InterfaceFloating {
+public final class ToolTipItem extends Prototype implements IFloating {
 
     private Label _textObject;
 
@@ -61,24 +61,24 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
     @Override
     public void initElements() {
-        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
+        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.Floating);
         addItem(_textObject);
         if (!_queue.isEmpty()) {
-            for (InterfaceBaseItem item : _queue) {
+            for (IBaseItem item : _queue) {
                 super.addItem(item);
             }
         }
         isInit = true;
     }
 
-    private Queue<InterfaceBaseItem> _queue = null;
+    private Queue<IBaseItem> _queue = null;
 
     @Override
-    public void addItems(InterfaceBaseItem... items) {
+    public void addItems(IBaseItem... items) {
         if (isInit) {
             return;
         }
-        for (InterfaceBaseItem item : items) {
+        for (IBaseItem item : items) {
             _queue.add(item);
         }
     }
@@ -217,7 +217,7 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
     }
 
     @Override
-    public void show(InterfaceItem sender, MouseArgs args) {
+    public void show(IItem sender, MouseArgs args) {
     }
 
     @Override

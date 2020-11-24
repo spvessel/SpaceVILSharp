@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -334,10 +334,10 @@ public class ProgressBar extends Prototype {
     /**
      * Adding item into the container (this).
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         super.addItem(item);
         updateLayout();
     }

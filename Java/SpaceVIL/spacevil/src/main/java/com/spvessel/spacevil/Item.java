@@ -1,11 +1,11 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IItem;
 
 import java.awt.*;
 import java.util.List;
 
-class Item implements InterfaceItem {
+class Item implements IItem {
     private String _name;
 
     public void setItemName(String name) {

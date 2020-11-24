@@ -2,19 +2,14 @@ package com.spvessel.spacevil;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 import com.spvessel.spacevil.Flags.ImageQuality;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.*;
-
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
+import static com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper.*;
 
 final class VramTexture extends AbstractVramResource {
+
     private float[] _vbo_data;
     int VBO;
     private int[] _ibo_data;
@@ -25,31 +20,28 @@ final class VramTexture extends AbstractVramResource {
     }
 
     private void applySmoothFilter() {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     private void applyRoughFilter() {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
     void genTexture(int w, int h, byte[] bitmap, ImageQuality filtering) {
         byte[] array = bitmap;
-        ByteBuffer bb = BufferUtils.createByteBuffer(array.length);// ByteBuffer.allocateDirect(array.length);
-        bb.put(array);
-        bb.rewind();
 
-        texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
+        texture = gl.GenTexture();
+        gl.BindTexture(GL_TEXTURE_2D, texture);
 
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bb);
+        gl.TexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+        gl.TexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, array);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-        if (filtering == ImageQuality.SMOOTH) {
+        if (filtering == ImageQuality.Smooth) {
             applySmoothFilter();
         } else {
             applyRoughFilter();
@@ -57,18 +49,18 @@ final class VramTexture extends AbstractVramResource {
     }
 
     void genTexture(int w, int h, BufferedImage bitmap, ImageQuality filtering) {
-        ByteBuffer buffer = getByteBuffer(bitmap);
+        byte[] buffer = getByteBuffer(bitmap);
 
-        texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
+        texture = gl.GenTexture();
+        gl.BindTexture(GL_TEXTURE_2D, texture);
 
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        gl.TexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+        gl.TexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-        if (filtering == ImageQuality.SMOOTH) {
+        if (filtering == ImageQuality.Smooth) {
             applySmoothFilter();
         } else {
             applyRoughFilter();
@@ -104,87 +96,86 @@ final class VramTexture extends AbstractVramResource {
                 2, 3, 0, // second triangle
         };
 
-        VBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, _vbo_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
-        glEnableVertexAttribArray(0);
+        VBO = gl.GenBuffer();
+        gl.BindBuffer(GL_ARRAY_BUFFER, VBO);
+        gl.BufferDataf(GL_ARRAY_BUFFER, _vbo_data.length * 4, _vbo_data, GL_STATIC_DRAW);
+        gl.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+        gl.EnableVertexAttribArray(0);
 
-        IBO = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _ibo_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 4 * 4, (2 * 4));
-        glEnableVertexAttribArray(1);
+        IBO = gl.GenBuffer();
+        gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+        gl.BufferDatai(GL_ELEMENT_ARRAY_BUFFER, _ibo_data.length * 4, _ibo_data, GL_STATIC_DRAW);
+        gl.VertexAttribPointer(1, 2, GL_FLOAT, true, 4 * 4, (2 * 4));
+        gl.EnableVertexAttribArray(1);
     }
 
     @Override
     public void unbind() {
-        glBindTexture(GL_TEXTURE_2D, 0);
+        gl.BindTexture(GL_TEXTURE_2D, 0);
     }
 
     void bind(int tex) {
-        glBindTexture(GL_TEXTURE_2D, tex);
+        gl.BindTexture(GL_TEXTURE_2D, tex);
     }
 
     @Override
     public void bind() {
-        glBindTexture(GL_TEXTURE_2D, texture);
+        gl.BindTexture(GL_TEXTURE_2D, texture);
     }
 
     void bindVboIbo() {
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
-        glEnableVertexAttribArray(0);
+        gl.BindBuffer(GL_ARRAY_BUFFER, VBO);
+        gl.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+        gl.EnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 4 * 4, (2 * 4));
-        glEnableVertexAttribArray(1);
+        gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+        gl.VertexAttribPointer(1, 2, GL_FLOAT, true, 4 * 4, (2 * 4));
+        gl.EnableVertexAttribArray(1);
     }
 
     @Override
     public void draw() {
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        gl.DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT);
+        gl.DisableVertexAttribArray(0);
+        gl.DisableVertexAttribArray(1);
     }
 
     @Override
     public void clear() {
-        glDeleteBuffers(VBO);
-        glDeleteBuffers(IBO);
-        glDeleteTextures(texture);
+        gl.DeleteBuffer(VBO);
+        gl.DeleteBuffer(IBO);
+        gl.DeleteTexture(texture);
         _vbo_data = null;
         _ibo_data = null;
     }
 
     void deleteIBOBuffer() {
-        glDeleteBuffers(IBO);
+        gl.DeleteBuffer(IBO);
     }
 
     void deleteVBOBuffer() {
-        glDeleteBuffers(VBO);
+        gl.DeleteBuffer(VBO);
     }
 
     void deleteTexture() {
-        glDeleteTextures(texture);
+        gl.DeleteTexture(texture);
     }
 
-    static ByteBuffer getByteBuffer(BufferedImage bitmap) {
+    static byte[] getByteBuffer(BufferedImage bitmap) {
         int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
         bitmap.getRGB(0, 0, bitmap.getWidth(), bitmap.getHeight(), pixels, 0, bitmap.getWidth());
 
-        ByteBuffer buffer = BufferUtils.createByteBuffer(bitmap.getWidth() * bitmap.getHeight() * 4);
-
+        byte[] buffer = new byte[bitmap.getWidth() * bitmap.getHeight() * 4];
+        int index = 0;
         for (int y = 0; y < bitmap.getHeight(); y++) {
             for (int x = 0; x < bitmap.getWidth(); x++) {
                 int pixel = pixels[y * bitmap.getWidth() + x];
-                buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
-                buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
-                buffer.put((byte) (pixel & 0xFF)); // Blue component
-                buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
+                buffer[index++] = ((byte) ((pixel >> 16) & 0xFF)); // Red component
+                buffer[index++] = ((byte) ((pixel >> 8) & 0xFF)); // Green component
+                buffer[index++] = ((byte) (pixel & 0xFF)); // Blue component
+                buffer[index++] = ((byte) ((pixel >> 24) & 0xFF)); // Alpha component
             }
         }
-        buffer.flip();
         return buffer;
     }
 }

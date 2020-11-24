@@ -4,16 +4,16 @@ package com.spvessel.spacevil.Flags;
  * Enums of types of input events.
  */
 public enum InputEventType {
-    EMPTY(0), FOCUS_GET(0x01), FOCUS_LOST(0x02), RESIZED(0x04), DESTROYED(0x08), VALUE_CHANGED(0x10),
-    SELECTION_CHANGED(0x20), INDEX_CHANGED(0x40),
+    Empty(0), FocusGet(0x01), FocusLost(0x02), Resized(0x04), Destroy(0x08), ValueChanged(0x10),
+    SelectionChanged(0x20), IndexChanged(0x40),
 
-    MOUSE_MOVE(0x80), MOUSE_HOVER(0x400000), MOUSE_LEAVE(0x4000000), MOUSE_DRAG(0x800000), MOUSE_PRESS(0x100), MOUSE_RELEASE(0x200),
-    MOUSE_SCROLL(0x400), MOUSE_DOUBLE_CLICK(0x1000000),
+    MouseMove(0x80), MouseHover(0x400000), MouseLeave(0x4000000), MouseDrag(0x800000), MousePress(0x100), MouseRelease(0x200),
+    MouseScroll(0x400), MouseDoubleClick(0x1000000),
 
-    KEY_PRESS(0x800), KEY_REPEAT(0x1000), KEY_RELEASE(0x2000), TEXT_INPUT(0x200000),
+    KeyPress(0x800), KeyRepeat(0x1000), KeyRelease(0x2000), TextInput(0x200000),
 
-    WINDOW_RESIZE(0x4000), WINDOW_MOVE(0x8000), WINDOW_MINIMIZE(0x10000), WINDOW_RESTORE(0x20000),
-    WINDOW_CLOSE(0x40000), WINDOW_FOCUS_GET(0x80000), WINDOW_FOCUS_LOST(0x100000), WINDOW_DROP(0x2000000), WINDOW_MAXIMIZE(0x4000000);
+    WindowResize(0x4000), WindowMove(0x8000), WindowMinimize(0x10000), WindowRestore(0x20000),
+    WindowClose(0x40000), WindowGetFocus(0x80000), WindowLostFocus(0x100000), WindowDrop(0x2000000), WindowMaximize(0x4000000);
 
     private final int type;
 

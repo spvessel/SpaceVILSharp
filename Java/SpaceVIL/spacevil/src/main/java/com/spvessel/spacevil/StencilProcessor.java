@@ -4,25 +4,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
-import static org.lwjgl.opengl.GL11.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
+import static com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper.*;
 
 final class StencilProcessor {
 
+    private OpenGLWrapper gl = null;
+
     private CommonProcessor _commonProcessor;
-    private Map<InterfaceBaseItem, int[]> _bounds;
+    private Map<IBaseItem, int[]> _bounds;
 
     StencilProcessor(CommonProcessor processor) {
+        gl = OpenGLWrapper.get();
         _commonProcessor = processor;
         _bounds = new HashMap<>();
     }
 
     private Scale _scale = new Scale();
 
-    boolean process(InterfaceBaseItem shell, Scale scale) {
+    boolean process(IBaseItem shell, Scale scale) {
 
         _scale.setScale(scale.getXScale(), scale.getYScale());
 
@@ -34,8 +38,8 @@ final class StencilProcessor {
             if (shape == null)
                 return false;
 
-            glEnable(GL_SCISSOR_TEST);
-            glScissor(shape[0], shape[1], shape[2], shape[3]);
+            gl.Enable(GL_SCISSOR_TEST);
+            gl.Scissor(shape[0], shape[1], shape[2], shape[3]);
 
             if (!_bounds.containsKey(shell)) {
                 int x = shell.getX();
@@ -74,19 +78,19 @@ final class StencilProcessor {
         return lazyStencil(shell);
     }
 
-    private void setConfines(InterfaceBaseItem shell, int[] parentConfines) {
+    private void setConfines(IBaseItem shell, int[] parentConfines) {
         shell.setConfines(parentConfines[0], parentConfines[1], parentConfines[2], parentConfines[3]);
 
         if (shell instanceof Prototype) {
             Prototype root = (Prototype) shell;
-            List<InterfaceBaseItem> root_items = root.getItems();
-            for (InterfaceBaseItem item : root_items) {
+            List<IBaseItem> root_items = root.getItems();
+            for (IBaseItem item : root_items) {
                 setConfines(item, parentConfines);
             }
         }
     }
 
-    private void setScissorRectangle(InterfaceBaseItem rect) {
+    private void setScissorRectangle(IBaseItem rect) {
         Prototype parent = rect.getParent();
         if (parent == null)
             return;
@@ -100,8 +104,8 @@ final class StencilProcessor {
         w *= _scale.getXScale();
         h *= _scale.getYScale();
 
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(x, y, w, h);
+        gl.Enable(GL_SCISSOR_TEST);
+        gl.Scissor(x, y, w, h);
 
         if (!_bounds.containsKey(rect))
             _bounds.put(rect, new int[] { x, y, w, h });
@@ -112,7 +116,7 @@ final class StencilProcessor {
         setConfines(rect, parent.getConfines());
     }
 
-    private Boolean lazyStencil(InterfaceBaseItem shell) {
+    private Boolean lazyStencil(IBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
         Prototype parent = shell.getParent();
 
@@ -121,25 +125,25 @@ final class StencilProcessor {
             if (parent.getY() + parent.getHeight() < shell.getY() + shell.getHeight()) {
                 int y = parent.getY() + parent.getHeight() - parent.getPadding().bottom;
                 int h = shell.getHeight();
-                outside.put(ItemAlignment.BOTTOM, new int[] { y, h });
+                outside.put(ItemAlignment.Bottom, new int[] { y, h });
             }
             // top
             if (parent.getY() + parent.getPadding().top > shell.getY()) {
                 int y = shell.getY();
                 int h = parent.getY() + parent.getPadding().top - shell.getY();
-                outside.put(ItemAlignment.TOP, new int[] { y, h });
+                outside.put(ItemAlignment.Top, new int[] { y, h });
             }
             // right
             if (parent.getX() + parent.getWidth() - parent.getPadding().right < shell.getX() + shell.getWidth()) {
                 int x = parent.getX() + parent.getWidth() - parent.getPadding().right;
                 int w = shell.getWidth();
-                outside.put(ItemAlignment.RIGHT, new int[] { x, w });
+                outside.put(ItemAlignment.Right, new int[] { x, w });
             }
             // left
             if (parent.getX() + parent.getPadding().left > shell.getX()) {
                 int x = shell.getX();
                 int w = parent.getX() + parent.getPadding().left - shell.getX();
-                outside.put(ItemAlignment.LEFT, new int[] { x, w });
+                outside.put(ItemAlignment.Left, new int[] { x, w });
             }
 
             if (outside.size() > 0) {

@@ -3,10 +3,13 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.awt.Font;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IEffect;
 import com.spvessel.spacevil.Decorations.Border;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EffectType;
 
 /**
  * ToolTip is a static class for com.spvessel.spacevil.ToolTipItem managing.
@@ -149,7 +152,7 @@ public final class ToolTip {
             return;
         }
         ToolTipItem toolTip = getToolTip(window);
-        toolTip.setShadow(shadow.getRadius(), shadow.getXOffset(), shadow.getYOffset(), shadow.getColor());
+        Effects.addEffect(toolTip, shadow.clone());
     }
 
     /**
@@ -167,7 +170,10 @@ public final class ToolTip {
             return;
         }
         ToolTipItem toolTip = getToolTip(window);
-        toolTip.setShadowDrop(value);
+        for (IEffect effect : Effects.getEffects(toolTip, EffectType.Shadow))
+        {
+            ((Shadow)effect).setDrop(value);
+        }
     }
 
     /**
@@ -177,9 +183,9 @@ public final class ToolTip {
      * 
      * @param window Window as com.spvessel.spacevil.CoreWindow.
      * @param items  Sequence of items as
-     *               com.spvessel.spacevil.Core.InterfaceBaseItem.
+     *               com.spvessel.spacevil.Core.IBaseItem.
      */
-    public static void addItems(CoreWindow window, InterfaceBaseItem... items) {
+    public static void addItems(CoreWindow window, IBaseItem... items) {
         if (window == null) {
             return;
         }

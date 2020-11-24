@@ -1,22 +1,22 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 /**
  * FloatItem is a floating container for other items (see
- * com.spvessel.spacevil.Core.InterfaceFloating). Can be moved using drag and
+ * com.spvessel.spacevil.Core.IFloating). Can be moved using drag and
  * drop events.
  * <p>
  * Supports all events including drag and drop.
  * <p>
  * Notice: All floating items render above all others items.
  */
-public class FloatItem extends Prototype implements InterfaceFloating, InterfaceDraggable {
+public class FloatItem extends Prototype implements IFloating, IDraggable {
     /**
      * Property for enabling/disabling drag and drop.
      * <p>
@@ -33,7 +33,7 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
     private boolean _ouside = false;
 
     /**
-     * Returns True if FloatItem (see com.spvessel.spacevil.Core.InterfaceFloating)
+     * Returns True if FloatItem (see com.spvessel.spacevil.Core.IFloating)
      * should closes when mouse click outside the area of FloatItem otherwise
      * returns False.
      * 
@@ -64,10 +64,10 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
      * @param handler Window for attaching FloatItem.
      */
     public FloatItem(CoreWindow handler) {
-        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
+        ItemsLayoutBox.addItem(handler, this, LayoutType.Floating);
         setVisible(false);
         setItemName("FloatItem_" + count++);
-        setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         eventMousePress.add(this::onMousePress);
         eventMouseDrag.add(this::onDragging);
     }
@@ -91,7 +91,7 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
      * @param args   Mouse click arguments (cursor position, mouse button, mouse
      *               button press/release, etc.).
      */
-    public void show(InterfaceItem sender, MouseArgs args) {
+    public void show(IItem sender, MouseArgs args) {
         if (!_init)
             initElements();
         if (getX() == -getWidth()) // refactor?
@@ -131,12 +131,12 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         hide();
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(IItem sender, MouseArgs args) {
         _diffX = args.position.getX() - getX();
         _diffY = args.position.getY() - getY();
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(IItem sender, MouseArgs args) {
         if (!isFloating)
             return;
 

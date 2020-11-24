@@ -3,8 +3,8 @@ package com.spvessel.spacevil;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-import org.lwjgl.glfw.*;
-import static org.lwjgl.glfw.GLFW.*;
+import com.spvessel.spacevil.internal.Wrapper.GlfwWrapper;
+import com.spvessel.spacevil.internal.Wrapper.GLFWImage;
 
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 
@@ -22,15 +22,20 @@ public final class CursorImage {
     static long cursorResizeV;
     static long cursorResizeAll;
 
+    static GlfwWrapper glfw = null;
+
     static void initCursors() {
+        if(glfw == null) {
+            glfw = GlfwWrapper.get();
+        }
         if (!isDefaultCursorsInit) {
             // cursors
-            cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-            cursorInput = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-            cursorHand = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-            cursorResizeH = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-            cursorResizeV = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-            cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+            cursorArrow = glfw.CreateStandardCursor(EmbeddedCursor.Arrow.getValue());
+            cursorInput = glfw.CreateStandardCursor(EmbeddedCursor.IBeam.getValue());
+            cursorHand = glfw.CreateStandardCursor(EmbeddedCursor.Hand.getValue());
+            cursorResizeH = glfw.CreateStandardCursor(EmbeddedCursor.ResizeX.getValue());
+            cursorResizeV = glfw.CreateStandardCursor(EmbeddedCursor.ResizeY.getValue());
+            cursorResizeAll = glfw.CreateStandardCursor(EmbeddedCursor.Crosshair.getValue());
             isDefaultCursorsInit = true;
         }
     }
@@ -41,7 +46,7 @@ public final class CursorImage {
         return _cursor;
     }
 
-    private ByteBuffer _bitmap;
+    private byte[] _bitmap;
 
     /**
      * Constructor for creating cursor with standards types of cursor images (Arrow,
@@ -51,22 +56,22 @@ public final class CursorImage {
      */
     public CursorImage(EmbeddedCursor type) {
         switch (type) {
-            case ARROW:
+            case Arrow:
                 _cursor = CursorImage.cursorArrow;
                 break;
-            case IBEAM:
+            case IBeam:
                 _cursor = CursorImage.cursorInput;
                 break;
-            case CROSSHAIR:
+            case Crosshair:
                 _cursor = CursorImage.cursorResizeAll;
                 break;
-            case HAND:
+            case Hand:
                 _cursor = CursorImage.cursorHand;
                 break;
-            case RESIZE_X:
+            case ResizeX:
                 _cursor = CursorImage.cursorResizeH;
                 break;
-            case RESIZE_Y:
+            case ResizeY:
                 _cursor = CursorImage.cursorResizeV;
                 break;
             default:
@@ -111,9 +116,11 @@ public final class CursorImage {
     }
 
     private void createCursor() {
-        GLFWImage imageBuffer = GLFWImage.malloc();
-        imageBuffer.set(getCursorWidth(), getCursorHeight(), _bitmap);
-        _cursor = GLFW.glfwCreateCursor(imageBuffer, 0, 0);
+        GLFWImage imageBuffer = new GLFWImage();
+        imageBuffer.width = getCursorWidth();
+        imageBuffer.height = getCursorHeight();
+        imageBuffer.pixels = _bitmap;
+        _cursor = glfw.CreateCursor(imageBuffer, 0, 0);
     }
 
     private int _imageWidth;
@@ -150,7 +157,7 @@ public final class CursorImage {
         createCursor();
     }
 
-    private ByteBuffer getImagePixels(BufferedImage bitmap) {
+    private byte[] getImagePixels(BufferedImage bitmap) {
         if (bitmap == null)
             return null;
 

@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceHLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IHLayout;
 
 import java.util.List;
 
@@ -16,17 +16,17 @@ import java.util.LinkedList;
  * HorizontalStack is a class that represents a line type container (horizontal
  * version). HorizontalStack groups items one after another using content
  * alignment, margins, paddings, sizes and size policies. HorizontalStack
- * implements com.spvessel.spacevil.Core.InterfaceHLayout.
+ * implements com.spvessel.spacevil.Core.IHLayout.
  * <p>
  * By default ability to get focus is disabled.
  * <p>
  * HorizontalStack cannot receive any events, so HorizontalStack is always in
  * the com.spvessel.spacevil.Flags.ItemStateType.BASE state.
  */
-public class HorizontalStack extends Prototype implements InterfaceHLayout {
+public class HorizontalStack extends Prototype implements IHLayout {
     private static int count = 0;
 
-    private ItemAlignment _contentAlignment = ItemAlignment.LEFT;
+    private ItemAlignment _contentAlignment = ItemAlignment.Left;
 
     /**
      * Setting content alignment within HorizontalStack area. Default:
@@ -39,7 +39,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
      *                  com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setContentAlignment(ItemAlignment alignment) {
-        if (alignment == ItemAlignment.LEFT || alignment == ItemAlignment.HCENTER || alignment == ItemAlignment.RIGHT)
+        if (alignment == ItemAlignment.Left || alignment == ItemAlignment.HCenter || alignment == ItemAlignment.Right)
             _contentAlignment = alignment;
     }
 
@@ -73,10 +73,10 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
     /**
      * Adding item to the HorizontalStack.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
@@ -86,11 +86,11 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
      * elements is less than the index, then the element is added to the end of the
      * list.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         super.insertItem(item, index);
         updateLayout();
     }
@@ -98,12 +98,12 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
     /**
      * Removing the specified item from the HorizontalStack container.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean result = super.removeItem(item);
         if (result)
             updateLayout();
@@ -136,7 +136,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceHLayout).
+     * com.spvessel.spacevil.Core.IHLayout).
      */
     public void updateLayout() {
         int total_space = getWidth() - getPadding().left - getPadding().right;
@@ -145,11 +145,11 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         int expanded_count = 0;
 
         List<Integer> maxWidthExpands = new LinkedList<>();
-        List<InterfaceBaseItem> itemList = getItems();
+        List<IBaseItem> itemList = getItems();
 
-        for (InterfaceBaseItem child : itemList) {
+        for (IBaseItem child : itemList) {
             if (child.isVisible()) {
-                if (child.getWidthPolicy() == SizePolicy.FIXED) {
+                if (child.getWidthPolicy() == SizePolicy.Fixed) {
                     fixed_count++;
                     free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
                 } else {
@@ -205,11 +205,11 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         // if (expanded_count == 0)
         // System.out.println(getParent().getItemName() + " " + _contentAlignment);
 
-        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.LEFT)) {
-            for (InterfaceBaseItem child : itemList) {
+        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.Left)) {
+            for (IBaseItem child : itemList) {
                 if (child.isVisible()) {
                     child.setX(startX + offset + child.getMargin().left);
-                    if (child.getWidthPolicy() == SizePolicy.EXPAND) {
+                    if (child.getWidthPolicy() == SizePolicy.Expand) {
                         if (width_for_expanded - child.getMargin().left - child.getMargin().right < child
                                 .getMaxWidth()) {
                             child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
@@ -237,28 +237,28 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
                 child.setConfines();
             }
         } else {
-            if (_contentAlignment.equals(ItemAlignment.RIGHT)) {
-                for (InterfaceBaseItem child : itemList) {
+            if (_contentAlignment.equals(ItemAlignment.Right)) {
+                for (IBaseItem child : itemList) {
                     if (child.isVisible()) {
                         child.setX(startX + offset + child.getMargin().left + free_space);//
                         offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
                                 + child.getMargin().right;//
                         // System.out.print(child.getWidth() + ", " + child.getMaxWidth() + " | ");
 
-                        if (child.getWidthPolicy() == SizePolicy.EXPAND)
+                        if (child.getWidthPolicy() == SizePolicy.Expand)
                             child.setWidth(child.getMaxWidth());
                     }
                     child.setConfines();
                 }
                 // System.out.println();
-            } else if (_contentAlignment.equals(ItemAlignment.HCENTER)) {
-                for (InterfaceBaseItem child : itemList) {
+            } else if (_contentAlignment.equals(ItemAlignment.HCenter)) {
+                for (IBaseItem child : itemList) {
                     if (child.isVisible()) {
                         child.setX(startX + offset + child.getMargin().left + free_space / 2);//
                         offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
                                 + child.getMargin().right;//
 
-                        if (child.getWidthPolicy() == SizePolicy.EXPAND)
+                        if (child.getWidthPolicy() == SizePolicy.Expand)
                             child.setWidth(child.getMaxWidth());
                     }
                     child.setConfines();

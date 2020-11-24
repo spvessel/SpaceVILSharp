@@ -2,8 +2,8 @@ package com.spvessel.spacevil;
 
 import java.util.List;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Flags.ItemStateType;
 
 /**
@@ -18,7 +18,7 @@ import com.spvessel.spacevil.Flags.ItemStateType;
  */
 public class SelectionItem extends Prototype {
     private static int count = 0;
-    InterfaceBaseItem _item;
+    IBaseItem _item;
     private boolean _visibility = true;
 
     void setToggleVisible(boolean value) {
@@ -35,9 +35,9 @@ public class SelectionItem extends Prototype {
      * Constructs SelectionItem with given item for wrapping.
      * 
      * @param content Item for wrapping as
-     *                com.spvessel.spacevil.Core.InterfaceBaseItem.
+     *                com.spvessel.spacevil.Core.IBaseItem.
      */
-    public SelectionItem(InterfaceBaseItem content) {
+    public SelectionItem(IBaseItem content) {
         this();
         _item = content;
 
@@ -52,9 +52,9 @@ public class SelectionItem extends Prototype {
     /**
      * Getting wrapped item of SelectionItem.
      * 
-     * @return Wrapped item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return Wrapped item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public InterfaceBaseItem getContent() {
+    public IBaseItem getContent() {
         return _item;
     }
 
@@ -116,14 +116,14 @@ public class SelectionItem extends Prototype {
     public void setSelected(boolean value) {
         _isSelected = value;
         if (value == true)
-            setState(ItemStateType.TOGGLED);
+            setState(ItemStateType.Toggled);
         else
-            setState(ItemStateType.BASE);
+            setState(ItemStateType.Base);
     }
 
-    private void unselectOthers(InterfaceItem sender) {
-        List<InterfaceBaseItem> items = getParent().getItems();
-        for (InterfaceBaseItem item : items) {
+    private void unselectOthers(IItem sender) {
+        List<IBaseItem> items = getParent().getItems();
+        for (IBaseItem item : items) {
             if (item instanceof SelectionItem && !item.equals(this)) {
                 ((SelectionItem) item).setSelected(false);
             }
@@ -133,12 +133,12 @@ public class SelectionItem extends Prototype {
     /**
      * Removing the specified item from SelectionItem.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         if (_item != null)
             return getParent().removeItem(item);
         else

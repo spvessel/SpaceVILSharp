@@ -19,11 +19,6 @@ public class ItemState {
      */
     public Border border = new Border();
     
-    // public Color Foreground = Color.Black;
-    // public string Text = null;
-    // public string ImageUri = null;
-    // public bool IsVisible = true;
-
     /**
      * Getting shape of the item of current state as com.spvessel.spacevil.Decorations.Figure.
      */

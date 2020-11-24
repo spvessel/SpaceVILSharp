@@ -110,7 +110,7 @@ namespace SpaceVIL
             return _textObject.GetTextMargin();
         }
 
-        // <summary>
+        /// <summary>
         /// Setting font of the text.
         /// </summary>
         /// <param name="font">Font as System.Drawing.Font.</param>

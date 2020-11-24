@@ -91,7 +91,7 @@ public class InputDialog extends DialogItem {
         window.isLocked = true;
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
+            if (args.key == KeyCode.Escape) {
                 _inputResult = "";
                 close();
             }
@@ -141,10 +141,10 @@ public class InputDialog extends DialogItem {
             close();
         });
         _input.eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+            if (args.key == KeyCode.Enter || args.key == KeyCode.NumpadEnter) {
                 _inputResult = _input.getText();
                 close();
-            } else if (args.key == KeyCode.ESCAPE) {
+            } else if (args.key == KeyCode.Escape) {
                 _inputResult = "";
                 close();
             }

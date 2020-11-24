@@ -10,18 +10,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.spvessel.spacevil.Common.DisplayService;
-import com.spvessel.spacevil.Core.InterfaceTextContainer;
-import com.spvessel.spacevil.Core.InterfaceTextImage;
-import com.spvessel.spacevil.Core.InterfaceTextWrap;
+import com.spvessel.spacevil.Core.ITextContainer;
+import com.spvessel.spacevil.Core.ITextImage;
+import com.spvessel.spacevil.Core.ITextWrap;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 
-final class TextureStorage extends Primitive implements InterfaceTextContainer {
+final class TextureStorage extends Primitive implements ITextContainer {
     private static int count = 0;
     private List<TextLine> _linesList;
     private List<ItemAlignment> _blockAlignment = new LinkedList<>(
-            Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+            Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
     private List<Integer> _lineBreakes;
     private Font _elementFont;
     private int _lineSpacer;
@@ -186,7 +186,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private boolean checkIsWrap() {
         Prototype parent = getParent();
         if (parent != null) {
-            return (((InterfaceTextWrap) parent).isWrapText());
+            return (((ITextWrap) parent).isWrapText());
         }
         return false;
     }
@@ -414,10 +414,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             return;
         }
 
-        if (keyCode == KeyCode.BACKSPACE) {
+        if (keyCode == KeyCode.Backspace) {
             combinePos.x--;
             setTextInLine(currentText.substring(0, currentText.length() - 1), combinePos); //new Point(combinePos));
-        } else if (keyCode == KeyCode.DELETE) {
+        } else if (keyCode == KeyCode.Delete) {
             combinePos.x = 0;
             combinePos.y++;
             setTextInLine(nextText.substring(1), combinePos); //new Point(combinePos));
@@ -1012,7 +1012,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private TextPrinter _blockTexture = null;
     private int _firstVisibleLineNumb = -1;
 
-    public InterfaceTextImage getTexture() {
+    public ITextImage getTexture() {
         textInputLock.lock();
         try {
             Prototype parent = getParent();
@@ -1034,7 +1034,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                     // makeBigArr();
                 }
 
-                List<InterfaceTextImage> tpLines = new LinkedList<>();
+                List<ITextImage> tpLines = new LinkedList<>();
                 int w = 0, h = 0, bigWidth = 0;
                 int lineHeigh = (int) (getLineY(1) * _screenScale);
                 int visibleHeight = 0;
@@ -1043,7 +1043,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 
                 for (TextLine tl : _linesList) {
                     inc++;
-                    InterfaceTextImage tmp = tl.getTexture();
+                    ITextImage tmp = tl.getTexture();
                     tpLines.add(tmp);
                     h += lineHeigh;// tmp.HeightTexture;
                     w = (w > tl.getWidth()) ? w : tl.getWidth();
@@ -1076,7 +1076,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 byte[] bigByte = new byte[visibleHeight * w * 4];
                 int bigOff = 0;
 
-                for (InterfaceTextImage tptmp : tpLines) {
+                for (ITextImage tptmp : tpLines) {
                     if (tptmp == null) {
                         continue;
                     }

@@ -9,7 +9,7 @@ import com.spvessel.spacevil.Core.EventInputTextMethodState;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.Geometry;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Core.Size;
@@ -23,18 +23,22 @@ import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.nio.IntBuffer;
 import java.util.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
+import com.spvessel.spacevil.internal.Wrapper.*;
 /**
  * CoreWindow is an abstract class containing an implementation of common
  * functionality for a window.
  */
 public abstract class CoreWindow {
+    private GlfwWrapper glfw = null;
+
+    static {
+        if (!CommonService.initSpaceVILComponents()) {
+            throw new SpaceVILException("SpaceVIL initializing failed!");
+        }
+    }
+
     private static int count = 0;
     private UUID windowUUID;
 
@@ -42,6 +46,8 @@ public abstract class CoreWindow {
      * Constructs a CoreWindow
      */
     public CoreWindow() {
+        glfw = GlfwWrapper.get();
+
         CursorImage.initCursors();
         windowUUID = UUID.randomUUID();
         setWindowName("Window_" + count);
@@ -242,7 +248,7 @@ public abstract class CoreWindow {
      * 
      * @return Returns a list of contained items in the window.
      */
-    public List<InterfaceBaseItem> getItems() {
+    public List<IBaseItem> getItems() {
         return _windowLayout.getContainer().getItems();
     }
 
@@ -251,7 +257,7 @@ public abstract class CoreWindow {
      * 
      * @param item An instance of any IBaseItem class.
      */
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         _windowLayout.getContainer().addItem(item);
     }
 
@@ -260,8 +266,8 @@ public abstract class CoreWindow {
      * 
      * @param items An instance of any IBaseItem class.
      */
-    public void addItems(InterfaceBaseItem... items) {
-        for (InterfaceBaseItem item : items) {
+    public void addItems(IBaseItem... items) {
+        for (IBaseItem item : items) {
             _windowLayout.getContainer().addItem(item);
         }
     }
@@ -272,7 +278,7 @@ public abstract class CoreWindow {
      * @param item  An instance of any IBaseItem class.
      * @param index Index of position.
      */
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         _windowLayout.getContainer().insertItem(item, index);
     }
 
@@ -284,7 +290,7 @@ public abstract class CoreWindow {
      *         successfully removed. False: if the window did not cantain the
      *         specified item.
      */
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return _windowLayout.getContainer().removeItem(item);
     }
 
@@ -767,7 +773,7 @@ public abstract class CoreWindow {
      */
     boolean isFullScreen;
 
-    MSAA _msaa = MSAA.MSAA_4X;
+    MSAA _msaa = MSAA.MSAA4x;
 
     /**
      * Setting the anti aliasing quality (off, x2, x4, x8). Default: MSAA.MSAA4x
@@ -820,7 +826,7 @@ public abstract class CoreWindow {
      * Sets the window maximized.
      */
     public void maximize() {
-        if (CommonService.getOSType() != OSType.MAC)
+        if (CommonService.getOSType() != OSType.Mac)
             _windowLayout.maximize();
         else
             macOSMaximize();
@@ -1338,14 +1344,10 @@ public abstract class CoreWindow {
      * @return Work area as com.spvessel.spacevil.Core.Area
      */
     public Area getWorkArea() {
-        long monitor = GLFW.glfwGetPrimaryMonitor();
-        if (monitor != NULL) {
-            IntBuffer x = BufferUtils.createIntBuffer(1);
-            IntBuffer y = BufferUtils.createIntBuffer(1);
-            IntBuffer w = BufferUtils.createIntBuffer(1);
-            IntBuffer h = BufferUtils.createIntBuffer(1);
-            GLFW.glfwGetMonitorWorkarea(monitor, x, y, w, h);
-            return new Area(x.get(0), y.get(0), w.get(0), h.get(0));
+        long monitor = glfw.GetPrimaryMonitor();
+        if (monitor != 0) {
+            int[] workArea = glfw.GetMonitorWorkarea(monitor);
+            return new Area(workArea[0], workArea[1], workArea[2], workArea[3]);
         }
         return null;
     }

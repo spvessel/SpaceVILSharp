@@ -82,7 +82,7 @@ final class DefaultFont {
 
     private void addFontFromMemory() {
         if (_embedded_font == null || _embedded_font == "")
-            setDefaultEmbeddedFont(EmbeddedFont.UBUNTU);
+            setDefaultEmbeddedFont(EmbeddedFont.Ubuntu);
 
         privateFontCollection = DefaultFont.class.getResourceAsStream(_embedded_font);
     }
@@ -91,7 +91,7 @@ final class DefaultFont {
 
     public void setDefaultEmbeddedFont(EmbeddedFont font) {
         switch (font) {
-            case UBUNTU:
+            case Ubuntu:
                 _embedded_font = "/fonts/Ubuntu-Regular.ttf";
                 break;
 

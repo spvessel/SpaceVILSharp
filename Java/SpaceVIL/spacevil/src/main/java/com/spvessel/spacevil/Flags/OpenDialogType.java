@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: OPEN, SAVE.
  */
 public enum OpenDialogType {
-    OPEN, SAVE
+    Open, Save
 }

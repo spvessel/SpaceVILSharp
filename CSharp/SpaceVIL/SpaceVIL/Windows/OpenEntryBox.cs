@@ -194,17 +194,17 @@ namespace SpaceVIL
             _addNewList = new ContextMenu(this, GetEntryMenuItem("Directory"), GetEntryMenuItem("File"));
             _addNewList.ActiveButton = MouseButton.ButtonLeft;
 
-            _folder = DefaultsService.GetDefaultImage(EmbeddedImage.Folder, EmbeddedImageSize.Size32x32);
-            _file = DefaultsService.GetDefaultImage(EmbeddedImage.File, EmbeddedImageSize.Size32x32);
-            ImageItem backward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowLeft, EmbeddedImageSize.Size32x32), false);
-            ImageItem upward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowUp, EmbeddedImageSize.Size32x32), false);
-            ImageItem home = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Home, EmbeddedImageSize.Size32x32), false);
-            ImageItem user = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.User, EmbeddedImageSize.Size32x32), false);
-            ImageItem create = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.FolderPlus, EmbeddedImageSize.Size32x32), false);
-            ImageItem rename = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Pencil, EmbeddedImageSize.Size32x32), false);
-            ImageItem refresh = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Refresh, EmbeddedImageSize.Size32x32), false);
-            ImageItem hidden = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32), false);
-            ImageItem filter = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Filter, EmbeddedImageSize.Size32x32), false);
+            _folder = DefaultsService.GetDefaultImage(EmbeddedImage.Folder, EmbeddedImageSize.Size64x64);
+            _file = DefaultsService.GetDefaultImage(EmbeddedImage.File, EmbeddedImageSize.Size64x64);
+            ImageItem backward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowLeft, EmbeddedImageSize.Size64x64), false);
+            ImageItem upward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowUp, EmbeddedImageSize.Size64x64), false);
+            ImageItem home = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Home, EmbeddedImageSize.Size64x64), false);
+            ImageItem user = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.User, EmbeddedImageSize.Size64x64), false);
+            ImageItem create = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.FolderPlus, EmbeddedImageSize.Size64x64), false);
+            ImageItem rename = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Pencil, EmbeddedImageSize.Size64x64), false);
+            ImageItem refresh = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Refresh, EmbeddedImageSize.Size64x64), false);
+            ImageItem hidden = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size64x64), false);
+            ImageItem filter = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Filter, EmbeddedImageSize.Size64x64), false);
             Style.GetFrameStyle().SetStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
 
             AddItems(_layout);

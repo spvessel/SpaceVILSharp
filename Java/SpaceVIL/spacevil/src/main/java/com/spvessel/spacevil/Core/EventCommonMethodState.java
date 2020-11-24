@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class EventCommonMethodState {
 
-    List<InterfaceCommonMethodState> events;
+    List<ICommonMethodState> events;
 
-    public List<InterfaceCommonMethodState> getActions() {
+    public List<ICommonMethodState> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventCommonMethodState {
         return events.size();
     }
     
-    public void add(InterfaceCommonMethodState action) {
+    public void add(ICommonMethodState action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceCommonMethodState action) {
+    public boolean remove(ICommonMethodState action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -39,10 +39,10 @@ public class EventCommonMethodState {
         events.clear();
     }
 
-    public void execute(InterfaceItem sender) {
+    public void execute(IItem sender) {
         if (events == null)
             return;
-        for (InterfaceCommonMethodState action : events) {
+        for (ICommonMethodState action : events) {
             action.execute(sender);
         }
     }

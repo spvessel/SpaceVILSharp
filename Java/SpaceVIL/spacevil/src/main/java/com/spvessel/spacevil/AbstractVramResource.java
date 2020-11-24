@@ -1,13 +1,17 @@
 package com.spvessel.spacevil;
 
-import static org.lwjgl.opengl.GL20.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
 
-abstract class AbstractVramResource implements InterfaceVramResource {
+abstract class AbstractVramResource implements IVramResource {
+
+    protected OpenGLWrapper gl = null;
+
     public AbstractVramResource() {
+        gl = OpenGLWrapper.get();
     }
 
     int getLocation(Shader shader, String name) {
-        return glGetUniformLocation((int) shader.getProgramID(), name);
+        return gl.GetUniformLocation((int) shader.getProgramID(), name);
     }
 
     boolean printError(Shader shader, String name) {
@@ -20,7 +24,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform1i(location, 0);
+        gl.Uniform1i(location, 0);
         return true;
     }
 
@@ -29,7 +33,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform4f(location, array[0], array[1], array[2], array[3]);
+        gl.Uniform4f(location, array[0], array[1], array[2], array[3]);
         return true;
     }
 
@@ -38,7 +42,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform1fv(location, array);
+        gl.Uniform1fv(location, array.length, array);
         return true;
     }
 
@@ -47,7 +51,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform2fv(location, array);
+        gl.Uniform2fv(location, 1, array);
         return true;
     }
 
@@ -56,7 +60,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform1f(location, array);
+        gl.Uniform1f(location, array);
         return true;
     }
 
@@ -65,7 +69,7 @@ abstract class AbstractVramResource implements InterfaceVramResource {
         int location = getLocation(shader, name);
         if (location < 0)
             return printError(shader, name);
-        glUniform1i(location, value);
+        gl.Uniform1i(location, value);
         return true;
     }
 

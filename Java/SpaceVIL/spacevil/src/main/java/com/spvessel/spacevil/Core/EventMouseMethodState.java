@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class EventMouseMethodState {
 
-    List<InterfaceMouseMethodState> events;
+    List<IMouseMethodState> events;
 
-    public List<InterfaceMouseMethodState> getActions() {
+    public List<IMouseMethodState> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventMouseMethodState {
         return events.size();
     }
 
-    public void add(InterfaceMouseMethodState action) {
+    public void add(IMouseMethodState action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceMouseMethodState action) {
+    public boolean remove(IMouseMethodState action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -39,10 +39,10 @@ public class EventMouseMethodState {
         events.clear();
     }
 
-    public void execute(InterfaceItem sender, MouseArgs args) {
+    public void execute(IItem sender, MouseArgs args) {
         if (events == null)
             return;
-        for (InterfaceMouseMethodState action : events) {
+        for (IMouseMethodState action : events) {
             action.execute(sender, args);
             // if (_cancel)
             //     break;

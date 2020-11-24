@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFreeLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFreeLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * Grid cannot receive any events, so Grid is always in the
  * com.spvessel.spacevil.Flags.ItemStateType.BASE state.
  */
-public class Grid extends Prototype implements InterfaceFreeLayout {
+public class Grid extends Prototype implements IFreeLayout {
     private static int count = 0;
 
     /**
@@ -76,12 +76,12 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
             return;
         }
 
-        List<InterfaceBaseItem> items = new LinkedList<>();
+        List<IBaseItem> items = new LinkedList<>();
         for (Cell cell : _cells)
             items.add(cell.getItem());
         initCells();
         int index = 0;
-        for (InterfaceBaseItem item : items) {
+        for (IBaseItem item : items) {
             _cells.get(index).setItem(item);
             index++;
             if (_cells.size() == index)
@@ -170,12 +170,12 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     /**
      * Removing item from the Grid. if the removal was successful Cell becomes free.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean superBool = super.removeItem(item);
         for (Cell link : _cells) {
             if (link.getItem() == item) {
@@ -199,7 +199,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         if (row >= _rowCount || column >= _columnCount)
             return false;
 
-        InterfaceBaseItem ibi = _cells.get(column + row * _columnCount).getItem();
+        IBaseItem ibi = _cells.get(column + row * _columnCount).getItem();
         if (ibi != null) {
             if (super.removeItem(ibi)) {
                 _cells.get(column + row * _columnCount).setItem(null);
@@ -214,7 +214,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
      */
     @Override
     public void clear() {
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
         while (!list.isEmpty()) {
             removeItem(list.get(0));
             list.remove(0);
@@ -224,10 +224,10 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     /**
      * Adding item to the Grid.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         // ignore if it is out of space, add in free cell, attach row and collumn
         // numbers
         for (Cell cell : _cells) {
@@ -243,11 +243,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     /**
      * Inserting item into the Cell by row and column index.
      * 
-     * @param item   Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item   Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param row    Row index.
      * @param column Column index.
      */
-    public void insertItem(InterfaceBaseItem item, int row, int column) {
+    public void insertItem(IBaseItem item, int row, int column) {
         if (row == _rowCount || column == _columnCount)
             return;
         super.addItem(item);
@@ -261,11 +261,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     /**
      * Inserting item into the Cell by cell index.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Cell index.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         if (_columnCount == 0)
             return;
         int row, column;
@@ -338,11 +338,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceFreeLayout).
+     * com.spvessel.spacevil.Core.IFreeLayout).
      */
     public void updateLayout() {
 
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
         if (list == null || list.size() == 0 || _isUpdating)
             return;
         _isUpdating = true;
@@ -360,7 +360,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
             for (int c = 0; c < _columnCount; c++) {
                 index = c + r * _columnCount;
 
-                InterfaceBaseItem item = _cells.get(index).getItem();
+                IBaseItem item = _cells.get(index).getItem();
 
                 _cells.get(index).setRow(r);
                 _cells.get(index).setColumn(c);
@@ -372,10 +372,10 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
                 _cells.get(index).setY(getY() + getPadding().top + y_offset);
 
                 if (item != null) {
-                    if (item.getWidthPolicy() == SizePolicy.EXPAND)
+                    if (item.getWidthPolicy() == SizePolicy.Expand)
                         item.setWidth(columns_width[c] - item.getMargin().left - item.getMargin().right);
 
-                    if (item.getHeightPolicy() == SizePolicy.EXPAND)
+                    if (item.getHeightPolicy() == SizePolicy.Expand)
                         item.setHeight(rows_height[r] - item.getMargin().top - item.getMargin().bottom);
                     item.setConfines();
                 }
@@ -401,14 +401,14 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
         for (int r = 0; r < _rowCount; r++) {
             for (int c = 0; c < _columnCount; c++) {
-                InterfaceBaseItem item = _cells.get(c + r * _columnCount).getItem();
+                IBaseItem item = _cells.get(c + r * _columnCount).getItem();
 
                 if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_height.add(new int[] { r, -1 });
                     continue;
                 }
 
-                if (item.getHeightPolicy() == SizePolicy.FIXED) {
+                if (item.getHeightPolicy() == SizePolicy.Fixed) {
                     list_height.add(new int[] { r, item.getHeight() + item.getMargin().top + item.getMargin().bottom });
                 } else {
                     list_height.add(new int[] { r, 0 });
@@ -467,13 +467,13 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
         for (int c = 0; c < _columnCount; c++) {
             for (int r = 0; r < _rowCount; r++) {
-                InterfaceBaseItem item = _cells.get(c + r * _columnCount).getItem();
+                IBaseItem item = _cells.get(c + r * _columnCount).getItem();
                 if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_width.add(new int[] { c, -1 });
                     continue;
                 }
 
-                if (item.getWidthPolicy() == SizePolicy.FIXED) {
+                if (item.getWidthPolicy() == SizePolicy.Fixed) {
                     list_width.add(new int[] { c, item.getWidth() + item.getMargin().left + item.getMargin().right });
                 } else {
                     list_width.add(new int[] { c, 0 });

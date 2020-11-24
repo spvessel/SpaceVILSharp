@@ -9,7 +9,7 @@ import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.EventInputTextMethodState;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
@@ -28,7 +28,7 @@ import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 /**
- * The Prototype is an abstract implementation of InterfaceBaseItem for complex
+ * The Prototype is an abstract implementation of IBaseItem for complex
  * interactive items.
  * <p>
  * Contains all the necessary methods for rendering objects and interacting with
@@ -37,7 +37,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
  * Examples of subclasses: com.spvessel.spacevil.ButtonCore,
  * com.spvessel.spacevil.TextEdit, com.spvessel.spacevil.ListBox and etc.
  */
-abstract public class Prototype implements InterfaceBaseItem {
+abstract public class Prototype implements IBaseItem {
 
     private VisualItem _core = new VisualItem();
 
@@ -898,104 +898,6 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
-     * Getting the shadow visibility status of an item.
-     * 
-     * @return True: if shadow is visible. False: if shadow is invisible.
-     */
-    public boolean isShadowDrop() {
-        return _core.isShadowDrop();
-    }
-
-    /**
-     * Setting the shadow visibility status of an item.
-     * 
-     * @param value True: if shadow should be visible. False: if shadow should be
-     *              invisible.
-     */
-    public void setShadowDrop(boolean value) {
-        _core.setShadowDrop(value);
-    }
-
-    /**
-     * Setting the specified blur radius of the shadow.
-     * <p>
-     * Default: 0.
-     * 
-     * @param radius The blur radius of the shadow.
-     */
-    public void setShadowRadius(int radius) {
-        _core.setShadowRadius(radius);
-    }
-
-    /**
-     * Getting the shadow blur raduis.
-     * 
-     * @return The blur radius of the shadow.
-     */
-    public int getShadowRadius() {
-        return _core.getShadowRadius();
-    }
-
-    /**
-     * Getting shadow color.
-     * 
-     * @return Returns the shadow color as java.awt.Color.
-     */
-    public Color getShadowColor() {
-        return _core.getShadowColor();
-    }
-
-    /**
-     * Setting shadow color.
-     * 
-     * @param color Shadow color as java.awt.Color.
-     */
-    public void setShadowColor(Color color) {
-        _core.setShadowColor(color);
-    }
-
-    /**
-     * Getting the offset of the shadow relative to the position of the item.
-     * 
-     * @return Shadow offset as com.spvessel.spacevil.Core.Position.
-     */
-    public Position getShadowPos() {
-        return _core.getShadowPos();
-    }
-
-    /**
-     * Getting the values of shadow extensions in pixels.
-     * 
-     * @return The values of shadow extensions. 0 - width extension, 1 - height
-     *         extension.
-     */
-    public int[] getShadowExtension() {
-        return _core.getShadowExtension();
-    }
-
-    /**
-     * Setting the values of shadow extensions in pixels.
-     * 
-     * @param wExtension Extension by width.
-     * @param hExtension Extension by height.
-     */
-    public void setShadowExtension(int wExtension, int hExtension) {
-        _core.setShadowExtension(wExtension, hExtension);
-    }
-
-    /**
-     * Setting the shadow with specified blur radius, axis shifts, shadow color.
-     * 
-     * @param radius A blur radius of the shadow.
-     * @param x      X shift of the shadow.
-     * @param y      Y shift of the shadow.
-     * @param color  A shadow color as java.awt.Color.
-     */
-    public void setShadow(int radius, int x, int y, Color color) {
-        _core.setShadow(radius, x, y, color);
-    }
-
-    /**
      * Adding visual state for an item.
      * <p>
      * Type can be BASE, HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED.
@@ -1048,20 +950,20 @@ abstract public class Prototype implements InterfaceBaseItem {
      * Getting list of the Prototype's inner items (children).
      * 
      * @return List of children as
-     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *         List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public List<InterfaceBaseItem> getItems() {
+    public List<IBaseItem> getItems() {
         return _core.getItems();
     }
 
     /**
      * Removing the specified item from container (this).
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return _core.removeItem(item);
     }
 
@@ -1076,10 +978,10 @@ abstract public class Prototype implements InterfaceBaseItem {
      * Inserting item to the container (this). If the count of container elements is
      * less than the index, then the element is added to the end of the list.
      * 
-     * @param item  Child as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Child as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         _core.insertItem(item, index);
     }
 
@@ -1088,8 +990,8 @@ abstract public class Prototype implements InterfaceBaseItem {
      * 
      * @param items Sequence of items.
      */
-    public void addItems(InterfaceBaseItem... items) {
-        for (InterfaceBaseItem item : items) {
+    public void addItems(IBaseItem... items) {
+        for (IBaseItem item : items) {
             this.addItem(item);
         }
     }
@@ -1097,9 +999,9 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Adding item into the container (this).
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         _core.addItem(item);
     }
 
@@ -1368,11 +1270,11 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.getHoverVerification(xpos, ypos);
     }
 
-    void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void addEventListener(GeometryEventType type, IBaseItem listener) {
         _core.addEventListener(type, listener);
     }
 
-    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void removeEventListener(GeometryEventType type, IBaseItem listener) {
         _core.removeEventListener(type, listener);
     }
 
@@ -1393,17 +1295,17 @@ abstract public class Prototype implements InterfaceBaseItem {
      * <p>
      * Note: this method is only for sorting children i.e. Prototype.getItems()
      * contains equal set of children as input argument:
-     * List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt; content. If content
+     * List&lt;com.spvessel.spacevil.Core.IBaseItem&gt; content. If content
      * is different this method do nothing.
      * 
      * @param content Sorted (in any way) content of this item.
      */
-    public void setContent(List<InterfaceBaseItem> content) {
-        List<InterfaceBaseItem> oldContent = getItems();
+    public void setContent(List<IBaseItem> content) {
+        List<IBaseItem> oldContent = getItems();
         if (oldContent.size() != content.size())
             return;
 
-        for (InterfaceBaseItem ibi : oldContent) {
+        for (IBaseItem ibi : oldContent) {
             if (!content.contains(ibi))
                 return;
         }

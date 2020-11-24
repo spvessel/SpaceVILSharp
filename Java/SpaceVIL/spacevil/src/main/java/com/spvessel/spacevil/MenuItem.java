@@ -1,9 +1,9 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
+import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -100,7 +100,7 @@ public class MenuItem extends Prototype {
         count++;
         eventKeyPress.add(this::onKeyPress);
 
-        InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
+        IMouseMethodState m_press = (sender, args) -> onMouseAction();
         eventMousePress.add(m_press);
         _textObject = new Label();
         _textObject.isHover = false;
@@ -131,7 +131,7 @@ public class MenuItem extends Prototype {
         setText(text);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
         if (args.scancode == 0x1C && eventMouseClick != null)
             eventMouseClick.execute(this, new MouseArgs());
     }
@@ -354,20 +354,20 @@ public class MenuItem extends Prototype {
         addItem(_textObject);
         if (isActionItem)
             addItem(_arrow);
-        for (InterfaceBaseItem item : _queue) {
+        for (IBaseItem item : _queue) {
             super.addItem(item);
         }
     }
 
-    private List<InterfaceBaseItem> _queue = new LinkedList<>();
+    private List<IBaseItem> _queue = new LinkedList<>();
 
     /**
      * Adding item into the container (this).
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         _queue.add(item);
     }
 
@@ -418,7 +418,7 @@ public class MenuItem extends Prototype {
             return;
 
         MouseArgs args = new MouseArgs();
-        args.button = MouseButton.BUTTON_RIGHT;
+        args.button = MouseButton.ButtonRight;
 
         // проверка справа
         args.position.setX((contextMenu.getX() + contextMenu.getWidth() + 2));
@@ -448,7 +448,7 @@ public class MenuItem extends Prototype {
             if (_subContextMenu.isVisible()) {
                 hide();
                 MouseArgs args = new MouseArgs();
-                args.button = MouseButton.BUTTON_RIGHT;
+                args.button = MouseButton.ButtonRight;
                 args.position.setPosition(getX(), getY());
                 _subContextMenu.closeDependencies(args);
             } else

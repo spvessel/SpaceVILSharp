@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-import com.spvessel.spacevil.Core.InterfaceInputEventArgs;
+import com.spvessel.spacevil.Core.IInputEventArgs;
 import com.spvessel.spacevil.Flags.InputEventType;
 
 final class ActionManagerAssigner {
@@ -14,7 +14,7 @@ final class ActionManagerAssigner {
         _layout = layout;
     }
 
-    void assignActionsForHoveredItem(InputEventType action, InterfaceInputEventArgs args, Prototype hoveredItem,
+    void assignActionsForHoveredItem(InputEventType action, IInputEventArgs args, Prototype hoveredItem,
             List<Prototype> itemPyramid, boolean isOnlyHovered) {
         if (isOnlyHovered) {
             if (hoveredItem.isDisabled())
@@ -31,7 +31,7 @@ final class ActionManagerAssigner {
         _layout.executePollActions();
     }
 
-    void assignActionsForSender(InputEventType action, InterfaceInputEventArgs args, Prototype sender,
+    void assignActionsForSender(InputEventType action, IInputEventArgs args, Prototype sender,
             List<Prototype> itemPyramid, boolean isPassUnder) {
         if (!sender.isDisabled()) {
             EventTask task = new EventTask();
@@ -49,7 +49,7 @@ final class ActionManagerAssigner {
         _layout.executePollActions();
     }
 
-    void assignActionsForItemPyramid(InputEventType action, InterfaceInputEventArgs args, Prototype sender,
+    void assignActionsForItemPyramid(InputEventType action, IInputEventArgs args, Prototype sender,
             List<Prototype> itemPyramid) {
         if (sender.isPassEvents(action)) {
             if (itemPyramid != null) {
@@ -59,7 +59,7 @@ final class ActionManagerAssigner {
         _layout.executePollActions();
     }
 
-    private void goThroughItemPyramid(List<Prototype> itemsList, InputEventType action, InterfaceInputEventArgs args) {
+    private void goThroughItemPyramid(List<Prototype> itemsList, InputEventType action, IInputEventArgs args) {
         Deque<Prototype> tmp = new ArrayDeque<Prototype>(itemsList);
         while (tmp.size() != 0) {
 

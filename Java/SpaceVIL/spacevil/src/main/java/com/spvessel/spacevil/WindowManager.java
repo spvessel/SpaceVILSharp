@@ -14,7 +14,7 @@ import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 import com.spvessel.spacevil.Flags.RenderType;
 
-import static org.lwjgl.glfw.GLFW.*;
+import com.spvessel.spacevil.internal.Wrapper.*;
 
 /**
  * WindowManager is a static class that is designed to manage instances of a
@@ -24,8 +24,13 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public final class WindowManager {
 
+    private static GlfwWrapper glfw = null;
+    static {
+        glfw = GlfwWrapper.get();
+    }
+
     private WindowManager() {
-        waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
+        waitfunc.add(() -> glfw.WaitEventsTimeout(getCurrentFrequency()));
     }
 
     private static float _intervalVeryLow = 1.0f;
@@ -34,7 +39,7 @@ public final class WindowManager {
     private static float _intervalHigh = 1.0f / 60.0f;
     private static float _intervalUltra = 1.0f / 120.0f;
     private static float _intervalAssigned = 1.0f / 10.0f;
-    private static RedrawFrequency _frequency = RedrawFrequency.LOW;
+    private static RedrawFrequency _frequency = RedrawFrequency.Low;
 
     /**
      * Setting the frequency of redrawing scene in idle state. The higher the level,
@@ -59,15 +64,15 @@ public final class WindowManager {
         _lock.lock();
         try {
             _frequency = value;
-            if (value == RedrawFrequency.VERY_LOW) {
+            if (value == RedrawFrequency.VeryLow) {
                 _intervalAssigned = _intervalVeryLow;
-            } else if (value == RedrawFrequency.LOW) {
+            } else if (value == RedrawFrequency.Low) {
                 _intervalAssigned = _intervalLow;
-            } else if (value == RedrawFrequency.MEDIUM) {
+            } else if (value == RedrawFrequency.Medium) {
                 _intervalAssigned = _intervalMedium;
-            } else if (value == RedrawFrequency.HIGH) {
+            } else if (value == RedrawFrequency.High) {
                 _intervalAssigned = _intervalHigh;
-            } else if (value == RedrawFrequency.ULTRA) {
+            } else if (value == RedrawFrequency.Ultra) {
                 _intervalAssigned = _intervalUltra;
             }
         } catch (Exception ex) {
@@ -104,7 +109,7 @@ public final class WindowManager {
         } catch (Exception ex) {
             System.out.println("Method - SetFrequency");
             ex.printStackTrace();
-            _frequency = RedrawFrequency.LOW;
+            _frequency = RedrawFrequency.Low;
             return _frequency;
         } finally {
             _lock.unlock();
@@ -160,12 +165,12 @@ public final class WindowManager {
         _lock.lock();
         try {
             waitfunc.clear();
-            if (value == RenderType.IF_NEEDED) {
-                waitfunc.add(() -> glfwWaitEvents());
-            } else if (value == RenderType.PERIODIC) {
-                waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
-            } else if (value == RenderType.ALWAYS) {
-                waitfunc.add(() -> glfwPollEvents());
+            if (value == RenderType.IfNeeded) {
+                waitfunc.add(() -> glfw.WaitEvents());
+            } else if (value == RenderType.Periodic) {
+                waitfunc.add(() -> glfw.WaitEventsTimeout(getCurrentFrequency()));
+            } else if (value == RenderType.Always) {
+                waitfunc.add(() -> glfw.PollEvents());
             }
 
         } catch (Exception ex) {
@@ -256,7 +261,7 @@ public final class WindowManager {
         _isEmpty = _windows.isEmpty();
 
         if (waitfunc.size() == 0) {
-            waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
+            waitfunc.add(() -> glfw.WaitEventsTimeout(getCurrentFrequency()));
         }
 
         _isRunning = true;
@@ -339,7 +344,7 @@ public final class WindowManager {
     static void setContextCurrent(CoreWindow window) {
         _lock.lock();
         try {
-            glfwMakeContextCurrent(window.getGLWID());
+            glfw.MakeContextCurrent(window.getGLWID());
             _currentContextedWindow = window;
         } finally {
             _lock.unlock();

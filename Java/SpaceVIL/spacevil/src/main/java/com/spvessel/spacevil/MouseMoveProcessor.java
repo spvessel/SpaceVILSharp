@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Set;
 import java.nio.*;
 
-import org.lwjgl.*;
-import static org.lwjgl.glfw.GLFW.*;
+import com.spvessel.spacevil.internal.Wrapper.*;
 
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceMovable;
-import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IMovable;
+import com.spvessel.spacevil.Core.IWindowAnchor;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.OSType;
@@ -20,9 +19,12 @@ import com.spvessel.spacevil.Flags.Side;
 
 final class MouseMoveProcessor {
 
+    private GlfwWrapper glfw = null;
+
     private CommonProcessor _commonProcessor;
 
     MouseMoveProcessor(CommonProcessor processor) {
+        glfw = GlfwWrapper.get();
         _commonProcessor = processor;
     }
 
@@ -31,7 +33,7 @@ final class MouseMoveProcessor {
         _commonProcessor.ptrRelease.setY((int) ypos);
         _commonProcessor.margs.position.setPosition((int) xpos, (int) ypos);
 
-        if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
+        if (_commonProcessor.events.lastEvent().contains(InputEventType.MousePress)) {
             if (_commonProcessor.window.isBorderHidden && _commonProcessor.window.isResizable) {
                 int w = _commonProcessor.window.getWidth();
                 int h = _commonProcessor.window.getHeight();
@@ -42,7 +44,7 @@ final class MouseMoveProcessor {
                 int xPress = _commonProcessor.ptrPress.getX();
                 int yPress = _commonProcessor.ptrPress.getY();
                 List<Side> handlerContainerSides = _commonProcessor.rootContainer.getSides();
-                if (handlerContainerSides.contains(Side.LEFT)) {
+                if (handlerContainerSides.contains(Side.Left)) {
                     if (!(_commonProcessor.window.getMinWidth() == _commonProcessor.window.getWidth()
                             && (xRelease - xPress) >= 0)) {
                         int x5 = xHandler - _commonProcessor.xGlobal + (int) xpos
@@ -51,18 +53,18 @@ final class MouseMoveProcessor {
                         w = _commonProcessor.wGlobal - x5;
                     }
                 }
-                if (handlerContainerSides.contains(Side.RIGHT)) {
+                if (handlerContainerSides.contains(Side.Right)) {
                     if (!(xRelease < _commonProcessor.window.getMinWidth()
                             && _commonProcessor.window.getWidth() == _commonProcessor.window.getMinWidth())) {
                         w = xRelease;
                     }
                     _commonProcessor.ptrPress.setX(xRelease);
                 }
-                if (handlerContainerSides.contains(Side.TOP)) {
+                if (handlerContainerSides.contains(Side.Top)) {
                     if (!(_commonProcessor.window.getMinHeight() == _commonProcessor.window.getHeight()
                             && (yRelease - yPress) >= 0)) {
 
-                        if (CommonService.getOSType() == OSType.MAC) {
+                        if (CommonService.getOSType() == OSType.Mac) {
                             h -= yRelease - yPress;
                             yHandler = (_commonProcessor.hGlobal - h) + _commonProcessor.yGlobal;
                         } else {
@@ -73,35 +75,35 @@ final class MouseMoveProcessor {
                         }
                     }
                 }
-                if (handlerContainerSides.contains(Side.BOTTOM)) {
+                if (handlerContainerSides.contains(Side.Bottom)) {
                     if (!(yRelease < _commonProcessor.window.getMinHeight()
                             && _commonProcessor.window.getHeight() == _commonProcessor.window.getMinHeight())) {
 
-                        if (CommonService.getOSType() == OSType.MAC)
+                        if (CommonService.getOSType() == OSType.Mac)
                             yHandler = _commonProcessor.yGlobal;
                         h = yRelease;
                         _commonProcessor.ptrPress.setY(yRelease);
                     }
                 }
                 if (handlerContainerSides.size() != 0 && !_commonProcessor.window.isMaximized) {
-                    if (CommonService.getOSType() == OSType.MAC) {
+                    if (CommonService.getOSType() == OSType.Mac) {
                         _commonProcessor.wndProcessor.setWindowSize(w, h, new Scale());
-                        if (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP)) {
+                        if (handlerContainerSides.contains(Side.Left) && handlerContainerSides.contains(Side.Top)) {
                             _commonProcessor.wndProcessor.setWindowPos(xHandler,
                                     (_commonProcessor.hGlobal - h) + _commonProcessor.yGlobal);
-                        } else if (handlerContainerSides.contains(Side.LEFT)
-                                || handlerContainerSides.contains(Side.BOTTOM)
-                                || handlerContainerSides.contains(Side.TOP)) {
+                        } else if (handlerContainerSides.contains(Side.Left)
+                                || handlerContainerSides.contains(Side.Bottom)
+                                || handlerContainerSides.contains(Side.Top)) {
                             _commonProcessor.wndProcessor.setWindowPos(xHandler, yHandler);
                             _commonProcessor.handler.getPointer().setY(yHandler);
                         }
                     } else {
                         boolean flagLT = false;
-                        if (handlerContainerSides.contains(Side.LEFT)) {
+                        if (handlerContainerSides.contains(Side.Left)) {
                             flagLT = true;
                             w = (int) (w / scale.getXScale());
                         }
-                        if (handlerContainerSides.contains(Side.TOP)) {
+                        if (handlerContainerSides.contains(Side.Top)) {
                             flagLT = true;
                             h = (int) (h / scale.getYScale());
                         }
@@ -116,30 +118,27 @@ final class MouseMoveProcessor {
             if (_commonProcessor.rootContainer.getSides().size() == 0) {
                 int xClick = _commonProcessor.ptrClick.getX();
                 int yClick = _commonProcessor.ptrClick.getY();
-                _commonProcessor.draggableItem = _commonProcessor.isInListHoveredItems(InterfaceDraggable.class);
-                Prototype anchor = _commonProcessor.isInListHoveredItems(InterfaceWindowAnchor.class);
+                _commonProcessor.draggableItem = _commonProcessor.isInListHoveredItems(IDraggable.class);
+                Prototype anchor = _commonProcessor.isInListHoveredItems(IWindowAnchor.class);
                 if (_commonProcessor.draggableItem != null
                         && _commonProcessor.draggableItem.equals(_commonProcessor.hoveredItem)) {
-                    _commonProcessor.events.setEvent(InputEventType.MOUSE_DRAG);
+                    _commonProcessor.events.setEvent(InputEventType.MouseDrag);
                     _commonProcessor.draggableItem.eventMouseDrag.execute(_commonProcessor.draggableItem,
                             _commonProcessor.margs);
                 } else if (anchor != null && !(_commonProcessor.hoveredItem instanceof ButtonCore)
                         && !_commonProcessor.window.isMaximized) {
-                    DoubleBuffer x_pos = BufferUtils.createDoubleBuffer(1);
-                    DoubleBuffer y_pos = BufferUtils.createDoubleBuffer(1);
-                    glfwGetCursorPos(_commonProcessor.handler.getWindowId(), x_pos, y_pos);
-                    int delta_x = (int) x_pos.get(0) - xClick;
-                    int delta_y = (int) y_pos.get(0) - yClick;
-                    IntBuffer x = BufferUtils.createIntBuffer(1);
-                    IntBuffer y = BufferUtils.createIntBuffer(1);
-                    glfwGetWindowPos(_commonProcessor.handler.getWindowId(), x, y);
-                    _commonProcessor.wndProcessor.setWindowPos(x.get(0) + delta_x, y.get() + delta_y);
+                    double[] pos = glfw.GetCursorPos(_commonProcessor.handler.getWindowId());
+                    int delta_x = (int)pos[0] - xClick;
+                    int delta_y = (int)pos[1] - yClick;
+
+                    int[] windowPos = glfw.GetWindowPos(_commonProcessor.handler.getWindowId());
+                    _commonProcessor.wndProcessor.setWindowPos(windowPos[0] + delta_x, windowPos[1] + delta_y);
                 }
             }
             if (_commonProcessor.hoveredItem != null
                     && !_commonProcessor.hoveredItem.getHoverVerification((float) xpos, (float) ypos)) {
                 _commonProcessor.hoveredItem.setMouseHover(false);
-                _commonProcessor.manager.assignActionsForSender(InputEventType.MOUSE_LEAVE, _commonProcessor.margs,
+                _commonProcessor.manager.assignActionsForSender(InputEventType.MouseLeave, _commonProcessor.margs,
                         _commonProcessor.hoveredItem, _commonProcessor.underFocusedItems, false);
             }
         } else {
@@ -150,7 +149,7 @@ final class MouseMoveProcessor {
             List<Prototype> tmpList = new LinkedList<>(_commonProcessor.underHoveredItems);
 
             if (_commonProcessor.getHoverPrototype(_commonProcessor.ptrRelease.getX(),
-                    _commonProcessor.ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
+                    _commonProcessor.ptrRelease.getY(), InputEventType.MouseMove)) {
                 if (_commonProcessor.hoveredItem != null && !("".equals(_commonProcessor.hoveredItem.getToolTip()))) {
                     _commonProcessor.toolTip.initTimer(true);
                 }
@@ -170,8 +169,8 @@ final class MouseMoveProcessor {
             }
         }
 
-        if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
-            _commonProcessor.events.setEvent(InputEventType.MOUSE_DRAG);
+        if (_commonProcessor.hoveredItem instanceof IMovable) {
+            _commonProcessor.events.setEvent(InputEventType.MouseDrag);
             _commonProcessor.hoveredItem.eventMouseMove.execute(_commonProcessor.hoveredItem, _commonProcessor.margs);
         }
     }

@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
@@ -42,7 +42,7 @@ public class VerticalScrollBar extends VerticalStack {
         count++;
 
         // Slider
-        slider.handler.orientation = Orientation.VERTICAL;
+        slider.handler.orientation = Orientation.Vertical;
 
         setStyle(DefaultsService.getDefaultStyle(VerticalScrollBar.class));
     }
@@ -62,9 +62,9 @@ public class VerticalScrollBar extends VerticalStack {
         addItems(upArrow, slider, downArrow);
 
         // Arrows
-        InterfaceMouseMethodState upScroll = (sender, args) -> {
+        IMouseMethodState upScroll = (sender, args) -> {
             float value = slider.getCurrentValue();
-            value -= slider.getStep();
+            value -= slider.getStep() * args.scrollValue.dY;
             if (value < slider.getMinValue())
                 value = slider.getMinValue();
             slider.setCurrentValue(value);
@@ -72,9 +72,9 @@ public class VerticalScrollBar extends VerticalStack {
         upArrow.eventMouseClick.add(upScroll);
         eventScrollUp.add(upScroll);
 
-        InterfaceMouseMethodState downScroll = (sender, args) -> {
+        IMouseMethodState downScroll = (sender, args) -> {
             float value = slider.getCurrentValue();
-            value += slider.getStep();
+            value += slider.getStep() * args.scrollValue.dY;
             if (value > slider.getMaxValue())
                 value = slider.getMaxValue();
             slider.setCurrentValue(value);

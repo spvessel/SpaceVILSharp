@@ -105,7 +105,7 @@ public class MessageItem extends DialogItem {
         window.isLocked = true;
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE)
+            if (args.key == KeyCode.Escape)
                 close();
         });
 
@@ -206,10 +206,10 @@ public class MessageItem extends DialogItem {
         if (window.getWidth() < w_text)
             window.setWidth(w_text);
         window.addItems(_titleBar, _msgLayout);
-        window.update(GeometryEventType.RESIZE_WIDTH, 0);
+        window.update(GeometryEventType.ResizeWidth, 0);
 
         if (!isEmpty) {
-            _toolbar.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+            _toolbar.setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
             int right = _toolbar.getWidth() + _toolbar.getMargin().left + _toolbar.getMargin().right + 10;
             _userbar.setMargin(0, 0, right / 2, 0);
             _msgLayout.addItems(_msgLabel, _userbar, _toolbar);

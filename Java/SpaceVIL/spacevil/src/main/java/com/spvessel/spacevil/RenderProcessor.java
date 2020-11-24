@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceImageItem;
-import com.spvessel.spacevil.Core.InterfaceTextContainer;
-import com.spvessel.spacevil.Core.InterfaceTextImage;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IImageItem;
+import com.spvessel.spacevil.Core.ITextContainer;
+import com.spvessel.spacevil.Core.ITextImage;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.ImageQuality;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
@@ -23,16 +23,16 @@ final class RenderProcessor {
     private float _intervalUltra = 1.0f / 120.0f;
     private float _intervalAssigned = 1.0f / 15.0f;
 
-    private RedrawFrequency _frequency = RedrawFrequency.LOW;
+    private RedrawFrequency _frequency = RedrawFrequency.Low;
 
     private Lock _locker = new ReentrantLock();
 
     VramVertex screenSquare;
 
-    VRamStorage<InterfaceImageItem, VramTexture> textureStorage = new VRamStorage<>();
-    VRamStorage<InterfaceTextContainer, VramTexture> textStorage = new VRamStorage<>();
-    VRamStorage<InterfaceBaseItem, VramVertex> vertexStorage = new VRamStorage<>();
-    VRamStorage<InterfaceBaseItem, VramTexture> shadowStorage = new VRamStorage<>();
+    VramStorage<IImageItem, VramTexture> textureStorage = new VramStorage<>();
+    VramStorage<ITextContainer, VramTexture> textStorage = new VramStorage<>();
+    VramStorage<IBaseItem, VramVertex> vertexStorage = new VramStorage<>();
+    VramStorage<IBaseItem, VramTexture> shadowStorage = new VramStorage<>();
 
     RenderProcessor() {
         screenSquare = new VramVertex();
@@ -41,15 +41,15 @@ final class RenderProcessor {
     void setFrequency(RedrawFrequency value) {
         _locker.lock();
         try {
-            if (value == RedrawFrequency.VERY_LOW) {
+            if (value == RedrawFrequency.VeryLow) {
                 _intervalAssigned = _intervalVeryLow;
-            } else if (value == RedrawFrequency.LOW) {
+            } else if (value == RedrawFrequency.Low) {
                 _intervalAssigned = _intervalLow;
-            } else if (value == RedrawFrequency.MEDIUM) {
+            } else if (value == RedrawFrequency.Medium) {
                 _intervalAssigned = _intervalMedium;
-            } else if (value == RedrawFrequency.HIGH) {
+            } else if (value == RedrawFrequency.High) {
                 _intervalAssigned = _intervalHigh;
-            } else if (value == RedrawFrequency.ULTRA) {
+            } else if (value == RedrawFrequency.Ultra) {
                 _intervalAssigned = _intervalUltra;
             }
         } catch (Exception ex) {
@@ -80,7 +80,7 @@ final class RenderProcessor {
         } catch (Exception ex) {
             System.out.println("Method - SetFrequency");
             ex.printStackTrace();
-            _frequency = RedrawFrequency.LOW;
+            _frequency = RedrawFrequency.Low;
             return _frequency;
         } finally {
             _locker.unlock();
@@ -90,7 +90,7 @@ final class RenderProcessor {
     void drawDirectVertex(Shader shader, List<float[]> vertex, float level, int x, int y, int w, int h, Color color,
             int type) {
 
-        if (vertex == null)
+        if (vertex == null || vertex.isEmpty())
             return;
 
         shader.useShader();
@@ -115,12 +115,12 @@ final class RenderProcessor {
         screenSquare.unbind();
     }
 
-    void drawFreshVertex(Shader shader, InterfaceBaseItem item, float level, int x, int y, int w, int h, Color color,
+    void drawFreshVertex(Shader shader, IBaseItem item, float level, int x, int y, int w, int h, Color color,
             int type) {
 
         vertexStorage.deleteResource(item);
         List<float[]> vertex = item.getTriangles();
-        if (vertex == null)
+        if (vertex == null || vertex.isEmpty())
             return;
 
         shader.useShader();
@@ -136,7 +136,7 @@ final class RenderProcessor {
         vertexStorage.addResource(item, store);
     }
 
-    void drawStoredVertex(Shader shader, InterfaceBaseItem item, float level, int x, int y, int w, int h, Color color,
+    void drawStoredVertex(Shader shader, IBaseItem item, float level, int x, int y, int w, int h, Color color,
             int type) {
 
         VramVertex store = vertexStorage.getResource(item);
@@ -154,11 +154,11 @@ final class RenderProcessor {
         store.draw();
     }
 
-    void drawFreshVertex(Shader shader, InterfaceBaseItem item, float[] vertex, float level, int x, int y, int w, int h,
+    void drawFreshVertex(Shader shader, IBaseItem item, float[] vertex, float level, int x, int y, int w, int h,
             Color color, int type) {
         vertexStorage.deleteResource(item);
 
-        if (vertex == null)
+        if (vertex == null  || vertex.length == 0)
             return;
 
         shader.useShader();
@@ -175,7 +175,7 @@ final class RenderProcessor {
         vertexStorage.addResource(item, store);
     }
 
-    void drawFreshText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, Scale scale, float w,
+    void drawFreshText(Shader shader, ITextContainer item, ITextImage printer, Scale scale, float w,
             float h, float level, float[] color) {
 
         textStorage.deleteResource(item);
@@ -186,7 +186,7 @@ final class RenderProcessor {
         shader.useShader();
         VramTexture store = new VramTexture();
         store.genBuffers(0, printer.getWidth() / scale.getXScale(), 0, printer.getHeight() / scale.getYScale(), true);
-        store.genTexture(printer.getWidth(), printer.getHeight(), printer.getBytes(), ImageQuality.SMOOTH);
+        store.genTexture(printer.getWidth(), printer.getHeight(), printer.getBytes(), ImageQuality.Smooth);
         textStorage.addResource(item, store);
 
         store.sendUniformSample2D(shader, "tex");
@@ -197,7 +197,7 @@ final class RenderProcessor {
         store.unbind();
     }
 
-    void drawStoredText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, float w, int h,
+    void drawStoredText(Shader shader, ITextContainer item, ITextImage printer, float w, int h,
             float level, float[] color) {
 
         VramTexture store = textStorage.getResource(item);
@@ -254,7 +254,7 @@ final class RenderProcessor {
         store.clear();
     }
 
-    void drawFreshShadow(Shader shader, InterfaceBaseItem item, float level, int fboTexture, float x, float y, float w,
+    void drawFreshShadow(Shader shader, IBaseItem item, float level, int fboTexture, float x, float y, float w,
             float h, int width, int height) {
 
         shadowStorage.deleteResource(item);
@@ -285,7 +285,7 @@ final class RenderProcessor {
         // store.clear();
     }
 
-    void drawStoredShadow(Shader shader, InterfaceBaseItem item, float level, float x, float y, int width, int height) {
+    void drawStoredShadow(Shader shader, IBaseItem item, float level, float x, float y, int width, int height) {
 
         VramTexture store = shadowStorage.getResource(item);
         if (store == null)
@@ -311,7 +311,7 @@ final class RenderProcessor {
         store.unbind();
     }
 
-    void drawTextureAsIs(Shader shader, InterfaceImageItem image, float ax, float ay, float aw, float ah, int iw,
+    void drawTextureAsIs(Shader shader, IImageItem image, float ax, float ay, float aw, float ah, int iw,
             int ih, int width, int height, float level) {
 
         BufferedImage bmp = image.getImage();
@@ -341,7 +341,7 @@ final class RenderProcessor {
         store.clear();
     }
 
-    void drawFreshTexture(InterfaceImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw,
+    void drawFreshTexture(IImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw,
             int ih, int width, int height, float level) {
 
         textureStorage.deleteResource(image);
@@ -380,7 +380,7 @@ final class RenderProcessor {
         tex.unbind();
     }
 
-    void drawStoredTexture(InterfaceImageItem image, Shader shader, float ax, float ay, int width, int height,
+    void drawStoredTexture(IImageItem image, Shader shader, float ax, float ay, int width, int height,
             float level) {
         VramTexture tex = textureStorage.getResource(image);
         if (tex == null) {
@@ -443,18 +443,18 @@ final class RenderProcessor {
     }
 
     <T> void freeResource(T resource) {
-        if (resource instanceof InterfaceTextContainer) {
-            InterfaceTextContainer text = (InterfaceTextContainer) resource;
+        if (resource instanceof ITextContainer) {
+            ITextContainer text = (ITextContainer) resource;
             ItemsRefreshManager.removeText(text);
             textStorage.flushResource(text);
         }
-        if (resource instanceof InterfaceImageItem) {
-            InterfaceImageItem image = (InterfaceImageItem) resource;
+        if (resource instanceof IImageItem) {
+            IImageItem image = (IImageItem) resource;
             ItemsRefreshManager.removeImage(image);
             textureStorage.flushResource(image);
         }
-        if (resource instanceof InterfaceBaseItem) {
-            InterfaceBaseItem item = (InterfaceBaseItem) resource;
+        if (resource instanceof IBaseItem) {
+            IBaseItem item = (IBaseItem) resource;
             ItemsRefreshManager.removeShape(item);
 
             vertexStorage.flushResource(item);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
@@ -47,8 +46,8 @@ namespace SpaceVIL
 
             if (baseState == currentState)
             {
-                Border border = CloneBorder(currentState.Border);
-                if (!item.GetBorderDirect().GetRadius().Equals(baseState.Border.GetRadius()))
+                Border border = currentState.Border.Clone();
+                if (!item.GetBorder().GetRadius().Equals(baseState.Border.GetRadius()))
                     ItemsRefreshManager.SetRefreshShape(item.prototype);
 
                 item.border = border;
@@ -60,8 +59,8 @@ namespace SpaceVIL
             ItemState currentState = item.GetState(item.GetCurrentStateType());
             item.SetBackgroundDirect(GraphicsMathService.MixColors(currentState.Background, item.GetBackground(), state.Background));
 
-            Border borderCurrentState = CloneBorder(currentState.Border);
-            Border borderState = CloneBorder(state.Border);
+            Border borderCurrentState = currentState.Border.Clone();
+            Border borderState = state.Border.Clone();
 
             //CASE 1: item has CornerRadius(!=0) but other states has CornerRadius(0)
             if (!borderCurrentState.GetRadius().IsCornersZero())
@@ -96,30 +95,17 @@ namespace SpaceVIL
                     item.border.SetThickness(prevState.Border.GetThickness());
             }
 
-            if (borderState.GetFill().A > 0)
+            if (borderState.GetColor().A > 0)
             {
-                item.border.SetFill(borderState.GetFill());
+                item.border.SetColor(borderState.GetColor());
             }
             else
             {
-                if (prevState.Border.GetFill().A > 0)
-                    item.border.SetFill(prevState.Border.GetFill());
+                if (prevState.Border.GetColor().A > 0)
+                    item.border.SetColor(prevState.Border.GetColor());
             }
-            //     item._border.setFill(prevState.Border.getFill());
-            // if (item._border.getFill().getAlpha() == 0)
-            //     item._border.setFill(item.getState(ItemStateType.BASE).Border.getFill());
-
             if (state.Shape != null)
                 item.SetCustomFigure(state.Shape);
-        }
-
-        internal static Border CloneBorder(Border border)
-        {
-            Border clone = new Border();
-            clone.SetFill(border.GetFill());
-            clone.SetRadius(border.GetRadius());
-            clone.SetThickness(border.GetThickness());
-            return clone;
         }
 
         internal static bool GetHoverVerification(VisualItem item, float xpos, float ypos)
@@ -209,18 +195,13 @@ namespace SpaceVIL
             item.SetMinSize(style.MinWidth, style.MinHeight);
             item.SetMaxSize(style.MaxWidth, style.MaxHeight);
             item.SetBackground(style.Background);
-            item.SetBorderRadius(style.BorderRadius);
-            item.SetBorderThickness(style.BorderThickness);
-            item.SetBorderFill(style.BorderFill);
-            item.SetShadow(style.ShadowRadius, style.ShadowXOffset, style.ShadowYOffset, style.ShadowColor);
-            item.SetShadowDrop(style.IsShadowDrop);
+            item.SetBorder(style.Border);
+            Effects.AddEffect(item.prototype, style.Shadow);
             item.SetVisible(style.IsVisible);
             item.RemoveAllItemStates();
 
-            ItemState core_state = new ItemState(style.Background);
-            core_state.Border.SetRadius(style.BorderRadius);
-            core_state.Border.SetThickness(style.BorderThickness);
-            core_state.Border.SetFill(style.BorderFill);
+            ItemState coreState = new ItemState(style.Background);
+            coreState.Border = style.Border.Clone();
 
             foreach (var state in style.GetAllStates())
             {
@@ -229,9 +210,9 @@ namespace SpaceVIL
             if (style.Shape != null)
             {
                 item.SetCustomFigure(new Figure(style.IsFixedShape, style.Shape));
-                core_state.Shape = item.IsCustomFigure();
+                coreState.Shape = item.IsCustomFigure();
             }
-            item.AddItemState(ItemStateType.Base, core_state);
+            item.AddItemState(ItemStateType.Base, coreState);
         }
 
         internal static Style ExtractCoreStyle(VisualItem item)
@@ -250,9 +231,7 @@ namespace SpaceVIL
             style.Margin = new Indents(item.GetMargin().Left, item.GetMargin().Top, item.GetMargin().Right, item.GetMargin().Bottom);
             style.Spacing = new Spacing(item.GetSpacing().Horizontal, item.GetSpacing().Vertical);
             style.Alignment = item.GetAlignment();
-            style.BorderFill = item.GetBorderFill();
-            style.BorderRadius = item.GetBorderRadius();
-            style.BorderThickness = item.GetBorderThickness();
+            style.Border = item.border.Clone();
             style.IsVisible = item.IsVisible();
             if (item.IsCustomFigure() != null)
             {

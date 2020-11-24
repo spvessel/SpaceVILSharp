@@ -563,4 +563,18 @@ namespace SpaceVIL.Core
         Smooth,
         Rough
     }
+
+    [Flags]
+    public enum BenchmarkIndicator
+    {
+        Framerate = 0x1,
+        Frametime = 0x2
+    }
+
+    public enum EffectType
+    {
+        Border,
+        Shadow,
+        Subtract
+    }
 }

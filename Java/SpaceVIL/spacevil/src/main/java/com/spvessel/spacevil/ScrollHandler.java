@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.Orientation;
 
@@ -11,7 +11,7 @@ import com.spvessel.spacevil.Flags.Orientation;
  * <p>
  * Supports all events including drag and drop.
  */
-public class ScrollHandler extends Prototype implements InterfaceDraggable {
+public class ScrollHandler extends Prototype implements IDraggable {
     private static int count = 0;
 
     /**
@@ -35,17 +35,17 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
         isFocusable = false;
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
-        if (orientation == Orientation.HORIZONTAL)
+    private void onMousePress(IItem sender, MouseArgs args) {
+        if (orientation == Orientation.Horizontal)
             _diff = args.position.getX() - getX();
         else
             _diff = args.position.getY() - getY();
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(IItem sender, MouseArgs args) {
         int offset;
         Prototype parent = getParent();
-        if (orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.Horizontal)
             offset = args.position.getX() - parent.getX() - _diff;
         else
             offset = args.position.getY() - parent.getY() - _diff;
@@ -66,7 +66,7 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
 
         _offset = offset;
 
-        if (orientation == Orientation.HORIZONTAL)
+        if (orientation == Orientation.Horizontal)
             setX(_offset + parent.getX());
         else
             setY(_offset + parent.getY());

@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.TextInputArgs;
@@ -38,14 +38,14 @@ class TextEditRestricted extends TextEditStorage {
     private InputRestriction inres = InputRestriction.DOUBLENUMBERS;
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
-        if (args.button == MouseButton.BUTTON_LEFT) {
+        if (args.button == MouseButton.ButtonLeft) {
             selectAll();
             //            setEditable(true);
         }
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (args.key == KeyCode.Enter || args.key == KeyCode.NumpadEnter) {
             constructCurrentValue();
         }
     }

@@ -10,10 +10,10 @@ public enum ItemHoverRule {
      * <p> Example: Function will return True If shape is triangle and mouse cursor located outside this triangle, 
      * but inside rectangle area that bounds this triangle.
      */
-    LAZY,
+    Lazy,
 
     /**
      * Hover function will return True only if mouse cursor located inside the shape of the item.
      */
-    STRICT
+    Strict
 }

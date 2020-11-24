@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-class TextEditStorage extends Prototype implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
+class TextEditStorage extends Prototype implements ITextEditable, ITextShortcuts, IDraggable {
     static int count = 0;
     private TextLine _textObject;
     private TextLine _substrateText;
@@ -65,18 +65,18 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         eventScrollDown.add(this::onScrollDown);
         // eventMouseDoubleClick.add(this::onMouseDoubleClick);
 
-        _cursorControlKeys = new HashSet<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
+        _cursorControlKeys = new HashSet<>(Arrays.asList(KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home));
         // InsteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
         //         KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
         
         _serviceEditKeys = new HashSet<>(
-            Arrays.asList(KeyCode.BACKSPACE, KeyCode.DELETE, KeyCode.TAB));
+            Arrays.asList(KeyCode.Backspace, KeyCode.Delete, KeyCode.Tab));
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextEditState("", 0, 0, 0, 0));
 
-        setCursor(EmbeddedCursor.IBEAM);
+        setCursor(EmbeddedCursor.IBeam);
     }
 
     @Override
@@ -96,7 +96,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private void onMouseClick(Object sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 int savePos = _cursorPosition;
                 if (isPosSame()) {
                     if ((System.nanoTime() - _startTime) / 1000000 < 500) {
@@ -145,7 +145,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private void onMousePressed(Object sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 replaceCursorAccordingCoord(args.position.getX());
                 if (_isSelect) {
                     unselectText();
@@ -160,7 +160,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
     private void onDragging(Object sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 replaceCursorAccordingCoord(args.position.getX());
 
                 if (!_isSelect) {
@@ -234,7 +234,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
     private void replaceCursorAccordingCoord(int realPos) {
         int w = getTextWidth();
-        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+        if (_textObject.getTextAlignment().contains(ItemAlignment.Right) && (w < _cursorXMax)) {
             realPos -= getX() + (getWidth() - w) - getPadding().right - _textObject.getMargin().right
                     - _cursor.getWidth();
         } else {
@@ -264,11 +264,11 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         return pos;
     }
 
-    private void onKeyRelease(InterfaceItem sender, KeyArgs args) {
+    private void onKeyRelease(IItem sender, KeyArgs args) {
 
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
         textInputLock.lock();
         try {
             TextShortcutProcessor.processShortcut(this, args);
@@ -282,10 +282,10 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             }
 
             boolean isCursorControlKey = _cursorControlKeys.contains(args.key);
-            boolean hasShift = args.mods.contains(KeyMods.SHIFT);
+            boolean hasShift = args.mods.contains(KeyMods.Shift);
             boolean hasControl = args.mods.contains(CommonService.getOsControlMod());
 
-            if (!args.mods.contains(KeyMods.NO)) {
+            if (!args.mods.contains(KeyMods.No)) {
                 // Выделение не сбрасывается, проверяются сочетания
                 if (isCursorControlKey) {
                     if (!_isSelect) {
@@ -306,7 +306,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                 // control + delete/backspace
                 if (hasControl && (args.mods.size() == 1)) {
                     if (!_isSelect) {
-                        if (args.key == KeyCode.BACKSPACE) { //remove to left
+                        if (args.key == KeyCode.Backspace) { //remove to left
                             int[] wordBounds = findWordBounds();
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[0]) {
@@ -318,7 +318,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                             } else {
                                 onBackSpaceInput();
                             }
-                        } else if (args.key == KeyCode.DELETE) { //remove to right
+                        } else if (args.key == KeyCode.Delete) { //remove to right
                             int[] wordBounds = findWordBounds();
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition != wordBounds[1]) {
@@ -331,7 +331,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                                 onDeleteInput();
                             }
                         }
-                    } else if (_isSelect && ((args.key == KeyCode.BACKSPACE) || (args.key == KeyCode.DELETE))) {
+                    } else if (_isSelect && ((args.key == KeyCode.Backspace) || (args.key == KeyCode.Delete))) {
                         cutText();
                     }
                 }
@@ -342,15 +342,15 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                     if (_isSelect) {
                         privCutText();
                     } else {
-                        if (args.key == KeyCode.BACKSPACE) { // backspace
+                        if (args.key == KeyCode.Backspace) { // backspace
                             onBackSpaceInput();
                         }
-                        if (args.key == KeyCode.DELETE) { // delete
+                        if (args.key == KeyCode.Delete) { // delete
                             onDeleteInput();
                         }
                     }
 
-                    if (args.key == KeyCode.TAB) {
+                    if (args.key == KeyCode.Tab) {
                         pasteText("    ");
                     }
 
@@ -361,8 +361,8 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
             }
 
             if (isCursorControlKey) {
-                if (!args.mods.contains(KeyMods.ALT) && !args.mods.contains(KeyMods.SUPER)) {
-                    if (args.key == KeyCode.LEFT && _cursorPosition > 0) { // arrow left
+                if (!args.mods.contains(KeyMods.Alt) && !args.mods.contains(KeyMods.Super)) {
+                    if (args.key == KeyCode.Left && _cursorPosition > 0) { // arrow left
                         _cursorPosition = checkLineFits(_cursorPosition);
 
                         boolean doUsual = true;
@@ -383,7 +383,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                         }
                     }
 
-                    if (args.key == KeyCode.RIGHT && _cursorPosition < getLettersCount()) { // arrow right
+                    if (args.key == KeyCode.Right && _cursorPosition < getLettersCount()) { // arrow right
                         boolean doUsual = true;
 
                         if (hasControl) {
@@ -402,12 +402,12 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
                         }
                     }
 
-                    if (args.key == KeyCode.END) { // end
+                    if (args.key == KeyCode.End) { // end
                         _cursorPosition = getLettersCount();
                         replaceCursor();
                     }
 
-                    if (args.key == KeyCode.HOME) { // home
+                    if (args.key == KeyCode.Home) { // home
                         _cursorPosition = 0;
                         replaceCursor();
                     }
@@ -474,7 +474,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         if (cPos > 0) {
             coord = _textObject.getLetPosArray().get(cPos - 1);
-            if ((getTextWidth() >= _cursorXMax) || !_textObject.getTextAlignment().contains(ItemAlignment.RIGHT)) {
+            if ((getTextWidth() >= _cursorXMax) || !_textObject.getTextAlignment().contains(ItemAlignment.Right)) {
                 coord += _cursor.getWidth();
             }
         }
@@ -501,7 +501,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
         int w = getTextWidth();
 
-        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+        if (_textObject.getTextAlignment().contains(ItemAlignment.Right) && (w < _cursorXMax)) {
             int xcp = getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
                     - _textObject.getMargin().right - _cursor.getWidth();
             if (_cursorPosition == 0) {
@@ -634,7 +634,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         _substrateText.checkXShift(_cursorXMax);
 
         replaceCursor();
-        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT)) {
+        if (_textObject.getTextAlignment().contains(ItemAlignment.Right)) {
             //TODO WTF???
             makeSelectedArea();
         }
@@ -692,7 +692,7 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
         int width = toReal - fromReal + 1;
 
         int w = getTextWidth();
-        if (_textObject.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+        if (_textObject.getTextAlignment().contains(ItemAlignment.Right) && (w < _cursorXMax)) {
             _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _textObject.getMargin().right
                     - _cursor.getWidth());
         } else {
@@ -1011,12 +1011,12 @@ class TextEditStorage extends Prototype implements InterfaceTextEditable, Interf
 
     void setTextAlignment(List<ItemAlignment> alignment) {
         List<ItemAlignment> ial = new LinkedList<>();
-        if (alignment.contains(ItemAlignment.RIGHT)) {
-            ial.add(ItemAlignment.RIGHT);
-            ial.add(ItemAlignment.VCENTER);
+        if (alignment.contains(ItemAlignment.Right)) {
+            ial.add(ItemAlignment.Right);
+            ial.add(ItemAlignment.VCenter);
         } else {
-            ial.add(ItemAlignment.LEFT);
-            ial.add(ItemAlignment.VCENTER);
+            ial.add(ItemAlignment.Left);
+            ial.add(ItemAlignment.VCenter);
         }
         _textObject.setTextAlignment(ial);
         _substrateText.setTextAlignment(ial);

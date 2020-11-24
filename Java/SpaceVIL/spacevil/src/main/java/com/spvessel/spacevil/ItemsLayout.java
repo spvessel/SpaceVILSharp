@@ -1,10 +1,8 @@
 package com.spvessel.spacevil;
 
-//import InterfaceBaseItem;
-
 import java.util.*;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 
 final class ItemsLayout {
     ItemsLayout(UUID layoutId) {
@@ -21,33 +19,33 @@ final class ItemsLayout {
         _id = value;
     }
 
-    List<InterfaceBaseItem> _items = new LinkedList<>();
+    List<IBaseItem> _items = new LinkedList<>();
 
-    List<InterfaceBaseItem> getItems() {
+    List<IBaseItem> getItems() {
         return _items;
     }
 
-    void setItems(List<InterfaceBaseItem> value) {
+    void setItems(List<IBaseItem> value) {
         _items = value;
     }
 
-    List<InterfaceBaseItem> _float_items = new LinkedList<>();
+    List<IBaseItem> _float_items = new LinkedList<>();
 
-    List<InterfaceBaseItem> getFloatItems() {
+    List<IBaseItem> getFloatItems() {
         return _float_items;
     }
 
-    void setFloatItems(List<InterfaceBaseItem> value) {
+    void setFloatItems(List<IBaseItem> value) {
         _float_items = value;
     }
 
-    List<InterfaceBaseItem> _dialog_items = new LinkedList<>();
+    List<IBaseItem> _dialog_items = new LinkedList<>();
 
-    List<InterfaceBaseItem> getDialogItems() {
+    List<IBaseItem> getDialogItems() {
         return _dialog_items;
     }
 
-    void setDialogItems(List<InterfaceBaseItem> value) {
+    void setDialogItems(List<IBaseItem> value) {
         _dialog_items = value;
     }
 }

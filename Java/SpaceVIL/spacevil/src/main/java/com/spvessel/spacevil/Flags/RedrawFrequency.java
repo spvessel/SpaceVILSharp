@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: VERY_LOW, LOW, MEDIUM, HIGH, ULTRA.
  */
 public enum RedrawFrequency {
-    VERY_LOW, LOW, MEDIUM, HIGH, ULTRA
+    VeryLow, Low, Medium, High, Ultra
 }

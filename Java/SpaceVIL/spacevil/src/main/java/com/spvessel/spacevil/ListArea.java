@@ -14,7 +14,7 @@ import com.spvessel.spacevil.Decorations.Style;
  * <p>
  * Supports all events except drag and drop.
  */
-public class ListArea extends Prototype implements InterfaceVLayout {
+public class ListArea extends Prototype implements IVLayout {
 
     /**
      * Event that is invoked when one of the element is selected.
@@ -74,9 +74,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * Getting selected item.
      * 
-     * @return Selected item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return Selected item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         if (_selectionItem != null)
             return _selectionItem.getContent();
         return null;
@@ -105,8 +105,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     }
 
     private void unselectOthers(SelectionItem sender) {
-        List<InterfaceBaseItem> items = getItems();
-        for (InterfaceBaseItem item : items) {
+        List<IBaseItem> items = getItems();
+        for (IBaseItem item : items) {
             if (!item.equals(sender)) {
                 ((SelectionItem) item).setSelected(false);
             }
@@ -166,25 +166,25 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         eventKeyPress.add(this::onKeyPress);
     }
 
-    private void onMouseClick(InterfaceItem sender, MouseArgs args) {
+    private void onMouseClick(IItem sender, MouseArgs args) {
 
     }
 
-    private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
+    private void onMouseDoubleClick(IItem sender, MouseArgs args) {
 
     }
 
-    private void onMouseHover(InterfaceItem sender, MouseArgs args) {
+    private void onMouseHover(IItem sender, MouseArgs args) {
 
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
         int index = _selection;
         boolean changed = false;
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
 
         switch (args.key) {
-            case UP:
+            case Up:
                 while (index > 0) {
                     index--;
                     _selectionItem = ((SelectionItem) list.get(index));
@@ -196,7 +196,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 if (changed)
                     setSelection(index);
                 break;
-            case DOWN:
+            case Down:
                 while (index < list.size() - 1) {
                     index++;
                     _selectionItem = ((SelectionItem) list.get(index));
@@ -208,7 +208,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 if (changed)
                     setSelection(index);
                 break;
-            case ESCAPE:
+            case Escape:
                 unselect();
                 break;
             default:
@@ -224,9 +224,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         super.setMouseHover(value);
     }
 
-    Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
+    Map<IBaseItem, SelectionItem> _mapContent = new HashMap<>();
 
-    private SelectionItem getWrapper(InterfaceBaseItem item) {
+    private SelectionItem getWrapper(IBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
         wrapper.setStyle(_selectedStyle);
         wrapper.setToggleVisible(_isSelectionVisible);
@@ -234,7 +234,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             int index = 0;
             if (_mapContent.get(item) != null)
                 _selectionItem = _mapContent.get(item);
-            for (InterfaceBaseItem var : super.getItems()) {
+            for (IBaseItem var : super.getItems()) {
                 if (var.equals(_selectionItem)) {
                     _selection = index;
                     selectionChanged.execute();
@@ -249,11 +249,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * Insert item into the ListArea by index.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         SelectionItem wrapper = getWrapper(item);
         super.insertItem(wrapper, index);
         wrapper.updateHeight();
@@ -267,10 +267,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * Add item to the ListArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         SelectionItem wrapper = getWrapper(item);
         super.addItem(wrapper);
         wrapper.updateHeight();
@@ -282,11 +282,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      * Adding all elements in the ListArea from the given list.
      * 
      * @param content List of items as
-     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *                List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public void setListContent(List<InterfaceBaseItem> content) {
+    public void setListContent(List<IBaseItem> content) {
         removeAllItems();
-        for (InterfaceBaseItem item : content) {
+        for (IBaseItem item : content) {
             SelectionItem wrapper = getWrapper(item);
             super.addItem(wrapper);
             wrapper.updateSize();
@@ -297,12 +297,12 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * Removing the specified item from the ListArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean restore = false;
         SelectionItem currentSelection = null;
 
@@ -349,7 +349,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private void removeAllItems() {
         unselect();
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
 
         if (list == null || list.size() == 0)
             return;
@@ -419,10 +419,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceVLayout).
+     * com.spvessel.spacevil.Core.IVLayout).
      */
     public void updateLayout() {
-        List<InterfaceBaseItem> list = getItems();
+        List<IBaseItem> list = getItems();
         if (list == null || list.size() == 0 || _isUpdating)
             return;
         _isUpdating = true;
@@ -430,7 +430,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
         int child_X = (-1) * (int) _xOffset + getX() + getPadding().left;
-        for (InterfaceBaseItem child : list) {
+        for (IBaseItem child : list) {
             if (!child.isVisible())
                 continue;
 
@@ -480,8 +480,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         Style innerStyle = style.getInnerStyle("selection");
         if (innerStyle != null) {
             _selectedStyle = innerStyle.clone();
-            List<InterfaceBaseItem> list = getItems();
-            for (InterfaceBaseItem item : list) {
+            List<IBaseItem> list = getItems();
+            for (IBaseItem item : list) {
                 item.setStyle(_selectedStyle);
             }
         }

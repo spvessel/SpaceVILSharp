@@ -1,8 +1,8 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -171,7 +171,7 @@ public class TreeItem extends Prototype {
      */
     public TreeItem(TreeItemType type) {
         if (type == null)
-            type = TreeItemType.LEAF;
+            type = TreeItemType.Leaf;
         _nodeType = type;
         setItemName(type.toString().toLowerCase() + "_v" + count);
         count++;
@@ -180,7 +180,7 @@ public class TreeItem extends Prototype {
         _indicator = new ButtonToggle();
         _indicator.setItemName("Indicator_" + count);
         _textLabel = new Label();
-        _textLabel.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        _textLabel.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
         _iconShape = new CustomShape();
 
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
@@ -198,8 +198,8 @@ public class TreeItem extends Prototype {
         setText(text);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER)
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (args.key == KeyCode.Enter)
             _indicator.eventToggle.execute(sender, new MouseArgs());
         // else if (args.key == KeyCode.SPACE)
         // addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
@@ -215,7 +215,7 @@ public class TreeItem extends Prototype {
             level--;
         setPadding(2 + _indentSize * level, 0, 0, 0);
         int width = getPadding().left;
-        for (InterfaceBaseItem item : getItems()) {
+        for (IBaseItem item : getItems()) {
             width += item.getWidth() + item.getMargin().left + item.getMargin().right + getSpacing().horizontal;
         }
 
@@ -240,13 +240,13 @@ public class TreeItem extends Prototype {
     @Override
     public void initElements() {
         switch (_nodeType) {
-            case LEAF:
+            case Leaf:
                 _iconShape.setMargin(2, 0, 0, 0);
                 super.addItem(_iconShape);
                 super.addItem(_textLabel);
                 break;
 
-            case BRANCH:
+            case Branch:
                 super.addItem(_indicator);
                 super.addItem(_iconShape);
                 super.addItem(_textLabel);
@@ -254,7 +254,7 @@ public class TreeItem extends Prototype {
                 _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
                 _indicator.isFocusable = false;
                 eventMouseDoubleClick.add((sender, args) -> {
-                    if (args.button == MouseButton.BUTTON_LEFT)
+                    if (args.button == MouseButton.ButtonLeft)
                         _indicator.eventToggle.execute(sender, args);
                 });
                 break;
@@ -330,10 +330,10 @@ public class TreeItem extends Prototype {
     /**
      * Adding item into the TreeItem.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         if (item instanceof TreeItem)
             addTreeItem((TreeItem) item);
         else
@@ -370,9 +370,9 @@ public class TreeItem extends Prototype {
         int offset = 0;
         int startX = getX() + getPadding().left;
 
-        for (InterfaceBaseItem child : getItems()) {
+        for (IBaseItem child : getItems()) {
             child.setX(startX + offset + child.getMargin().left);
-            if (child.getWidthPolicy() == SizePolicy.EXPAND) {
+            if (child.getWidthPolicy() == SizePolicy.Expand) {
                 child.setWidth(getWidth() - offset);
             }
             offset += child.getWidth() + getSpacing().horizontal;
@@ -606,7 +606,7 @@ public class TreeItem extends Prototype {
         if (innerStyle != null) {
             _indicator.setStyle(innerStyle);
         }
-        if (_nodeType == TreeItemType.BRANCH)
+        if (_nodeType == TreeItemType.Branch)
             innerStyle = style.getInnerStyle("branchicon");
         else
             innerStyle = style.getInnerStyle("leaficon");
@@ -623,7 +623,7 @@ public class TreeItem extends Prototype {
      *              content.
      */
     public void setExpanded(boolean value) {
-        if (_nodeType.equals(TreeItemType.BRANCH)) {
+        if (_nodeType.equals(TreeItemType.Branch)) {
             _indicator.setToggled(value);
             onToggleHide(value);
         }

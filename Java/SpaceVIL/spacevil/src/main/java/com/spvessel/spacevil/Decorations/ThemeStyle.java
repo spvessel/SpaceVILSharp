@@ -1,6 +1,6 @@
 package com.spvessel.spacevil.Decorations;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.*;
 
@@ -89,7 +89,7 @@ public class ThemeStyle {
         return null;
     }
 
-    private Map<InterfaceBaseItem, Style> specificItemsStyle = new HashMap<>();
+    private Map<IBaseItem, Style> specificItemsStyle = new HashMap<>();
 
     /**
      * Set this theme as default.
@@ -100,10 +100,10 @@ public class ThemeStyle {
 
     /**
      * Add unique style for the specified item (specific item, not type of item).
-     * @param item An item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item An item as com.spvessel.spacevil.Core.IBaseItem.
      * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void addSpecificItemStyle(InterfaceBaseItem item, Style style) {
+    public void addSpecificItemStyle(IBaseItem item, Style style) {
         if (specificItemsStyle.containsKey(item)) {
             specificItemsStyle.replace(item, style);
         } else {
@@ -113,10 +113,10 @@ public class ThemeStyle {
 
     /**
      * Remove unique style for the item (specific item, not type of item).
-     * @param item An item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item An item as com.spvessel.spacevil.Core.IBaseItem.
      * @param style A style as com.spvessel.spacevil.Decorations.Style.
      */
-    public void removeSpecificItemStyle(InterfaceBaseItem item, Style style)
+    public void removeSpecificItemStyle(IBaseItem item, Style style)
         {
             if (specificItemsStyle.containsKey(item)) {
                 specificItemsStyle.remove(item);

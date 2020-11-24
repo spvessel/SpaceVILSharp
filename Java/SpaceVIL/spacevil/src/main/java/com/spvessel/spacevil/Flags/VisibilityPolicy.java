@@ -8,15 +8,15 @@ public enum VisibilityPolicy {
     /**
      * Item is always visible.
      */
-    ALWAYS,
+    Always,
     
     /**
      * Item can be visible in some circumstances.
      */
-    AS_NEEDED,
+    AsNeeded,
     
     /**
      * Item is always invisible.
      */
-    NEVER
+    Never
 }

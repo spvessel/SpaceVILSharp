@@ -9,35 +9,35 @@ public enum ItemStateType {
      * Base static item's condition. 
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    BASE,
+    Base,
 
     /**
      * Item's condition when mouse cursor inside items area. 
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    HOVERED,
+    Hovered,
 
     /**
      * Item's condition when mouse cursor inside items area and any mouse button is pressed.
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    PRESSED,
+    Pressed,
 
     /**
      * Item's condition when it is toggled.
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    TOGGLED,
+    Toggled,
 
     /**
      * Item's condition when it is focused.
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    FOCUSED,
+    Focused,
 
     /**
      * Item's condition when it is disabled.
      * <p> Where Item is class extended from com.spvessel.spacevil.Prototype.
      */
-    DISABLED
+    Disabled
 }

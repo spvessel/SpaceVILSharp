@@ -58,7 +58,7 @@ namespace SpaceVIL
             EventMouseMethodState upScroll = (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
-                value -= Slider.GetStep();
+                value -= Slider.GetStep() * (float)args.ScrollValue.DX;
                 if (value < Slider.GetMinValue())
                     value = Slider.GetMinValue();
                 Slider.SetCurrentValue(value);
@@ -70,7 +70,7 @@ namespace SpaceVIL
             EventMouseMethodState downScroll = (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
-                value += Slider.GetStep();
+                value += Slider.GetStep() * (float)args.ScrollValue.DX;
                 if (value > Slider.GetMaxValue())
                     value = Slider.GetMaxValue();
                 Slider.SetCurrentValue(value);

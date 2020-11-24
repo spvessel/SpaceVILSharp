@@ -9,6 +9,11 @@ namespace SpaceVIL.Core
         int _h = 0;
 
         /// <summary>
+        /// Default Size constructor with width and height equal to 0.
+        /// </summary>
+        public Size() { }
+
+        /// <summary>
         /// Constructs Size with specified width and height.
         /// </summary>
         /// <param name="w">Width of the object.</param>
@@ -54,7 +59,7 @@ namespace SpaceVIL.Core
         {
             _h = value;
         }
-        
+
         /// <summary>
         /// Setting the size of the object.
         /// </summary>

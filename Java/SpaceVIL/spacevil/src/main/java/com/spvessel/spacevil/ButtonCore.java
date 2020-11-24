@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -44,8 +44,8 @@ public class ButtonCore extends Prototype {
         setText(text);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (args.key == KeyCode.Enter && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }

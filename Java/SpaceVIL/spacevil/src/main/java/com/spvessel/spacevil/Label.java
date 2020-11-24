@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.IVLayout;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -19,7 +19,7 @@ import java.util.List;
  * <p>
  * By default, Label is stretched to all available space in the container.
  */
-public class Label extends Prototype implements InterfaceVLayout {
+public class Label extends Prototype implements IVLayout {
     private static int count = 0;
     private List<TextLine> _textObjects;
     private boolean _init = false;
@@ -430,16 +430,16 @@ public class Label extends Prototype implements InterfaceVLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceVLayout).
+     * com.spvessel.spacevil.Core.IVLayout).
      */
     @Override
     public void updateLayout() {
         // updateLinesYShifts
         List<ItemAlignment> alignment = getTextAlignment();
         int globalYShift = 0;
-        if (alignment.contains(ItemAlignment.BOTTOM)) {
+        if (alignment.contains(ItemAlignment.Bottom)) {
             globalYShift = -(getTextHeight() - getLineY(1));
-        } else if (alignment.contains(ItemAlignment.VCENTER)) {
+        } else if (alignment.contains(ItemAlignment.VCenter)) {
             globalYShift = -((getTextHeight() - getLineY(1)) / 2);
         }
         int inc = 0;

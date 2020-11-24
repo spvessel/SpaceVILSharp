@@ -1,10 +1,12 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
@@ -131,8 +133,8 @@ public class ListBox extends Prototype {
      */
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
 
-    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
-    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
+    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AsNeeded;
+    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AsNeeded;
 
     /**
      * Getting vertical scroll bar visibility policy.
@@ -154,13 +156,13 @@ public class ListBox extends Prototype {
     public void setVScrollBarPolicy(VisibilityPolicy policy) {
         _vScrollBarPolicy = policy;
 
-        if (policy == VisibilityPolicy.NEVER) {
+        if (policy == VisibilityPolicy.Never) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AsNeeded) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.ALWAYS) {
+        } else if (policy == VisibilityPolicy.Always) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -193,13 +195,13 @@ public class ListBox extends Prototype {
     public void setHScrollBarPolicy(VisibilityPolicy policy) {
         _hScrollBarPolicy = policy;
 
-        if (policy == VisibilityPolicy.NEVER) {
+        if (policy == VisibilityPolicy.Never) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AsNeeded) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == VisibilityPolicy.ALWAYS) {
+        } else if (policy == VisibilityPolicy.Always) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -248,37 +250,37 @@ public class ListBox extends Prototype {
         return false;
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
         SelectionItem selection = _area.getTrueSelection();
         if (selection == null)
             return;
         long offset = _area.getVScrollOffset();
         int startY = _area.getY() + getPadding().top;
-        long selection_Y = selection.getY() + selection.getMargin().top;
+        long selectionY = selection.getY() + selection.getMargin().top;
 
         switch (args.key) {
-            case UP:
-                if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
-                    _area.setVScrollOffset(offset - (startY - selection_Y));
+            case Up:
+                if (isOutsideArea(selectionY, selection.getHeight(), selection.getMargin())) {
+                    _area.setVScrollOffset(offset - (startY - selectionY));
                     updateVerticalSlider();
                     break;
                 }
-                if (selection_Y < startY) {
-                    _area.setVScrollOffset(offset - (startY - selection_Y));
+                if (selectionY < startY) {
+                    _area.setVScrollOffset(offset - (startY - selectionY));
                     updateVerticalSlider();
                 }
                 break;
-            case DOWN:
-                if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
+            case Down:
+                if (isOutsideArea(selectionY, selection.getHeight(), selection.getMargin())) {
                     // _area.setVScrollOffset(offset - (startY - selection_Y));
                     _area.setVScrollOffset(
                             offset + selection.getHeight() + (selection.getY() - (_area.getY() + _area.getHeight())));
                     updateVerticalSlider();
                     break;
                 }
-                if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
+                if (selectionY + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
                         - getPadding().bottom) {
-                    _area.setVScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
+                    _area.setVScrollOffset(offset + ((selectionY + selection.getHeight() + selection.getMargin().bottom
                             + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
                     updateVerticalSlider();
                 }
@@ -288,49 +290,49 @@ public class ListBox extends Prototype {
         }
     }
 
-    private long v_size = 0;
-    private long h_size = 0;
+    private long _vSize = 0;
+    private long _hSize = 0;
 
     private void updateVListArea() {
         // vertical slider
-        float v_value = vScrollBar.slider.getCurrentValue();
-        int v_offset = (int) Math.round((float) (v_size * v_value) / 100.0f);
-        _area.setVScrollOffset(v_offset);
+        float vValue = vScrollBar.slider.getCurrentValue();
+        int vOffset = (int) Math.round((float) (_vSize * vValue) / 100.0f);
+        _area.setVScrollOffset(vOffset);
     }
 
     private void updateHListArea() {
         // horizontal slider
-        float h_value = hScrollBar.slider.getCurrentValue();
-        int h_offset = (int) Math.round((float) (h_size * h_value) / 100.0f);
-        _area.setHScrollOffset(h_offset);
+        float hValue = hScrollBar.slider.getCurrentValue();
+        int hOffset = (int) Math.round((float) (_hSize * hValue) / 100.0f);
+        _area.setHScrollOffset(hOffset);
     }
 
     // vertical slider
     private void updateVerticalSlider() {
-        int total_invisible_size = 0;
-        int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
-        if (visible_area < 0)
-            visible_area = 0;
-        List<InterfaceBaseItem> list = _area.getItems();
-        for (InterfaceBaseItem item : list) {
+        int totalInvisibleSize = 0;
+        int visibleArea = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
+        if (visibleArea < 0)
+            visibleArea = 0;
+        List<IBaseItem> list = _area.getItems();
+        for (IBaseItem item : list) {
             if (!item.isVisible())
                 continue;
-            total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
+            totalInvisibleSize += (item.getHeight() + _area.getSpacing().vertical);
         }
-        int total = total_invisible_size - _area.getSpacing().vertical;
-        if (total_invisible_size <= visible_area) {
+        int total = totalInvisibleSize - _area.getSpacing().vertical;
+        if (totalInvisibleSize <= visibleArea) {
             vScrollBar.slider.handler.setDrawable(false);
             vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
-            v_size = 0;
+            _vSize = 0;
             vScrollBar.slider.setCurrentValue(0);
-            if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getVScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 vScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+        if (getVScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -339,47 +341,47 @@ public class ListBox extends Prototype {
             _grid.updateLayout();
         }
         vScrollBar.slider.handler.setDrawable(true);
-        total_invisible_size -= visible_area;
-        v_size = total_invisible_size;
+        totalInvisibleSize -= visibleArea;
+        _vSize = totalInvisibleSize;
 
-        if (total_invisible_size > 0) {
-            float size_handler = (float) (visible_area) / (float) total * 100.0f;
-            size_handler = (float) vScrollBar.slider.getHeight() / 100.0f * size_handler;
+        if (totalInvisibleSize > 0) {
+            float sizeHandler = (float) (visibleArea) / (float) total * 100.0f;
+            sizeHandler = (float) vScrollBar.slider.getHeight() / 100.0f * sizeHandler;
             // size of handler
-            vScrollBar.slider.handler.setHeight((int) size_handler);
+            vScrollBar.slider.handler.setHeight((int) sizeHandler);
         }
         // step of slider
-        float step_count = total_invisible_size / _area.getStep();
-        vScrollBar.slider.setStep((vScrollBar.slider.getMaxValue() - vScrollBar.slider.getMinValue()) / step_count);
-        vScrollBar.slider.setCurrentValue((100.0f / total_invisible_size) * _area.getVScrollOffset());
+        float stepCount = totalInvisibleSize / _area.getStep();
+        vScrollBar.slider.setStep((vScrollBar.slider.getMaxValue() - vScrollBar.slider.getMinValue()) / stepCount);
+        vScrollBar.slider.setCurrentValue((100.0f / totalInvisibleSize) * _area.getVScrollOffset());
     }
 
     // horizontal slider
     private void updateHorizontalSlider() {
-        int max_size = 0;
-        int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
-        if (visible_area < 0)
-            visible_area = 0;
-        List<InterfaceBaseItem> list = _area.getItems();
-        for (InterfaceBaseItem item : list) {
+        int maxSize = 0;
+        int visibleArea = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
+        if (visibleArea < 0)
+            visibleArea = 0;
+        List<IBaseItem> list = _area.getItems();
+        for (IBaseItem item : list) {
             if (!item.isVisible())
                 continue;
-            if (max_size < item.getWidth() + item.getMargin().left + item.getMargin().right)
-                max_size = item.getWidth() + item.getMargin().left + item.getMargin().right;
+            if (maxSize < item.getWidth() + item.getMargin().left + item.getMargin().right)
+                maxSize = item.getWidth() + item.getMargin().left + item.getMargin().right;
         }
-        if (max_size <= visible_area) {
+        if (maxSize <= visibleArea) {
             hScrollBar.slider.handler.setDrawable(false);
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
-            h_size = 0;
+            _hSize = 0;
             hScrollBar.slider.setCurrentValue(0);
-            if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getHScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 hScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+        if (getHScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -388,23 +390,23 @@ public class ListBox extends Prototype {
             _grid.updateLayout();
         }
         hScrollBar.slider.handler.setDrawable(true);
-        int total_invisible_size = max_size - visible_area;
-        h_size = total_invisible_size;
+        int totalInvisibleSize = maxSize - visibleArea;
+        _hSize = totalInvisibleSize;
 
-        if (total_invisible_size > 0) {
-            float size_handler = (float) (visible_area) / (float) max_size * 100.0f;
-            size_handler = (float) hScrollBar.slider.getWidth() / 100.0f * size_handler;
+        if (totalInvisibleSize > 0) {
+            float sizeHandler = (float) (visibleArea) / (float) maxSize * 100.0f;
+            sizeHandler = (float) hScrollBar.slider.getWidth() / 100.0f * sizeHandler;
             // size of handler
-            hScrollBar.slider.handler.setWidth((int) size_handler);
+            hScrollBar.slider.handler.setWidth((int) sizeHandler);
         }
         // step of slider
-        int step_count = (int) ((float) total_invisible_size / (float) _area.getStep());
-        if (step_count == 0)
+        int stepCount = (int) ((float) totalInvisibleSize / (float) _area.getStep());
+        if (stepCount == 0)
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
         else
-            hScrollBar.slider.setStep((hScrollBar.slider.getMaxValue() - hScrollBar.slider.getMinValue()) / step_count);
+            hScrollBar.slider.setStep((hScrollBar.slider.getMaxValue() - hScrollBar.slider.getMinValue()) / stepCount);
 
-        float f = (100.0f / (float) total_invisible_size) * (float) _area.getHScrollOffset();
+        float f = (100.0f / (float) totalInvisibleSize) * (float) _area.getHScrollOffset();
         hScrollBar.slider.setCurrentValue(f);
     }
 
@@ -439,10 +441,10 @@ public class ListBox extends Prototype {
     /**
      * Adding item to the list area of ListBox.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         _area.addItem(item);
         updateElements();
     }
@@ -450,11 +452,11 @@ public class ListBox extends Prototype {
     /**
      * Insert item into the list area of ListBox by index.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         _area.insertItem(item, index);
         updateElements();
     }
@@ -462,13 +464,13 @@ public class ListBox extends Prototype {
     /**
      * Removing the specified item from the list area of ListBox.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
-        List<InterfaceBaseItem> list = getItems();
+    public boolean removeItem(IBaseItem item) {
+        List<IBaseItem> list = getItems();
         if (list.contains(item)) {
             return super.removeItem(item);
         }
@@ -516,11 +518,11 @@ public class ListBox extends Prototype {
         _area.itemListChanged.add(this::updateElements);
 
         eventScrollUp.add((sender, args) -> {
-            if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+            if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                 vScrollBar.eventScrollUp.execute(sender, args);
         });
         eventScrollDown.add((sender, args) -> {
-            if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+            if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                 vScrollBar.eventScrollDown.execute(sender, args);
         });
 
@@ -535,38 +537,38 @@ public class ListBox extends Prototype {
 
             Color menuItemForeground = new Color(210, 210, 210);
 
-            MenuItem go_up = new MenuItem("Go up");
-            go_up.setForeground(menuItemForeground);
-            go_up.eventMouseClick.add((sender, args) -> {
+            MenuItem goTop = new MenuItem("Go up");
+            goTop.setForeground(menuItemForeground);
+            goTop.eventMouseClick.add((sender, args) -> {
                 vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
             });
 
-            MenuItem go_down = new MenuItem("Go down");
-            go_down.setForeground(menuItemForeground);
-            go_down.eventMouseClick.add((sender, args) -> {
+            MenuItem goDown = new MenuItem("Go down");
+            goDown.setForeground(menuItemForeground);
+            goDown.eventMouseClick.add((sender, args) -> {
                 vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
             });
 
-            MenuItem go_up_left = new MenuItem("Go up and left");
-            go_up_left.setForeground(menuItemForeground);
-            go_up_left.eventMouseClick.add((sender, args) -> {
+            MenuItem goTopLeft = new MenuItem("Go up and left");
+            goTopLeft.setForeground(menuItemForeground);
+            goTopLeft.eventMouseClick.add((sender, args) -> {
                 hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMinValue());
                 vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
             });
 
-            MenuItem go_down_right = new MenuItem("Go down and right");
-            go_down_right.setForeground(menuItemForeground);
-            go_down_right.eventMouseClick.add((sender, args) -> {
+            MenuItem goBottomRight = new MenuItem("Go down and right");
+            goBottomRight.setForeground(menuItemForeground);
+            goBottomRight.eventMouseClick.add((sender, args) -> {
                 hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMaxValue());
                 vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
             });
-            _menu.addItems(go_up_left, go_down_right, go_up, go_down);
+            _menu.addItems(goTopLeft, goBottomRight, goTop, goDown);
             menu.eventMouseClick.add((sender, args) -> {
                 if (!_isMenuDisabled)
                     _menu.show(sender, args);
             });
-            _menu.activeButton = MouseButton.BUTTON_LEFT;
-            _menu.setShadow(10, 0, 0, Color.black);
+            _menu.activeButton = MouseButton.ButtonLeft;
+            Effects.addEffect(_menu, new Shadow(10));
         }
     }
 
@@ -574,12 +576,12 @@ public class ListBox extends Prototype {
      * Getting content of the list area of ListBox.
      * 
      * @return List of items as
-     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *         List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public List<InterfaceBaseItem> getListContent() {
-        List<InterfaceBaseItem> result = new LinkedList<>();
-        List<InterfaceBaseItem> list = _area.getItems();
-        for (InterfaceBaseItem item : list) {
+    public List<IBaseItem> getListContent() {
+        List<IBaseItem> result = new LinkedList<>();
+        List<IBaseItem> list = _area.getItems();
+        for (IBaseItem item : list) {
             result.add(((SelectionItem) item).getContent());
         }
         return result;
@@ -589,9 +591,9 @@ public class ListBox extends Prototype {
      * Adding all elements in the list area of ListBox from the given list.
      * 
      * @param content List of items as
-     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *                List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public void setListContent(List<InterfaceBaseItem> content) {
+    public void setListContent(List<IBaseItem> content) {
         _area.setListContent(content);
         updateElements();
     }
@@ -599,19 +601,19 @@ public class ListBox extends Prototype {
     /**
      * Getting selected item.
      * 
-     * @return Selected item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return Selected item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         return _area.getSelectedItem();
     }
 
     /**
      * Getting wrapper of item.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return Wrapper of given item as com.spvessel.spacevil.SelectionItem.
      */
-    public SelectionItem getWrapper(InterfaceBaseItem item) {
+    public SelectionItem getWrapper(IBaseItem item) {
         return getArea()._mapContent.get(item);
     }
 

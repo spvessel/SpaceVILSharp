@@ -7,14 +7,13 @@ import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.OSType;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import com.spvessel.spacevil.internal.Wrapper.*;
 
 import java.nio.FloatBuffer;
 
 final class GLWHandler {
+
+    private GlfwWrapper glfw = null;
 
     ///////////////////////////////////////////////
     private GLFWCursorPosCallback mouseMoveCallback;
@@ -58,7 +57,7 @@ final class GLWHandler {
         return _coreWindow;
     }
 
-    private long _window = NULL;
+    private long _window = 0;
 
     long getWindowId() {
         return _window;
@@ -67,6 +66,7 @@ final class GLWHandler {
     int gVAO = 0;
 
     GLWHandler(CoreWindow handler) {
+        glfw = GlfwWrapper.get();
         _coreWindow = handler;
         getPointer().setX(0);
         getPointer().setY(0);
@@ -74,62 +74,59 @@ final class GLWHandler {
 
     void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
-
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        // glfw.DefaultWindowHinst();
+        
+        glfw.WindowHint(Hint.OpenglForwardCompat, 1);
+        glfw.WindowHint(Hint.OpenglProfile, OpenGLProfile.Core);
+        glfw.WindowHint(Hint.Samples, _coreWindow._msaa.getValue());
+        glfw.WindowHint(Hint.ContextVersionMajor, 3);
+        glfw.WindowHint(Hint.ContextVersionMinor, 3);
 
         // scaling window's content (does not affect on Mac OS)
-        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+        glfw.WindowHint(Hint.ScaleToMonitor, 1);
 
         if (resizeble)
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+            glfw.WindowHint(Hint.Resizable, 1);
         else
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            glfw.WindowHint(Hint.Resizable, 0);
 
         if (!borderHidden)
-            glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+            glfw.WindowHint(Hint.Decorated, 1);
         else
-            glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+            glfw.WindowHint(Hint.Decorated, 0);
 
         if (focused)
-            glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+            glfw.WindowHint(Hint.Focused, 1);
         else
-            glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+            glfw.WindowHint(Hint.Focused, 0);
 
         if (alwaysOnTop)
-            glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
+            glfw.WindowHint(Hint.Floating, 1);
         else
-            glfwWindowHint(GLFW_FLOATING, GLFW_FALSE);
+            glfw.WindowHint(Hint.Floating, 0);
 
         // if (maximized)
-        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+        // glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
         // else
-        //     glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+        // glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         if (transparent)
-            glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+            glfw.WindowHint(Hint.TranspatentFramebuffer, 1);
         else
-            glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
+        glfw.WindowHint(Hint.TranspatentFramebuffer, 0);
 
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfw.WindowHint(Hint.Visible, 0);
 
-        _window = glfwCreateWindow(_coreWindow.getWidth(), _coreWindow.getHeight(), _coreWindow.getWindowTitle(), NULL,
-                NULL);
+        _window = glfw.CreateWindow(_coreWindow.getWidth(), _coreWindow.getHeight(), _coreWindow.getWindowTitle(), 0, 0);
 
-        if (_window == NULL) {
+        if (_window == 0) {
             System.out.println("glfwCreateWindow fails");
             throw new SpaceVILException("Create window fails - " + getCoreWindow().getWindowTitle());
         }
-
         WindowManager.setContextCurrent(_coreWindow);
 
-        FloatBuffer xScale = BufferUtils.createFloatBuffer(1);
-        FloatBuffer yScale = BufferUtils.createFloatBuffer(1);
-        glfwGetWindowContentScale(_window, xScale, yScale);
-        _coreWindow.setWindowScale(xScale.get(0), yScale.get(0));
+        float[] scale = glfw.GetWindowContentScale(_window);
+        _coreWindow.setWindowScale(scale[0], scale[1]);
 
         // System.out.println(_coreWindow.getDpiScale().toString());
 
@@ -141,7 +138,7 @@ final class GLWHandler {
         Area workArea = _coreWindow.getWorkArea();
 
         if (appearInCenter) {
-            if (CommonService.getOSType() != OSType.MAC) {
+            if (CommonService.getOSType() != OSType.Mac) {
                 actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getXScale());
                 actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getYScale());
             }
@@ -150,7 +147,7 @@ final class GLWHandler {
 
         } else {
 
-            if (CommonService.getOSType() != OSType.MAC) {
+            if (CommonService.getOSType() != OSType.Mac) {
                 xActualScale = _coreWindow.getDpiScale().getXScale();
                 yActualScale = _coreWindow.getDpiScale().getYScale();
             }
@@ -161,21 +158,22 @@ final class GLWHandler {
             getPointer().setX(_coreWindow.getX() + workArea.getX());
             getPointer().setY(_coreWindow.getY() + workArea.getY());
         }
-        glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
+        glfw.SetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
-        glfwSetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * xActualScale),
+        glfw.SetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * xActualScale),
                 (int) (_coreWindow.getMinHeight() * yActualScale), (int) (_coreWindow.getMaxWidth() * xActualScale),
                 (int) (_coreWindow.getMaxHeight() * yActualScale));
 
         if (_coreWindow.isKeepAspectRatio)
-            glfwSetWindowAspectRatio(_window, _coreWindow.ratioW, _coreWindow.ratioH);
+            glfw.SetWindowAspectRatio(_window, _coreWindow.ratioW, _coreWindow.ratioH);
 
-        if (visible)
-            glfwShowWindow(_window);
+        if (visible) {
+            glfw.ShowWindow(_window);
+        }
     }
 
     void switchContext() {
-        glfwMakeContextCurrent(0);
+        glfw.MakeContextCurrent(0);
         WindowManager.setContextCurrent(_coreWindow);
     }
 
@@ -201,121 +199,121 @@ final class GLWHandler {
     void setCursorType(int type) {
         EmbeddedCursor cursor = EmbeddedCursor.valueOf(type);
         switch (cursor) {
-            case ARROW:
-                glfwSetCursor(_window, CursorImage.cursorArrow);
+            case Arrow:
+                glfw.SetCursor(_window, CursorImage.cursorArrow);
                 break;
-            case IBEAM:
-                glfwSetCursor(_window, CursorImage.cursorInput);
+            case IBeam:
+                glfw.SetCursor(_window, CursorImage.cursorInput);
                 break;
-            case CROSSHAIR:
-                glfwSetCursor(_window, CursorImage.cursorResizeAll);
+            case Crosshair:
+                glfw.SetCursor(_window, CursorImage.cursorResizeAll);
                 break;
-            case HAND:
-                glfwSetCursor(_window, CursorImage.cursorHand);
+            case Hand:
+                glfw.SetCursor(_window, CursorImage.cursorHand);
                 break;
-            case RESIZE_X:
-                glfwSetCursor(_window, CursorImage.cursorResizeH);
+            case ResizeX:
+                glfw.SetCursor(_window, CursorImage.cursorResizeH);
                 break;
-            case RESIZE_Y:
-                glfwSetCursor(_window, CursorImage.cursorResizeV);
+            case ResizeY:
+                glfw.SetCursor(_window, CursorImage.cursorResizeV);
                 break;
             default:
-                glfwSetCursor(_window, CursorImage.cursorArrow);
+                glfw.SetCursor(_window, CursorImage.cursorArrow);
                 break;
         }
     }
 
     Boolean isClosing() {
-        return glfwWindowShouldClose(_window);
+        return glfw.WindowShouldClose(_window);
     }
 
     void destroy() {
-        glfwDestroyWindow(_window);
+        glfw.DestroyWindow(_window);
     }
 
     void swap() {
-        glfwSwapBuffers(_window);
+        glfw.SwapBuffers(_window);
     }
 
     void setToClose() {
         if (_window != 0)
-            glfwSetWindowShouldClose(_window, true);
+            glfw.SetWindowShouldClose(_window, 1);
     }
 
     void setCallbackMouseMove(GLFWCursorPosCallback function) {
         mouseMoveCallback = function;
-        glfwSetCursorPosCallback(_window, mouseMoveCallback);
+        glfw.SetCursorPosCallback(_window, mouseMoveCallback);
     }
 
     void setCallbackMouseClick(GLFWMouseButtonCallback function) {
         mouseClickCallback = function;
-        glfwSetMouseButtonCallback(_window, mouseClickCallback);
+        glfw.SetMouseButtonCallback(_window, mouseClickCallback);
     }
 
     void setCallbackMouseScroll(GLFWScrollCallback function) {
         mouseScrollCallback = function;
-        glfwSetScrollCallback(_window, mouseScrollCallback);
+        glfw.SetScrollCallback(_window, mouseScrollCallback);
     }
 
     void setCallbackKeyPress(GLFWKeyCallback function) {
         keyPressCallback = function;
-        glfwSetKeyCallback(_window, keyPressCallback);
+        glfw.SetKeyCallback(_window, keyPressCallback);
     }
 
     void setCallbackTextInput(GLFWCharModsCallback function) {
         keyInputTextCallback = function;
-        glfwSetCharModsCallback(_window, keyInputTextCallback);
+        glfw.SetCharModsCallback(_window, keyInputTextCallback);
     }
 
     void setCallbackClose(GLFWWindowCloseCallback function) {
         windowCloseCallback = function;
-        glfwSetWindowCloseCallback(_window, windowCloseCallback);
+        glfw.SetWindowCloseCallback(_window, windowCloseCallback);
     }
 
     void setCallbackPosition(GLFWWindowPosCallback function) {
         windowPosCallback = function;
-        glfwSetWindowPosCallback(_window, windowPosCallback);
+        glfw.SetWindowPosCallback(_window, windowPosCallback);
     }
 
     void setCallbackFocus(GLFWWindowFocusCallback function) {
         windowFocusCallback = function;
-        glfwSetWindowFocusCallback(_window, windowFocusCallback);
+        glfw.SetWindowFocusCallback(_window, windowFocusCallback);
     }
 
     void setCallbackResize(GLFWWindowSizeCallback function) {
         windowResizeCallback = function;
-        glfwSetWindowSizeCallback(_window, windowResizeCallback);
+        glfw.SetWindowSizeCallback(_window, windowResizeCallback);
     }
 
     void setCallbackIconify(GLFWWindowIconifyCallback function) {
         windowIconifyCallback = function;
-        glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
+        glfw.SetWindowIconifyCallback(_window, windowIconifyCallback);
     }
 
     void setCallbackFramebuffer(GLFWFramebufferSizeCallback function) {
         framebufferCallback = function;
-        glfwSetFramebufferSizeCallback(_window, framebufferCallback);
+        glfw.SetFramebufferSizeCallback(_window, framebufferCallback);
     }
 
     void setCallbackRefresh(GLFWWindowRefreshCallback function) {
         windowRefreshCallback = function;
-        glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
+        glfw.SetWindowRefreshCallback(_window, windowRefreshCallback);
     }
 
     void setCallbackDrop(GLFWDropCallback function) {
         dropCallback = function;
-        glfwSetDropCallback(_window, dropCallback);
+        glfw.SetDropCallback(_window, dropCallback);
     }
 
     void setCallbackContentScale(GLFWWindowContentScaleCallback function) {
         contentScaleCallback = function;
-        glfwSetWindowContentScaleCallback(_window, contentScaleCallback);
+        glfw.SetWindowContentScaleCallback(_window, contentScaleCallback);
     }
 
     void setHidden(Boolean value) {
         if (value)
-            glfwHideWindow(_window);
+            glfw.HideWindow(_window);
         else
-            glfwShowWindow(_window);
+            glfw.ShowWindow(_window);
     }
 }

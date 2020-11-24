@@ -1,6 +1,4 @@
 ﻿using SpaceVIL.Core;
-using Glfw3;
-using static Glfw3.Glfw;
 
 namespace SpaceVIL.Common
 {

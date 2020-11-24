@@ -4,16 +4,16 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.spvessel.spacevil.Core.InterfaceEffect;
-import com.spvessel.spacevil.Core.InterfaceSubtractFigure;
+import com.spvessel.spacevil.Core.IEffect;
+import com.spvessel.spacevil.Core.ISubtractFigure;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 /**
  * SubtractFigure is visual effect for applying to item's shape. 
- * Implements com.spvessel.spacevil.Core.InterfaceSubtractFigure and com.spvessel.spacevil.Core.InterfaceEffect.
+ * Implements com.spvessel.spacevil.Core.ISubtractFigure and com.spvessel.spacevil.Core.IEffect.
  * <p> This visual effect cuts specified shape from original item's shape.
  */
-public class SubtractFigure implements InterfaceSubtractFigure, InterfaceEffect {
+public class SubtractFigure implements ISubtractFigure, IEffect {
     /**
      * Constructs subtract effect with specified shape.
      * @param figure Figure for subtraction as com.spvessel.spacevil.Decorations.Figure.
@@ -139,44 +139,44 @@ public class SubtractFigure implements InterfaceSubtractFigure, InterfaceEffect 
         ItemAlignment _vcenter = null;
 
         for (ItemAlignment var : alignmentList) {
-            if (var.equals(ItemAlignment.LEFT)) {
+            if (var.equals(ItemAlignment.Left)) {
                 _left = var;
             }
-            if (var.equals(ItemAlignment.RIGHT)) {
+            if (var.equals(ItemAlignment.Right)) {
                 _right = var;
             }
-            if (var.equals(ItemAlignment.TOP)) {
+            if (var.equals(ItemAlignment.Top)) {
                 _top = var;
             }
-            if (var.equals(ItemAlignment.BOTTOM)) {
+            if (var.equals(ItemAlignment.Bottom)) {
                 _bottom = var;
             }
-            if (var.equals(ItemAlignment.HCENTER)) {
+            if (var.equals(ItemAlignment.HCenter)) {
                 _hcenter = var;
             }
-            if (var.equals(ItemAlignment.VCENTER)) {
+            if (var.equals(ItemAlignment.VCenter)) {
                 _vcenter = var;
             }
         }
 
         if (_left != null && _right != null) {
-            alignmentList.remove(ItemAlignment.RIGHT);
+            alignmentList.remove(ItemAlignment.Right);
         }
 
         if (_top != null && _bottom != null) {
-            alignmentList.remove(ItemAlignment.BOTTOM);
+            alignmentList.remove(ItemAlignment.Bottom);
         }
         if (_hcenter != null) {
 //            if (alignmentList.contains(ItemAlignment.LEFT))
-                alignmentList.remove(ItemAlignment.LEFT);
+                alignmentList.remove(ItemAlignment.Left);
 //            if (alignmentList.contains(ItemAlignment.RIGHT))
-                alignmentList.remove(ItemAlignment.RIGHT);
+                alignmentList.remove(ItemAlignment.Right);
         }
         if (_vcenter != null) {
 //            if (alignmentList.contains(ItemAlignment.TOP))
-                alignmentList.remove(ItemAlignment.TOP);
+                alignmentList.remove(ItemAlignment.Top);
 //            if (alignmentList.contains(ItemAlignment.BOTTOM))
-                alignmentList.remove(ItemAlignment.BOTTOM);
+                alignmentList.remove(ItemAlignment.Bottom);
         }
 
         _alignment = alignmentList;

@@ -3,11 +3,15 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
+import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Decorations.Effects;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EffectType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.LayoutType;
@@ -17,7 +21,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 /**
  * SideArea is a container designed to show when it is needed, and the rest of
  * the time SideArea is hidden. SideArea is a floating item (see
- * com.spvessel.spacevil.InterfaceFloating and enum
+ * com.spvessel.spacevil.Core.IFloating and enum
  * com.spvessel.spacevil.Flags.LayoutType) Always attached to one of the four
  * sides of window.
  * <p>
@@ -29,35 +33,20 @@ import com.spvessel.spacevil.Flags.SizePolicy;
  * <p>
  * SideArea does not pass any input events and invisible by default.
  */
-public class SideArea extends Prototype implements InterfaceFloating {
-
-    private boolean _init = false;
-    private boolean _outside = false;
-
-    /**
-     * Returns True if SideArea (see com.spvessel.spacevil.InterfaceFloating) should
-     * closes when mouse click outside the area of SideArea otherwise returns False.
-     * 
-     * @return True: if SideArea closes when mouse click outside the area. False: if
-     *         SideArea stays opened when mouse click outside the area.
-     */
-    public boolean isOutsideClickClosable() {
-        return _outside;
-    }
-
-    /**
-     * Setting boolean value of item's behavior when mouse click occurs outside the
-     * SideArea.
-     * 
-     * @param value True: SideArea should become invisible if mouse click occurs
-     *              outside the item. False: an item should stay visible if mouse
-     *              click occurs outside the item.
-     */
-    public void setOutsideClickClosable(boolean value) {
-        _outside = value;
-    }
+public class SideArea extends Prototype implements IFloating {
 
     static int count = 0;
+    private boolean _init = false;
+
+    private final Color _shadowColor = new Color(0, 0, 0, 150);
+    private final int _shadowRadius = 5;
+    private final int _shadowIndent = 3;
+
+    private Shadow _shadowLeftArea = null;
+    private Shadow _shadowTopArea = null;
+    private Shadow _shadowRightArea = null;
+    private Shadow _shadowBottomArea = null;
+
     private ButtonCore _close;
 
     /**
@@ -65,7 +54,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
      */
     public ResizableItem window;
 
-    private Side _attachSide = Side.LEFT;
+    private Side _attachSide = Side.Left;
 
     /**
      * Getting the side of the window which SideArea is attached.
@@ -94,57 +83,53 @@ public class SideArea extends Prototype implements InterfaceFloating {
     }
 
     private void applyAttach() {
-        window.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        window.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        window.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        window.setAlignment(ItemAlignment.Top, ItemAlignment.Left);
         window.isXResizable = false;
         window.isYResizable = false;
         window.clearExcludedSides();
-
-        Color shadowColor = new Color(0, 0, 0, 150);
-        int shadowRadius = 5;
-        int shadowIndent = 2;
+        Effects.clearEffects(window, EffectType.Shadow);
 
         switch (_attachSide) {
-            case LEFT:
+            case Left:
                 window.isXResizable = true;
-                window.setWidthPolicy(SizePolicy.FIXED);
+                window.setWidthPolicy(SizePolicy.Fixed);
                 window.setWidth(_size);
-                window.excludeSides(Side.LEFT, Side.BOTTOM, Side.TOP);
-                window.setAlignment(ItemAlignment.LEFT);
-                window.setShadow(shadowRadius, shadowIndent, 0, shadowColor);
+                window.excludeSides(Side.Left, Side.Bottom, Side.Top);
+                window.setAlignment(ItemAlignment.Left);
+                Effects.addEffect(window, _shadowLeftArea);
                 break;
 
-            case TOP:
+            case Top:
                 window.isYResizable = true;
-                window.setHeightPolicy(SizePolicy.FIXED);
+                window.setHeightPolicy(SizePolicy.Fixed);
                 window.setHeight(_size);
-                window.excludeSides(Side.LEFT, Side.RIGHT, Side.TOP);
-                window.setAlignment(ItemAlignment.TOP);
-                window.setShadow(shadowRadius, 0, shadowIndent, shadowColor);
+                window.excludeSides(Side.Left, Side.Right, Side.Top);
+                window.setAlignment(ItemAlignment.Top);
+                Effects.addEffect(window, _shadowTopArea);
                 break;
 
-            case RIGHT:
+            case Right:
                 window.isXResizable = true;
-                window.setWidthPolicy(SizePolicy.FIXED);
+                window.setWidthPolicy(SizePolicy.Fixed);
                 window.setWidth(_size);
-                window.excludeSides(Side.RIGHT, Side.BOTTOM, Side.TOP);
-                window.setShadow(shadowRadius, -shadowIndent, 0, shadowColor);
-                window.setAlignment(ItemAlignment.RIGHT);
+                window.excludeSides(Side.Right, Side.Bottom, Side.Top);
+                Effects.addEffect(window, _shadowRightArea);
                 break;
 
-            case BOTTOM:
+            case Bottom:
                 window.isYResizable = true;
-                window.setHeightPolicy(SizePolicy.FIXED);
+                window.setHeightPolicy(SizePolicy.Fixed);
                 window.setHeight(_size);
-                window.excludeSides(Side.LEFT, Side.RIGHT, Side.BOTTOM);
-                window.setShadow(shadowRadius, 0, -shadowIndent, shadowColor);
-                window.setAlignment(ItemAlignment.BOTTOM);
+                window.excludeSides(Side.Left, Side.Right, Side.Bottom);
+                window.setAlignment(ItemAlignment.Bottom);
+                Effects.addEffect(window, _shadowBottomArea);
                 break;
 
             default:
                 window.setWidth(_size);
-                window.setAlignment(ItemAlignment.LEFT);
-                window.setShadow(shadowRadius, shadowIndent, 0, shadowColor);
+                window.setAlignment(ItemAlignment.Left);
+                Effects.addEffect(window, _shadowLeftArea);
                 break;
         }
     }
@@ -193,7 +178,13 @@ public class SideArea extends Prototype implements InterfaceFloating {
      * @param attachSide Side of the window as com.spvessel.spacevil.Flags.Side.
      */
     public SideArea(CoreWindow handler, Side attachSide) {
-        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
+        ItemsLayoutBox.addItem(handler, this, LayoutType.Floating);
+
+        _shadowLeftArea = new Shadow(_shadowRadius, new Position(_shadowIndent, 0), _shadowColor);
+        _shadowTopArea = new Shadow(_shadowRadius, new Position(0, _shadowIndent), _shadowColor);
+        _shadowRightArea = new Shadow(_shadowRadius, new Position(-_shadowIndent, 0), _shadowColor);
+        _shadowBottomArea = new Shadow(_shadowRadius, new Position(0, -_shadowIndent), _shadowColor);
+
         setItemName("SideArea_" + count++);
         _close = new ButtonCore();
         window = new ResizableItem();
@@ -207,7 +198,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
         setPassEvents(false);
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE)
+            if (args.key == KeyCode.Escape)
                 hide();
         });
     }
@@ -234,33 +225,33 @@ public class SideArea extends Prototype implements InterfaceFloating {
     /**
      * Adding item to the SideArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         window.addItem(item);
     }
 
     /**
      * Inserting item to the SideArea.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         window.insertItem(item, index);
     }
 
     /**
      * Removing the specified item from SideArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return window.removeItem(item);
     }
 
@@ -306,7 +297,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
      * @param args   Mouse click arguments (cursor position, mouse button, mouse
      *               button press/release, etc.).
      */
-    public void show(InterfaceItem sender, MouseArgs args) {
+    public void show(IItem sender, MouseArgs args) {
         show();
     }
 
@@ -347,5 +338,30 @@ public class SideArea extends Prototype implements InterfaceFloating {
         if (inner_style != null) {
             _close.setStyle(inner_style);
         }
+    }
+
+    private boolean _outside = false;
+
+    /**
+     * Returns True if SideArea (see com.spvessel.spacevil.Core.IFloating) should
+     * closes when mouse click outside the area of SideArea otherwise returns False.
+     * 
+     * @return True: if SideArea closes when mouse click outside the area. False: if
+     *         SideArea stays opened when mouse click outside the area.
+     */
+    public boolean isOutsideClickClosable() {
+        return _outside;
+    }
+
+    /**
+     * Setting boolean value of item's behavior when mouse click occurs outside the
+     * SideArea.
+     * 
+     * @param value True: SideArea should become invisible if mouse click occurs
+     *              outside the item. False: an item should stay visible if mouse
+     *              click occurs outside the item.
+     */
+    public void setOutsideClickClosable(boolean value) {
+        _outside = value;
     }
 }

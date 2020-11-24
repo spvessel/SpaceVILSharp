@@ -1,10 +1,10 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceInputEventArgs;
+import com.spvessel.spacevil.Core.IInputEventArgs;
 import com.spvessel.spacevil.Flags.InputEventType;
 
 final class EventTask {
-    InputEventType action = InputEventType.EMPTY;
+    InputEventType action = InputEventType.Empty;
     Prototype item = null;
-    InterfaceInputEventArgs args = null;
+    IInputEventArgs args = null;
 }

@@ -4,6 +4,7 @@ using SpaceVIL.Core;
 using System.Threading;
 using System.Runtime.InteropServices;
 using SpaceVIL.Decorations;
+using System.Reflection;
 
 namespace SpaceVIL.Common
 {
@@ -36,7 +37,6 @@ namespace SpaceVIL.Common
                 + "OS type: " + _osType + "\n";
         }
 
-        private static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();
 
         private static SpaceVIL.Core.OSType _osType;
@@ -95,9 +95,10 @@ namespace SpaceVIL.Common
                 _controlLeft = KeyCode.LeftSuper;
                 _controlMod = KeyMods.Super;
             }
-
             try
             {
+                NativeLibrary.ExtractEmbeddedLibrary();
+
                 if (!Glfw.Init())
                 {
                     Console.WriteLine("Init SpaceVIL framework failed. Abort.\nReason: Init GLFW failed.");
@@ -107,15 +108,13 @@ namespace SpaceVIL.Common
             catch
             {
                 Console.WriteLine("Can not load/find library: " +
-                ((GetOSType() == OSType.Linux || GetOSType() == OSType.Mac) ? "lib" : "") +
-                "glfw" +
-                ((GetOSType() == OSType.Linux) ? ".so" : ((GetOSType() == OSType.Mac) ? ".dylib" : ".dll")) +
-                ". Failed to init GLFW. Abort function."
+                    ((GetOSType() == OSType.Linux || GetOSType() == OSType.Mac) ? "lib" : "") +
+                    "glfw3" +
+                    ((GetOSType() == OSType.Linux) ? ".so" : ((GetOSType() == OSType.Mac) ? ".dylib" : ".dll")) +
+                    ". Failed to init GLFW. Abort function."
                 );
-                // System.Environment.Exit(-1);
                 return false;
             }
-
             //cursors
             CursorArrow = Glfw.CreateStandardCursor(EmbeddedCursor.Arrow);
             CursorInput = Glfw.CreateStandardCursor(EmbeddedCursor.IBeam);
@@ -132,11 +131,8 @@ namespace SpaceVIL.Common
             Glfw.GetMonitorContentScale(monitor, out x, out y);
             DisplayService.SetDisplayScale(x, y);
 
-            // Console.WriteLine(DisplayService.GetDisplayDpiScale());
-
             DefaultsService.InitImages();
             DefaultsService.InitDefaultTheme();
-
             // RunCG();
 
             return true;
@@ -164,17 +160,24 @@ namespace SpaceVIL.Common
         /// <returns>The text as System.String.</returns>
         public static String GetClipboardString()
         {
-            CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
-            if (window == null)
+            try
             {
-                return "";
+                CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
+                if (window == null)
+                {
+                    return String.Empty;
+                }
+                Int64 id = window.GetGLWID();
+                if (id == 0)
+                {
+                    return String.Empty;
+                }
+                return Glfw.GetClipboardString(id);
             }
-            Int64 id = window.GetGLWID();
-            if (id == 0)
+            catch (System.Exception ex)
             {
-                return String.Empty;
+                return null;
             }
-            return Glfw.GetClipboardString(id);
         }
 
         /// <summary>

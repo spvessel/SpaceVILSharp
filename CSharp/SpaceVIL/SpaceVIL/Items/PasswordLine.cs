@@ -250,7 +250,7 @@ namespace SpaceVIL
         {
             AddItems(_textEncrypt, _showPwdBtn);
 
-            ImageItem eye = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32));
+            ImageItem eye = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size64x64));
             eye.KeepAspectRatio(true);
             Color eyeBtnShadeColor = Color.FromArgb(80, 80, 80);
             eye.SetColorOverlay(eyeBtnShadeColor);

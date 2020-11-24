@@ -29,7 +29,7 @@ final class VisualItem extends BaseItem {
     VisualItem(String name) {
         ItemState base = new ItemState();
         base.background = getBackground();
-        states.put(ItemStateType.BASE, base);
+        states.put(ItemStateType.Base, base);
 
         // common default prop
         eventManager = new EventManager();
@@ -43,7 +43,7 @@ final class VisualItem extends BaseItem {
         if (value != 0) {
             super.setWidth(width);
             BaseItemStatics.updateHLayout(this);
-            eventManager.notifyListeners(GeometryEventType.RESIZE_WIDTH, value);
+            eventManager.notifyListeners(GeometryEventType.ResizeWidth, value);
         }
     }
 
@@ -53,7 +53,7 @@ final class VisualItem extends BaseItem {
         if (value != 0) {
             super.setHeight(height);
             BaseItemStatics.updateVLayout(this);
-            eventManager.notifyListeners(GeometryEventType.RESIZE_HEIGHT, value);
+            eventManager.notifyListeners(GeometryEventType.ResizeHeight, value);
         }
     }
 
@@ -67,7 +67,7 @@ final class VisualItem extends BaseItem {
         int value = x - getX();
         if (value != 0) {
             super.setX(x);
-            eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
+            eventManager.notifyListeners(GeometryEventType.MovedX, value);
         }
     }
 
@@ -76,7 +76,7 @@ final class VisualItem extends BaseItem {
         int value = y - getY();
         if (value != 0) {
             super.setY(y);
-            eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
+            eventManager.notifyListeners(GeometryEventType.MovedY, value);
         }
     }
 
@@ -87,47 +87,47 @@ final class VisualItem extends BaseItem {
         this.border = border;
     }
 
-    Border getBorderDirect() {
+    Border getBorder() {
         return border;
     }
 
     void setBorder(Border border) {
         this.border = border;
-        getState(ItemStateType.BASE).border = border;
+        getState(ItemStateType.Base).border = border;
         updateState();
     }
 
-    void setBorderFill(Color fill) {
-        border.setFill(fill);
-        getState(ItemStateType.BASE).border.setFill(fill);
+    void setBorderFill(Color color) {
+        border.setColor(color);
+        getState(ItemStateType.Base).border.setColor(color);
         updateState();
     }
 
-    public void setBorderFill(int r, int g, int b) {
+    void setBorderFill(int r, int g, int b) {
         setBorderFill(GraphicsMathService.colorTransform(r, g, b));
     }
 
-    public void setBorderFill(int r, int g, int b, int a) {
+    void setBorderFill(int r, int g, int b, int a) {
         setBorderFill(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
-    public void setBorderFill(float r, float g, float b) {
+    void setBorderFill(float r, float g, float b) {
         setBorderFill(GraphicsMathService.colorTransform(r, g, b));
     }
 
-    public void setBorderFill(float r, float g, float b, float a) {
+    void setBorderFill(float r, float g, float b, float a) {
         setBorderFill(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     void setBorderRadius(CornerRadius radius) {
         border.setRadius(radius);
-        getState(ItemStateType.BASE).border.setRadius(radius);
+        getState(ItemStateType.Base).border.setRadius(radius);
         updateState();
     }
 
     void setBorderThickness(int thickness) {
         border.setThickness(thickness);
-        getState(ItemStateType.BASE).border.setThickness(thickness);
+        getState(ItemStateType.Base).border.setThickness(thickness);
         updateState();
     }
 
@@ -140,11 +140,19 @@ final class VisualItem extends BaseItem {
     }
 
     Color getBorderFill() {
-        return border.getFill();
+        return border.getColor();
+    }
+
+    void SetBorder(Color color, CornerRadius radius, int thickness) {
+        border.setColor(color);
+        border.setRadius(radius);
+        border.setThickness(thickness);
+        getState(ItemStateType.Base).border = border;
+        updateState();
     }
 
     Map<ItemStateType, ItemState> states = new HashMap<>();
-    ItemStateType _state = ItemStateType.BASE;
+    ItemStateType _state = ItemStateType.Base;
 
     void setState(ItemStateType state) {
         _state = state;
@@ -199,12 +207,12 @@ final class VisualItem extends BaseItem {
     }
 
     EventManager eventManager = null;
-    private Set<InterfaceBaseItem> _content = new LinkedHashSet<>();
+    private Set<IBaseItem> _content = new LinkedHashSet<>();
 
-    List<InterfaceBaseItem> getItems() {
+    List<IBaseItem> getItems() {
         locker.lock();
         try {
-            return new LinkedList<InterfaceBaseItem>(_content);
+            return new LinkedList<IBaseItem>(_content);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -213,7 +221,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void setContent(List<InterfaceBaseItem> content) {
+    void setContent(List<IBaseItem> content) {
         locker.lock();
         try {
             _content = new LinkedHashSet<>(content);
@@ -224,7 +232,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    private void castAndRemove(InterfaceBaseItem item) {
+    private void castAndRemove(IBaseItem item) {
         if (item instanceof Prototype) {
             Prototype prototype = ((Prototype) item);
             prototype.getCore().removeItemFromListeners();
@@ -237,13 +245,13 @@ final class VisualItem extends BaseItem {
     @Override
     void removeItemFromListeners() {
         Prototype parent = getParent();
-        parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this.prototype);
-        parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this.prototype);
-        parent.removeEventListener(GeometryEventType.MOVED_X, this.prototype);
-        parent.removeEventListener(GeometryEventType.MOVED_Y, this.prototype);
+        parent.removeEventListener(GeometryEventType.ResizeWidth, this.prototype);
+        parent.removeEventListener(GeometryEventType.ResizeHeight, this.prototype);
+        parent.removeEventListener(GeometryEventType.MovedX, this.prototype);
+        parent.removeEventListener(GeometryEventType.MovedY, this.prototype);
     }
 
-    void addItem(InterfaceBaseItem item) {
+    void addItem(IBaseItem item) {
         locker.lock();
         try {
             if (item == null) {
@@ -257,7 +265,7 @@ final class VisualItem extends BaseItem {
             item.setHandler(getHandler());
             addChildren(item);
             _content.add(item);
-            ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+            ItemsLayoutBox.addItem(getHandler(), item, LayoutType.Static);
             // needs to force update all attributes
             BaseItemStatics.castToUpdateGeometry(item);
             item.initElements();
@@ -269,7 +277,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void insertItem(InterfaceBaseItem item, int index) {
+    void insertItem(IBaseItem item, int index) {
         locker.lock();
         try {
             if (item == null) {
@@ -291,13 +299,13 @@ final class VisualItem extends BaseItem {
             if (index > _content.size())
                 _content.add(item);
             else {
-                List<InterfaceBaseItem> list = new LinkedList<>(_content);
+                List<IBaseItem> list = new LinkedList<>(_content);
                 list.add(index, item);
                 _content = new LinkedHashSet<>(list);
             }
 
             try {
-                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.Static);
             } catch (Exception ex) {
                 System.out.println(item.getItemName());
                 throw ex;
@@ -318,20 +326,20 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void cascadeRemoving(InterfaceBaseItem item, LayoutType type) {
+    void cascadeRemoving(IBaseItem item, LayoutType type) {
         if (item instanceof Prototype)// и если это действительно контейнер
         {
             Prototype container = (Prototype) item;// предполагаю что элемент контейнер
-            List<InterfaceBaseItem> tmp = container.getItems();
+            List<IBaseItem> tmp = container.getItems();
             while (tmp.size() > 0) {
-                InterfaceBaseItem child = tmp.get(0);
+                IBaseItem child = tmp.get(0);
                 container.removeItem(child);
                 tmp.remove(child);
             }
         }
     }
 
-    boolean removeItem(InterfaceBaseItem item) {
+    boolean removeItem(IBaseItem item) {
         locker.lock();
         try {
             if (!_content.contains(item))
@@ -343,12 +351,12 @@ final class VisualItem extends BaseItem {
             }
 
             LayoutType type;
-            if (item instanceof InterfaceFloating) {
-                cascadeRemoving(item, LayoutType.FLOATING);
-                type = LayoutType.FLOATING;
+            if (item instanceof IFloating) {
+                cascadeRemoving(item, LayoutType.Floating);
+                type = LayoutType.Floating;
             } else {
-                cascadeRemoving(item, LayoutType.STATIC);
-                type = LayoutType.STATIC;
+                cascadeRemoving(item, LayoutType.Static);
+                type = LayoutType.Static;
             }
 
             // removing
@@ -382,12 +390,12 @@ final class VisualItem extends BaseItem {
     }
 
     @Override
-    void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void addEventListener(GeometryEventType type, IBaseItem listener) {
         eventManager.subscribe(type, listener);
     }
 
     @Override
-    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void removeEventListener(GeometryEventType type, IBaseItem listener) {
         eventManager.unsubscribe(type, listener);
     }
 
@@ -411,14 +419,14 @@ final class VisualItem extends BaseItem {
     }
 
     void removeItemState(ItemStateType type) {
-        if (type == ItemStateType.BASE)
+        if (type == ItemStateType.Base)
             return;
         if (states.containsKey(type))
             states.remove(type);
     }
 
     void removeAllItemStates() {
-        List<ItemStateType> itemsToRemove = states.entrySet().stream().filter(i -> i.getKey() != ItemStateType.BASE)
+        List<ItemStateType> itemsToRemove = states.entrySet().stream().filter(i -> i.getKey() != ItemStateType.Base)
                 .map(Map.Entry::getKey).collect(Collectors.toList());
         for (ItemStateType item : itemsToRemove)
             states.remove(item);
@@ -430,35 +438,35 @@ final class VisualItem extends BaseItem {
 
     @Override
     public void setBackground(Color color) {
-        getState(ItemStateType.BASE).background = color;
+        getState(ItemStateType.Base).background = color;
         updateState();
     }
 
     @Override
     public void setBackground(int r, int g, int b) {
         super.setBackground(r, g, b);
-        getState(ItemStateType.BASE).background = getBackground();
+        getState(ItemStateType.Base).background = getBackground();
         updateState();
     }
 
     @Override
     public void setBackground(int r, int g, int b, int a) {
         super.setBackground(r, g, b, a);
-        getState(ItemStateType.BASE).background = getBackground();
+        getState(ItemStateType.Base).background = getBackground();
         updateState();
     }
 
     @Override
     public void setBackground(float r, float g, float b) {
         super.setBackground(r, g, b);
-        getState(ItemStateType.BASE).background = getBackground();
+        getState(ItemStateType.Base).background = getBackground();
         updateState();
     }
 
     @Override
     public void setBackground(float r, float g, float b, float a) {
         super.setBackground(r, g, b, a);
-        getState(ItemStateType.BASE).background = getBackground();
+        getState(ItemStateType.Base).background = getBackground();
         updateState();
     }
 
@@ -565,11 +573,11 @@ final class VisualItem extends BaseItem {
     // private boolean _focusable = true;
 
     // public boolean isFocusable() {
-    //     return _focusable;
+    // return _focusable;
     // }
 
     // public void setFocusable() {
-    //     // foreach inner item focusable value set?
+    // // foreach inner item focusable value set?
     // }
 
     void updateState() {
@@ -595,8 +603,8 @@ final class VisualItem extends BaseItem {
     public void makeShape() {
         if (isCustomFigure() != null) {
             setTriangles(isCustomFigure().getFigure());
-            if (getState(ItemStateType.BASE).shape == null)
-                getState(ItemStateType.BASE).shape = isCustomFigure();
+            if (getState(ItemStateType.Base).shape == null)
+                getState(ItemStateType.Base).shape = isCustomFigure();
 
             if (!isCustomFigure().isFixed())
                 setTriangles(updateShape());

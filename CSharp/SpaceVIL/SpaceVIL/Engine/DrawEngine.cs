@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Glfw3;
 using System.Threading;
+using System.Diagnostics;
 using System.Drawing;
 using SpaceVIL.Core;
 using Position = SpaceVIL.Core.Position;
@@ -174,7 +175,6 @@ namespace SpaceVIL
 
         private bool InitWindow()
         {
-            Monitor.Enter(CommonService.GlobalLocker);
             try
             {
                 GLWHandler.CreateWindow();
@@ -193,10 +193,6 @@ namespace SpaceVIL
                     GLWHandler.Destroy();
                 GLWHandler.GetCoreWindow().Close();
                 return false;
-            }
-            finally
-            {
-                Monitor.Exit(CommonService.GlobalLocker);
             }
         }
         private void InitGL()
@@ -437,11 +433,29 @@ namespace SpaceVIL
             _commonProcessor.Events.SetEvent(InputEventType.MouseScroll);
         }
 
+        private KeyCode TryGetKeyByScancode(int scancode)
+        {
+            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            {
+                int code = Glfw.GetKeyScancode(key);
+                System.Console.WriteLine("{ " + code + ", KeyCode." + key + " },");
+            }
+            return KeyCode.Unknown;
+        }
+
         private void KeyPress(Int64 wnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            // if (action == InputState.Release) {
+            //     TryGetKeyByScancode(scancode);
+            // }
+
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
             _tooltip.InitTimer(false);
+            if (key == KeyCode.Unknown)
+            {
+                key = DefaultsService.GetKeyCodeByScancode(scancode);
+            }
             _keyInputProcessor.Process(wnd, key, scancode, action, mods);
         }
 
@@ -539,6 +553,11 @@ namespace SpaceVIL
         IList<IOpenGLLayer> oglLine = new List<IOpenGLLayer>();
         internal void FreeOnClose()
         {
+            if (_stop != null)
+            {
+                _stop.Stop();
+                _stop = null;
+            }
             _primitive.DeleteShader();
             _texture.DeleteShader();
             _char.DeleteShader();
@@ -558,13 +577,124 @@ namespace SpaceVIL
             GLWHandler.Destroy();
         }
 
+        private System.Timers.Timer _stop = null;
+        private bool _updateFramerate = false;
+        private int _framerate = 0;
+        private int _framerateRecord = 0;
+        private double _frametime = 0;
+        private double _frametimeRecord = 0;
+        private Label _benchmarkLabel = null;
+        private bool _isBenchmarkEnabled = false;
+
         internal void Render()
         {
+            if (RenderService.GetMonitoringIndicators() != 0)
+            {
+                _isBenchmarkEnabled = true;
+                if (_benchmarkLabel == null)
+                {
+                    _benchmarkLabel = new Label();
+                    _benchmarkLabel.SetHandler(_commonProcessor.Window);
+                    _benchmarkLabel.SetBackground(0, 0, 0, 100);
+                    _benchmarkLabel.SetForeground(255, 255, 255);
+                    _benchmarkLabel.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+                    _benchmarkLabel.SetPosition(20, 20);
+                    _benchmarkLabel.SetPadding(10, 0, 10, 0);
+                    _benchmarkLabel.InitElements();
+                }
+            }
+            else if (_isBenchmarkEnabled)
+            {
+                _isBenchmarkEnabled = false;
+            }
+
+            if (_isBenchmarkEnabled)
+            {
+                _frametime = NanoTime() / 1000000.0;
+                if (_stop == null)
+                {
+                    _stop = new System.Timers.Timer(1000);
+                    _stop.Elapsed += (sender, e) =>
+                    {
+                        _updateFramerate = true;
+                        _framerateRecord = _framerate;
+                        _framerate = 0;
+                        _stop.Stop();
+                        _stop = null;
+                    };
+                    _stop.Start();
+                }
+            }
+
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             DrawStaticItems();
             DrawFloatItems();
             DrawToolTip();
             DrawShadePillow();
+
+            if (_isBenchmarkEnabled)
+            {
+                _frametimeRecord = NanoTime() / 1000000.0 - _frametime;
+                _framerate++;
+                DrawBenchmark();
+            }
+        }
+
+        private void DrawBenchmark()
+        {
+            if (_updateFramerate)
+            {
+
+                BenchmarkIndicator indicators = RenderService.GetMonitoringIndicators();
+                String indicatorsString = "";
+                int size = 0;
+                foreach (BenchmarkIndicator indicator in Enum.GetValues(typeof(BenchmarkIndicator)))
+                {
+                    if (indicators.HasFlag(indicator))
+                    {
+                        size++;
+                    }
+                }
+                int height = size * 24;
+                if (indicators.HasFlag(BenchmarkIndicator.Framerate))
+                {
+                    indicatorsString = "Framerate: " + _framerateRecord;
+                }
+                if (size > 1)
+                {
+                    indicatorsString += "\n";
+                }
+                if (indicators.HasFlag(BenchmarkIndicator.Frametime))
+                {
+                    indicatorsString += "Frametime: " + _frametimeRecord.ToString("0.00") + " ms";
+                }
+                _benchmarkLabel.SetText(indicatorsString);
+                int width = 150;
+                if (width < _benchmarkLabel.GetTextWidth())
+                {
+                    width = _benchmarkLabel.GetTextWidth() + _benchmarkLabel.GetPadding().Right + _benchmarkLabel.GetPadding().Left;
+                }
+                _benchmarkLabel.SetSize(width, height);
+                _updateFramerate = false;
+            }
+
+            _benchmarkLabel.MakeShape();
+
+            _renderProcessor.DrawDirectVertex(_primitive, _benchmarkLabel.GetTriangles(), GetItemPyramidLevel(),
+                    _benchmarkLabel.GetX(), _benchmarkLabel.GetY(), _commonProcessor.Window.GetWidth(),
+                    _commonProcessor.Window.GetHeight(), _benchmarkLabel.GetBackground(), GL_TRIANGLES);
+
+            glDisable(GL_SCISSOR_TEST);
+            DrawItems(_benchmarkLabel);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        private long NanoTime()
+        {
+            long nano = 10000L * Stopwatch.GetTimestamp();
+            nano /= TimeSpan.TicksPerMillisecond;
+            nano *= 100L;
+            return nano;
         }
 
         private void DrawStaticItems()
@@ -692,13 +822,16 @@ namespace SpaceVIL
                 return;
             }
 
+            var shadows = Effects.GetEffects(shell, EffectType.Shadow);
+
             bool preEffect = DrawPreprocessingEffects(shell);
             if (ItemsRefreshManager.IsRefreshShape(shell))
             {
                 shell.MakeShape();
-
-                if (shell.IsShadowDrop())
-                    DrawShadow(shell, stencil);
+                foreach (var shadow in shadows)
+                {
+                    DrawShadow(shell, shadow as IShadow, stencil);
+                }
 
                 ItemsRefreshManager.RemoveShape(shell);
 
@@ -709,8 +842,10 @@ namespace SpaceVIL
             }
             else
             {
-                if (shell.IsShadowDrop())
-                    DrawShadow(shell, stencil);
+                foreach (var shadow in shadows)
+                {
+                    DrawShadow(shell, shadow as IShadow, stencil);
+                }
                 _renderProcessor.DrawStoredVertex(
                     _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
@@ -748,12 +883,17 @@ namespace SpaceVIL
 
         float[] _weights;
 
-        void DrawShadow(IBaseItem shell, bool stencil)
+        void DrawShadow(IBaseItem shell, IShadow shadow, bool stencil)
         {
-            int[] extension = shell.GetShadowExtension();
-            int xAddidion = extension[0] / 2;
-            int yAddidion = extension[1] / 2;
-            int res = shell.GetShadowRadius();
+            if (!shadow.IsDrop())
+            {
+                return;
+            }
+
+            Core.Size extension = shadow.GetExtension();
+            int xAddidion = extension.GetWidth() / 2;
+            int yAddidion = extension.GetHeight() / 2;
+            int res = shadow.GetRadius();
 
             if (_weights == null)
             {
@@ -770,8 +910,8 @@ namespace SpaceVIL
                     _weights[i] /= sum;
             }
 
-            int fboWidth = shell.GetWidth() + extension[0] + 2 * res;
-            int fboHeight = shell.GetHeight() + extension[1] + 2 * res;
+            int fboWidth = shell.GetWidth() + extension.GetWidth() + 2 * res;
+            int fboHeight = shell.GetHeight() + extension.GetHeight() + 2 * res;
             if (ItemsRefreshManager.IsRefreshShape(shell) || _renderProcessor.ShadowStorage.GetResource(shell) == null)
             {
                 if (stencil)
@@ -783,20 +923,28 @@ namespace SpaceVIL
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 List<float[]> vertex = BaseItemStatics.UpdateShape(
-                    shell.GetTriangles(), shell.GetWidth() + extension[0], shell.GetHeight() + extension[1]);
+                    shell.GetTriangles(), shell.GetWidth() + extension.GetWidth(),
+                    shell.GetHeight() + extension.GetHeight());
 
                 _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
-                    fboWidth, fboHeight, shell.GetShadowColor(), GL_TRIANGLES);
+                    fboWidth, fboHeight, shadow.GetColor(), GL_TRIANGLES);
 
                 _fboVertex.UnbindTexture();
                 _fboVertex.Unbind();
                 _fboBlur.Bind();
                 _fboBlur.GenFboTexture(fboWidth, fboHeight);
+
+                glClearColor(
+                    shadow.GetColor().R / 255.0f,
+                    shadow.GetColor().G / 255.0f,
+                    shadow.GetColor().B / 255.0f,
+                    0.0f);
+
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 VramTexture store = _renderProcessor.DrawDirectShadow(
                     _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
-                    shell.GetWidth() + extension[0], shell.GetHeight() + extension[1],
+                    shell.GetWidth() + extension.GetWidth(), shell.GetHeight() + extension.GetHeight(),
                     fboWidth, fboHeight);
                 store.Clear();
 
@@ -808,18 +956,20 @@ namespace SpaceVIL
                 glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
                 _renderProcessor.DrawFreshShadow(_texture, shell, GetItemPyramidLevel(), _fboBlur.Texture,
-                    shell.GetX() + shell.GetShadowPos().GetX() - xAddidion - res,
-                    shell.GetY() + shell.GetShadowPos().GetY() - yAddidion - res,
+                    shell.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
+                    shell.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                     fboWidth, fboHeight, _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
 
                 _fboVertex.Clear();
                 _fboBlur.Clear();
+
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             }
             else
             {
                 _renderProcessor.DrawStoredShadow(_texture, shell, GetItemPyramidLevel(),
-                    shell.GetX() + shell.GetShadowPos().GetX() - xAddidion - res,
-                    shell.GetY() + shell.GetShadowPos().GetY() - yAddidion - res,
+                    shell.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
+                    shell.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
             }
         }
@@ -1000,8 +1150,12 @@ namespace SpaceVIL
 
             _tooltip.MakeShape();
 
-            if (_tooltip.IsShadowDrop())
-                DrawToolTipShadow();
+            var shadows = Effects.GetEffects(_tooltip, EffectType.Shadow);
+
+            foreach (var shadow in shadows)
+            {
+                DrawToolTipShadow(shadow as IShadow);
+            }
 
             _renderProcessor.DrawDirectVertex(
                 _primitive, _tooltip.GetTriangles(), GetItemPyramidLevel(), _tooltip.GetX(), _tooltip.GetY(),
@@ -1017,12 +1171,16 @@ namespace SpaceVIL
             glDisable(GL_SCISSOR_TEST);
         }
 
-        private void DrawToolTipShadow()
+        private void DrawToolTipShadow(IShadow shadow)
         {
-            int[] extension = _tooltip.GetShadowExtension();
-            int xAddidion = extension[0] / 2;
-            int yAddidion = extension[1] / 2;
-            int res = _tooltip.GetShadowRadius();
+            if (!shadow.IsDrop())
+            {
+                return;
+            }
+            Core.Size extension = shadow.GetExtension();
+            int xAddidion = extension.GetWidth() / 2;
+            int yAddidion = extension.GetHeight() / 2;
+            int res = shadow.GetRadius();
 
             if (_weights == null)
             {
@@ -1039,8 +1197,8 @@ namespace SpaceVIL
                     _weights[i] /= sum;
             }
 
-            int fboWidth = _tooltip.GetWidth() + extension[0] + 2 * res;
-            int fboHeight = _tooltip.GetHeight() + extension[1] + 2 * res;
+            int fboWidth = _tooltip.GetWidth() + extension.GetWidth() + 2 * res;
+            int fboHeight = _tooltip.GetHeight() + extension.GetHeight() + 2 * res;
 
             glViewport(0, 0, fboWidth, fboHeight);
             _fboVertex.GenFBO();
@@ -1048,10 +1206,11 @@ namespace SpaceVIL
             glClear(GL_COLOR_BUFFER_BIT);
 
             List<float[]> vertex = BaseItemStatics.UpdateShape(
-                _tooltip.GetTriangles(), _tooltip.GetWidth() + extension[0], _tooltip.GetHeight() + extension[1]);
+                _tooltip.GetTriangles(), _tooltip.GetWidth() + extension.GetWidth(),
+                _tooltip.GetHeight() + extension.GetHeight());
 
             _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
-                fboWidth, fboHeight, _tooltip.GetShadowColor(), GL_TRIANGLES);
+                fboWidth, fboHeight, shadow.GetColor(), GL_TRIANGLES);
 
             _fboVertex.UnbindTexture();
             _fboVertex.Unbind();
@@ -1061,7 +1220,7 @@ namespace SpaceVIL
 
             VramTexture store = _renderProcessor.DrawDirectShadow(
                 _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
-                _tooltip.GetWidth() + extension[0], _tooltip.GetHeight() + extension[1],
+                _tooltip.GetWidth() + extension.GetWidth(), _tooltip.GetHeight() + extension.GetHeight(),
                 fboWidth, fboHeight);
             store.Clear();
 
@@ -1071,8 +1230,8 @@ namespace SpaceVIL
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
             _renderProcessor.DrawRawShadow(_texture, GetItemPyramidLevel(), _fboBlur.Texture,
-                _tooltip.GetX() + _tooltip.GetShadowPos().GetX() - xAddidion - res,
-                _tooltip.GetY() + _tooltip.GetShadowPos().GetY() - yAddidion - res,
+                _tooltip.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
+                _tooltip.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                 fboWidth, fboHeight,
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
 
@@ -1093,7 +1252,7 @@ namespace SpaceVIL
 
         private bool DrawPreprocessingEffects(IBaseItem item)
         {
-            List<IEffect> effects = Effects.GetEffects(item);
+            List<IEffect> effects = Effects.GetEffects(item, EffectType.Subtract);
             if (effects.Count == 0)
             {
                 return false;

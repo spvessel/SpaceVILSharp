@@ -10,7 +10,7 @@ import com.spvessel.spacevil.Flags.MouseButton;
 /**
  * A class that describes mouse inputs.
  */
-public final class MouseArgs implements InterfaceInputEventArgs {
+public final class MouseArgs implements IInputEventArgs {
     /**
      * Mouse button as com.spvessel.spacevil.Flags.MouseButton.
      */
@@ -31,14 +31,28 @@ public final class MouseArgs implements InterfaceInputEventArgs {
      */
     public Position position = new Position();
 
+    public ScrollValue scrollValue = new ScrollValue();
+
     /**
      * Clearing MouseArgs
      */
     public void clear() {
-        button = MouseButton.UNKNOWN;
-        state = InputState.RELEASE;
+        button = MouseButton.Unknown;
+        state = InputState.Release;
         mods = new LinkedList<>();
-        mods.add(KeyMods.NO);
+        mods.add(KeyMods.No);
         position.setPosition(0, 0);
+        scrollValue.setValues(0, 0);
+    }
+
+    @Override
+    public String toString() {
+        return
+            button + " " +
+            state + " " +
+            mods + " " +
+            scrollValue + " " +
+            position.getX() + " " +
+            position.getY() + " ";
     }
 }

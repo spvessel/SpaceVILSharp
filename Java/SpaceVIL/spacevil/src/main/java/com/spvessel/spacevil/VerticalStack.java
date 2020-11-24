@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IVLayout;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,16 +15,16 @@ import com.spvessel.spacevil.Flags.SizePolicy;
  * VerticalStack is a class that represents a line type container (vertical
  * version). VerticalStack groups items one after another using content
  * alignment, margins, paddings, sizes and size policies. VerticalStack
- * implements com.spvessel.spacevil.Core.InterfaceVLayout. By default ability to
+ * implements com.spvessel.spacevil.Core.IVLayout. By default ability to
  * get focus is disabled.
  * <p>
  * VerticalStack cannot receive any events, so VerticalStack is always in the
  * com.spvessel.spacevil.Flags.ItemStateType.BASE state.
  */
-public class VerticalStack extends Prototype implements InterfaceVLayout {
+public class VerticalStack extends Prototype implements IVLayout {
     private static int count = 0;
 
-    private ItemAlignment _contentAlignment = ItemAlignment.TOP;
+    private ItemAlignment _contentAlignment = ItemAlignment.Top;
 
     /**
      * Setting content alignment within VerticalStack area.
@@ -38,7 +38,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
      *                  com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setContentAlignment(ItemAlignment alignment) {
-        if (alignment == ItemAlignment.TOP || alignment == ItemAlignment.VCENTER || alignment == ItemAlignment.BOTTOM)
+        if (alignment == ItemAlignment.Top || alignment == ItemAlignment.VCenter || alignment == ItemAlignment.Bottom)
             _contentAlignment = alignment;
     }
 
@@ -71,10 +71,10 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     /**
      * Adding item to the VerticalStack.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
@@ -84,11 +84,11 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
      * elements is less than the index, then the element is added to the end of the
      * list.
      * 
-     * @param item  Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Item as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         super.insertItem(item, index);
         updateLayout();
     }
@@ -96,12 +96,12 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     /**
      * Removing the specified item from the VerticalStack container.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean result = super.removeItem(item);
         if (result)
             updateLayout();
@@ -134,7 +134,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceVLayout).
+     * com.spvessel.spacevil.Core.IVLayout).
      */
     public void updateLayout() {
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
@@ -144,9 +144,9 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
 
         List<Integer> maxHeightExpands = new LinkedList<>();
 
-        for (InterfaceBaseItem child : getItems()) {
+        for (IBaseItem child : getItems()) {
             if (child.isVisible()) {
-                if (child.getHeightPolicy() == SizePolicy.FIXED) {
+                if (child.getHeightPolicy() == SizePolicy.Fixed) {
                     fixed_count++;
                     free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);//
                 } else {
@@ -195,11 +195,11 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
             isFirstExpand = true;
         }
 
-        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.TOP)) {
-            for (InterfaceBaseItem child : getItems()) {
+        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.Top)) {
+            for (IBaseItem child : getItems()) {
                 if (child.isVisible()) {
                     child.setY(startY + offset + child.getMargin().top);//
-                    if (child.getHeightPolicy() == SizePolicy.EXPAND) {
+                    if (child.getHeightPolicy() == SizePolicy.Expand) {
                         if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child
                                 .getMaxHeight()) {
                             child.setHeight(height_for_expanded - child.getMargin().top - child.getMargin().bottom);
@@ -227,26 +227,26 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
                 child.setConfines();
             }
         } else {
-            if (_contentAlignment.equals(ItemAlignment.BOTTOM)) {
-                for (InterfaceBaseItem child : getItems()) {
+            if (_contentAlignment.equals(ItemAlignment.Bottom)) {
+                for (IBaseItem child : getItems()) {
                     if (child.isVisible()) {
                         child.setY(startY + offset + child.getMargin().top + free_space);//
                         offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
                                 + child.getMargin().bottom;//
 
-                        if (child.getHeightPolicy() == SizePolicy.EXPAND)
+                        if (child.getHeightPolicy() == SizePolicy.Expand)
                             child.setHeight(child.getMaxHeight());
                     }
                     child.setConfines();
                 }
-            } else if (_contentAlignment.equals(ItemAlignment.VCENTER)) {
-                for (InterfaceBaseItem child : getItems()) {
+            } else if (_contentAlignment.equals(ItemAlignment.VCenter)) {
+                for (IBaseItem child : getItems()) {
                     if (child.isVisible()) {
                         child.setY(startY + offset + child.getMargin().top + free_space / 2);//
                         offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
                                 + child.getMargin().bottom;//
 
-                        if (child.getHeightPolicy() == SizePolicy.EXPAND)
+                        if (child.getHeightPolicy() == SizePolicy.Expand)
                             child.setHeight(child.getMaxHeight());
                     }
                     child.setConfines();

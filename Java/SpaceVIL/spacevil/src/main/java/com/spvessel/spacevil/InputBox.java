@@ -87,7 +87,7 @@ public class InputBox extends DialogWindow {
         _input.setText(defaultText);
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
+            if (args.key == KeyCode.Escape) {
                 _inputResult = "";
                 close();
             }
@@ -140,10 +140,10 @@ public class InputBox extends DialogWindow {
         });
 
         _input.eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+            if (args.key == KeyCode.Enter || args.key == KeyCode.NumpadEnter) {
                 _inputResult = _input.getText();
                 close();
-            } else if (args.key == KeyCode.ESCAPE) {
+            } else if (args.key == KeyCode.Escape) {
                 _inputResult = "";
                 close();
             }

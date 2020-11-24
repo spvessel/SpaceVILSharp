@@ -1,13 +1,24 @@
 using System;
 using System.Drawing;
+using SpaceVIL.Core;
 
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// Class that is the shadow of an item.
+    /// Shadow is visual effect for applying to item's shape. Implements SpaceVIL.Core.IShadow and SpaceVIL.Core.IEffect.
+    /// <para/> This visual effect drops shadow under item's shape.
     /// </summary>
-    public sealed class Shadow
+    public sealed class Shadow : IShadow, IEffect
     {
+        /// <summary>
+        /// Getting the effect name. 
+        /// </summary>
+        /// <returns>Returns name Shadow effect as System.String.</returns>
+        public string GetEffectName()
+        {
+            return this.GetType().ToString();
+        }
+
         private int _radius = 0;
         private int _maxAvailableRadius = 10;
 
@@ -34,7 +45,7 @@ namespace SpaceVIL.Decorations
             return _radius;
         }
 
-        private int _x = 0;
+        private Position _offset = new Position();
 
         /// <summary>
         /// Setting X shift of the shadow.
@@ -42,19 +53,8 @@ namespace SpaceVIL.Decorations
         /// <param name="value">Shift by X-axis.</param>
         public void SetXOffset(int value)
         {
-            _x = value;
+            _offset.SetX(value);
         }
-
-        /// <summary>
-        /// Getting X shift of the shadow.
-        /// </summary>
-        /// <returns>Shift by X-axis.</returns>
-        public int GetXOffset()
-        {
-            return _x;
-        }
-
-        private int _y = 0;
 
         /// <summary>
         /// Setting Y shift of the shadow.
@@ -62,16 +62,16 @@ namespace SpaceVIL.Decorations
         /// <param name="value">Shift by Y-axis.</param>
         public void SetYOffset(int value)
         {
-            _y = value;
+            _offset.SetY(value);
         }
-        
+
         /// <summary>
-        /// Setting Y shift of the shadow.
+        /// Getting the offset of the shadow relative to the position of the item.
         /// </summary>
-        /// <returns>Shift by Y-axis.</returns>
-        public int GetYOffset()
+        /// <returns>Shadow offset as SpaceVIL.Core.Position.</returns>
+        public Position GetOffset()
         {
-            return _y;
+            return _offset;
         }
 
         private Color _color = Color.Black;
@@ -160,6 +160,17 @@ namespace SpaceVIL.Decorations
             return _isDrop;
         }
 
+        private Core.Size _extension = new Core.Size();
+
+        /// <summary>
+        /// Getting the values of shadow extensions in pixels.
+        /// </summary>
+        /// <returns>The values of shadow extensions as SpaceVIL.Core.Size</returns>
+        public Core.Size GetExtension()
+        {
+            return _extension;
+        }
+
         /// <summary>
         /// Default Shadow class constructor. Allow shadow dropping.
         /// </summary>
@@ -167,20 +178,83 @@ namespace SpaceVIL.Decorations
         {
             _isDrop = true;
         }
-        
+
+        /// <summary>
+        /// Shadow class constructor with specified blur radius. Allow shadow dropping.
+        /// </summary>
+        /// <param name="radius">A blur radius of the shadow.</param>
+        public Shadow(int radius) : this()
+        {
+            _radius = radius;
+        }
+
+        /// <summary>
+        /// Shadow class constructor with specified blur radius, shadow color. Allow shadow dropping.
+        /// </summary>
+        /// <param name="radius">A blur radius of the shadow.</param>
+        /// <param name="color">A shadow color as System.Drawing.Color.</param>
+        public Shadow(int radius, Color color) : this()
+        {
+            _radius = radius;
+            _color = Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
         /// <summary>
         /// Shadow class constructor with specified blur radius, axis shifts, shadow color. Allow shadow dropping.
         /// </summary>
         /// <param name="radius">A blur radius of the shadow.</param>
-        /// <param name="x">X shift of the shadow.</param>
-        /// <param name="y">Y shift of the shadow.</param>
+        /// <param name="offset">Shift of the shadow.</param>
         /// <param name="color">A shadow color as System.Drawing.Color.</param>
-        public Shadow(int radius, int x, int y, Color color) : this()
+        public Shadow(int radius, Position offset, Color color) : this()
         {
             _radius = radius;
-            _x = x;
-            _y = y;
+            _offset.SetPosition(offset.GetX(), offset.GetY());
             _color = Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        /// Shadow class constructor with specified blur radius, size extensions, shadow color. Allow shadow dropping.
+        /// </summary>
+        /// <param name="radius">A blur radius of the shadow.</param>
+        /// <param name="extension">>Size extension of the shadow.</param>
+        /// <param name="color">A shadow color as System.Drawing.Color.</param>
+        public Shadow(int radius, Core.Size extension, Color color) : this()
+        {
+            _radius = radius;
+            _extension.SetSize(extension.GetWidth(), extension.GetHeight());
+            _color = Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        /// Shadow class constructor with specified blur radius, axis shifts, size extensions and shadow color. Allow shadow dropping.
+        /// </summary>
+        /// <param name="radius">A blur radius of the shadow.</param>
+        /// <param name="offset">Shift of the shadow.</param>
+        /// <param name="extension">Size extension of the shadow.</param>
+        /// <param name="color">A shadow color as System.Drawing.Color.</param>
+        public Shadow(int radius, Position offset, Core.Size extension, Color color) : this()
+        {
+            _radius = radius;
+            _offset.SetPosition(offset.GetX(), offset.GetY());
+            _extension.SetSize(extension.GetWidth(), extension.GetHeight());
+            _color = Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        /// Clones current Shadow class instance.
+        /// </summary>
+        /// <returns>Copy of current Shadow.</returns>
+        public Shadow Clone()
+        {
+            Shadow clone = new Shadow(
+                GetRadius(),
+                new Position(GetOffset().GetX(), GetOffset().GetY()),
+                new Core.Size(GetExtension().GetWidth(), GetExtension().GetHeight()),
+                Color.FromArgb(_color.ToArgb())
+            );
+            clone.SetDrop(IsDrop());
+
+            return clone;
         }
     }
 }

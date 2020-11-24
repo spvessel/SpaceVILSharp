@@ -8,7 +8,7 @@ import com.spvessel.spacevil.Flags.KeyMods;
 /**
  * A class that describe keyboard text typing input.
  */
-public final class TextInputArgs implements InterfaceInputEventArgs {
+public final class TextInputArgs implements IInputEventArgs {
     /**
      * Character code.
      */
@@ -25,6 +25,6 @@ public final class TextInputArgs implements InterfaceInputEventArgs {
     public void clear() {
         character = 0;
         mods = new LinkedList<>();
-        mods.add(KeyMods.NO);
+        mods.add(KeyMods.No);
     }
 }

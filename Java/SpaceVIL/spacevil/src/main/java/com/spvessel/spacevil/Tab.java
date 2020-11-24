@@ -7,8 +7,8 @@ import java.util.List;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -24,7 +24,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
  * <p>
  * Supports all including drag and drop.
  */
-public class Tab extends Prototype implements InterfaceDraggable {
+public class Tab extends Prototype implements IDraggable {
     static int count = 0;
     Frame view;
     private Label _textLabel;
@@ -98,8 +98,8 @@ public class Tab extends Prototype implements InterfaceDraggable {
         setStyle(DefaultsService.getDefaultStyle(Tab.class));
 
         // draggable tabs
-        setPassEvents(false, InputEventType.MOUSE_DOUBLE_CLICK, InputEventType.MOUSE_PRESS,
-                InputEventType.MOUSE_RELEASE);
+        setPassEvents(false, InputEventType.MouseDoubleClick, InputEventType.MousePress,
+                InputEventType.MouseRelease);
         isFocusable = false;
 
         eventMousePress.add(this::onMousePress);
@@ -131,14 +131,14 @@ public class Tab extends Prototype implements InterfaceDraggable {
         return _isDraggable;
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(IItem sender, MouseArgs args) {
         if (!isDraggable())
             return;
         _xClick = args.position.getX();
         _xDiff = args.position.getX() - getX();
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(IItem sender, MouseArgs args) {
         if (!isDraggable())
             return;
         if (dragging) {
@@ -179,9 +179,9 @@ public class Tab extends Prototype implements InterfaceDraggable {
     public void setToggled(boolean value) {
         _toggled = value;
         if (value == true)
-            setState(ItemStateType.TOGGLED);
+            setState(ItemStateType.Toggled);
         else
-            setState(ItemStateType.BASE);
+            setState(ItemStateType.Base);
     }
 
     /**
@@ -421,7 +421,7 @@ public class Tab extends Prototype implements InterfaceDraggable {
     private int _labelRightMargin = 0;
 
     void updateTabWidth() {
-        if (getWidthPolicy() == SizePolicy.FIXED) {
+        if (getWidthPolicy() == SizePolicy.Fixed) {
             int w = getPadding().left + getTextWidth() + getPadding().right;
             if (_isClosable) {
                 w += getSpacing().horizontal + _close.getWidth();

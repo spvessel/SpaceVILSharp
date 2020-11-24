@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.Area;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
@@ -104,7 +104,7 @@ public final class GraphicsMathService {
         return figure;
     }
 
-    static List<float[]> toGL(InterfaceBaseItem item, CoreWindow handler) // where TLayout : VisualItem
+    static List<float[]> toGL(IBaseItem item, CoreWindow handler) // where TLayout : VisualItem
     {
         if (item.getTriangles() == null) {
             return null;
@@ -1122,17 +1122,17 @@ public final class GraphicsMathService {
 
         // x offset
         int offsetX = 0;
-        if (alignments.contains(ItemAlignment.HCENTER)) {
+        if (alignments.contains(ItemAlignment.HCenter)) {
             offsetX = (area.getWidth() - figureWidth) / 2;
-        } else if (alignments.contains(ItemAlignment.RIGHT)) {
+        } else if (alignments.contains(ItemAlignment.Right)) {
             offsetX = area.getWidth() - figureWidth;
         }
 
         // y offset
         int offsetY = 0;
-        if (alignments.contains(ItemAlignment.VCENTER)) {
+        if (alignments.contains(ItemAlignment.VCenter)) {
             offsetY = (area.getHeight() - figureHeight) / 2;
-        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
+        } else if (alignments.contains(ItemAlignment.Bottom)) {
             offsetY = area.getHeight() - figureHeight;
         }
 
@@ -1194,17 +1194,17 @@ public final class GraphicsMathService {
 
         // x offset
         int offsetX = 0;
-        if (alignments.contains(ItemAlignment.HCENTER)) {
+        if (alignments.contains(ItemAlignment.HCenter)) {
             offsetX = (area.getWidth() - figureWidth) / 2;
-        } else if (alignments.contains(ItemAlignment.RIGHT)) {
+        } else if (alignments.contains(ItemAlignment.Right)) {
             offsetX = area.getWidth() - figureWidth;
         }
 
         // y offset
         int offsetY = 0;
-        if (alignments.contains(ItemAlignment.VCENTER)) {
+        if (alignments.contains(ItemAlignment.VCenter)) {
             offsetY = (area.getHeight() - figureHeight) / 2;
-        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
+        } else if (alignments.contains(ItemAlignment.Bottom)) {
             offsetY = area.getHeight() - figureHeight;
         }
 

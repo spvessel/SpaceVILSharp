@@ -330,6 +330,11 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glFramebufferTexture2DEXT(uint target, uint attachment, uint textarget, uint texture, int level);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawBuffers(int n, uint[] bufs);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCheckFramebufferStatusEXT(uint target);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenRenderbuffersEXT(int n, uint[] buffers);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glFramebufferRenderbufferEXT(uint target, uint attachment, uint component, uint buffer);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glRenderbufferStorageEXT(uint target, uint component, int w, int h);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteRenderbuffersEXT(int n, uint[] buffers);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBindRenderbufferEXT(uint target, uint buffer);
         // stencil
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glClearStencil(int s);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilFunc(uint func, int refnotkeword, uint mask);
@@ -354,6 +359,31 @@ namespace OpenGL
         public void StencilOp(uint fail, uint zfail, uint zpass)
         {
             glStencilOp(fail, zfail, zpass);
+        }
+
+        public void GenRenderbuffers(int n, uint[] buffers)
+        {
+            glGenRenderbuffersEXT(n, buffers);
+        }
+
+        public void FramebufferRenderbuffer(uint target, uint attachment, uint component, uint buffer)
+        {
+            glFramebufferRenderbufferEXT(target, attachment, component, buffer);
+        }
+
+        public void RenderbufferStorage(uint target, uint component, int w, int h)
+        {
+            glRenderbufferStorageEXT(target, component, w, h);
+        }
+
+        public void DeleteRenderbuffers(int n, uint[] buffers)
+        {
+            glDeleteRenderbuffersEXT(n, buffers);
+        }
+
+        public void BindRenderbuffer(uint target, uint buffer)
+        {
+            glBindRenderbufferEXT(target, buffer);
         }
     }
 }

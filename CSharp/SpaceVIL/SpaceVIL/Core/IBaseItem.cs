@@ -133,65 +133,6 @@ namespace SpaceVIL.Core
         void SetVisible(bool value);
 
         /// <summary>
-        /// Getting the shadow visibility status of an item.
-        /// </summary>
-        /// <returns>True: if shadow is visible. False: if shadow is invisible.</returns>
-        bool IsShadowDrop();
-
-        /// <summary>
-        /// Setting the shadow visibility status of an item.
-        /// </summary>
-        /// <param name="value">True: if shadow should be visible. 
-        /// False: if shadow should be invisible.</param>
-        void SetShadowDrop(bool value);
-
-        /// <summary>
-        /// Setting the specified blur radius of the shadow.
-        /// <para/>Default: 0.
-        /// </summary>
-        /// <param name="radius">Blur radius of the shadow.</param>
-        void SetShadowRadius(int radius);
-
-        /// <summary>
-        /// Getting the shadow blur raduis.
-        /// </summary>
-        /// <returns>The blur radius of the shadow.</returns>
-        int GetShadowRadius();
-
-        /// <summary>
-        /// Getting shadow color.
-        /// </summary>
-        /// <returns>Returns the shadow color as System.Drawing.Color.</returns>
-        Color GetShadowColor();
-
-        /// <summary>
-        /// Setting shadow color.
-        /// </summary>
-        /// <param name="color">Shadow color as System.Drawing.Color.</param>
-        void SetShadowColor(Color color);
-
-        /// <summary>
-        /// Getting the offset of the shadow relative to the position of the item.
-        /// </summary>
-        /// <returns>Shadow offset as SpaceVIL.Core.Position.</returns>
-        Position GetShadowPos();
-
-        /// <summary>
-        /// Getting the values of shadow extensions in pixels.
-        /// </summary>
-        /// <returns>The values of shadow extensions.</returns>
-        int[] GetShadowExtension();
-
-        /// <summary>
-        /// Setting the shadow with specified blur radius, axis shifts, shadow color.
-        /// </summary>
-        /// <param name="radius">A blur radius of the shadow.</param>
-        /// <param name="x">X shift of the shadow.</param>
-        /// <param name="y">Y shift of the shadow.</param>
-        /// <param name="color">A shadow color as System.Drawing.Color.</param>
-        void SetShadow(int radius, int x, int y, Color color);
-        
-        /// <summary>
         /// Method to describe disposing item's resources if the item was removed.
         /// </summary>
         void Release();

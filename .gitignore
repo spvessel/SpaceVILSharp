@@ -240,3 +240,8 @@ Java/SpaceVIL/spacevil/spacevil.iml
 Java/SpaceVIL/spacevil/.idea/modules/spacevil.test.iml
 Java/SpaceVIL/spacevil/.idea/modules/spacevil.main.iml
 OwlsInSpace/history.cfg
+Java/Glfw/.gitattributes
+Java/Glfw/gradlew
+Java/GlfwApi/.vscode/settings.json
+Java/GlfwApi/bin/main/com/spacevil/glfwapi/com_spacevil_glfwapi_GlfwApi.h
+Java/GlfwApi/gradlew

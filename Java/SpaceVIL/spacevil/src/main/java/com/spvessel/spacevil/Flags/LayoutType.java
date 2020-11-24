@@ -8,15 +8,15 @@ public enum LayoutType {
     /**
      * Items whose parent LayoutType is STATIC.
      */
-    STATIC,
+    Static,
     
     /**
      * Items whose root parent LayoutType is FLOATING.
      */
-    FLOATING,
+    Floating,
     
     /**
      * Items whose root parent LayoutType is DIALOG.
      */
-    DIALOG
+    Dialog
 }

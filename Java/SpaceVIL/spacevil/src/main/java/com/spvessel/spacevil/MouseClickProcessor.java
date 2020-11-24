@@ -5,19 +5,19 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.nio.*;
 
-import org.lwjgl.*;
-import static org.lwjgl.glfw.GLFW.*;
-import org.lwjgl.system.MemoryStack;
+import com.spvessel.spacevil.internal.Wrapper.*;
 
-import com.spvessel.spacevil.Core.InterfaceDraggable;
-import com.spvessel.spacevil.Core.InterfaceMovable;
-import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
+import com.spvessel.spacevil.Core.IDraggable;
+import com.spvessel.spacevil.Core.IMovable;
+import com.spvessel.spacevil.Core.IWindowAnchor;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.InputState;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
 
 final class MouseClickProcessor {
+
+    private GlfwWrapper glfw = null;
 
     private CommonProcessor _commonProcessor;
     private long _doubleClickStartTime = 0;
@@ -27,6 +27,7 @@ final class MouseClickProcessor {
     private final float _accountingLength = 10.0f;
 
     MouseClickProcessor(CommonProcessor processor) {
+        glfw = GlfwWrapper.get();
         _commonProcessor = processor;
     }
 
@@ -56,19 +57,19 @@ final class MouseClickProcessor {
         _commonProcessor.margs.mods = KeyMods.getEnums(mods);
 
         InputEventType mouseState;
-        if (action == InputState.PRESS.getValue())
-            mouseState = InputEventType.MOUSE_PRESS;
+        if (action == InputState.Press.getValue())
+            mouseState = InputEventType.MousePress;
         else
-            mouseState = InputEventType.MOUSE_RELEASE;
+            mouseState = InputEventType.MouseRelease;
 
         Prototype lastHovered = _commonProcessor.hoveredItem;
         if (lastHovered == null) {
-            DoubleBuffer xPos = BufferUtils.createDoubleBuffer(1);
-            DoubleBuffer yPos = BufferUtils.createDoubleBuffer(1);
-            glfwGetCursorPos(_commonProcessor.handler.getWindowId(), xPos, yPos);
-            int x = (int) xPos.get(0);
-            int y = (int) yPos.get(0);
-            _commonProcessor.getHoverPrototype(x, y, mouseState);
+
+            double[] pos = glfw.GetCursorPos(_commonProcessor.handler.getWindowId());
+            int x = (int)pos[0];
+            int y = (int)pos[1];
+
+            _commonProcessor.getHoverPrototype((float)pos[0], (float)pos[1], mouseState);
             lastHovered = _commonProcessor.hoveredItem;
             _commonProcessor.margs.position.setPosition(x, y);
             _commonProcessor.ptrRelease.setPosition(x, y);
@@ -79,28 +80,28 @@ final class MouseClickProcessor {
                 mouseState)) {
             lastHovered.setMousePressed(false);
             _commonProcessor.events.resetAllEvents();
-            _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
-            if (lastHovered instanceof InterfaceDraggable)
+            _commonProcessor.events.setEvent(InputEventType.MouseRelease);
+            if (lastHovered instanceof IDraggable)
                 lastHovered.eventMouseDrop.execute(lastHovered, _commonProcessor.margs);
             return;
         }
 
-        if (action == InputState.PRESS.getValue() && _commonProcessor.handler.getCoreWindow().getLayout().getContainer()
+        if (action == InputState.Press.getValue() && _commonProcessor.handler.getCoreWindow().getLayout().getContainer()
                 .getSides(_commonProcessor.ptrRelease.getX(), _commonProcessor.ptrRelease.getY()).size() != 0) {
             _commonProcessor.handler.getCoreWindow().getLayout().getContainer()
                     .saveLastFocus(_commonProcessor.focusedItem);
         }
-
-        switch (action) {
-            case GLFW_RELEASE:
+        InputState state = InputState.getEnum(action);
+        switch (state) {
+            case Release:
                 release(wnd, button, action, mods);
                 break;
 
-            case GLFW_PRESS:
+            case Press:
                 press(wnd, button, action, mods);
                 break;
 
-            case GLFW_REPEAT:
+            case Repeat:
                 break;
 
             default:
@@ -109,31 +110,23 @@ final class MouseClickProcessor {
     }
 
     private void press(long wnd, int button, int action, int mods) {
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer width = stack.mallocInt(1);
-            IntBuffer height = stack.mallocInt(1);
-            glfwGetFramebufferSize(_commonProcessor.handler.getWindowId(), width, height);
-            _commonProcessor.wGlobal = width.get(0);
-            _commonProcessor.hGlobal = height.get(0);
+        int[] framebufferSize = glfw.GetFramebufferSize(_commonProcessor.handler.getWindowId());
+        _commonProcessor.wGlobal = framebufferSize[0];
+        _commonProcessor.hGlobal = framebufferSize[1];
 
-            IntBuffer x = stack.mallocInt(1);
-            IntBuffer y = stack.mallocInt(1);
-            glfwGetWindowPos(_commonProcessor.handler.getWindowId(), x, y);
-            _commonProcessor.xGlobal = x.get(0);
-            _commonProcessor.yGlobal = y.get(0);
-        }
+        int[] windowPos = glfw.GetWindowPos(_commonProcessor.handler.getWindowId());
+        _commonProcessor.xGlobal = windowPos[0];
+        _commonProcessor.yGlobal = windowPos[1];
 
-        DoubleBuffer xpos = BufferUtils.createDoubleBuffer(1);
-        DoubleBuffer ypos = BufferUtils.createDoubleBuffer(1);
-        glfwGetCursorPos(_commonProcessor.handler.getWindowId(), xpos, ypos);
-        _commonProcessor.ptrClick.setX((int) xpos.get(0));
-        _commonProcessor.ptrClick.setY((int) ypos.get(0));
-        _commonProcessor.ptrPress.setX((int) xpos.get(0));
-        _commonProcessor.ptrPress.setY((int) ypos.get(0));
+        double[] cursorPos = glfw.GetCursorPos(_commonProcessor.handler.getWindowId());
+        _commonProcessor.ptrClick.setX((int) cursorPos[0]);
+        _commonProcessor.ptrClick.setY((int) cursorPos[1]);
+        _commonProcessor.ptrPress.setX((int) cursorPos[0]);
+        _commonProcessor.ptrPress.setY((int) cursorPos[1]);
 
         if (_commonProcessor.hoveredItem != null) {
             _commonProcessor.hoveredItem.setMousePressed(true);
-            _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_PRESS, _commonProcessor.margs,
+            _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MousePress, _commonProcessor.margs,
                     _commonProcessor.hoveredItem, _commonProcessor.underHoveredItems, false);
 
             if (_commonProcessor.hoveredItem.isFocusable) {
@@ -154,7 +147,7 @@ final class MouseClickProcessor {
                     if (f.equals(_commonProcessor.hoveredItem) && _commonProcessor.hoveredItem.isDisabled())
                         continue;
                     if (f.isFocusable) {
-                        if (f instanceof InterfaceWindowAnchor)
+                        if (f instanceof IWindowAnchor)
                             _commonProcessor.handler.getCoreWindow().getLayout().getContainer()
                                     .saveLastFocus(_commonProcessor.focusedItem);
                         else {
@@ -168,7 +161,7 @@ final class MouseClickProcessor {
             }
         }
         _commonProcessor.events.resetAllEvents();
-        _commonProcessor.events.setEvent(InputEventType.MOUSE_PRESS);
+        _commonProcessor.events.setEvent(InputEventType.MousePress);
     }
 
     private void release(long wnd, int button, int action, int mods) {
@@ -186,32 +179,32 @@ final class MouseClickProcessor {
             item.setMousePressed(false);
         }
 
-        if (_commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_RESIZE)
-                || _commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_MOVE)) {
+        if (_commonProcessor.events.lastEvent().contains(InputEventType.WindowResize)
+                || _commonProcessor.events.lastEvent().contains(InputEventType.WindowMove)) {
             _commonProcessor.events.resetAllEvents();
-            _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
+            _commonProcessor.events.setEvent(InputEventType.MouseRelease);
             return;
         }
 
-        if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
+        if (_commonProcessor.events.lastEvent().contains(InputEventType.MouseMove)) {
 
             if (_commonProcessor.draggableItem != null) {
                 _commonProcessor.draggableItem.eventMouseDrop.execute(_commonProcessor.draggableItem,
                         _commonProcessor.margs);
             }
 
-            if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
+            if (_commonProcessor.hoveredItem instanceof IMovable) {
                 _commonProcessor.hoveredItem.eventMouseClick.execute(_commonProcessor.hoveredItem,
                         _commonProcessor.margs);
             }
 
-            if (!_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
+            if (!_commonProcessor.events.lastEvent().contains(InputEventType.MouseDrag)) {
                 float len = getLengthBetweenTwoPixelPoints(_commonProcessor.ptrClick.getX(),
                         _commonProcessor.ptrClick.getY(), _commonProcessor.ptrRelease.getX(),
                         _commonProcessor.ptrRelease.getY());
                 if (len > _accountingLength) {
                     _commonProcessor.events.resetAllEvents();
-                    _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
+                    _commonProcessor.events.setEvent(InputEventType.MouseRelease);
                     return;
                 }
             } else if (_commonProcessor.draggableItem != _commonProcessor.hoveredItem) {
@@ -220,10 +213,10 @@ final class MouseClickProcessor {
                 _commonProcessor.findUnderFocusedItems(_commonProcessor.draggableItem);
                 _commonProcessor.focusedItem = lastFocused;
 
-                _commonProcessor.manager.assignActionsForSender(InputEventType.MOUSE_RELEASE, _commonProcessor.margs,
+                _commonProcessor.manager.assignActionsForSender(InputEventType.MouseRelease, _commonProcessor.margs,
                         _commonProcessor.draggableItem, _commonProcessor.underFocusedItems, true);
                 _commonProcessor.events.resetAllEvents();
-                _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
+                _commonProcessor.events.setEvent(InputEventType.MouseRelease);
                 return;
             }
         }
@@ -232,16 +225,16 @@ final class MouseClickProcessor {
             _commonProcessor.hoveredItem.setMousePressed(false);
 
             if (isDoubleClick) {
-                _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_DOUBLE_CLICK,
+                _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MouseDoubleClick,
                         _commonProcessor.margs, _commonProcessor.hoveredItem, _commonProcessor.underHoveredItems,
                         false);
             } else {
-                if (!_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
-                    if (_commonProcessor.hoveredItem instanceof InterfaceMovable) {
+                if (!_commonProcessor.events.lastEvent().contains(InputEventType.MouseDrag)) {
+                    if (_commonProcessor.hoveredItem instanceof IMovable) {
                         _commonProcessor.hoveredItem.eventMouseClick.execute(_commonProcessor.hoveredItem,
                                 _commonProcessor.margs);
                     } else {
-                        _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_RELEASE,
+                        _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MouseRelease,
                                 _commonProcessor.margs, _commonProcessor.hoveredItem,
                                 _commonProcessor.underHoveredItems, false);
                     }
@@ -250,7 +243,7 @@ final class MouseClickProcessor {
         }
 
         _commonProcessor.events.resetAllEvents();
-        _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
+        _commonProcessor.events.setEvent(InputEventType.MouseRelease);
     }
 
     private float getLengthBetweenTwoPixelPoints(int x0, int y0, int x1, int y1) {

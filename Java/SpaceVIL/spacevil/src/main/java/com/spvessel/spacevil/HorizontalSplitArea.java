@@ -3,9 +3,9 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
-import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
+import com.spvessel.spacevil.Core.IVLayout;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
@@ -13,7 +13,7 @@ import com.spvessel.spacevil.Flags.Orientation;
 /**
  * HorizontalSplitArea is a container with two divided areas (on top and on
  * bottom). HorizontalSplitArea implements
- * com.spvessel.spacevil.Core.InterfaceVLayout.
+ * com.spvessel.spacevil.Core.IVLayout.
  * <p>
  * Contains com.spvessel.spacevil.SplitHolder.
  * <p>
@@ -21,11 +21,11 @@ import com.spvessel.spacevil.Flags.Orientation;
  * <p>
  * Supports all events except drag and drop.
  */
-public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
+public class HorizontalSplitArea extends Prototype implements IVLayout {
     private static int count = 0;
-    private InterfaceBaseItem _topBlock;
-    private InterfaceBaseItem _bottomBlock;
-    private SplitHolder _splitHolder = new SplitHolder(Orientation.HORIZONTAL);
+    private IBaseItem _topBlock;
+    private IBaseItem _bottomBlock;
+    private SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
     private int _topHeight = -1;
     private int _diff = 0;
     private int _tMin = 0;
@@ -68,11 +68,11 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
         _splitHolder.eventMouseDrag.add(this::onDragging);
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(IItem sender, MouseArgs args) {
         _diff = args.position.getY() - _splitHolder.getY();
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(IItem sender, MouseArgs args) {
         int offset = args.position.getY() - getY() - _diff;
         setSplitPosition(offset);
     }
@@ -99,9 +99,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     /**
      * Assign item on the top area of the HorizontalSplitArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void assignTopItem(InterfaceBaseItem item) {
+    public void assignTopItem(IBaseItem item) {
         addItem(item);
         _topBlock = item;
         _tMin = _topBlock.getMinHeight();
@@ -111,9 +111,9 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     /**
      * Assign item on the bottom area of the HorizontalSplitArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void assignBottomItem(InterfaceBaseItem item) {
+    public void assignBottomItem(IBaseItem item) {
         addItem(item);
         _bottomBlock = item;
         _bMin = _bottomBlock.getMinHeight();
@@ -161,7 +161,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceVLayout).
+     * com.spvessel.spacevil.Core.IVLayout).
      */
     public void updateLayout() {
         _splitHolder.setWidth(getWidth());
@@ -186,7 +186,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
                 _bottomBlock.setHeight(0);
         }
 
-        for (InterfaceBaseItem item : getItems())
+        for (IBaseItem item : getItems())
             item.setConfines();
     }
 

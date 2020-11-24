@@ -18,14 +18,21 @@ final class MouseScrollProcessor {
             return;
 
         Deque<Prototype> tmp = new ArrayDeque<>(_commonProcessor.underHoveredItems);
+        
+        _commonProcessor.margs.scrollValue.setValues(Math.abs(dx), Math.abs(dy));
+
         while (!tmp.isEmpty()) {
             Prototype item = tmp.pollLast();
-            if (dy > 0 || dx < 0)
+            if (dy > 0 || dx < 0) {
                 item.eventScrollUp.execute(item, _commonProcessor.margs);
-            if (dy < 0 || dx > 0)
+            }
+            if (dy < 0 || dx > 0) {
                 item.eventScrollDown.execute(item, _commonProcessor.margs);
-            if (!item.isPassEvents(InputEventType.MOUSE_SCROLL))
+            }
+            if (!item.isPassEvents(InputEventType.MouseScroll)) {
                 break;
+            }
         }
+        _commonProcessor.events.setEvent(InputEventType.MouseScroll);
     }
 }

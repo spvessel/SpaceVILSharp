@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.EventCommonMethodState;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -191,7 +191,7 @@ public class VerticalSlider extends Prototype {
         count++;
 
         // Handler
-        handler.orientation = Orientation.VERTICAL;
+        handler.orientation = Orientation.Vertical;
         setStyle(DefaultsService.getDefaultStyle(VerticalSlider.class));
     }
 
@@ -213,7 +213,7 @@ public class VerticalSlider extends Prototype {
 
     private boolean _dragging = false;
 
-    protected void onDragHandler(InterfaceItem sender, MouseArgs args) {
+    protected void onDragHandler(IItem sender, MouseArgs args) {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getY() - getY()) * (_maxValue - _minValue)
@@ -222,7 +222,7 @@ public class VerticalSlider extends Prototype {
             setCurrentValue(result);
     }
 
-    protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
+    protected void onTrackClick(IItem sender, MouseArgs args) {
         // Compute CurrentValue
         if (!_dragging)
             setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_maxValue - _minValue)

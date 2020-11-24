@@ -1,11 +1,13 @@
 package com.spvessel.spacevil;
 
-import static org.lwjgl.opengl.GL20.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
 
 import java.io.FileReader;
 import java.io.BufferedReader;
 
 final class Shader {
+    private OpenGLWrapper gl = null;
+
     private final int VERTEX = 0x8B31;
     private final int FRAGMENT = 0x8B30;
     private final int GEOMETRY = 0x8DD9;
@@ -76,10 +78,12 @@ final class Shader {
     }
 
     Shader() {
+        gl = OpenGLWrapper.get();
         initDefaults();
     }
 
     Shader(String vertexCode, String fragmendCode) {
+        gl = OpenGLWrapper.get();
         _codeVertex = vertexCode;
         _codeFragment = fragmendCode;
 
@@ -89,6 +93,7 @@ final class Shader {
     }
 
     Shader(BufferedReader vertexCode, BufferedReader fragmendCode) {
+        gl = OpenGLWrapper.get();
         _codeVertex = readSource(vertexCode);
         _codeFragment = readSource(fragmendCode);
 
@@ -139,60 +144,60 @@ final class Shader {
     }
 
     void compile() {
-        _programId = glCreateProgram();
+        _programId = gl.CreateProgram();
         // compiling
         if (!_codeVertex.equals("")) {
             _shaderVertex = compileShader(VERTEX, _codeVertex);
-            glAttachShader(_programId, _shaderVertex);
+            gl.AttachShader(_programId, _shaderVertex);
         }
 
         if (!_codeFragment.equals("")) {
             _shaderFragment = compileShader(FRAGMENT, _codeFragment);
-            glAttachShader(_programId, _shaderFragment);
+            gl.AttachShader(_programId, _shaderFragment);
         }
 
         if (!_codeGeometry.equals("")) {
             _shaderGeometry = compileShader(GEOMETRY, _codeGeometry);
-            glAttachShader(_programId, _shaderGeometry);
+            gl.AttachShader(_programId, _shaderGeometry);
         }
 
         if (!_codeCompute.equals("")) {
             _shaderCompute = compileShader(COMPUTE, _codeCompute);
-            glAttachShader(_programId, _shaderCompute);
+            gl.AttachShader(_programId, _shaderCompute);
         }
         // linking
-        glLinkProgram(_programId);
+        gl.LinkProgram(_programId);
 
     }
 
     private int compileShader(int shaderType, String code) {
-        int shaderId = glCreateShader(shaderType);
-        glShaderSource(shaderId, code);
-        glCompileShader(shaderId);
+        int shaderId = gl.CreateShader(shaderType);
+        gl.ShaderSource(shaderId, code);
+        gl.CompileShader(shaderId);
         return shaderId;
     }
 
     void useShader() {
-        glUseProgram(_programId);
+        gl.UseProgram(_programId);
     }
 
     void deleteShader() {
         detachShaders();
         deleteShadersID();
-        glDeleteProgram(_programId);
+        gl.DeleteProgram(_programId);
     }
 
     private void detachShaders() {
-        glDetachShader(_programId, _shaderVertex);
-        glDetachShader(_programId, _shaderFragment);
-        glDetachShader(_programId, _shaderGeometry);
-        glDetachShader(_programId, _shaderCompute);
+        gl.DetachShader(_programId, _shaderVertex);
+        gl.DetachShader(_programId, _shaderFragment);
+        gl.DetachShader(_programId, _shaderGeometry);
+        gl.DetachShader(_programId, _shaderCompute);
     }
 
     private void deleteShadersID() {
-        glDeleteShader(_shaderVertex);
-        glDeleteShader(_shaderFragment);
-        glDeleteShader(_shaderGeometry);
-        glDeleteShader(_shaderCompute);
+        gl.DeleteShader(_shaderVertex);
+        gl.DeleteShader(_shaderFragment);
+        gl.DeleteShader(_shaderGeometry);
+        gl.DeleteShader(_shaderCompute);
     }
 }

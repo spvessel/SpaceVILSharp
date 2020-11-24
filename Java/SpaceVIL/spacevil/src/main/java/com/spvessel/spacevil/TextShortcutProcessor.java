@@ -1,17 +1,14 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Core.InterfaceTextShortcuts;
+import com.spvessel.spacevil.Core.ITextShortcuts;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
 
-//import static org.lwjgl.glfw.GLFW.glfwGetClipboardString;
-//import static org.lwjgl.glfw.GLFW.glfwSetClipboardString;
-
 class TextShortcutProcessor {
 
-    static void processShortcut(InterfaceTextShortcuts textItem, KeyArgs args) {
+    static void processShortcut(ITextShortcuts textItem, KeyArgs args) {
         int modsCount = args.mods.size();
 
         if (modsCount == 1) {
@@ -47,7 +44,7 @@ class TextShortcutProcessor {
 
             //insert/paste
             if ((args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.V)
-                    || (args.mods.contains(KeyMods.SHIFT) && args.key == KeyCode.INSERT)) {
+                    || (args.mods.contains(KeyMods.Shift) && args.key == KeyCode.Insert)) {
                 String paste_str = "";
 //                paste_str = glfwGetClipboardString(_handler.getWindowId());
                 paste_str = CommonService.getClipboardString();

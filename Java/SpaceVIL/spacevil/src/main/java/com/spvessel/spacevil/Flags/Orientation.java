@@ -6,5 +6,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: HORIZONTAL, VERTICAL.
  */
 public enum Orientation {
-    HORIZONTAL, VERTICAL
+    Horizontal, Vertical
 }

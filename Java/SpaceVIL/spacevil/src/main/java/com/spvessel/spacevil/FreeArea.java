@@ -8,20 +8,20 @@ import java.util.HashMap;
 
 /**
  * FreeArea is class representing an unbounded area with free location of inner
- * items. FreeArea implements com.spvessel.spacevil.Core.InterfaceFreeLayout and
- * com.spvessel.spacevil.Core.InterfaceDraggable. FreeArea is supposed to be
+ * items. FreeArea implements com.spvessel.spacevil.Core.IFreeLayout and
+ * com.spvessel.spacevil.Core.IDraggable. FreeArea is supposed to be
  * used with com.spvessel.spacevil.ResizableItem.
  * <p>
  * Supports all events including drag and drop.
  */
-public class FreeArea extends Prototype implements InterfaceDraggable, InterfaceFreeLayout {
+public class FreeArea extends Prototype implements IDraggable, IFreeLayout {
 
     private static int count = 0;
     private int _xPress = 0;
     private int _yPress = 0;
     private int _diffX = 0;
     private int _diffY = 0;
-    private Map<InterfaceBaseItem, int[]> _storedItemsCoords;
+    private Map<IBaseItem, int[]> _storedItemsCoords;
 
     /**
      * Default FreeArea constructor.
@@ -37,14 +37,14 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
         setStyle(DefaultsService.getDefaultStyle(FreeArea.class));
     }
 
-    private void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(IItem sender, MouseArgs args) {
         _xPress = args.position.getX();
         _yPress = args.position.getY();
         _diffX = (int) _xOffset;
         _diffY = (int) _yOffset;
     }
 
-    private void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(IItem sender, MouseArgs args) {
         _xOffset = _diffX - _xPress + args.position.getX();
         _yOffset = _diffY + args.position.getY() - _yPress;
         updateLayout();
@@ -101,10 +101,10 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
      * <p>
      * Notice: Make sure the item is in the correct position to be visible.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         super.addItem(item);
         _storedItemsCoords.put(item, new int[] { item.getX(), item.getY() });
         if (item instanceof ResizableItem) {
@@ -118,12 +118,12 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
     /**
      * Remove item from the FreeArea.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         boolean b = super.removeItem(item);
         synchronized (this) {
             _storedItemsCoords.remove(item);
@@ -134,10 +134,10 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
 
     /**
      * Updating all children positions (implementation of
-     * com.spvessel.spacevil.Core.InterfaceFreeLayout).
+     * com.spvessel.spacevil.Core.IFreeLayout).
      */
     public void updateLayout() {
-        for (InterfaceBaseItem child : getItems()) {
+        for (IBaseItem child : getItems()) {
             child.setX((int) _xOffset + getX() + getPadding().left + _storedItemsCoords.get(child)[0]
                     + child.getMargin().left);
             child.setY((int) _yOffset + getY() + getPadding().top + _storedItemsCoords.get(child)[1]

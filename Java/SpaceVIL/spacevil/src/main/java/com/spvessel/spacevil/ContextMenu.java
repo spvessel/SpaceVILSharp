@@ -1,9 +1,9 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * ContextMenu is a menu for selecting one of the available options from the
  * list that perform the assigned action. ContextMenu is a floating item (see
- * com.spvessel.spacevil.Core.InterfaceFloating and enum
+ * com.spvessel.spacevil.Core.IFloating and enum
  * com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside
  * the ContextMenu area.
  * <p>
@@ -29,7 +29,7 @@ import java.util.List;
  * <p>
  * ContextMenu does not pass any input events and invisible by default.
  */
-public class ContextMenu extends Prototype implements InterfaceFloating {
+public class ContextMenu extends Prototype implements IFloating {
     /**
      * Property that allows to specify what item will be focused after ContextMenu
      * is closed.
@@ -39,7 +39,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * ListBox for storing a list of options (com.spvessel.spacevil.MenuItem).
      */
     public ListBox itemList = new ListBox();
-    private List<InterfaceBaseItem> _queue = new LinkedList<>();
+    private List<IBaseItem> _queue = new LinkedList<>();
 
     private Prototype _sender = null;
 
@@ -59,14 +59,14 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * <p>
      * Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_RIGHT.
      */
-    public MouseButton activeButton = MouseButton.BUTTON_RIGHT;
+    public MouseButton activeButton = MouseButton.ButtonRight;
 
     private boolean _init = false;
     private boolean _ouside = true;
 
     /**
      * Returns True if ContextMenu (see
-     * com.spvessel.spacevil.Core.InterfaceFloating) should closes when mouse click
+     * com.spvessel.spacevil.Core.IFloating) should closes when mouse click
      * outside the area of ContextMenu otherwise returns False.
      * 
      * @return True: if ContextMenu closes when mouse click outside the area. False:
@@ -97,7 +97,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * @param handler Window for attaching ContextMenu.
      */
     public ContextMenu(CoreWindow handler) {
-        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
+        ItemsLayoutBox.addItem(handler, this, LayoutType.Floating);
         setItemName("ContextMenu_" + count++);
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
         setPassEvents(false);
@@ -129,8 +129,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public void initElements() {
         setConfines();
         itemList.disableMenu(true);
-        itemList.setVScrollBarPolicy(VisibilityPolicy.NEVER);
-        itemList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.Never);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.Never);
         super.addItem(itemList);
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
@@ -138,11 +138,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.eventKeyPress.clear();
 
         itemList.getArea().eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
+            if (args.key == KeyCode.Escape) {
                 hide();
                 hideDependentMenus();
             }
-            if (args.key == KeyCode.ENTER) {
+            if (args.key == KeyCode.Enter) {
                 if (itemList.getSelectedItem() instanceof Prototype) {
                     Prototype selected = (Prototype) itemList.getSelectedItem();
                     selected.eventMousePress.execute(selected, null);
@@ -151,7 +151,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             }
         });
 
-        for (InterfaceBaseItem item : _queue) {
+        for (IBaseItem item : _queue) {
             itemList.addItem(item);
         }
 
@@ -159,7 +159,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     private void hideDependentMenus() {
-        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getWindowGuid())) {
+        for (IBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getWindowGuid())) {
             if (context_menu instanceof ContextMenu && !context_menu.equals(this)) {
                 ContextMenu menu = (ContextMenu) context_menu;
                 menu.hide();
@@ -167,7 +167,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
-    private void onSelectionChanged(InterfaceBaseItem sender) {
+    private void onSelectionChanged(IBaseItem sender) {
         if (sender instanceof MenuItem) {
             MenuItem menu = (MenuItem) sender;
             if (menu.isActionItem) {
@@ -194,18 +194,18 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * 
      * @return Options as List&lt;com.spvessel.spacevil.MenuItem&gt;
      */
-    public List<InterfaceBaseItem> getListContent() {
+    public List<IBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
     /**
-     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * Adding option (or any com.spvessel.spacevil.Core.IBaseItem
      * implementation) to the ComboBoxDropDown.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         if (item instanceof MenuItem) {
             MenuItem tmp = (MenuItem) item;
             tmp.contextMenu = this;
@@ -222,20 +222,20 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * Removing option (or any com.spvessel.spacevil.Core.IBaseItem
      * implementation) from the ComboBoxDropDown.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         return itemList.removeItem(item);
     }
 
     boolean closeDependencies(MouseArgs args) {
-        for (InterfaceBaseItem item : getListContent()) {
+        for (IBaseItem item : getListContent()) {
             if (item instanceof MenuItem) {
                 MenuItem menu_item = (MenuItem) item;
                 if (menu_item.isActionItem) {
@@ -253,9 +253,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     private void updateSize() {
         int height = 0;
         int width = getWidth();
-        List<InterfaceBaseItem> list = itemList.getListContent();
-        for (InterfaceBaseItem item : list) {
-            InterfaceBaseItem wrapper = itemList.getWrapper(item);
+        List<IBaseItem> list = itemList.getListContent();
+        for (IBaseItem item : list) {
+            IBaseItem wrapper = itemList.getWrapper(item);
             height += (wrapper.getHeight() + itemList.getArea().getSpacing().vertical);
 
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
@@ -289,7 +289,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * @param args   Mouse click arguments (cursor position, mouse button, mouse
      *               button press/release, etc.).
      */
-    public void show(InterfaceItem sender, MouseArgs args) {
+    public void show(IItem sender, MouseArgs args) {
         if (args.button.equals(activeButton)) {
             if (!_init) {
                 initElements();
@@ -326,7 +326,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     public void show() {
         MouseArgs margs = new MouseArgs();
-        margs.button = MouseButton.BUTTON_RIGHT;
+        margs.button = MouseButton.ButtonRight;
         show(this, margs);
     }
 

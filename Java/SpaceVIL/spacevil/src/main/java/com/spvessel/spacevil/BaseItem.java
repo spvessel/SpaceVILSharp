@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.spvessel.spacevil.Core.Geometry;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFloating;
-import com.spvessel.spacevil.Core.InterfaceFreeLayout;
-import com.spvessel.spacevil.Core.InterfaceHLayout;
-import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFloating;
+import com.spvessel.spacevil.Core.IFreeLayout;
+import com.spvessel.spacevil.Core.IHLayout;
+import com.spvessel.spacevil.Core.IVLayout;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -21,16 +21,16 @@ import com.spvessel.spacevil.Flags.ItemHoverRule;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 /**
- * Abstract class implementation of com.spvessel.spacevil.Core.InterfaceBaseItem
+ * Abstract class implementation of com.spvessel.spacevil.Core.IBaseItem
  * interface.
  * <p>
- * com.spvessel.spacevil.Core.InterfaceBaseItem is the main interface of SpaceVIL
+ * com.spvessel.spacevil.Core.IBaseItem is the main interface of SpaceVIL
  * environment.
  * <p>
  * Contains all the necessary methods for rendering objects and interacting with
  * them.
  */
-public abstract class BaseItem implements InterfaceBaseItem {
+public abstract class BaseItem implements IBaseItem {
 
     int _confinesX0 = 0;
     int _confinesX1 = 0;
@@ -79,7 +79,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         _parent = parent;
     }
 
-    void addChildren(InterfaceBaseItem item) {
+    void addChildren(IBaseItem item) {
         Prototype itemParent = item.getParent();
         if (itemParent != null)
             itemParent.removeItem(item);
@@ -88,42 +88,42 @@ public abstract class BaseItem implements InterfaceBaseItem {
         itemParent = item.getParent();
 
         // refactor events verification
-        if (itemParent instanceof InterfaceFreeLayout) {
+        if (itemParent instanceof IFreeLayout) {
             return;
         }
 
-        if (itemParent instanceof InterfaceVLayout) {
-            addEvents(item, GeometryEventType.RESIZE_WIDTH, GeometryEventType.MOVED_X);
+        if (itemParent instanceof IVLayout) {
+            addEvents(item, GeometryEventType.ResizeWidth, GeometryEventType.MovedX);
             return;
         }
-        if (itemParent instanceof InterfaceHLayout) {
-            addEvents(item, GeometryEventType.RESIZE_HEIGHT, GeometryEventType.MOVED_Y);
+        if (itemParent instanceof IHLayout) {
+            addEvents(item, GeometryEventType.ResizeHeight, GeometryEventType.MovedY);
             return;
         }
 
-        addEvents(item, GeometryEventType.RESIZE_WIDTH, GeometryEventType.RESIZE_HEIGHT, GeometryEventType.MOVED_X,
-                GeometryEventType.MOVED_Y);
+        addEvents(item, GeometryEventType.ResizeWidth, GeometryEventType.ResizeHeight, GeometryEventType.MovedX,
+                GeometryEventType.MovedY);
     }
 
-    private void addEvents(InterfaceBaseItem listener, GeometryEventType... types) {
+    private void addEvents(IBaseItem listener, GeometryEventType... types) {
         for (GeometryEventType t : types) {
             addEventListener(t, listener);
         }
         BaseItemStatics.castToUpdateBehavior(listener);
     }
 
-    void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void addEventListener(GeometryEventType type, IBaseItem listener) {
     }
 
-    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void removeEventListener(GeometryEventType type, IBaseItem listener) {
     }
 
     void removeItemFromListeners() {
         Prototype parent = getParent();
-        parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
-        parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
-        parent.removeEventListener(GeometryEventType.MOVED_X, this);
-        parent.removeEventListener(GeometryEventType.MOVED_Y, this);
+        parent.removeEventListener(GeometryEventType.ResizeWidth, this);
+        parent.removeEventListener(GeometryEventType.ResizeHeight, this);
+        parent.removeEventListener(GeometryEventType.MovedX, this);
+        parent.removeEventListener(GeometryEventType.MovedY, this);
     }
 
     /**
@@ -597,11 +597,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
                 VisualItem vItem = (VisualItem) this;
                 Prototype protoItem = vItem.prototype;
 
-                if (protoItem instanceof InterfaceFloating) {
-                    if (policy == SizePolicy.EXPAND)
-                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+                if (protoItem instanceof IFloating) {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
                     else
-                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
                     updateGeometry();
                 }
             }
@@ -634,11 +634,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
                 VisualItem vItem = (VisualItem) this;
                 Prototype protoItem = vItem.prototype;
 
-                if (protoItem instanceof InterfaceFloating) {
-                    if (policy == SizePolicy.EXPAND)
-                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+                if (protoItem instanceof IFloating) {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeHeight);
                     else
-                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeHeight);
                     updateGeometry();
                 }
             }
@@ -731,132 +731,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * Can be ItemHoverRule.LAZY or ItemHoverRule.STRICT (see
      * com.spvessel.spacevil.Flags.ItemHoverRule).
      */
-    public ItemHoverRule HoverRule = ItemHoverRule.LAZY;
-
-    // shadow
-    private boolean _isShadowDrop = false;
-    private int _shadowRadius = 1;
-    private Color _shadowColor = new Color(0, 0, 0);
-    private Position _shadowPos = new Position();
-
-    /**
-     * Getting the shadow visibility status of an item.
-     * 
-     * @return True: if shadow is visible. False: if shadow is invisible.
-     */
-    public boolean isShadowDrop() {
-        return _isShadowDrop;
-    }
-
-    /**
-     * Setting the shadow visibility status of an item.
-     * 
-     * @param value True: if shadow should be visible. False: if shadow should be
-     *              invisible.
-     */
-    public void setShadowDrop(boolean value) {
-        _isShadowDrop = value;
-    }
-
-    /**
-     * Setting the specified blur radius of the shadow.
-     * <p>
-     * Default: 0.
-     * 
-     * @param radius The blur radius of the shadow.
-     */
-    public void setShadowRadius(int radius) {
-        _shadowRadius = radius;
-    }
-
-    /**
-     * Getting the shadow blur raduis.
-     * 
-     * @return The blur radius of the shadow.
-     */
-    public int getShadowRadius() {
-        return _shadowRadius;
-    }
-
-    /**
-     * Getting shadow color.
-     * 
-     * @return Returns the shadow color as java.awt.Color.
-     */
-    public Color getShadowColor() {
-        return _shadowColor;
-    }
-
-    /**
-     * Setting shadow color.
-     * 
-     * @param color Shadow color as java.awt.Color.
-     */
-    public void setShadowColor(Color color) {
-        _shadowColor = color;
-    }
-
-    /**
-     * Getting the offset of the shadow relative to the position of the item.
-     * 
-     * @return Shadow offset as com.spvessel.spacevil.Core.Position.
-     */
-    public Position getShadowPos() {
-        return _shadowPos;
-    }
-
-    private int _xExtension = 0;
-    private int _yExtension = 0;
-
-    /**
-     * Getting the values of shadow extensions in pixels.
-     * 
-     * @return The values of shadow extensions. 0 - width extension, 1 - height
-     *         extension.
-     */
-    public int[] getShadowExtension() {
-        return new int[] { _xExtension, _yExtension };
-    }
-
-    /**
-     * Setting the values of shadow extensions in pixels.
-     * 
-     * @param wExtension Extension by width.
-     * @param hExtension Extension by height.
-     */
-    public void setShadowExtension(int wExtension, int hExtension) {
-        _xExtension = wExtension;
-        _yExtension = hExtension;
-    }
-
-    /**
-     * Setting the shadow with specified blur radius, axis shifts, shadow color.
-     * 
-     * @param radius A blur radius of the shadow.
-     * @param x      X shift of the shadow.
-     * @param y      Y shift of the shadow.
-     * @param color  A shadow color as java.awt.Color.
-     */
-    public void setShadow(int radius, int x, int y, Color color) {
-        _isShadowDrop = true;
-        _shadowRadius = radius;
-        _shadowColor = color;
-        _shadowPos.setX(x);
-        _shadowPos.setY(y);
-    }
-
-    /**
-     * Setting the shadow of an item.
-     * 
-     * @param shadow Shadow as com.spvessel.spacevil.Decorations.Shadow.
-     */
-    public void setShadow(Shadow shadow) {
-        _isShadowDrop = shadow.isDrop();
-        _shadowRadius = shadow.getRadius();
-        _shadowColor = shadow.getColor();
-        _shadowPos.setX(shadow.getXOffset());
-        _shadowPos.setY(shadow.getYOffset());
-    }
+    public ItemHoverRule HoverRule = ItemHoverRule.Lazy;
 
     // update
 

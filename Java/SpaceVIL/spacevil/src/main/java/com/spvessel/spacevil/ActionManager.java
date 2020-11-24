@@ -70,37 +70,37 @@ class ActionManager {
 
     private void executeAction(EventTask task) {
         switch (task.action) {
-            case MOUSE_RELEASE:
+            case MouseRelease:
                 invokeMouseClickEvent(task.item, (MouseArgs) task.args);
                 break;
-            case MOUSE_DOUBLE_CLICK:
+            case MouseDoubleClick:
                 invokeMouseDoubleClickEvent(task.item, (MouseArgs) task.args);
                 break;
-            case MOUSE_PRESS:
+            case MousePress:
                 invokeMousePressedEvent(task.item, (MouseArgs) task.args);
                 break;
-            case MOUSE_HOVER:
+            case MouseHover:
                 invokeMouseHoverEvent(task.item, (MouseArgs) task.args);
                 break;
-            case MOUSE_LEAVE:
+            case MouseLeave:
                 invokeMouseLeaveEvent(task.item, (MouseArgs) task.args);
                 break;
-            case MOUSE_DRAG:
+            case MouseDrag:
                 invokeMouseDragEvent(task.item, (MouseArgs) task.args);
                 break;
-            case FOCUS_GET:
+            case FocusGet:
                 invokeFocusGetEvent(task.item);
                 break;
-            case KEY_PRESS:
+            case KeyPress:
                 invokeKeyPressEvent(task.item, (KeyArgs) task.args);
                 break;
-            case KEY_RELEASE:
+            case KeyRelease:
                 invokeKeyReleaseEvent(task.item, (KeyArgs) task.args);
                 break;
-            case TEXT_INPUT:
+            case TextInput:
                 invokeTextInputEvent(task.item, (TextInputArgs) task.args);
                 break;
-            case WINDOW_DROP:
+            case WindowDrop:
                 invokeDropEvent(task.item, (DropArgs) task.args);
                 break;
             default:

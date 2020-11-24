@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace SpaceVIL.Core
 {
@@ -27,6 +26,8 @@ namespace SpaceVIL.Core
         /// Mouse cursor position.
         /// </summary>
         public Position Position = new Position();
+
+        public ScrollValue ScrollValue = new ScrollValue();
         
         /// <summary>
         /// Clearing MouseArgs
@@ -37,6 +38,7 @@ namespace SpaceVIL.Core
             State = 0;
             Mods = 0;
             Position.SetPosition(0, 0);
+            ScrollValue.SetValues(0, 0);
         }
 
         public override String ToString()
@@ -45,6 +47,7 @@ namespace SpaceVIL.Core
                 Button + " " +
                 State + " " +
                 Mods + " " +
+                ScrollValue + " " +
                 Position.GetX() + " " +
                 Position.GetY() + " ";
         }

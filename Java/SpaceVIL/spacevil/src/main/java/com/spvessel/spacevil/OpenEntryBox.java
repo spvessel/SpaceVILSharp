@@ -85,8 +85,8 @@ public class OpenEntryBox extends DialogWindow {
         return _titleBar.getText();
     }
 
-    private FileSystemEntryType _entryType = FileSystemEntryType.FILE;
-    private OpenDialogType _dialogType = OpenDialogType.OPEN;
+    private FileSystemEntryType _entryType = FileSystemEntryType.File;
+    private OpenDialogType _dialogType = OpenDialogType.Open;
 
     /**
      * Constructs OpenEntryBox with title text, entry type and dialog type.
@@ -125,7 +125,7 @@ public class OpenEntryBox extends DialogWindow {
         _fileName = new TextEdit();
         _controlPanel = new Frame();
 
-        if (dialogType == OpenDialogType.SAVE) {
+        if (dialogType == OpenDialogType.Save) {
             _btnOpen = new ButtonCore("Save");
         } else {
             _btnOpen = new ButtonCore("Open");
@@ -147,7 +147,7 @@ public class OpenEntryBox extends DialogWindow {
      *                  com.spvessel.spacevil.Flags.FileSystemEntryType.
      */
     public OpenEntryBox(String title, FileSystemEntryType entryType) {
-        this(title, entryType, OpenDialogType.OPEN);
+        this(title, entryType, OpenDialogType.Open);
     }
 
     /**
@@ -157,7 +157,7 @@ public class OpenEntryBox extends DialogWindow {
      * @param title Title text.
      */
     public OpenEntryBox(String title) {
-        this(title, FileSystemEntryType.FILE);
+        this(title, FileSystemEntryType.File);
     }
 
     /**
@@ -182,46 +182,46 @@ public class OpenEntryBox extends DialogWindow {
         });
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
+            if (args.key == KeyCode.Escape) {
                 close();
             }
         });
 
-        if (_entryType == FileSystemEntryType.DIRECTORY) {
+        if (_entryType == FileSystemEntryType.Directory) {
             _fileName.setVisible(false);
             _btnFilter.setVisible(false);
             _filterText.setVisible(false);
         } else {
-            if (_dialogType == OpenDialogType.SAVE) {
+            if (_dialogType == OpenDialogType.Save) {
                 _fileName.setText("new_file");
             }
             _filterList = new ContextMenu(this);
-            _filterList.activeButton = MouseButton.BUTTON_LEFT;
+            _filterList.activeButton = MouseButton.ButtonLeft;
             addFilterExtensions("All files (*.*);*.*");
         }
         _addNewList = new ContextMenu(this, getEntryMenuItem("Directory"), getEntryMenuItem("File"));
-        _addNewList.activeButton = MouseButton.BUTTON_LEFT;
+        _addNewList.activeButton = MouseButton.ButtonLeft;
 
-        _folder = DefaultsService.getDefaultImage(EmbeddedImage.FOLDER, EmbeddedImageSize.SIZE_32X32);
-        _file = DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32);
+        _folder = DefaultsService.getDefaultImage(EmbeddedImage.Folder, EmbeddedImageSize.Size64x64);
+        _file = DefaultsService.getDefaultImage(EmbeddedImage.File, EmbeddedImageSize.Size64x64);
         ImageItem backward = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_LEFT, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.ArrowLeft, EmbeddedImageSize.Size64x64), false);
         ImageItem upward = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_UP, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.ArrowUp, EmbeddedImageSize.Size64x64), false);
         ImageItem home = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.HOME, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.Home, EmbeddedImageSize.Size64x64), false);
         ImageItem user = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.USER, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.User, EmbeddedImageSize.Size64x64), false);
         ImageItem create = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.FOLDER_PLUS, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.ForderPlus, EmbeddedImageSize.Size64x64), false);
         ImageItem rename = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.PENCIL, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.Pencil, EmbeddedImageSize.Size64x64), false);
         ImageItem refresh = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.REFRESH, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.Refresh, EmbeddedImageSize.Size64x64), false);
         ImageItem hidden = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size64x64), false);
         ImageItem filter = new ImageItem(
-                DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_32X32), false);
+                DefaultsService.getDefaultImage(EmbeddedImage.Filter, EmbeddedImageSize.Size64x64), false);
 
         Style.getFrameStyle().setStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
         addItems(_layout);
@@ -240,8 +240,8 @@ public class OpenEntryBox extends DialogWindow {
         _btnFilter.addItem(filter);
         _controlPanel.addItems(_btnOpen, _btnCancel);
 
-        _fileList.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
-        _fileList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        _fileList.setHScrollBarPolicy(VisibilityPolicy.AsNeeded);
+        _fileList.setVScrollBarPolicy(VisibilityPolicy.AsNeeded);
         _btnBackward.eventMouseClick.add((sender, args) -> pathBackward());
         _btnUpward.eventMouseClick.add((sender, args) -> pathUpward());
         _btnHome.eventMouseClick.add((sender, args) -> {
@@ -271,7 +271,7 @@ public class OpenEntryBox extends DialogWindow {
                     selected.setText(result);
                 } else {
                     PopUpMessage popError = new PopUpMessage(
-                            (selected.getEntryType() == FileSystemEntryType.DIRECTORY) ? "Can not rename directory."
+                            (selected.getEntryType() == FileSystemEntryType.Directory) ? "Can not rename directory."
                                     : "Can not rename file.");
                     popError.show(this);
                 }
@@ -293,7 +293,7 @@ public class OpenEntryBox extends DialogWindow {
         });
         _addressLine.eventKeyRelease.add((sender, args) -> pathEditFinished(args));
         _fileList.getArea().eventKeyRelease.add((sender, args) -> {
-            if (args.key == KeyCode.BACKSPACE) {
+            if (args.key == KeyCode.Backspace) {
                 pathBackward();
             }
         });
@@ -319,21 +319,21 @@ public class OpenEntryBox extends DialogWindow {
             }
             FileSystemEntry fi;
             if (f.isDirectory()) {
-                fi = new FileSystemEntry(FileSystemEntryType.DIRECTORY, f.getName());
+                fi = new FileSystemEntry(FileSystemEntryType.Directory, f.getName());
                 fi.setIcon(_folder, 16, 16);
                 _fileList.addItem(fi);
                 fi.eventMouseDoubleClick.add((sender, args) -> {
                     setAddressLine(fi);
                 });
                 fi.eventKeyRelease.add((sender, args) -> {
-                    if (args.key == KeyCode.ENTER) {
+                    if (args.key == KeyCode.Enter) {
                         setAddressLine(fi);
                     }
                 });
             }
         }
 
-        if (_entryType == FileSystemEntryType.FILE) {
+        if (_entryType == FileSystemEntryType.File) {
             for (File f : files) {
                 if (!_btnShowHidden.isToggled() && f.isHidden()) {
                     continue;
@@ -344,7 +344,7 @@ public class OpenEntryBox extends DialogWindow {
                         continue;
                     }
 
-                    fi = new FileSystemEntry(FileSystemEntryType.FILE, f.getName());
+                    fi = new FileSystemEntry(FileSystemEntryType.File, f.getName());
                     fi.setIcon(_file, 16, 16);
                     fi.setText(f.getName());
                     _fileList.addItem(fi);
@@ -355,7 +355,7 @@ public class OpenEntryBox extends DialogWindow {
                         open();
                     });
                     fi.eventKeyRelease.add((sender, args) -> {
-                        if (args.key == KeyCode.ENTER) {
+                        if (args.key == KeyCode.Enter) {
                             open();
                         }
                     });
@@ -365,7 +365,7 @@ public class OpenEntryBox extends DialogWindow {
     }
 
     private void pathEditFinished(KeyArgs args) {
-        if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+        if (args.key == KeyCode.Enter || args.key == KeyCode.NumpadEnter) {
             String text = _addressLine.getText();
             if (text == null || text.equals("")) {
                 text = "./";
@@ -563,21 +563,21 @@ public class OpenEntryBox extends DialogWindow {
 
     private void open() {
         FileSystemEntry selection = ((FileSystemEntry) _fileList.getSelectedItem());
-        if (_dialogType == OpenDialogType.OPEN) {
-            if (_entryType == FileSystemEntryType.FILE) {
-                if (selection == null || selection.getEntryType() == FileSystemEntryType.DIRECTORY) {
+        if (_dialogType == OpenDialogType.Open) {
+            if (_entryType == FileSystemEntryType.File) {
+                if (selection == null || selection.getEntryType() == FileSystemEntryType.Directory) {
                     PopUpMessage popError = new PopUpMessage("Choose file first.");
                     popError.show(this);
                     return;
                 }
                 _result = _addressLine.getText() + File.separator + selection.getText();
-            } else if (_entryType == FileSystemEntryType.DIRECTORY) {
+            } else if (_entryType == FileSystemEntryType.Directory) {
                 _result = _addressLine.getText();
                 if (selection != null) {
                     _result += File.separator + selection.getText();
                 }
             }
-        } else if (_dialogType == OpenDialogType.SAVE) {
+        } else if (_dialogType == OpenDialogType.Save) {
             _result = _addressLine.getText() + File.separator + _fileName.getText();
         }
 

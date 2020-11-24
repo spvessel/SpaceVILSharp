@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: FILE, DIRECTORY.
  */
 public enum FileSystemEntryType{
-    FILE, DIRECTORY//, NETWORK, DISK
+    File, Directory//, NETWORK, DISK
 }

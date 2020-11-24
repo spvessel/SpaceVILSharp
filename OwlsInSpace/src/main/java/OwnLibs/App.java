@@ -15,7 +15,7 @@ public class App {
         if (CommonService.initSpaceVILComponents()) {
             System.out.println(CommonService.getSpaceVILInfo());
 
-            // setDebugPerformanceMode();
+            setDebugPerformanceMode();
 
             MainWindow ow = new MainWindow();
             Controller controller = new Controller(ow);

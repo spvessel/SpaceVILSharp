@@ -6,9 +6,6 @@ import java.nio.IntBuffer;
 import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.Core.Scale;
 
-import org.lwjgl.BufferUtils;
-import static org.lwjgl.glfw.GLFW.*;
-
 /**
  * DisplayService is static class providing methods to getting display attributes such as size and dpi scale.
  */

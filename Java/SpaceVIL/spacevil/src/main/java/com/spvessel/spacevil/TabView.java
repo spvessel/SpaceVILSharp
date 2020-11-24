@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -156,9 +156,9 @@ public class TabView extends VerticalStack {
      * 
      * @param tab Tab as com.spvessel.spacevil.Tab.
      * @return Page content as
-     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
+     *         List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;.
      */
-    public List<InterfaceBaseItem> getTabContent(Tab tab) {
+    public List<IBaseItem> getTabContent(Tab tab) {
         return _tabBar.getTabContent(tab);
     }
 
@@ -198,12 +198,12 @@ public class TabView extends VerticalStack {
     /**
      * Removing the specified item from TabView.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
         if (item instanceof Tab) {
             Tab tmpTab = (Tab) item;
             if (_tabBar.tabMapView.containsKey(tmpTab)) {
@@ -279,9 +279,9 @@ public class TabView extends VerticalStack {
      * tabs with the same address.
      * 
      * @param tabName Tab name.
-     * @param item    Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item    Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void addItemToTabByName(String tabName, InterfaceBaseItem item) {
+    public void addItemToTabByName(String tabName, IBaseItem item) {
         _tabBar.addItemToTabByName(tabName, item);
     }
 
@@ -294,9 +294,9 @@ public class TabView extends VerticalStack {
      * tabs with the same address.
      * 
      * @param tabText Tab text.
-     * @param item    Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item    Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void addItemToTabByText(String tabText, InterfaceBaseItem item) {
+    public void addItemToTabByText(String tabText, IBaseItem item) {
         _tabBar.addItemToTabByText(tabText, item);
     }
 
@@ -304,9 +304,9 @@ public class TabView extends VerticalStack {
      * Adding an item to page by its tab.
      * 
      * @param tab  Tab as com.spvessel.spacevil.Tab.
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void addItemToTab(Tab tab, InterfaceBaseItem item) {
+    public void addItemToTab(Tab tab, IBaseItem item) {
         _tabBar.addItemToTab(tab, item);
     }
 

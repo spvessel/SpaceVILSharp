@@ -1,26 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Core;
 
 namespace SpaceVIL.Decorations
 {
     /// <summary>
     /// Border is a class that decorates item's shape with border.
     /// </summary>
-    public class Border
+    public class Border : IBorder, IEffect
     {
-        private CornerRadius _borderRadius;
-        
+        /// <summary>
+        /// Getting the effect name. 
+        /// </summary>
+        /// <returns>Returns name Shadow effect as System.String.</returns>
+        public string GetEffectName()
+        {
+            return this.GetType().ToString();
+        }
+
+        private CornerRadius _radius;
+
         /// <summary>
         /// Getting border radiuses.
         /// </summary>
         /// <returns>Border radiuses as SpaceVIL.Decorations.CornerRadius.</returns>
         public CornerRadius GetRadius()
         {
-            return _borderRadius;
+            return _radius;
         }
 
         /// <summary>
@@ -29,30 +34,30 @@ namespace SpaceVIL.Decorations
         /// <param name="value">Radiuses of the border's corners as SpaceVIL.Decorations.CornerRadius.</param>
         public void SetRadius(CornerRadius value)
         {
-            _borderRadius = value;
+            _radius = value;
         }
 
-        private Color _border_color;
+        private Color _color;
 
         /// <summary>
         /// Getting the border color oa an item's shape.
         /// </summary>
         /// <returns>Border color as System.Drawing.Color.</returns>
-        public Color GetFill()
+        public Color GetColor()
         {
-            return _border_color;
+            return _color;
         }
 
         /// <summary>
         /// Setting the border color of an item's shape.
         /// </summary>
-        /// <param name="fill">Border color as System.Drawing.Color.</param>
-        public void SetFill(Color fill)
+        /// <param name="color">Border color as System.Drawing.Color.</param>
+        public void SetColor(Color color)
         {
-            _border_color = fill;
+            _color = color;
         }
 
-        private int border_thickness;
+        private int _thickness;
 
         /// <summary>
         /// Getting border thickness of an item's shape.
@@ -60,7 +65,7 @@ namespace SpaceVIL.Decorations
         /// <returns>Border thickness.</returns>
         public int GetThickness()
         {
-            return border_thickness;
+            return _thickness;
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace SpaceVIL.Decorations
         /// <param name="thickness">Border thickness.</param>
         public void SetThickness(int thickness)
         {
-            border_thickness = thickness;
+            _thickness = thickness;
         }
 
         /// <summary>
@@ -82,7 +87,7 @@ namespace SpaceVIL.Decorations
         /// </summary>
         public Border()
         {
-            SetFill(Color.Transparent);
+            SetColor(Color.Transparent);
             SetThickness(-1);
             SetRadius(new CornerRadius());
         }
@@ -90,14 +95,29 @@ namespace SpaceVIL.Decorations
         /// <summary>
         /// Constructs a Border  with specified color, radius and thickness.
         /// </summary>
-        /// <param name="fill">Border color as System.Drawing.Color.</param>
+        /// <param name="color">Border color as System.Drawing.Color.</param>
         /// <param name="radius">Radiuses of the border's corners as SpaceVIL.Decorations.CornerRadius.</param>
         /// <param name="thickness">Border thickness.</param>
-        public Border(Color fill, CornerRadius radius, int thickness)
+        public Border(Color color, CornerRadius radius, int thickness)
         {
-            SetFill(fill); // (Color.Transparent);
+            SetColor(color);
             SetRadius(radius);
             SetThickness(thickness);
+        }
+
+        /// <summary>
+        /// Clones current Border class instance.
+        /// </summary>
+        /// <returns>Copy of current Border.</returns>
+        public Border Clone()
+        {
+            Border clone = new Border(
+                Color.FromArgb(_color.ToArgb()),
+                new CornerRadius(_radius),
+                _thickness
+            );
+
+            return clone;
         }
     }
 }

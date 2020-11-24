@@ -18,8 +18,8 @@ abstract class TextItem extends Primitive {
     TextItem() {
         setItemName("TextItem_" + count);
         setBackground(new Color(0, 0, 0, 0));
-        setWidthPolicy(SizePolicy.EXPAND);
-        setHeightPolicy(SizePolicy.EXPAND);
+        setWidthPolicy(SizePolicy.Expand);
+        setHeightPolicy(SizePolicy.Expand);
         count++;
     }
 

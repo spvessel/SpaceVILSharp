@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: LEFT, TOP, RIGHT, BOTTOM.
  */
 public enum Side {
-    LEFT, TOP, RIGHT, BOTTOM
+    Left, Top, Right, Bottom
 }

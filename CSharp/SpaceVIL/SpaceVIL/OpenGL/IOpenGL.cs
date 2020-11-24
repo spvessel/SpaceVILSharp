@@ -62,6 +62,11 @@ namespace OpenGL
         void FramebufferTexture(uint target, uint attachment, uint texture, int level);
         void DeleteFramebuffers(int n, uint[] buffers);
         void TexParameterf(uint target, uint pname, float param);
+        void GenRenderbuffers(int n, uint[] buffers);
+        void FramebufferRenderbuffer(uint target, uint attachment, uint component, uint buffer);
+        void RenderbufferStorage(uint target, uint component, int w, int h);
+        void DeleteRenderbuffers(int n, uint[] buffers);
+        void BindRenderbuffer(uint target, uint buffer);
 
         //Stencil & Scissors
         void Scissor(int x, int y, int width, int height);

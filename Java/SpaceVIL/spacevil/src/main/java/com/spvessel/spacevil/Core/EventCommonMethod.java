@@ -5,9 +5,9 @@ import java.util.List;
 
 public class EventCommonMethod {
 
-    List<InterfaceCommonMethod> events = null;
+    List<ICommonMethod> events = null;
 
-    public List<InterfaceCommonMethod> getActions() {
+    public List<ICommonMethod> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventCommonMethod {
         return events.size();
     }
     
-    public void add(InterfaceCommonMethod action) {
+    public void add(ICommonMethod action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceCommonMethod action) {
+    public boolean remove(ICommonMethod action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -42,7 +42,7 @@ public class EventCommonMethod {
     public void execute() {
         if (events == null)
             return;
-        for (InterfaceCommonMethod action : events) {
+        for (ICommonMethod action : events) {
             action.execute();
         }
     }

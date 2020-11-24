@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceTextContainer;
-import com.spvessel.spacevil.Core.InterfaceTextImage;
+import com.spvessel.spacevil.Core.ITextContainer;
+import com.spvessel.spacevil.Core.ITextImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Common.DisplayService;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-class TextLine extends TextItem implements InterfaceTextContainer {
+class TextLine extends TextItem implements ITextContainer {
     private static int count = 0;
 
     private TextPrinter textPrt = new TextPrinter();
@@ -118,7 +118,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //        isBigExist = true;
     }
 
-    public InterfaceTextImage getTexture() {
+    public ITextImage getTexture() {
         textLock.lock();
         try {
             Alphabet.FontDimensions fontDims = getFontDims(); //int[] fontDims = getFontDims();
@@ -394,22 +394,22 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
         int _lineWidth = getWidth();
         // Horizontal
-        if (alignments.contains(ItemAlignment.LEFT) || (_lineWidth >= _parentAllowWidth)) {
+        if (alignments.contains(ItemAlignment.Left) || (_lineWidth >= _parentAllowWidth)) {
             alignShiftX = parent.getPadding().left + getMargin().left + cursorWidth;
-        } else if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth)) {
+        } else if (alignments.contains(ItemAlignment.Right) && (_lineWidth < _parentAllowWidth)) {
             alignShiftX = parent.getWidth() - _lineWidth - parent.getPadding().right - getMargin().right - cursorWidth;
-        } else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth)) {
+        } else if (alignments.contains(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth)) {
             // alignShiftX = ((parent.getWidth() - parent.getPadding().left - parent.getPadding().right
             //         + getMargin().left - getMargin().right) - _lineWidth) / 2f;
             alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.getPadding().left + getMargin().left
                     + cursorWidth; //(parent.getWidth() - _lineWidth) / 2f + parent.getPadding().left;
         }
         // Vertical
-        if (alignments.contains(ItemAlignment.TOP)) {
+        if (alignments.contains(ItemAlignment.Top)) {
             alignShiftY = parent.getPadding().top + getMargin().top;
-        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
+        } else if (alignments.contains(ItemAlignment.Bottom)) {
             alignShiftY = parent.getHeight() - height - parent.getPadding().bottom - getMargin().bottom;
-        } else if (alignments.contains(ItemAlignment.VCENTER)) {
+        } else if (alignments.contains(ItemAlignment.VCenter)) {
             // alignShiftY = ((parent.getHeight() - parent.getPadding().bottom - parent.getPadding().top)
             //         - height) / 2f - getMargin().bottom + getMargin().top;
             alignShiftY = (parent.getHeight() - height) / 2f + parent.getPadding().top;

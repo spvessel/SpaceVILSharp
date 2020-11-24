@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceLines;
+import com.spvessel.spacevil.Core.ILines;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import java.awt.Color;
 /**
  * LinesContainer is class for rendering lines in graph.
  */
-public class LinesContainer extends Primitive implements InterfaceLines {
+public class LinesContainer extends Primitive implements ILines {
     private static int count = 0;
 
     /**

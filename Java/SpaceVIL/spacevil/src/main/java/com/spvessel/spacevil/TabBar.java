@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 // import com.spvessel.spacevil.Core.AbstractHorizontalLayout;
-import com.spvessel.spacevil.Core.InterfaceHLayout;
+import com.spvessel.spacevil.Core.IHLayout;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-class TabBar extends Prototype implements InterfaceHLayout {
+class TabBar extends Prototype implements IHLayout {
 
     private Tab _selectedTab = null;
     Map<Tab, Frame> tabMapView;
@@ -28,7 +28,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
     private int _dragScrollStep = 10;
     private int _maxScrollOffsetValue = 0;
 
-    private SizePolicy _contentPolicy = SizePolicy.FIXED;
+    private SizePolicy _contentPolicy = SizePolicy.Fixed;
 
     void setContentPolicy(SizePolicy policy) {
         if (_contentPolicy == policy)
@@ -88,7 +88,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
     }
 
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         if (!(item instanceof Tab))
             return;
         Tab tab = (Tab) item;
@@ -105,15 +105,15 @@ class TabBar extends Prototype implements InterfaceHLayout {
         else
             super.insertItem(item, _tabList.size() - 2);
 
-        if (tab.getWidthPolicy() == SizePolicy.EXPAND) {
-            tab.setWidthPolicy(SizePolicy.FIXED);
+        if (tab.getWidthPolicy() == SizePolicy.Expand) {
+            tab.setWidthPolicy(SizePolicy.Fixed);
             tab.updateTabWidth();
         }
         updateLayout();
     }
 
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         if (!(item instanceof Tab))
             return;
         Tab tab = (Tab) item;
@@ -126,15 +126,15 @@ class TabBar extends Prototype implements InterfaceHLayout {
         _tabList.add(index, tab);
         initTab(tab);
         super.insertItem(item, _tabList.size() - 2);
-        if (tab.getWidthPolicy() == SizePolicy.EXPAND) {
-            tab.setWidthPolicy(SizePolicy.FIXED);
+        if (tab.getWidthPolicy() == SizePolicy.Expand) {
+            tab.setWidthPolicy(SizePolicy.Fixed);
             tab.updateTabWidth();
         }
         updateLayout();
     }
 
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(IBaseItem item) {
 
         boolean result = super.removeItem(item);
         if (result) {
@@ -168,7 +168,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
     @Override
     public void updateLayout() {
-        List<InterfaceBaseItem> itemList = getItems();
+        List<IBaseItem> itemList = getItems();
         if (itemList.size() == 0 || _isUpdating)
             return;
 
@@ -178,9 +178,9 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
         int itemOffsetX = getX() + getPadding().left;
 
-        if (_contentPolicy == SizePolicy.EXPAND) {
-            Map<InterfaceBaseItem, Integer> sizes = getMapItemSize(itemList);
-            for (InterfaceBaseItem item : itemList) {
+        if (_contentPolicy == SizePolicy.Expand) {
+            Map<IBaseItem, Integer> sizes = getMapItemSize(itemList);
+            for (IBaseItem item : itemList) {
                 if (!sizes.containsKey(item))
                     continue;
 
@@ -196,7 +196,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
             int startXPos = itemOffsetX;
             itemOffsetX = -scrollOffsetX;
             _maxScrollOffsetValue = 0;
-            for (InterfaceBaseItem item : itemList) {
+            for (IBaseItem item : itemList) {
                 if (!item.isVisible())
                     continue;
                 int itemXPos = startXPos + itemOffsetX;// + item.getMargin().Left;
@@ -311,21 +311,21 @@ class TabBar extends Prototype implements InterfaceHLayout {
     }
 
     void reindexing() {
-        List<InterfaceBaseItem> items = getItems();
+        List<IBaseItem> items = getItems();
         items.remove(items.size() - 1);
         items.add(_selectedTabIndex, _selectedTab);
 
         List<Tab> tabs = new LinkedList<Tab>();
-        for (InterfaceBaseItem item : items) {
+        for (IBaseItem item : items) {
             tabs.add((Tab) item);
         }
         _tabList = tabs;
     }
 
     void onTop(Tab tab) {
-        List<InterfaceBaseItem> tabList = getItems();
+        List<IBaseItem> tabList = getItems();
 
-        InterfaceBaseItem lastSelected = tabList.get(tabList.size() - 1);
+        IBaseItem lastSelected = tabList.get(tabList.size() - 1);
         tabList.remove(lastSelected);
         tabList.add(_selectedTabIndex, lastSelected);
 
@@ -334,7 +334,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         setContent(tabList);
     }
 
-    void setLastTabToActualPlace(List<InterfaceBaseItem> tabList) {
+    void setLastTabToActualPlace(List<IBaseItem> tabList) {
         int index = getSelectedTabIndex();
         if (index < 0 || index == (tabList.size() - 1))
             return;
@@ -384,7 +384,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return tabMapView.get(tab);
     }
 
-    List<InterfaceBaseItem> getTabContent(Tab tab) {
+    List<IBaseItem> getTabContent(Tab tab) {
         return tabMapView.get(tab).getItems();
     }
 
@@ -462,7 +462,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return true;
     }
 
-    void addItemToTabByName(String tabName, InterfaceBaseItem item) {
+    void addItemToTabByName(String tabName, IBaseItem item) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabName.equals(tab.getItemName())) {
                 tabMapView.get(tab).addItem(item);
@@ -471,7 +471,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
     }
 
-    void addItemToTabByText(String tabText, InterfaceBaseItem item) {
+    void addItemToTabByText(String tabText, IBaseItem item) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabText.equals(tab.getText())) {
                 tabMapView.get(tab).addItem(item);
@@ -480,25 +480,25 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
     }
 
-    void addItemToTab(Tab tab, InterfaceBaseItem item) {
+    void addItemToTab(Tab tab, IBaseItem item) {
         if (tabMapView.containsKey(tab))
             tabMapView.get(tab).addItem(item);
     }
 
-    private Map<InterfaceBaseItem, Integer> getMapItemSize(List<InterfaceBaseItem> list) {
+    private Map<IBaseItem, Integer> getMapItemSize(List<IBaseItem> list) {
         int totalSpace = getWidth() - getPadding().left - getPadding().right
                 - (list.size() - 1) * getSpacing().horizontal;
-        Map<InterfaceBaseItem, Integer> mapExpand = new HashMap<>();
-        Map<InterfaceBaseItem, Integer> mapFixed = new HashMap<>();
-        List<InterfaceBaseItem> visibleList = new LinkedList<>();
-        for (InterfaceBaseItem item : list) {
+        Map<IBaseItem, Integer> mapExpand = new HashMap<>();
+        Map<IBaseItem, Integer> mapFixed = new HashMap<>();
+        List<IBaseItem> visibleList = new LinkedList<>();
+        for (IBaseItem item : list) {
             if (!item.isVisible())
                 continue;
             visibleList.add(item);
         }
         int itemWidth = totalSpace / visibleList.size();
         int lastIndex = 0, orderInd = -1;
-        for (InterfaceBaseItem item : visibleList) {
+        for (IBaseItem item : visibleList) {
             orderInd++;
             if (item.getMaxWidth() < itemWidth) {
                 mapFixed.put(item, item.getMaxWidth());
@@ -515,7 +515,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
         if (!mapExpand.isEmpty())
             itemWidth = totalSpace / mapExpand.size();
-        for (InterfaceBaseItem item : mapExpand.keySet()) {
+        for (IBaseItem item : mapExpand.keySet()) {
             mapFixed.put(item, itemWidth);
         }
         if (!mapExpand.isEmpty())

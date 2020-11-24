@@ -26,7 +26,7 @@ abstract public class Primitive extends BaseItem {
      */
     public Primitive(String name) {
         setItemName(name);
-        setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        setAlignment(ItemAlignment.Top, ItemAlignment.Left);
     }
 
     /**

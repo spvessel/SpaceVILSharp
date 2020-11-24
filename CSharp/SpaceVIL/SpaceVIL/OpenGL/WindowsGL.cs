@@ -15,6 +15,7 @@ namespace OpenGL
         {
             InvokeWGL<attachShader>("glAttachShader")(program, shader);
         }
+
         public delegate void bindBuffer(uint target, uint buffer);
         public void BindBuffer(uint target, uint buffer)
         {
@@ -25,6 +26,36 @@ namespace OpenGL
         public void BindFramebuffer(uint target, uint buffer)
         {
             InvokeWGL<bindFramebuffer>("glBindFramebufferEXT")(target, buffer);
+        }
+
+        public delegate void genRenderbuffers(int n, uint[] buffers);
+        public void GenRenderbuffers(int n, uint[] buffers)
+        {
+            InvokeWGL<genRenderbuffers>("glGenRenderbuffersEXT")(n, buffers);
+        }
+
+        public delegate void bindRenderbuffer(uint target, uint buffer);
+        public void BindRenderbuffer(uint target, uint buffer)
+        {
+            InvokeWGL<bindRenderbuffer>("glBindRenderbufferEXT")(target, buffer);
+        }
+
+        public delegate void renderbufferStorage(uint target, uint component, int w, int h);
+        public void RenderbufferStorage(uint target, uint component, int w, int h)
+        {
+            InvokeWGL<renderbufferStorage>("glRenderbufferStorageEXT")(target, component, w, h);
+        }
+
+        public delegate void framebufferRenderbuffer(uint target, uint attachment, uint component, uint buffer);
+        public void FramebufferRenderbuffer(uint target, uint attachment, uint component, uint buffer)
+        {
+            InvokeWGL<framebufferRenderbuffer>("glFramebufferRenderbufferEXT")(target, attachment, component, buffer);
+        }
+
+        public delegate void deleteRenderBuffers(int n, uint[] buffers);
+        public void DeleteRenderbuffers(int n, uint[] buffers)
+        {
+            InvokeWGL<deleteRenderBuffers>("glDeleteRenderbuffersEXT")(n, buffers);
         }
 
         public void BindTexture(uint target, uint texture)
@@ -195,10 +226,10 @@ namespace OpenGL
             InvokeWGL<genVertexArrays>("glGenVertexArrays")(n, arrays);
         }
 
-        public delegate int getuniformlocation(uint shader, string value);
+        public delegate int getUniformLocation(uint shader, string value);
         public int GetUniformLocation(uint shader, string value)
         {
-            return InvokeWGL<getuniformlocation>("glGetUniformLocation")(shader, value);
+            return InvokeWGL<getUniformLocation>("glGetUniformLocation")(shader, value);
         }
 
         public delegate void linkProgram(uint program);
@@ -316,7 +347,7 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawArrays(uint mode, int first, int count);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawBuffer(uint mode);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawElements(uint mode, int count, uint type, IntPtr indices);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnable(uint cap); 
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnable(uint cap);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenTextures(int n, uint[] textures);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glScissor(int x, int y, int width, int height);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);

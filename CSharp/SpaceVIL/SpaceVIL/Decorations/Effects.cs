@@ -13,6 +13,8 @@ namespace SpaceVIL.Decorations
         private static Object _lock = new Object();
 
         private static Dictionary<IBaseItem, HashSet<IEffect>> _subtractEffects = new Dictionary<IBaseItem, HashSet<IEffect>>();
+        private static Dictionary<IBaseItem, IEffect> _shadowEffects = new Dictionary<IBaseItem, IEffect>();
+        private static Dictionary<IBaseItem, IEffect> _borderEffects = new Dictionary<IBaseItem, IEffect>();
 
         /// <summary>
         /// Adding effect to specified item.
@@ -33,6 +35,16 @@ namespace SpaceVIL.Decorations
                     }
                     _subtractEffects.Add(item, new HashSet<IEffect>());
                     _subtractEffects[item].Add(effect);
+                }
+                else if (effect is IShadow)
+                {
+                    _shadowEffects[item] = effect;
+                    return;
+                }
+                else if (effect is IBorder)
+                {
+                    _borderEffects[item] = effect;
+                    return;
                 }
             }
             finally
@@ -59,6 +71,20 @@ namespace SpaceVIL.Decorations
                         return _subtractEffects[item].Remove(effect);
                     }
                 }
+                else if (effect is IShadow)
+                {
+                    if (_shadowEffects.ContainsKey(item))
+                    {
+                        return _shadowEffects.Remove(item);
+                    }
+                }
+                else if (effect is IBorder)
+                {
+                    if (_borderEffects.ContainsKey(item))
+                    {
+                        return _borderEffects.Remove(item);
+                    }
+                }
                 return false;
             }
             finally
@@ -66,20 +92,76 @@ namespace SpaceVIL.Decorations
                 Monitor.Exit(_lock);
             }
         }
-        
+
         /// <summary>
-        /// Getting list of applyed effects on specified item.
+        /// Removing specified effect form item.
         /// </summary>
-        /// <param name="item">An item as SpaceVIL.Core.IBaseItem.</param>
-        /// <returns>List of effects of specified item as List&lt;SpaceVIL.Core.IEffect&gt;.</returns>
-        public static List<IEffect> GetEffects(IBaseItem item)
+        /// <param name="item">An item as SpaceVIL.Core.IBaseItem. </param>
+        /// <param name="type">An effect type as SpaceVIL.Core.EffectType. </param>
+        public static void ClearEffects(IBaseItem item, EffectType type)
         {
             Monitor.Enter(_lock);
             try
             {
-                if (_subtractEffects.ContainsKey(item))
+                switch (type)
                 {
-                    return new List<IEffect>(_subtractEffects[item]);
+                    case EffectType.Border:
+                        if (_borderEffects.ContainsKey(item))
+                        {
+                            _borderEffects.Remove(item);
+                        }
+                        break;
+                    case EffectType.Shadow:
+                        if (_shadowEffects.ContainsKey(item))
+                        {
+                            _shadowEffects.Remove(item);
+                        }
+                        break;
+                    case EffectType.Subtract:
+                        if (_subtractEffects.ContainsKey(item))
+                        {
+                            _subtractEffects[item].Clear();
+                        }
+                        break;
+                }
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+
+        /// <summary>
+        /// Getting list of applyed effects on specified item.
+        /// </summary>
+        /// <param name="item">An item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="type">An effect type as SpaceVIL.Core.EffectType.</param>
+        /// <returns>List of effects of specified item as List&lt;SpaceVIL.Core.IEffect&gt;.</returns>
+        public static List<IEffect> GetEffects(IBaseItem item, EffectType type)
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                switch (type)
+                {
+                    case EffectType.Border:
+                        if (_borderEffects.ContainsKey(item))
+                        {
+                            return new List<IEffect>() { _borderEffects[item] };
+                        }
+                        break;
+                    case EffectType.Shadow:
+                        if (_shadowEffects.ContainsKey(item))
+                        {
+                            return new List<IEffect>() { _shadowEffects[item] };
+                        }
+                        break;
+                    case EffectType.Subtract:
+                        if (_subtractEffects.ContainsKey(item))
+                        {
+                            return new List<IEffect>(_subtractEffects[item]);
+                        }
+                        break;
                 }
                 return new List<IEffect>();
             }

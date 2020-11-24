@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class EventKeyMethodState {
 
-    List<InterfaceKeyMethodState> events;
+    List<IKeyMethodState> events;
     
-    public List<InterfaceKeyMethodState> getActions() {
+    public List<IKeyMethodState> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventKeyMethodState {
         return events.size();
     }
     
-    public void add(InterfaceKeyMethodState action) {
+    public void add(IKeyMethodState action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceKeyMethodState action) {
+    public boolean remove(IKeyMethodState action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -39,10 +39,10 @@ public class EventKeyMethodState {
         events.clear();
     }
 
-    public void execute(InterfaceItem sender, KeyArgs args) {
+    public void execute(IItem sender, KeyArgs args) {
         if (events == null)
             return;
-        for (InterfaceKeyMethodState action : events) {
+        for (IKeyMethodState action : events) {
             action.execute(sender, args);
         }
     }

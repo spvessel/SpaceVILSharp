@@ -1,8 +1,8 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -209,7 +209,7 @@ public class WrapGrid extends Prototype {
      */
     public HorizontalScrollBar hScrollBar;
 
-    private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AS_NEEDED;
+    private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AsNeeded;
 
     /**
      * Getting internal com.spvessel.spacevil.WrapArea orientation.
@@ -242,20 +242,20 @@ public class WrapGrid extends Prototype {
     public void setScrollBarPolicy(VisibilityPolicy policy) {
         _scrollBarPolicy = policy;
 
-        if (getOrientation() == Orientation.HORIZONTAL) {
-            if (policy == VisibilityPolicy.NEVER)
+        if (getOrientation() == Orientation.Horizontal) {
+            if (policy == VisibilityPolicy.Never)
                 vScrollBar.setDrawable(false);
-            else if (policy == VisibilityPolicy.AS_NEEDED)
+            else if (policy == VisibilityPolicy.AsNeeded)
                 vScrollBar.setDrawable(false);
-            else if (policy == VisibilityPolicy.ALWAYS)
+            else if (policy == VisibilityPolicy.Always)
                 vScrollBar.setDrawable(true);
             _hlayout.updateLayout();
         } else {
-            if (policy == VisibilityPolicy.NEVER)
+            if (policy == VisibilityPolicy.Never)
                 hScrollBar.setDrawable(false);
-            else if (policy == VisibilityPolicy.AS_NEEDED)
+            else if (policy == VisibilityPolicy.AsNeeded)
                 hScrollBar.setDrawable(false);
-            else if (policy == VisibilityPolicy.ALWAYS)
+            else if (policy == VisibilityPolicy.Always)
                 hScrollBar.setDrawable(true);
             _vlayout.updateLayout();
         }
@@ -274,7 +274,7 @@ public class WrapGrid extends Prototype {
         count++;
         _area = new WrapArea(cellWidth, cellHeight, orientation);
 
-        if (getOrientation() == Orientation.HORIZONTAL) {
+        if (getOrientation() == Orientation.Horizontal) {
             _hlayout = new HorizontalStack();
             vScrollBar = new VerticalScrollBar();
         } else {
@@ -297,7 +297,7 @@ public class WrapGrid extends Prototype {
 
     private boolean isOutsideArea(SelectionItem selection) {
 
-        if (getOrientation() == Orientation.HORIZONTAL) {
+        if (getOrientation() == Orientation.Horizontal) {
             int startY = _area.getY() + getPadding().top;
             int endY = _area.getY() + getHeight() - getPadding().bottom;
             if (selection.getY() + selection.getHeight() < startY || selection.getY() > endY)
@@ -312,7 +312,7 @@ public class WrapGrid extends Prototype {
         }
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
         SelectionItem selection = _area.getTrueSelection();
         if (selection == null)
             return;
@@ -323,13 +323,13 @@ public class WrapGrid extends Prototype {
         long selection_X = selection.getX() + selection.getMargin().left;
 
         switch (args.key) {
-            case UP:
+            case Up:
                 if (isOutsideArea(selection) || (selection_Y < startY)) {
                     _area.setScrollOffset(offset - (startY - selection_Y));
                     updateSlider();
                 }
                 break;
-            case DOWN:
+            case Down:
                 if (isOutsideArea(selection)) {
                     _area.setScrollOffset(offset - (startY - selection_Y));
                     updateSlider();
@@ -343,13 +343,13 @@ public class WrapGrid extends Prototype {
                 }
                 break;
 
-            case LEFT:
+            case Left:
                 if (isOutsideArea(selection) || (selection_X < startX)) {
                     _area.setScrollOffset(offset - (startX - selection_X));
                     updateSlider();
                 }
                 break;
-            case RIGHT:
+            case Right:
                 if (isOutsideArea(selection)) {
                     _area.setScrollOffset(offset - (startX - selection_X));
                     updateSlider();
@@ -363,7 +363,7 @@ public class WrapGrid extends Prototype {
                 }
                 break;
 
-            case ESCAPE:
+            case Escape:
                 unselect();
                 break;
             default:
@@ -375,7 +375,7 @@ public class WrapGrid extends Prototype {
     private long h_size = 0;
 
     private void updateWrapArea() {
-        if (getOrientation() == Orientation.HORIZONTAL) {
+        if (getOrientation() == Orientation.Horizontal) {
             // vertical slider
             float v_value = vScrollBar.slider.getCurrentValue();
             int v_offset = (int) Math.round((float) (v_size * v_value) / 100.0f);
@@ -391,7 +391,7 @@ public class WrapGrid extends Prototype {
     private void updateSlider()// vertical slider
     {
         int total_invisible_size = 0;
-        if (getOrientation() == Orientation.HORIZONTAL) {
+        if (getOrientation() == Orientation.Horizontal) {
             int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
             if (visible_area < 0)
                 visible_area = 0;
@@ -401,13 +401,13 @@ public class WrapGrid extends Prototype {
                 vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
                 v_size = 0;
                 vScrollBar.slider.setCurrentValue(0);
-                if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+                if (getScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                     vScrollBar.setDrawable(false);
                     update();
                 }
                 return;
             }
-            if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 vScrollBar.setDrawable(true);
                 update();
             }
@@ -435,13 +435,13 @@ public class WrapGrid extends Prototype {
                 hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
                 h_size = 0;
                 hScrollBar.slider.setCurrentValue(0);
-                if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+                if (getScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                     hScrollBar.setDrawable(false);
                     update();
                 }
                 return;
             }
-            if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
+            if (getScrollBarPolicy() == VisibilityPolicy.AsNeeded) {
                 hScrollBar.setDrawable(true);
                 update();
             }
@@ -462,7 +462,7 @@ public class WrapGrid extends Prototype {
     }
 
     private void update() {
-        if (getOrientation() == Orientation.HORIZONTAL)
+        if (getOrientation() == Orientation.Horizontal)
             _hlayout.updateLayout();
         else
             _vlayout.updateLayout();
@@ -497,10 +497,10 @@ public class WrapGrid extends Prototype {
     /**
      * Adding item to the list area of WrapGrid.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
     @Override
-    public void addItem(InterfaceBaseItem item) {
+    public void addItem(IBaseItem item) {
         _area.addItem(item);
         updateSlider();
     }
@@ -508,11 +508,11 @@ public class WrapGrid extends Prototype {
     /**
      * Insert item into the list area of WrapGrid by index.
      * 
-     * @param item  Child as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item  Child as com.spvessel.spacevil.Core.IBaseItem.
      * @param index Index of insertion.
      */
     @Override
-    public void insertItem(InterfaceBaseItem item, int index) {
+    public void insertItem(IBaseItem item, int index) {
         _area.insertItem(item, index);
         updateSlider();
     }
@@ -520,13 +520,13 @@ public class WrapGrid extends Prototype {
     /**
      * Removing the specified item from the list area of WrapGrid.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return True: if the removal was successful. False: if the removal was
      *         unsuccessful.
      */
     @Override
-    public boolean removeItem(InterfaceBaseItem item) {
-        List<InterfaceBaseItem> list = getItems();
+    public boolean removeItem(IBaseItem item) {
+        List<IBaseItem> list = getItems();
         if (list.contains(item)) {
             return super.removeItem(item);
         }
@@ -554,15 +554,15 @@ public class WrapGrid extends Prototype {
         // Adding
         _area.itemListChanged.add(this::updateSlider);
 
-        if (getOrientation() == Orientation.HORIZONTAL) {
+        if (getOrientation() == Orientation.Horizontal) {
             super.addItem(_hlayout);
             _hlayout.addItems(_area, vScrollBar);
             eventScrollUp.add((sender, args) -> {
-                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                     vScrollBar.eventScrollUp.execute(sender, args);
             });
             eventScrollDown.add((sender, args) -> {
-                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                     vScrollBar.eventScrollDown.execute(sender, args);
             });
             vScrollBar.slider.eventValueChanged.add((sender) -> updateWrapArea());
@@ -570,11 +570,11 @@ public class WrapGrid extends Prototype {
             super.addItem(_vlayout);
             _vlayout.addItems(_area, hScrollBar);
             eventScrollUp.add((sender, args) -> {
-                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                     hScrollBar.eventScrollUp.execute(sender, args);
             });
             eventScrollDown.add((sender, args) -> {
-                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                if (args.mods.contains(KeyMods.No) && args.mods.size() == 1)
                     hScrollBar.eventScrollDown.execute(sender, args);
             });
             hScrollBar.slider.eventValueChanged.add((sender) -> updateWrapArea());
@@ -585,12 +585,12 @@ public class WrapGrid extends Prototype {
      * Getting content of the list area of WrapGrid.
      * 
      * @return Content of the list area as
-     *         List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *         List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public List<InterfaceBaseItem> getListContent() {
-        List<InterfaceBaseItem> result = new LinkedList<>();
-        List<InterfaceBaseItem> list = _area.getItems();
-        for (InterfaceBaseItem item : list) {
+    public List<IBaseItem> getListContent() {
+        List<IBaseItem> result = new LinkedList<>();
+        List<IBaseItem> list = _area.getItems();
+        for (IBaseItem item : list) {
             result.add(((SelectionItem) item).getContent());
         }
         return result;
@@ -600,9 +600,9 @@ public class WrapGrid extends Prototype {
      * Adding all elements in the list area of WrapGrid from the given list.
      * 
      * @param content List of items as
-     *                List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;
+     *                List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;
      */
-    public void setListContent(List<InterfaceBaseItem> content) {
+    public void setListContent(List<IBaseItem> content) {
         _area.setListContent(content);
         // updateSlider();
     }
@@ -610,10 +610,10 @@ public class WrapGrid extends Prototype {
     /**
      * Getting wrapper of item.
      * 
-     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      * @return Wrapper of given item as com.spvessel.spacevil.SelectionItem.
      */
-    public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {
+    public IBaseItem getWrapper(IBaseItem item) {
         return getArea()._mapContent.get(item);
     }
 
@@ -621,9 +621,9 @@ public class WrapGrid extends Prototype {
      * Getting selected item.
      * 
      * @return selection item Selected item as
-     *         com.spvessel.spacevil.Core.InterfaceBaseItem
+     *         com.spvessel.spacevil.Core.IBaseItem
      */
-    public InterfaceBaseItem getSelectedItem() {
+    public IBaseItem getSelectedItem() {
         return _area.getSelectedItem();
     }
 

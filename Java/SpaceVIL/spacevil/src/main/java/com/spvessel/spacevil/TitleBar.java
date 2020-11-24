@@ -32,7 +32,7 @@ public class TitleBar extends WindowAnchor {
      * Direction of title bar (in Mac OS is HorizontalDirection.FROM_LEFT_TO_RIGHT,
      * in others OS HorizontalDirection.FROM_RIGHT_TO_LEFT).
      */
-    public HorizontalDirection direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
+    public HorizontalDirection direction = HorizontalDirection.FromLeftToRight;
 
     private Label _texLabel;
     private ImageItem _icon;
@@ -366,11 +366,11 @@ public class TitleBar extends WindowAnchor {
 
         // adding
         switch (direction) {
-            case FROM_LEFT_TO_RIGHT:
+            case FromLeftToRight:
                 _layout.addItems(_icon, _texLabel, _minimize, _maximize, _close);
                 break;
-            case FROM_RIGHT_TO_LEFT:
-                _texLabel.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+            case FromRightToLeft:
+                _texLabel.setTextAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
                 _layout.addItems(_close, _minimize, _maximize, _icon, _texLabel);
                 break;
             default:
@@ -420,7 +420,7 @@ public class TitleBar extends WindowAnchor {
 
         _icon.setVisible(false);
         _icon.setBackground(0, 0, 0, 0);
-        _icon.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        _icon.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        _icon.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        _icon.setAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
     }
 }

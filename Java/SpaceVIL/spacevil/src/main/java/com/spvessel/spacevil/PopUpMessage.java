@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -267,7 +267,7 @@ public class PopUpMessage extends Prototype {
      */
     @Override
     public void initElements() {
-        InterfaceMouseMethodState click = (sender, args) -> removeSelf();
+        IMouseMethodState click = (sender, args) -> removeSelf();
         _btnClose.eventMouseClick.add(click);
         // adding
         addItems(_textObject, _btnClose);

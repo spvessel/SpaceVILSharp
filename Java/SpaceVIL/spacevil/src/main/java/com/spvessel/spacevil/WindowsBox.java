@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceOpenGLLayer;
+import com.spvessel.spacevil.Core.IOpenGLLayer;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -117,11 +117,11 @@ public final class WindowsBox {
         container.setHeight(_layout.getHeight());
         container.setMinHeight(_layout.getMinHeight());
         container.setMaxHeight(_layout.getMaxHeight());
-        container.setWidthPolicy(SizePolicy.EXPAND);
-        container.setHeightPolicy(SizePolicy.EXPAND);
+        container.setWidthPolicy(SizePolicy.Expand);
+        container.setHeightPolicy(SizePolicy.Expand);
 
         _layout.setWindow(container);
-        ItemsLayoutBox.addItem(_layout, container, LayoutType.STATIC);
+        ItemsLayoutBox.addItem(_layout, container, LayoutType.Static);
     }
 
     static void removeWindow(CoreWindow _layout) {
@@ -176,7 +176,7 @@ public final class WindowsBox {
         window.getLayout().restoreView();
     }
 
-    public static void setGLLayerViewport(CoreWindow window, InterfaceOpenGLLayer layer) {
+    public static void setGLLayerViewport(CoreWindow window, IOpenGLLayer layer) {
         window.getLayout().setGLLayerViewport(layer);
     }
 }

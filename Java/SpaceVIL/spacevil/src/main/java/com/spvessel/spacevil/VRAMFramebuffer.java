@@ -1,55 +1,58 @@
 package com.spvessel.spacevil;
 
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
+import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
+import static com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper.*;
 
 final class VramFramebuffer {
+
+    private OpenGLWrapper gl = null;
+
     int FBO;
     int texture;
 
     VramFramebuffer() {
+        gl = OpenGLWrapper.get();
     }
 
     void genFBO() {
-        FBO = glGenFramebuffersEXT();
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
+        FBO = gl.GenFramebuffer();
+        gl.BindFramebuffer(GL_FRAMEBUFFER_EXT, FBO);
     }
 
     void genFboTexture(int w, int h) {
-        texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        texture = gl.GenTexture();
+        gl.BindTexture(GL_TEXTURE_2D, texture);
+        gl.TexImage2DEmpty(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        gl.BindTexture(GL_TEXTURE_2D, 0);
 
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture, 0);
+        gl.FramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, texture, 0);
     }
 
     void bind() {
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
+        gl.BindFramebuffer(GL_FRAMEBUFFER_EXT, FBO);
     }
 
     void bindTexture() {
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D, texture, 0);
+        gl.FramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, texture, 0);
     }
 
     void unbind() {
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+        gl.BindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
     }
 
     void unbindTexture() {
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, 0, 0);
+        gl.FramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, 0, 0);
     }
 
     public void clear() {
-        glDeleteFramebuffersEXT(FBO);
+        gl.DeleteFramebuffer(FBO);
     }
 
     void clearTexture() {
-        glDeleteTextures(texture);
+        gl.DeleteTexture(texture);
     }
 }

@@ -5,5 +5,5 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: WINDOWS, LINUX, MAC.
  */
 public enum OSType {
-    WINDOWS, LINUX, MAC
+    Windows, Linux, Mac
 }

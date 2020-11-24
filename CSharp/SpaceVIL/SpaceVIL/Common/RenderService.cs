@@ -34,5 +34,22 @@ namespace SpaceVIL.Common
         {
             WindowsBox.SetGLLayerViewport(window, layer);
         }
+
+        public static void EnableMonitoring(BenchmarkIndicator indicators)
+        {
+            indicatorList = indicators;
+        }
+
+        public static void DisableMonitoring()
+        {
+            indicatorList = 0;
+        }
+
+        public static BenchmarkIndicator GetMonitoringIndicators()
+        {
+            return indicatorList;
+        }
+
+        private static BenchmarkIndicator indicatorList = 0;
     }
 }

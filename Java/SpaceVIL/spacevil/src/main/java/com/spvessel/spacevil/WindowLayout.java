@@ -1,14 +1,12 @@
 package com.spvessel.spacevil;
 
-import static org.lwjgl.system.MemoryUtil.NULL;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.spvessel.spacevil.Core.InterfaceOpenGLLayer;
+import com.spvessel.spacevil.Core.IOpenGLLayer;
 
 final class WindowLayout {
 
@@ -24,7 +22,7 @@ final class WindowLayout {
         }
     }
 
-    void setGLLayerViewport(InterfaceOpenGLLayer layer) {
+    void setGLLayerViewport(IOpenGLLayer layer) {
         if (_engine != null) {
             _engine.setGLLayerViewport(layer);
         }
@@ -169,7 +167,7 @@ final class WindowLayout {
     }
 
     boolean isGLWIDValid() {
-        if (getGLWID() == NULL)
+        if (getGLWID() == 0)
             return false;
         return true;
     }

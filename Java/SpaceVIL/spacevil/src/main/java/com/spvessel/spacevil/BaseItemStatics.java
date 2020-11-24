@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFreeLayout;
-import com.spvessel.spacevil.Core.InterfaceHLayout;
-import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFreeLayout;
+import com.spvessel.spacevil.Core.IHLayout;
+import com.spvessel.spacevil.Core.IVLayout;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -17,77 +17,77 @@ final class BaseItemStatics {
     private BaseItemStatics() {
     }
 
-    static void updateAllLayout(InterfaceBaseItem item) {
+    static void updateAllLayout(IBaseItem item) {
         Prototype parent = item.getParent();
         if (parent == null) {
             return;
         }
 
-        boolean hLayout = parent instanceof InterfaceHLayout;
-        boolean vLayout = parent instanceof InterfaceVLayout;
-        boolean grid = parent instanceof InterfaceFreeLayout;
+        boolean hLayout = parent instanceof IHLayout;
+        boolean vLayout = parent instanceof IVLayout;
+        boolean grid = parent instanceof IFreeLayout;
 
         if (!hLayout && !vLayout && !grid) {
             updateBehavior(item);
         }
 
         if (hLayout) {
-            ((InterfaceHLayout) parent).updateLayout();
+            ((IHLayout) parent).updateLayout();
         }
         if (vLayout) {
-            ((InterfaceVLayout) parent).updateLayout();
+            ((IVLayout) parent).updateLayout();
         }
         if (grid) {
-            ((InterfaceFreeLayout) parent).updateLayout();
+            ((IFreeLayout) parent).updateLayout();
         }
     }
 
-    static void updateHLayout(InterfaceBaseItem item) {
+    static void updateHLayout(IBaseItem item) {
         Prototype parent = item.getParent();
         if (parent == null) {
             return;
         }
 
-        if (item.getWidthPolicy() == SizePolicy.FIXED) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean grid = parent instanceof InterfaceFreeLayout;
+        if (item.getWidthPolicy() == SizePolicy.Fixed) {
+            boolean hLayout = parent instanceof IHLayout;
+            boolean grid = parent instanceof IFreeLayout;
 
             if (!hLayout && !grid) {
                 updateBehavior(item);
             }
 
             if (hLayout) {
-                ((InterfaceHLayout) parent).updateLayout();
+                ((IHLayout) parent).updateLayout();
             }
             if (grid) {
-                ((InterfaceFreeLayout) parent).updateLayout();
+                ((IFreeLayout) parent).updateLayout();
             }
         }
     }
 
-    static void updateVLayout(InterfaceBaseItem item) {
+    static void updateVLayout(IBaseItem item) {
         Prototype parent = item.getParent();
         if (parent == null) {
             return;
         }
-        if (item.getHeightPolicy() == SizePolicy.FIXED) {
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceFreeLayout;
+        if (item.getHeightPolicy() == SizePolicy.Fixed) {
+            boolean vLayout = parent instanceof IVLayout;
+            boolean grid = parent instanceof IFreeLayout;
 
             if (!vLayout && !grid) {
                 updateBehavior(item);
             }
 
             if (vLayout) {
-                ((InterfaceVLayout) parent).updateLayout();
+                ((IVLayout) parent).updateLayout();
             }
             if (grid) {
-                ((InterfaceFreeLayout) parent).updateLayout();
+                ((IFreeLayout) parent).updateLayout();
             }
         }
     }
 
-    static void castToUpdateBehavior(InterfaceBaseItem item) {
+    static void castToUpdateBehavior(IBaseItem item) {
         if (item instanceof Prototype) {
             updateBehavior(((Prototype) item).getCore());
         } else {
@@ -95,7 +95,7 @@ final class BaseItemStatics {
         }
     }
 
-    static void castToUpdateGeometry(InterfaceBaseItem item) {
+    static void castToUpdateGeometry(IBaseItem item) {
         if (item instanceof Prototype) {
             updateGeometry(((Prototype) item).getCore());
         } else {
@@ -103,14 +103,14 @@ final class BaseItemStatics {
         }
     }
 
-    static void updateGeometry(InterfaceBaseItem item) {
-        updateGeometryAttr(item, GeometryEventType.RESIZE_WIDTH, 0);
-        updateGeometryAttr(item, GeometryEventType.RESIZE_HEIGHT, 0);
-        updateGeometryAttr(item, GeometryEventType.MOVED_X, 0);
-        updateGeometryAttr(item, GeometryEventType.MOVED_Y, 0);
+    static void updateGeometry(IBaseItem item) {
+        updateGeometryAttr(item, GeometryEventType.ResizeWidth, 0);
+        updateGeometryAttr(item, GeometryEventType.ResizeHeight, 0);
+        updateGeometryAttr(item, GeometryEventType.MovedX, 0);
+        updateGeometryAttr(item, GeometryEventType.MovedY, 0);
     }
 
-    static void updateBehavior(InterfaceBaseItem item) {
+    static void updateBehavior(IBaseItem item) {
         Prototype parent = item.getParent();
         if (parent == null) {
             return;
@@ -123,38 +123,38 @@ final class BaseItemStatics {
         }
     }
 
-    static void updatePrototypeBehavior(InterfaceBaseItem item, Prototype parent) {
+    static void updatePrototypeBehavior(IBaseItem item, Prototype parent) {
         Prototype prt = ((VisualItem) item).prototype;
         updateBaseItemBehavior(prt, parent);
     }
 
-    static void updateBaseItemBehavior(InterfaceBaseItem item, Prototype parent) {
+    static void updateBaseItemBehavior(IBaseItem item, Prototype parent) {
         List<ItemAlignment> alignment = item.getAlignment();
         Indents itemMargin = item.getMargin();
 
-        if (alignment.contains(ItemAlignment.LEFT)) {
+        if (alignment.contains(ItemAlignment.Left)) {
             item.setX(parent.getX() + parent.getPadding().left + itemMargin.left);
         }
-        if (alignment.contains(ItemAlignment.RIGHT)) {
+        if (alignment.contains(ItemAlignment.Right)) {
             item.setX(
                     parent.getX() + parent.getWidth() - item.getWidth() - parent.getPadding().right - itemMargin.right);
         }
-        if (alignment.contains(ItemAlignment.TOP)) {
+        if (alignment.contains(ItemAlignment.Top)) {
             item.setY(parent.getY() + parent.getPadding().top + itemMargin.top);
         }
-        if (alignment.contains(ItemAlignment.BOTTOM)) {
+        if (alignment.contains(ItemAlignment.Bottom)) {
             item.setY(parent.getY() + parent.getHeight() - item.getHeight() - parent.getPadding().bottom
                     - itemMargin.bottom);
         }
-        if (alignment.contains(ItemAlignment.HCENTER)) {
+        if (alignment.contains(ItemAlignment.HCenter)) {
             item.setX(parent.getX() + (parent.getWidth() - item.getWidth()) / 2 + itemMargin.left - itemMargin.right);
         }
-        if (alignment.contains(ItemAlignment.VCENTER)) {
+        if (alignment.contains(ItemAlignment.VCenter)) {
             item.setY(parent.getY() + (parent.getHeight() - item.getHeight()) / 2 + itemMargin.top - itemMargin.bottom);
         }
     }
 
-    static void updateGeometryAttr(InterfaceBaseItem item, GeometryEventType type, int value) {
+    static void updateGeometryAttr(IBaseItem item, GeometryEventType type, int value) {
         Prototype parent = item.getParent();
         if (parent == null) {
             return;
@@ -167,29 +167,29 @@ final class BaseItemStatics {
         }
     }
 
-    static void updateBaseItemGeometryAttr(InterfaceBaseItem item, Prototype parent, GeometryEventType type,
+    static void updateBaseItemGeometryAttr(IBaseItem item, Prototype parent, GeometryEventType type,
             int value) {
         item.setConfines();
         switch (type) {
-        case MOVED_X:
+        case MovedX:
             item.setX(item.getX() + value);
             break;
 
-        case MOVED_Y:
+        case MovedY:
             item.setY(item.getY() + value);
             break;
 
-        case RESIZE_WIDTH:
-            if (item.getWidthPolicy() == SizePolicy.FIXED) {
-                if (item.getAlignment().contains(ItemAlignment.RIGHT)) {
+        case ResizeWidth:
+            if (item.getWidthPolicy() == SizePolicy.Fixed) {
+                if (item.getAlignment().contains(ItemAlignment.Right)) {
                     item.setX(parent.getX() + parent.getWidth() - item.getWidth() - parent.getPadding().right
                             - item.getMargin().right);//
                 }
-                if (item.getAlignment().contains(ItemAlignment.HCENTER)) {
+                if (item.getAlignment().contains(ItemAlignment.HCenter)) {
                     item.setX(parent.getX() + (parent.getWidth() - item.getWidth()) / 2 + item.getMargin().left
                             - item.getMargin().right);
                 }
-            } else if (item.getWidthPolicy() == SizePolicy.EXPAND) {
+            } else if (item.getWidthPolicy() == SizePolicy.Expand) {
                 int prefered = parent.getWidth() - parent.getPadding().left - parent.getPadding().right
                         - item.getMargin().right - item.getMargin().left;//
                 prefered = (prefered > item.getMaxWidth()) ? item.getMaxWidth() : prefered;
@@ -203,11 +203,11 @@ final class BaseItemStatics {
                 } else if (prefered + parent.getPadding().left + parent.getPadding().right + item.getMargin().right
                         + item.getMargin().left < parent.getWidth())//
                 {
-                    if (item.getAlignment().contains(ItemAlignment.RIGHT)) {
+                    if (item.getAlignment().contains(ItemAlignment.Right)) {
                         item.setX(parent.getX() + parent.getWidth() - item.getWidth() - parent.getPadding().right
                                 - item.getMargin().right);//
                     }
-                    if (item.getAlignment().contains(ItemAlignment.HCENTER)) {
+                    if (item.getAlignment().contains(ItemAlignment.HCenter)) {
                         item.setX(parent.getX() + (parent.getWidth() - item.getWidth()) / 2 + item.getMargin().left);//
                     }
                 } else if (prefered + parent.getPadding().left + parent.getPadding().right + item.getMargin().right
@@ -222,17 +222,17 @@ final class BaseItemStatics {
             }
             break;
 
-        case RESIZE_HEIGHT:
-            if (item.getHeightPolicy() == SizePolicy.FIXED) {
-                if (item.getAlignment().contains(ItemAlignment.BOTTOM)) {
+        case ResizeHeight:
+            if (item.getHeightPolicy() == SizePolicy.Fixed) {
+                if (item.getAlignment().contains(ItemAlignment.Bottom)) {
                     item.setY(parent.getY() + parent.getHeight() - item.getHeight() - parent.getPadding().bottom
                             - item.getMargin().bottom);//
                 }
-                if (item.getAlignment().contains(ItemAlignment.VCENTER)) {
+                if (item.getAlignment().contains(ItemAlignment.VCenter)) {
                     item.setY(parent.getY() + (parent.getHeight() - item.getHeight()) / 2 + item.getMargin().top
                             - item.getMargin().bottom);
                 }
-            } else if (item.getHeightPolicy() == SizePolicy.EXPAND) {
+            } else if (item.getHeightPolicy() == SizePolicy.Expand) {
                 int prefered = parent.getHeight() - parent.getPadding().top - parent.getPadding().bottom
                         - item.getMargin().bottom - item.getMargin().top;//
                 prefered = (prefered > item.getMaxHeight()) ? item.getMaxHeight() : prefered;
@@ -246,11 +246,11 @@ final class BaseItemStatics {
                 } else if (prefered + parent.getPadding().top + parent.getPadding().bottom + item.getMargin().bottom
                         + item.getMargin().top < parent.getHeight())//
                 {
-                    if (item.getAlignment().contains(ItemAlignment.BOTTOM)) {
+                    if (item.getAlignment().contains(ItemAlignment.Bottom)) {
                         item.setY(parent.getY() + parent.getHeight() - item.getHeight() - parent.getPadding().bottom
                                 - item.getMargin().bottom);//
                     }
-                    if (item.getAlignment().contains(ItemAlignment.VCENTER)) {
+                    if (item.getAlignment().contains(ItemAlignment.VCenter)) {
                         item.setY(parent.getY() + (parent.getHeight() - item.getHeight()) / 2 + item.getMargin().top);//
                     }
                 } else if (prefered + parent.getPadding().top + parent.getPadding().bottom + item.getMargin().bottom
@@ -270,13 +270,13 @@ final class BaseItemStatics {
         }
     }
 
-    static void updatePrototypeGeometryAttr(InterfaceBaseItem item, Prototype parent, GeometryEventType type,
+    static void updatePrototypeGeometryAttr(IBaseItem item, Prototype parent, GeometryEventType type,
             int value) {
         Prototype prt = ((VisualItem) item).prototype;
         updateBaseItemGeometryAttr(prt, parent, type, value);
     }
 
-    static List<float[]> updateShape(InterfaceBaseItem item) {
+    static List<float[]> updateShape(IBaseItem item) {
         if (item == null) {
             return null;
         }

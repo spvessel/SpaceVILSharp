@@ -1,14 +1,13 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBehavior;
+import com.spvessel.spacevil.Core.IBehavior;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-class Behavior implements InterfaceBehavior {
+class Behavior implements IBehavior {
 
     private List<ItemAlignment> _alignment = new LinkedList<>();
 
@@ -34,47 +33,47 @@ class Behavior implements InterfaceBehavior {
         ItemAlignment _vcenter = null;
 
         for (ItemAlignment var : alignment) {
-            if (var.equals(ItemAlignment.LEFT)) {
+            if (var.equals(ItemAlignment.Left)) {
                 _left = var;
             }
-            if (var.equals(ItemAlignment.RIGHT)) {
+            if (var.equals(ItemAlignment.Right)) {
                 _right = var;
             }
-            if (var.equals(ItemAlignment.TOP)) {
+            if (var.equals(ItemAlignment.Top)) {
                 _top = var;
             }
-            if (var.equals(ItemAlignment.BOTTOM)) {
+            if (var.equals(ItemAlignment.Bottom)) {
                 _bottom = var;
             }
-            if (var.equals(ItemAlignment.HCENTER)) {
+            if (var.equals(ItemAlignment.HCenter)) {
                 _hcenter = var;
             }
-            if (var.equals(ItemAlignment.VCENTER)) {
+            if (var.equals(ItemAlignment.VCenter)) {
                 _vcenter = var;
             }
         }
 
         if (_left != null && _right != null) {
-            alignment.remove(ItemAlignment.RIGHT);
+            alignment.remove(ItemAlignment.Right);
         }
 
         if (_top != null && _bottom != null) {
-            alignment.remove(ItemAlignment.BOTTOM);
+            alignment.remove(ItemAlignment.Bottom);
         }
         if (_hcenter != null) {
-            if (alignment.contains(ItemAlignment.LEFT)) {
-                alignment.remove(ItemAlignment.LEFT);
+            if (alignment.contains(ItemAlignment.Left)) {
+                alignment.remove(ItemAlignment.Left);
             }
-            if (alignment.contains(ItemAlignment.RIGHT)) {
-                alignment.remove(ItemAlignment.RIGHT);
+            if (alignment.contains(ItemAlignment.Right)) {
+                alignment.remove(ItemAlignment.Right);
             }
         }
         if (_vcenter != null) {
-            if (alignment.contains(ItemAlignment.TOP)) {
-                alignment.remove(ItemAlignment.TOP);
+            if (alignment.contains(ItemAlignment.Top)) {
+                alignment.remove(ItemAlignment.Top);
             }
-            if (alignment.contains(ItemAlignment.BOTTOM)) {
-                alignment.remove(ItemAlignment.BOTTOM);
+            if (alignment.contains(ItemAlignment.Bottom)) {
+                alignment.remove(ItemAlignment.Bottom);
             }
         }
 
@@ -84,7 +83,7 @@ class Behavior implements InterfaceBehavior {
         setAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
     }
 
-    public SizePolicy _w_policy = SizePolicy.FIXED;
+    public SizePolicy _w_policy = SizePolicy.Fixed;
 
     public void setWidthPolicy(SizePolicy policy) {
         _w_policy = policy;
@@ -94,7 +93,7 @@ class Behavior implements InterfaceBehavior {
         return _w_policy;
     }
 
-    public SizePolicy _h_policy = SizePolicy.FIXED;
+    public SizePolicy _h_policy = SizePolicy.Fixed;
 
     public void setHeightPolicy(SizePolicy policy) {
         _h_policy = policy;

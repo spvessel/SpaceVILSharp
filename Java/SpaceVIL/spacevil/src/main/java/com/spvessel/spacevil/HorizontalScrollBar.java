@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
@@ -38,7 +38,7 @@ public class HorizontalScrollBar extends HorizontalStack {
         setItemName("HorizontalScrollBar_" + count);
         count++;
 
-        slider.handler.orientation = Orientation.HORIZONTAL;
+        slider.handler.orientation = Orientation.Horizontal;
 
         setStyle(DefaultsService.getDefaultStyle(HorizontalScrollBar.class));
     }
@@ -57,9 +57,9 @@ public class HorizontalScrollBar extends HorizontalStack {
         slider.handler.isFocusable = false;
         addItems(upArrow, slider, downArrow);
 
-        InterfaceMouseMethodState upScroll = (sender, args) -> {
+        IMouseMethodState upScroll = (sender, args) -> {
             float value = slider.getCurrentValue();
-            value -= slider.getStep();
+            value -= slider.getStep() * args.scrollValue.dX;
             if (value < slider.getMinValue())
                 value = slider.getMinValue();
             slider.setCurrentValue(value);
@@ -67,9 +67,9 @@ public class HorizontalScrollBar extends HorizontalStack {
         upArrow.eventMouseClick.add(upScroll);
         eventScrollUp.add(upScroll);
 
-        InterfaceMouseMethodState downScroll = (sender, args) -> {
+        IMouseMethodState downScroll = (sender, args) -> {
             float value = slider.getCurrentValue();
-            value += slider.getStep();
+            value += slider.getStep() * args.scrollValue.dX;
             if (value > slider.getMaxValue())
                 value = slider.getMaxValue();
             slider.setCurrentValue(value);

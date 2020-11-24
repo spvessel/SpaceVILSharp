@@ -16,7 +16,7 @@ import java.util.List;
  * <p>
  * Supports all events including drag and drop.
  */
-public class TextView extends Prototype implements InterfaceDraggable, InterfaceTextShortcuts, InterfaceTextWrap {
+public class TextView extends Prototype implements IDraggable, ITextShortcuts, ITextWrap {
 
     private static int count = 0;
     private Point _cursorPosition = new Point(0, 0);
@@ -54,7 +54,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         // Set cursor and unselect only - common actions for click/double click
         _textureStorage.textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
                 if (_isSelect) {
                     unselectText();
@@ -69,7 +69,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     private void onMouseClick(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 // replaceCursorAccordingCoord(new Point(args.position.getX(),
                 // args.position.getY()));
                 // if (_isSelect) {
@@ -173,7 +173,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     private void onDragging(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
+            if (args.button == MouseButton.ButtonLeft) {
                 replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
                 if (!_isSelect) {
                     _isSelect = true;
@@ -198,7 +198,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
     private void onKeyPress(Object sender, KeyArgs args) {
         TextShortcutProcessor.processShortcut(this, args); // ctrl + c & ctrl + a processor only
-        if (args.key == KeyCode.ESCAPE && _isSelect) {
+        if (args.key == KeyCode.Escape && _isSelect) {
             unselectText();
         }
     }
@@ -442,7 +442,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     private void changeHeightAccordingToText() {
-        if (getHeightPolicy() == SizePolicy.EXPAND)
+        if (getHeightPolicy() == SizePolicy.Expand)
             return;
         int textHeight = getTextHeight();
         setHeight(textHeight);
@@ -454,7 +454,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     /**
      * Always returns True. TextView always wraps contained text.
      * <p>
-     * com.spvessel.spacevil.Core.InterfaceTextWrap implementation.
+     * com.spvessel.spacevil.Core.ITextWrap implementation.
      */
     public boolean isWrapText() {
         return true;
@@ -678,7 +678,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     // disable------------------------------------------------------------------------------------------
 
     /**
-     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     * Do nothing. com.spvessel.spacevil.Core.ITextShortcuts implementation.
      */
     @Override
     public void pasteText(String pasteStr) {
@@ -686,7 +686,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     /**
-     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     * Do nothing. com.spvessel.spacevil.Core.ITextShortcuts implementation.
      */
     @Override
     public String cutText() {
@@ -694,7 +694,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     /**
-     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     * Do nothing. com.spvessel.spacevil.Core.ITextShortcuts implementation.
      */
     @Override
     public void undo() {
@@ -702,7 +702,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     /**
-     * Do nothing. com.spvessel.spacevil.Core.InterfaceTextShortcuts implementation.
+     * Do nothing. com.spvessel.spacevil.Core.ITextShortcuts implementation.
      */
     @Override
     public void redo() {

@@ -5,7 +5,7 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: NO, MSAA_2X, MSAA_4X, MSAA_8X.
  */
 public enum MSAA {
-    NO(0), MSAA_2X(2), MSAA_4X(4), MSAA_8X(8);
+    No(0), MSAA2x(2), MSAA4x(4), MSAA8x(8);
 
     private final int state;
 
@@ -20,15 +20,15 @@ public enum MSAA {
     public static MSAA getEnum(int state) {
         switch (state) {
         case 0:
-            return MSAA.NO;
+            return MSAA.No;
         case 2:
-            return MSAA.MSAA_2X;
+            return MSAA.MSAA2x;
         case 4:
-            return MSAA.MSAA_4X;
+            return MSAA.MSAA4x;
         case 8:
-            return MSAA.MSAA_8X;
+            return MSAA.MSAA8x;
         default:
-            return MSAA.NO;
+            return MSAA.No;
         }
     }
 }

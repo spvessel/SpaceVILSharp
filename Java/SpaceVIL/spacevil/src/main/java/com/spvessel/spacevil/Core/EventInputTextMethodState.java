@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class EventInputTextMethodState {
 
-    List<InterfaceInputTextMethodState> events;
+    List<IInputTextMethodState> events;
 
-    public List<InterfaceInputTextMethodState> getActions() {
+    public List<IInputTextMethodState> getActions() {
         return new LinkedList<>(events);
     }
 
@@ -17,13 +17,13 @@ public class EventInputTextMethodState {
         return events.size();
     }
     
-    public void add(InterfaceInputTextMethodState action) {
+    public void add(IInputTextMethodState action) {
         if (events == null)
             events = new LinkedList<>();
         events.add(action);
     }
 
-    public boolean remove(InterfaceInputTextMethodState action) {
+    public boolean remove(IInputTextMethodState action) {
         if (events == null)
             return false;
         if (events.contains(action)) {
@@ -39,10 +39,10 @@ public class EventInputTextMethodState {
         events.clear();
     }
 
-    public void execute(InterfaceItem sender, TextInputArgs args) {
+    public void execute(IItem sender, TextInputArgs args) {
         if (events == null)
             return;
-        for (InterfaceInputTextMethodState action : events) {
+        for (IInputTextMethodState action : events) {
             action.execute(sender, args);
         }
     }

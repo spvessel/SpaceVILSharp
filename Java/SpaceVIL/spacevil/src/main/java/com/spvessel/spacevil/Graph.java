@@ -68,8 +68,8 @@ public class Graph extends Prototype {
      */
     @Override
     public void initElements() {
-        lines.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        lines.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        points.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         addItems(lines, points);
     }
 

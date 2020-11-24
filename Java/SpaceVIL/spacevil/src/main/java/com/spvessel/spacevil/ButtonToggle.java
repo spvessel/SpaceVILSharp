@@ -89,13 +89,13 @@ public class ButtonToggle extends Prototype {
     public void setToggled(boolean value) {
         _toggled = value;
         if (value == true)
-            setState(ItemStateType.TOGGLED);
+            setState(ItemStateType.Toggled);
         else
-            setState(ItemStateType.BASE);
+            setState(ItemStateType.Base);
     }
 
-    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
+    private void onKeyPress(IItem sender, KeyArgs args) {
+        if (args.key == KeyCode.Enter && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }

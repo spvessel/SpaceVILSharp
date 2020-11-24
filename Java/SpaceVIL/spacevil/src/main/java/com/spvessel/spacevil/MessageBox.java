@@ -90,7 +90,7 @@ public class MessageBox extends DialogWindow {
         _userbar = new HorizontalStack();
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
+            if (args.key == KeyCode.Escape) {
                 close();
             }
         });
@@ -193,10 +193,10 @@ public class MessageBox extends DialogWindow {
             setWidth(wText);
         }
         addItems(_titleBar, _msgLayout);
-        getLayout().getContainer().update(GeometryEventType.RESIZE_WIDTH, 0);
+        getLayout().getContainer().update(GeometryEventType.ResizeWidth, 0);
 
         if (!isEmpty) {
-            _toolbar.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+            _toolbar.setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
             _msgLayout.addItems(_msgLabel, _userbar, _toolbar);
         } else {
             _msgLayout.addItems(_msgLabel, _toolbar);

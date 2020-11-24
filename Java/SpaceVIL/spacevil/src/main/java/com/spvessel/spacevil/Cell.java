@@ -1,8 +1,8 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.Geometry;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceFreeLayout;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IFreeLayout;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.List;
@@ -13,29 +13,29 @@ import java.util.List;
  * from any instance of com.spvessel.spacevil.Grid class.
  */
 public final class Cell extends Geometry {
-    private InterfaceFreeLayout _parent = null;
+    private IFreeLayout _parent = null;
 
     /**
-     * Getting com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy com.spvessel.spacevil.Grid) 
+     * Getting com.spvessel.spacevil.Core.IFreeLayout (usualy com.spvessel.spacevil.Grid) 
      * instance to which this Cell belongs.
-     * @return Container with cells as com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy com.spvessel.spacevil.Grid).
+     * @return Container with cells as com.spvessel.spacevil.Core.IFreeLayout (usualy com.spvessel.spacevil.Grid).
      */
-    public InterfaceFreeLayout getParentGrid() {
+    public IFreeLayout getParentGrid() {
         return _parent;
     }
 
-    Cell(InterfaceFreeLayout grid) {
+    Cell(IFreeLayout grid) {
         _parent = grid;
     }
 
-    Cell(InterfaceFreeLayout grid, int row, int column)
+    Cell(IFreeLayout grid, int row, int column)
     {
         this(grid);
         _rowIndex = row;
         _columnIndex = column;
     }
 
-    Cell(InterfaceFreeLayout grid, int row, int column, InterfaceBaseItem item) {
+    Cell(IFreeLayout grid, int row, int column, IBaseItem item) {
         this(grid, row, column);
         _itemLink = item;
     }
@@ -97,17 +97,17 @@ public final class Cell extends Geometry {
         return _y;
     }
 
-    private InterfaceBaseItem _itemLink = null;
+    private IBaseItem _itemLink = null;
 
     /**
      * Getting contained item in the Cell
-     * @return Item as com.spvessel.spacevil.Core.InterfaceBaseItem
+     * @return Item as com.spvessel.spacevil.Core.IBaseItem
      */
-    public InterfaceBaseItem getItem() {
+    public IBaseItem getItem() {
         return _itemLink;
     }
 
-    void setItem(InterfaceBaseItem item) {
+    void setItem(IBaseItem item) {
         _itemLink = item;
     }
 
@@ -117,23 +117,23 @@ public final class Cell extends Geometry {
 
         List<ItemAlignment> alignment = _itemLink.getAlignment();
 
-        if (alignment.contains(ItemAlignment.LEFT)) {
+        if (alignment.contains(ItemAlignment.Left)) {
             _itemLink.setX(getX() + _itemLink.getMargin().left);//
         }
-        if (alignment.contains(ItemAlignment.RIGHT)) {
+        if (alignment.contains(ItemAlignment.Right)) {
             _itemLink.setX(getX() + getWidth() - _itemLink.getWidth() - _itemLink.getMargin().right);//
         }
-        if (alignment.contains(ItemAlignment.TOP)) {
+        if (alignment.contains(ItemAlignment.Top)) {
             _itemLink.setY(getY() + _itemLink.getMargin().top);//
         }
-        if (alignment.contains(ItemAlignment.BOTTOM)) {
+        if (alignment.contains(ItemAlignment.Bottom)) {
             _itemLink.setY(getY() + getHeight() - _itemLink.getHeight() - _itemLink.getMargin().bottom);//
         }
-        if (alignment.contains(ItemAlignment.HCENTER)) {
+        if (alignment.contains(ItemAlignment.HCenter)) {
             _itemLink.setX(getX() + (getWidth() - _itemLink.getWidth()) / 2 + _itemLink.getMargin().left
                     - _itemLink.getMargin().right);//
         }
-        if (alignment.contains(ItemAlignment.VCENTER)) {
+        if (alignment.contains(ItemAlignment.VCenter)) {
             _itemLink.setY(getY() + (getHeight() - _itemLink.getHeight()) / 2 + _itemLink.getMargin().top
                     - _itemLink.getMargin().bottom);//
         }

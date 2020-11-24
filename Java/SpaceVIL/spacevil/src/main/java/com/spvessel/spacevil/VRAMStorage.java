@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-final class VRamStorage<TKey, TValue extends InterfaceVramResource> {
+final class VramStorage<TKey, TValue extends IVramResource> {
 
     Map<TKey, TValue> resourceStorage = new HashMap<>();
     List<TKey> flushList = new LinkedList<>();
@@ -34,7 +34,7 @@ final class VRamStorage<TKey, TValue extends InterfaceVramResource> {
         }
     }
 
-    private <T, F extends InterfaceVramResource> void flushStorage(List<T> flushList, Map<T, F> storage) {
+    private <T, F extends IVramResource> void flushStorage(List<T> flushList, Map<T, F> storage) {
         for (T resource : flushList) {
             if (storage.containsKey(resource)) {
                 storage.get(resource).clear();

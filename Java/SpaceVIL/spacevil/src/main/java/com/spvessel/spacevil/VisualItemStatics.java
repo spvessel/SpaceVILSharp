@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spvessel.spacevil.Decorations.Border;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
@@ -17,7 +18,7 @@ final class VisualItemStatics {
     }
 
     static void updateState(VisualItem item) {
-        ItemState baseState = item.getState(ItemStateType.BASE);
+        ItemState baseState = item.getState(ItemStateType.Base);
         ItemState currentState = item.getState(item.getCurrentStateType());
         
         item.setBackgroundDirect(currentState.background);
@@ -28,31 +29,31 @@ final class VisualItemStatics {
                 item.setCustomFigure(currentState.shape);
         }
 
-        ItemState disabledState = item.getState(ItemStateType.DISABLED);
+        ItemState disabledState = item.getState(ItemStateType.Disabled);
         if (item.isDisabled() && disabledState != null) {
             updateVisualProperties(item, disabledState, baseState);
             return;
         }
 
-        ItemState focusedState = item.getState(ItemStateType.FOCUSED);
+        ItemState focusedState = item.getState(ItemStateType.Focused);
         if (item.isFocused() && focusedState != null) {
             updateVisualProperties(item, focusedState, baseState);
             baseState = focusedState;
         }
-        ItemState hoverState = item.getState(ItemStateType.HOVERED);
+        ItemState hoverState = item.getState(ItemStateType.Hovered);
         if (item.isMouseHover() && hoverState != null) {
             updateVisualProperties(item, hoverState, baseState);
             baseState = hoverState;
         }
-        ItemState pressedState = item.getState(ItemStateType.PRESSED);
+        ItemState pressedState = item.getState(ItemStateType.Pressed);
         if (item.isMousePressed() && pressedState != null) {
             updateVisualProperties(item, pressedState, baseState);
             baseState = pressedState;
         }
 
         if (baseState == currentState) {
-            Border border = cloneBorder(currentState.border);
-            if (!item.getBorderDirect().getRadius().equals(baseState.border.getRadius())) {
+            Border border = currentState.border.clone();
+            if (!item.getBorder().getRadius().equals(baseState.border.getRadius())) {
                 ItemsRefreshManager.setRefreshShape(item.prototype);
             }
             item.border = border;
@@ -64,8 +65,8 @@ final class VisualItemStatics {
         item.setBackgroundDirect(
                 GraphicsMathService.mixColors(currentState.background, item.getBackground(), state.background));
 
-        Border borderCurrentState = cloneBorder(currentState.border);
-        Border borderState = cloneBorder(state.border);
+        Border borderCurrentState = currentState.border.clone();
+        Border borderState = state.border.clone();
 
         //CASE 1: item has CornerRadius(!=0) but other states has CornerRadius(0)
         if (!borderCurrentState.getRadius().isCornersZero()) {
@@ -83,30 +84,6 @@ final class VisualItemStatics {
                 }
             }
         }
-
-        //CASE 2: item has CornerRadius(!=0) but other states has CornerRadius(!=0)
-
-        //CASE 3: item and other states have equal CornerRadius()
-
-        // if (item._border.getRadius().isCornersZero()) {
-        //     if (!prevState.border.getRadius().isCornersZero()
-        //             && !item._border.getRadius().equals(prevState.border.getRadius())) {
-        //         item._border.setRadius(prevState.border.getRadius());
-        //         item.setRemakeRequest(true);
-        //     }
-        //     if (item._border.getRadius().isCornersZero()) {
-        //         if (!item.getState(ItemStateType.BASE).border.getRadius().isCornersZero()) {
-        //             item._border.setRadius(item.getState(ItemStateType.BASE).border.getRadius());
-        //             item.setRemakeRequest(true);
-        //         }
-        //     }
-        // } else {
-        //     if (!item._border.getRadius().equals(prevState.border.getRadius())
-        //             && !item._border.getRadius().equals(currentState.border.getRadius())) {
-        //         item.setRemakeRequest(true);
-        //     }
-        // }
-
         if (borderState.getThickness() >= 0) {
             item.border.setThickness(borderState.getThickness());
         } else {
@@ -114,33 +91,21 @@ final class VisualItemStatics {
                 item.border.setThickness(prevState.border.getThickness());
         }
 
-        if (borderState.getFill().getAlpha() > 0) {
-            item.border.setFill(borderState.getFill());
+        if (borderState.getColor().getAlpha() > 0) {
+            item.border.setColor(borderState.getColor());
         } else {
-            if (prevState.border.getFill().getAlpha() > 0)
-                item.border.setFill(prevState.border.getFill());
+            if (prevState.border.getColor().getAlpha() > 0)
+                item.border.setColor(prevState.border.getColor());
         }
-        //     item._border.setFill(prevState.border.getFill());
-        // if (item._border.getFill().getAlpha() == 0)
-        //     item._border.setFill(item.getState(ItemStateType.BASE).border.getFill());
-
         if (state.shape != null)
             item.setCustomFigure(state.shape);
     }
 
-    static Border cloneBorder(Border border) {
-        Border clone = new Border();
-        clone.setFill(border.getFill());
-        clone.setRadius(border.getRadius());
-        clone.setThickness(border.getThickness());
-        return clone;
-    }
-
     static boolean getHoverVerification(VisualItem item, float xpos, float ypos) {
         switch (item.HoverRule) {
-        case LAZY:
+        case Lazy:
             return lazyHoverVerification(item, xpos, ypos);
-        case STRICT:
+        case Strict:
             return strictHoverVerification(item, xpos, ypos);
         default:
             return false;
@@ -218,15 +183,14 @@ final class VisualItemStatics {
         item.setSpacing(style.spacing);
         item.setMinSize(style.minWidth, style.minHeight);
         item.setMaxSize(style.maxWidth, style.maxHeight);
-        item.setShadow(style.shadowRadius, style.shadowXOffset, style.shadowYOffset, style.shadowColor);
-        item.setShadowDrop(style.isShadowDrop);
+        item.setBackground(style.background);
+        item.setBorder(style.border);
+        Effects.addEffect(item.prototype, style.shadow);
         item.setVisible(style.isVisible);
         item.removeAllItemStates();
 
         ItemState coreState = new ItemState(style.background);
-        coreState.border.setRadius(style.borderRadius);
-        coreState.border.setThickness(style.borderThickness);
-        coreState.border.setFill(style.borderFill);
+        coreState.border = style.border.clone();
 
         for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             item.addItemState(state.getKey(), state.getValue());
@@ -236,13 +200,7 @@ final class VisualItemStatics {
             item.setCustomFigure(new Figure(style.isFixedShape, style.shape));
             coreState.shape = item.isCustomFigure();
         }
-        item.addItemState(ItemStateType.BASE, coreState);
-
-        item.setBackground(style.background);
-        // item.setBackgroundDirect(style.background);
-        item.setBorderRadius(style.borderRadius);
-        item.setBorderThickness(style.borderThickness);
-        item.setBorderFill(style.borderFill);
+        item.addItemState(ItemStateType.Base, coreState);
     }
 
     static Style extractCoreStyle(VisualItem item) {
@@ -262,9 +220,7 @@ final class VisualItemStatics {
                 item.getMargin().bottom);
         style.spacing = new Spacing(item.getSpacing().horizontal, item.getSpacing().vertical);
         style.alignment = new LinkedList<>(item.getAlignment());
-        style.borderFill = item.getBorderFill();// _border.getFill();
-        style.borderRadius = item.getBorderRadius();// _border.getRadius();
-        style.borderThickness = item.getBorderThickness();// _border.getThickness();
+        style.border = item.border.clone();
         style.isVisible = item.isVisible();
 
         if (item.isCustomFigure() != null) {

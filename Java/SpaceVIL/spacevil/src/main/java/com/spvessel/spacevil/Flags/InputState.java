@@ -5,7 +5,7 @@ package com.spvessel.spacevil.Flags;
  * <p> Values: RELEASE, PRESS, REPEAT.
  */
 public enum InputState {
-    RELEASE(0), PRESS(1), REPEAT(2);
+    Release(0), Press(1), Repeat(2);
 
     private final int state;
 
@@ -20,13 +20,13 @@ public enum InputState {
     public static InputState getEnum(int state) {
         switch (state) {
         case 0:
-            return InputState.RELEASE;
+            return InputState.Release;
         case 1:
-            return InputState.PRESS;
+            return InputState.Press;
         case 2:
-            return InputState.REPEAT;
+            return InputState.Repeat;
         default:
-            return InputState.RELEASE;
+            return InputState.Release;
         }
     }
 }

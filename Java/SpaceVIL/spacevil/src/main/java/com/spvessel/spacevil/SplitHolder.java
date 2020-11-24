@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceDraggable;
+import com.spvessel.spacevil.Core.IDraggable;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.Orientation;
@@ -12,7 +12,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
  * handler dragging.
  * <p> Supports all events including drag and drop.
  */
-public class SplitHolder extends Prototype implements InterfaceDraggable {
+public class SplitHolder extends Prototype implements IDraggable {
     private static int count = 0;
     private Orientation _orientation;
     private int _spacerSize = 6;
@@ -52,17 +52,17 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
 
     private void makeHolderShape() {
         switch (_orientation) {
-        case VERTICAL:
-            setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        case Vertical:
+            setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             setWidth(_spacerSize);
-            setCursor(EmbeddedCursor.RESIZE_X);
+            setCursor(EmbeddedCursor.ResizeX);
             // setMinWidth(_spacerSize);
             break;
             
-            case HORIZONTAL:
-            setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+            case Horizontal:
+            setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             setHeight(_spacerSize);
-            setCursor(EmbeddedCursor.RESIZE_Y);
+            setCursor(EmbeddedCursor.ResizeY);
             // setMinHeight(_spacerSize);
             break;
         }

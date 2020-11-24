@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.Decorations;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.GraphicsMathService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -161,23 +162,9 @@ public class Style implements Cloneable {
     public Indents margin = new Indents();
 
     /**
-     * Radiuses to round the rectangular shape of the item.
+     * Border for an item's shape.
      */
-    public CornerRadius borderRadius = new CornerRadius();
-
-    /**
-     * Thickness of an item's border.
-     * <p>
-     * Default: 0.
-     */
-    public int borderThickness = 0;
-
-    /**
-     * Color of an item's border.
-     * <p>
-     * This property is java.awt.Color.
-     */
-    public Color borderFill = new Color(0, 0, 0, 0);
+    public Border border = new Border();
 
     /**
      * A form of an item's shape. If not assigned, the shape is rectangular.
@@ -198,41 +185,14 @@ public class Style implements Cloneable {
      * A storage of shapes for future use. Note: not supported in the current
      * version!
      * <p>
-     * Format: java.util.List&lt;com.spvessel.spacevil.Core.InterfaceBaseItem&gt;.
+     * Format: java.util.List&lt;com.spvessel.spacevil.Core.IBaseItem&gt;.
      */
-    public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
+    public List<IBaseItem> innerShapes;// = new List<float[]>();
 
     /**
-     * Blur radius of a shadow.
-     * <p>
-     * Min value: 0. Max value: 10. Default: 0.
+     * Shadow of an item's shape.
      */
-    public int shadowRadius;
-
-    /**
-     * X shift of a shadow.
-     */
-    public int shadowXOffset;
-
-    /**
-     * Y shift of a shadow.
-     */
-    public int shadowYOffset;
-
-    /**
-     * Drop shadow flag. True: allow shadow dropping. False: not allow shadow
-     * dropping.
-     * <p>
-     * Default: False.
-     */
-    public boolean isShadowDrop = false;
-
-    /**
-     * Color of a shadow.
-     * <p>
-     * This property is java.awt.Color.
-     */
-    public Color shadowColor;
+    public Shadow shadow = null;
 
     /**
      * A flag that determines if an item is visible or not.
@@ -244,22 +204,21 @@ public class Style implements Cloneable {
     /**
      * Constructs a default Style.
      */
-    public Style()// default
-    {
+    public Style() {
         isVisible = true;
         maxWidth = SpaceVILConstants.sizeMaxValue;
         maxHeight = SpaceVILConstants.sizeMaxValue;
-        setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        setAlignment(ItemAlignment.Left, ItemAlignment.Top);
     }
 
     /**
      * Setting this style for all items in sequence.
      * 
      * @param items A sequence of items that are
-     *              com.spvessel.spacevil.Core.InterfaceBaseItem.
+     *              com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void setStyle(InterfaceBaseItem... items) {
-        for (InterfaceBaseItem item : items) {
+    public void setStyle(IBaseItem... items) {
+        for (IBaseItem item : items) {
             item.setStyle(this);
         }
     }
@@ -478,9 +437,7 @@ public class Style implements Cloneable {
      * @param border Border as com.spvessel.spacevil.Decorations.Border.
      */
     public void setBorder(Border border) {
-        borderFill = border.getFill();
-        borderRadius = border.getRadius();
-        borderThickness = border.getThickness();
+        this.border = border.clone();
     }
 
     /**
@@ -492,10 +449,10 @@ public class Style implements Cloneable {
      *                  com.spvessel.spacevil.Decorations.CornerRadius.
      * @param thickness Border thickness.
      */
-    public void setBorder(Color fill, CornerRadius radius, int thickness) {
-        borderFill = fill;
-        borderRadius = radius;
-        borderThickness = thickness;
+    public void setBorder(Color color, CornerRadius radius, int thickness) {
+        border.setColor(color);
+        border.setRadius(radius);
+        border.setThickness(thickness);
     }
 
     /**
@@ -504,10 +461,7 @@ public class Style implements Cloneable {
      * @param shadow Shadow as com.spvessel.spacevil.Decorations.Shadow.
      */
     public void setShadow(Shadow shadow) {
-        shadowColor = shadow.getColor();// GraphicsMathService.cloneColor(shadow.getColor());
-        shadowRadius = shadow.getRadius();
-        shadowXOffset = shadow.getXOffset();
-        shadowYOffset = shadow.getYOffset();
+        this.shadow = shadow;
     }
 
     /**
@@ -538,9 +492,9 @@ public class Style implements Cloneable {
      * Add inner primitives to the object (as decorations only). Note: not supported
      * in the current version!
      * 
-     * @param shape Shape as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @param shape Shape as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void addInnerShape(InterfaceBaseItem shape) {
+    public void addInnerShape(IBaseItem shape) {
         if (innerShapes == null) {
             innerShapes = new LinkedList<>();
         }
@@ -635,7 +589,7 @@ public class Style implements Cloneable {
      * @param type Type as com.spvessel.spacevil.Flags.ItemStateType.
      */
     public void removeItemState(ItemStateType type) {
-        if (type == ItemStateType.BASE) {
+        if (type == ItemStateType.Base) {
             return;
         }
         if (_itemStates.containsKey(type)) {
@@ -695,27 +649,13 @@ public class Style implements Cloneable {
             style.setSpacing(spacing.horizontal, spacing.vertical);
         }
 
-        if (borderFill != null) {
-            style.borderFill = new Color(borderFill.getRed(), borderFill.getGreen(), borderFill.getBlue(),
-                    borderFill.getAlpha());
+        if (border != null) {
+            style.border = border.clone();
         }
 
-        style.borderThickness = borderThickness;
-
-        if (borderRadius != null) {
-            style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
-                    borderRadius.rightBottom);
+        if (shadow != null) {
+            style.shadow = shadow.clone();
         }
-
-        if (shadowColor != null) {
-            style.shadowColor = new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(),
-                    shadowColor.getAlpha());
-        }
-
-        style.shadowRadius = shadowRadius;
-        style.shadowXOffset = shadowXOffset;
-        style.shadowYOffset = shadowYOffset;
-        style.isShadowDrop = isShadowDrop;
 
         if (shape != null) {
             style.shape = new LinkedList<>(shape);
@@ -747,10 +687,10 @@ public class Style implements Cloneable {
         style.background = Color.white;
         style.foreground = Color.black;
         style.font = DefaultsService.getDefaultFont();
-        style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        style.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         style.setSize(30, 30);
-        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
+        style.setTextAlignment(ItemAlignment.Left, ItemAlignment.Top);
         style.setPadding(0, 0, 0, 0);
         style.setMargin(0, 0, 0, 0);
         style.setSpacing(0, 0);
@@ -772,28 +712,18 @@ public class Style implements Cloneable {
         style.background = new Color(13, 176, 255);
         style.foreground = new Color(32, 32, 32);
         style.font = DefaultsService.getDefaultFont(16);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
         style.width = 30;
         style.height = 30;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius();
-
-        // style.borderThickness = 2;
-        // style.borderFill = new Color(255, 255, 255);
-
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
-        style.addItemState(ItemStateType.HOVERED, hovered);
-
+        style.addItemState(ItemStateType.Hovered, hovered);
         ItemState pressed = new ItemState();
         pressed.background = new Color(0, 0, 0, 60);
-        style.addItemState(ItemStateType.PRESSED, pressed);
-
-        style.padding = new Indents();
-        style.margin = new Indents();
-        style.spacing = new Spacing();
+        style.addItemState(ItemStateType.Pressed, pressed);
 
         return style;
     }
@@ -809,25 +739,24 @@ public class Style implements Cloneable {
         style.background = new Color(13, 176, 255);
         style.foreground = new Color(32, 32, 32);
         style.font = DefaultsService.getDefaultFont(16);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
         style.width = 10;
         style.height = 10;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius();
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
-        style.addItemState(ItemStateType.HOVERED, hovered);
+        style.addItemState(ItemStateType.Hovered, hovered);
 
         ItemState pressed = new ItemState();
         pressed.background = new Color(30, 0, 0, 60);
-        style.addItemState(ItemStateType.PRESSED, pressed);
+        style.addItemState(ItemStateType.Pressed, pressed);
 
         ItemState toggled = new ItemState();
         toggled.background = new Color(121, 223, 152);
-        style.addItemState(ItemStateType.TOGGLED, toggled);
+        style.addItemState(ItemStateType.Toggled, toggled);
 
         return style;
     }
@@ -846,23 +775,23 @@ public class Style implements Cloneable {
         style.background = new Color(80, 80, 80, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(12);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.width = 10;
         style.height = 20;
         style.minHeight = 20;
         style.minWidth = 20;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style indicatorStyle = getIndicatorStyle();
         style.addInnerStyle("indicator", indicatorStyle);
 
         Style textlineStyle = getLabelStyle();
         textlineStyle.foreground = new Color(210, 210, 210);
-        textlineStyle.widthPolicy = SizePolicy.EXPAND;
-        textlineStyle.heightPolicy = SizePolicy.EXPAND;
-        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textlineStyle.widthPolicy = SizePolicy.Expand;
+        textlineStyle.heightPolicy = SizePolicy.Expand;
+        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter));
+        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         textlineStyle.margin = new Indents(10 + indicatorStyle.width, 0, 0, 0);
         style.addInnerStyle("text", textlineStyle);
 
@@ -883,31 +812,31 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(32, 32, 32);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
         style.width = 20;
         style.height = 20;
         style.minHeight = 20;
         style.minWidth = 20;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         style.padding = new Indents(4, 4, 4, 4);
 
         Style markerStyle = new Style();
         markerStyle.background = new Color(32, 32, 32);
         markerStyle.foreground = new Color(70, 70, 70);
         markerStyle.font = DefaultsService.getDefaultFont();
-        markerStyle.widthPolicy = SizePolicy.EXPAND;
-        markerStyle.heightPolicy = SizePolicy.EXPAND;
-        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        markerStyle.widthPolicy = SizePolicy.Expand;
+        markerStyle.heightPolicy = SizePolicy.Expand;
+        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
+        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
-        markerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        markerStyle.addItemState(ItemStateType.Hovered, hovered);
 
         ItemState toggled = new ItemState();
         toggled.background = new Color(255, 181, 111);
-        markerStyle.addItemState(ItemStateType.TOGGLED, toggled);
+        markerStyle.addItemState(ItemStateType.Toggled, toggled);
 
         style.addInnerStyle("marker", markerStyle);
 
@@ -923,9 +852,9 @@ public class Style implements Cloneable {
     public static Style getTextLineStyle() {
         Style style = new Style();
 
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         style.margin = new Indents(4, 4, 4, 4);
 
         return style;
@@ -944,38 +873,37 @@ public class Style implements Cloneable {
         style.background = new Color(220, 220, 220);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont();
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.width = 10;
         style.height = 30;
         style.minHeight = 10;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(0, 0, 0, 0);
         selectionStyle.foreground = new Color(70, 70, 70);
 
         selectionStyle.font = DefaultsService.getDefaultFont(14);
-        selectionStyle.widthPolicy = SizePolicy.EXPAND;
-        selectionStyle.heightPolicy = SizePolicy.EXPAND;
-        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        selectionStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        selectionStyle.widthPolicy = SizePolicy.Expand;
+        selectionStyle.heightPolicy = SizePolicy.Expand;
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        selectionStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         selectionStyle.padding = new Indents(10, 0, 0, 0);
         selectionStyle.margin = new Indents(0, 0, 20, 0);
         style.addInnerStyle("selection", selectionStyle);
 
         Style dropdownbuttonStyle = getButtonCoreStyle();
-        dropdownbuttonStyle.borderRadius = new CornerRadius();
         dropdownbuttonStyle.width = 20;
-        dropdownbuttonStyle.widthPolicy = SizePolicy.FIXED;
-        dropdownbuttonStyle.heightPolicy = SizePolicy.EXPAND;
-        dropdownbuttonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        dropdownbuttonStyle.widthPolicy = SizePolicy.Fixed;
+        dropdownbuttonStyle.heightPolicy = SizePolicy.Expand;
+        dropdownbuttonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.VCenter));
         dropdownbuttonStyle.background = new Color(255, 181, 111);
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        dropdownbuttonStyle.addItemState(ItemStateType.HOVERED, hovered);
+        dropdownbuttonStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("dropdownbutton", dropdownbuttonStyle);
 
@@ -984,9 +912,9 @@ public class Style implements Cloneable {
         Style arrowStyle = new Style();
         arrowStyle.width = 14;
         arrowStyle.height = 6;
-        arrowStyle.widthPolicy = SizePolicy.FIXED;
-        arrowStyle.heightPolicy = SizePolicy.FIXED;
-        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        arrowStyle.widthPolicy = SizePolicy.Fixed;
+        arrowStyle.heightPolicy = SizePolicy.Fixed;
+        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         arrowStyle.background = new Color(50, 50, 50);
         arrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
         style.addInnerStyle("arrow", arrowStyle);
@@ -1009,14 +937,14 @@ public class Style implements Cloneable {
     public static Style getComboBoxDropDownStyle() {
         Style style = new Style();
         style.background = Color.white;
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
         style.padding = new Indents(0, 0, 0, 0);
         style.isVisible = false;
 
         Style itemlistStyle = getListBoxStyle();
         itemlistStyle.background = new Color(0, 0, 0, 0);
-        itemlistStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        itemlistStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
         style.addInnerStyle("itemlist", itemlistStyle);
 
         Style itemlistareaStyle = itemlistStyle.getInnerStyle("area");
@@ -1025,17 +953,17 @@ public class Style implements Cloneable {
         }
 
         Style vsbStyle = getSimpleVerticalScrollBarStyle();
-        vsbStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
+        vsbStyle.setAlignment(ItemAlignment.Right, ItemAlignment.Top);
         itemlistStyle.addInnerStyle("vscrollbar", vsbStyle);
 
         Style hsbStyle = getHorizontalScrollBarStyle();
-        hsbStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        hsbStyle.setAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
         itemlistStyle.addInnerStyle("hscrollbar", hsbStyle);
 
         Style menuStyle = new Style();
         menuStyle.background = new Color(50, 50, 50);
-        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        menuStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        menuStyle.setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
         itemlistStyle.addInnerStyle("menu", menuStyle);
 
         return style;
@@ -1054,14 +982,14 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont();
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.height = 25;
         style.minHeight = 10;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         style.padding = new Indents(10, 0, 10, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(200, 200, 200)));
+        style.addItemState(ItemStateType.Hovered, new ItemState(new Color(200, 200, 200)));
 
         Style textStyle = new Style();
         textStyle.setMargin(0, 0, 0, 0);
@@ -1070,9 +998,9 @@ public class Style implements Cloneable {
         Style arrowStyle = new Style();
         arrowStyle.width = 6;
         arrowStyle.height = 10;
-        arrowStyle.widthPolicy = SizePolicy.FIXED;
-        arrowStyle.heightPolicy = SizePolicy.FIXED;
-        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        arrowStyle.widthPolicy = SizePolicy.Fixed;
+        arrowStyle.heightPolicy = SizePolicy.Fixed;
+        arrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.VCenter));
         arrowStyle.background = new Color(80, 80, 80);
         arrowStyle.margin = new Indents(10, 0, 0, 0);
         arrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
@@ -1096,7 +1024,7 @@ public class Style implements Cloneable {
 
         Style itemlistStyle = getListBoxStyle();
         itemlistStyle.background = new Color(0, 0, 0, 0);
-        itemlistStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        itemlistStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         style.addInnerStyle("itemlist", itemlistStyle);
 
         Style areaStyle = itemlistStyle.getInnerStyle("area");
@@ -1118,9 +1046,9 @@ public class Style implements Cloneable {
         style.background = new Color(70, 70, 70, 255);
 
         style.padding = new Indents(2, 2, 2, 2);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         return style;
     }
@@ -1136,9 +1064,9 @@ public class Style implements Cloneable {
 
         style.background = new Color(0, 0, 0, 0);
         style.padding = new Indents(2, 2, 2, 2);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         return style;
     }
@@ -1153,9 +1081,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         return style;
     }
@@ -1176,62 +1104,62 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(50, 50, 50);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.height = 16;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style uparrowStyle = getButtonCoreStyle();
-        uparrowStyle.widthPolicy = SizePolicy.FIXED;
-        uparrowStyle.heightPolicy = SizePolicy.FIXED;
+        uparrowStyle.widthPolicy = SizePolicy.Fixed;
+        uparrowStyle.heightPolicy = SizePolicy.Fixed;
         uparrowStyle.background = new Color(100, 100, 100, 255);
         uparrowStyle.width = 16;
         uparrowStyle.height = 16;
-        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        uparrowStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        uparrowStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         uparrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, -90);
         uparrowStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("uparrow", uparrowStyle);
 
         Style downarrowStyle = getButtonCoreStyle();
-        downarrowStyle.widthPolicy = SizePolicy.FIXED;
-        downarrowStyle.heightPolicy = SizePolicy.FIXED;
+        downarrowStyle.widthPolicy = SizePolicy.Fixed;
+        downarrowStyle.heightPolicy = SizePolicy.Fixed;
         downarrowStyle.background = new Color(100, 100, 100, 255);
         downarrowStyle.width = 16;
         downarrowStyle.height = 16;
-        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.VCenter));
         downarrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 90);
         downarrowStyle.isFixedShape = true;
-        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        downarrowStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("downarrow", downarrowStyle);
 
         Style sliderStyle = new Style();
-        sliderStyle.widthPolicy = SizePolicy.EXPAND;
-        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.widthPolicy = SizePolicy.Expand;
+        sliderStyle.heightPolicy = SizePolicy.Expand;
         sliderStyle.background = new Color(0, 0, 0, 0);
-        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         style.addInnerStyle("slider", sliderStyle);
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.EXPAND;
-        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.widthPolicy = SizePolicy.Expand;
+        trackStyle.heightPolicy = SizePolicy.Expand;
         trackStyle.background = new Color(0, 0, 0, 0);
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         sliderStyle.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.FIXED;
-        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.widthPolicy = SizePolicy.Fixed;
+        handlerStyle.heightPolicy = SizePolicy.Expand;
         handlerStyle.background = new Color(100, 100, 100, 255);
         handlerStyle.margin = new Indents(0, 3, 0, 3);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        handlerStyle.addItemState(ItemStateType.Hovered, hovered);
         handlerStyle.minWidth = 15;
         sliderStyle.addInnerStyle("handler", handlerStyle);
 
@@ -1253,10 +1181,10 @@ public class Style implements Cloneable {
 
         style.background = new Color(0, 0, 0, 0);
         style.padding = new Indents(2, 0, 2, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.height = 16;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style uparrowStyle = getButtonCoreStyle();
         uparrowStyle.isVisible = false;
@@ -1267,26 +1195,26 @@ public class Style implements Cloneable {
         style.addInnerStyle("downarrow", downarrowStyle);
 
         Style sliderStyle = new Style();
-        sliderStyle.widthPolicy = SizePolicy.EXPAND;
-        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.widthPolicy = SizePolicy.Expand;
+        sliderStyle.heightPolicy = SizePolicy.Expand;
         sliderStyle.background = new Color(0, 0, 0, 0);
-        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         style.addInnerStyle("slider", sliderStyle);
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.EXPAND;
-        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.widthPolicy = SizePolicy.Expand;
+        trackStyle.heightPolicy = SizePolicy.Expand;
         trackStyle.background = new Color(0, 0, 0, 0);
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         sliderStyle.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.FIXED;
-        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.widthPolicy = SizePolicy.Fixed;
+        handlerStyle.heightPolicy = SizePolicy.Expand;
         handlerStyle.background = new Color(120, 120, 120, 255);
         handlerStyle.margin = new Indents(0, 5, 0, 5);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        handlerStyle.borderRadius = new CornerRadius(3);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        handlerStyle.border.setRadius(new CornerRadius(3));
         handlerStyle.minWidth = 15;
         sliderStyle.addInnerStyle("handler", handlerStyle);
 
@@ -1309,61 +1237,61 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(50, 50, 50);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.EXPAND;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Expand;
         style.width = 16;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style uparrowStyle = getButtonCoreStyle();
-        uparrowStyle.widthPolicy = SizePolicy.FIXED;
-        uparrowStyle.heightPolicy = SizePolicy.FIXED;
+        uparrowStyle.widthPolicy = SizePolicy.Fixed;
+        uparrowStyle.heightPolicy = SizePolicy.Fixed;
         uparrowStyle.background = new Color(100, 100, 100, 255);
         uparrowStyle.width = 16;
         uparrowStyle.height = 16;
-        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         uparrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
         uparrowStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 40);
-        uparrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("uparrow", uparrowStyle);
 
         Style downarrowStyle = getButtonCoreStyle();
-        downarrowStyle.widthPolicy = SizePolicy.FIXED;
-        downarrowStyle.heightPolicy = SizePolicy.FIXED;
+        downarrowStyle.widthPolicy = SizePolicy.Fixed;
+        downarrowStyle.heightPolicy = SizePolicy.Fixed;
         downarrowStyle.background = new Color(100, 100, 100, 255);
         downarrowStyle.width = 16;
         downarrowStyle.height = 16;
-        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Bottom, ItemAlignment.HCenter));
         downarrowStyle.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
         downarrowStyle.isFixedShape = true;
-        downarrowStyle.addItemState(ItemStateType.HOVERED, hovered);
+        downarrowStyle.addItemState(ItemStateType.Hovered, hovered);
         style.addInnerStyle("downarrow", downarrowStyle);
 
         Style sliderStyle = new Style();
-        sliderStyle.widthPolicy = SizePolicy.EXPAND;
-        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.widthPolicy = SizePolicy.Expand;
+        sliderStyle.heightPolicy = SizePolicy.Expand;
         sliderStyle.background = new Color(0, 0, 0, 0);
-        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         style.addInnerStyle("slider", sliderStyle);
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.EXPAND;
-        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.widthPolicy = SizePolicy.Expand;
+        trackStyle.heightPolicy = SizePolicy.Expand;
         trackStyle.background = new Color(0, 0, 0, 0);
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         sliderStyle.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.EXPAND;
-        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.widthPolicy = SizePolicy.Expand;
+        handlerStyle.heightPolicy = SizePolicy.Fixed;
         handlerStyle.background = new Color(100, 100, 100, 255);
         handlerStyle.margin = new Indents(3, 0, 3, 0);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         handlerStyle.minHeight = 15;
-        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.addItemState(ItemStateType.Hovered, hovered);
         sliderStyle.addInnerStyle("handler", handlerStyle);
 
         return style;
@@ -1384,10 +1312,10 @@ public class Style implements Cloneable {
 
         style.background = new Color(0, 0, 0, 0);
         style.padding = new Indents(0, 2, 0, 2);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.EXPAND;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Expand;
         style.width = 16;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         Style uparrowStyle = getButtonCoreStyle();
         uparrowStyle.isVisible = false;
@@ -1398,26 +1326,26 @@ public class Style implements Cloneable {
         style.addInnerStyle("downarrow", downarrowStyle);
 
         Style sliderStyle = new Style();
-        sliderStyle.widthPolicy = SizePolicy.EXPAND;
-        sliderStyle.heightPolicy = SizePolicy.EXPAND;
+        sliderStyle.widthPolicy = SizePolicy.Expand;
+        sliderStyle.heightPolicy = SizePolicy.Expand;
         sliderStyle.background = new Color(0, 0, 0, 0);
-        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        sliderStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         style.addInnerStyle("slider", sliderStyle);
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.EXPAND;
-        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.widthPolicy = SizePolicy.Expand;
+        trackStyle.heightPolicy = SizePolicy.Expand;
         trackStyle.background = new Color(0, 0, 0, 0);
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         sliderStyle.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.EXPAND;
-        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.widthPolicy = SizePolicy.Expand;
+        handlerStyle.heightPolicy = SizePolicy.Fixed;
         handlerStyle.background = new Color(120, 120, 120, 255);
         handlerStyle.margin = new Indents(5, 0, 5, 0);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
-        handlerStyle.borderRadius = new CornerRadius(3);
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
+        handlerStyle.border.setRadius(new CornerRadius(3));
         handlerStyle.minHeight = 15;
         sliderStyle.addInnerStyle("handler", handlerStyle);
 
@@ -1436,29 +1364,29 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         style.height = 25;
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.EXPAND;
-        trackStyle.heightPolicy = SizePolicy.FIXED;
+        trackStyle.widthPolicy = SizePolicy.Expand;
+        trackStyle.heightPolicy = SizePolicy.Fixed;
         trackStyle.height = 5;
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter));
         trackStyle.background = new Color(100, 100, 100);
         style.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.FIXED;
-        handlerStyle.heightPolicy = SizePolicy.EXPAND;
+        handlerStyle.widthPolicy = SizePolicy.Fixed;
+        handlerStyle.heightPolicy = SizePolicy.Expand;
         handlerStyle.width = 10;
         handlerStyle.background = new Color(255, 181, 111);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT));
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("handler", handlerStyle);
 
@@ -1477,28 +1405,28 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         style.width = 25;
 
         Style trackStyle = new Style();
-        trackStyle.widthPolicy = SizePolicy.FIXED;
-        trackStyle.heightPolicy = SizePolicy.EXPAND;
+        trackStyle.widthPolicy = SizePolicy.Fixed;
+        trackStyle.heightPolicy = SizePolicy.Expand;
         trackStyle.width = 5;
-        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER));
+        trackStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter));
         trackStyle.background = new Color(100, 100, 100);
         style.addInnerStyle("track", trackStyle);
 
         Style handlerStyle = new Style();
-        handlerStyle.widthPolicy = SizePolicy.EXPAND;
-        handlerStyle.heightPolicy = SizePolicy.FIXED;
+        handlerStyle.widthPolicy = SizePolicy.Expand;
+        handlerStyle.heightPolicy = SizePolicy.Fixed;
         handlerStyle.height = 10;
         handlerStyle.background = new Color(255, 181, 111);
-        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP));
+        handlerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top));
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        handlerStyle.addItemState(ItemStateType.HOVERED, hovered);
+        handlerStyle.addItemState(ItemStateType.Hovered, hovered);
         style.addInnerStyle("handler", handlerStyle);
 
         return style;
@@ -1514,9 +1442,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
         style.spacing = new Spacing(0, 0);
         style.setPadding(new Indents());
         style.setMargin(new Indents());
@@ -1534,9 +1462,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
         style.spacing = new Spacing(0, 0);
 
         return style;
@@ -1554,9 +1482,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style splitterStyle = new Style();
         splitterStyle.background = new Color(42, 42, 42);
@@ -1578,9 +1506,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style splitterStyle = new Style();
         splitterStyle.background = new Color(42, 42, 42);
@@ -1602,10 +1530,10 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont();
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(210, 210, 210);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
 
         return style;
     }
@@ -1624,9 +1552,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 4);
 
@@ -1648,22 +1576,22 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(70, 70, 70);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style vsbStyle = getVerticalScrollBarStyle();
-        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.Top));
         style.addInnerStyle("vscrollbar", vsbStyle);
 
         Style hsbStyle = getHorizontalScrollBarStyle();
-        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Bottom));
         style.addInnerStyle("hscrollbar", hsbStyle);
 
         Style menuStyle = new Style();
         menuStyle.background = new Color(50, 50, 50);
-        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        menuStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        menuStyle.setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
         style.addInnerStyle("menu", menuStyle);
 
         Style areaStyle = getListAreaStyle();
@@ -1699,13 +1627,13 @@ public class Style implements Cloneable {
         style.background = new Color(80, 80, 80, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont();
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.height = 20;
         style.minHeight = 20;
         style.minWidth = 20;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius(10);
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.border.setRadius(new CornerRadius(10));
 
         Style indicatorStyle = getIndicatorStyle();
         indicatorStyle.shape = GraphicsMathService.getRoundSquare(10, 20, 20, 0, 0);
@@ -1718,10 +1646,10 @@ public class Style implements Cloneable {
 
         Style textlineStyle = getLabelStyle();
         textlineStyle.foreground = new Color(210, 210, 210);
-        textlineStyle.widthPolicy = SizePolicy.EXPAND;
-        textlineStyle.heightPolicy = SizePolicy.EXPAND;
-        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textlineStyle.widthPolicy = SizePolicy.Expand;
+        textlineStyle.heightPolicy = SizePolicy.Expand;
+        textlineStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter));
+        textlineStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         textlineStyle.margin = new Indents(10 + indicatorStyle.width, 0, 0, 0);
         style.addInnerStyle("text", textlineStyle);
 
@@ -1739,10 +1667,10 @@ public class Style implements Cloneable {
     public static Style getPasswordLineStyle() {
         Style style = new Style();
         style.background = new Color(210, 210, 210);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
         style.height = 30;
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.padding = new Indents(5, 0, 5, 0);
         style.spacing = new Spacing(5, 0);
 
@@ -1753,11 +1681,11 @@ public class Style implements Cloneable {
         Style markerStyle = getIndicatorStyle().getInnerStyle("marker");
         markerStyle.background = new Color(100, 100, 100, 0);
         markerStyle.setSize(20, 20);
-        markerStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        markerStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        markerStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Right));
+        markerStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         // marker_style.borderRadius = new CornerRadius(5);
-        markerStyle.removeItemState(ItemStateType.HOVERED);
+        markerStyle.removeItemState(ItemStateType.Hovered);
         // ItemState toggled = new ItemState();
         // toggled.background = new Color(40, 40, 40, 255);
         // marker_style.addItemState(ItemStateType.TOGGLED, toggled);
@@ -1774,24 +1702,24 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(25, 25, 25);
         style.font = DefaultsService.getDefaultFont(16);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
 
         Style cursorStyle = new Style();
         cursorStyle.background = new Color(60, 60, 60);
         cursorStyle.width = 2;
-        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         cursorStyle.margin = new Indents(0, 5, 0, 5);
         cursorStyle.isVisible = false;
         style.addInnerStyle("cursor", cursorStyle);
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(111, 181, 255);
-        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selectionStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         style.addInnerStyle("selection", selectionStyle);
 
         Style substrateStyle = new Style();
@@ -1817,32 +1745,32 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont(16);
         style.background = new Color(210, 210, 210);
         style.height = 30;
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
 
         Style textStyle = new Style();
         textStyle.background = new Color(0, 0, 0, 0);
         textStyle.foreground = new Color(70, 70, 70);
         textStyle.font = DefaultsService.getDefaultFont(16);
-        textStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        textStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        textStyle.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        textStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        textStyle.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
+        textStyle.setTextAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
         textStyle.padding = new Indents(5, 0, 5, 0);
         style.addInnerStyle("text", textStyle);
 
         Style cursorStyle = new Style();
         cursorStyle.background = new Color(60, 60, 60);
         cursorStyle.width = 2;
-        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         cursorStyle.margin = new Indents(0, 5, 0, 5);
         cursorStyle.isVisible = false;
         textStyle.addInnerStyle("cursor", cursorStyle);
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(111, 181, 255);
-        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selectionStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         selectionStyle.margin = new Indents(0, 5, 0, 5);
         textStyle.addInnerStyle("selection", selectionStyle);
 
@@ -1859,24 +1787,24 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        style.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
+        style.setTextAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
         style.padding = new Indents(5, 0, 5, 0);
 
         Style cursorStyle = new Style();
         cursorStyle.background = new Color(60, 60, 60);
         cursorStyle.width = 2;
-        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursorStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        cursorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         cursorStyle.margin = new Indents(0, 5, 0, 5);
         cursorStyle.isVisible = false;
         style.addInnerStyle("cursor", cursorStyle);
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(111, 181, 255);
-        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selectionStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        selectionStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         selectionStyle.margin = new Indents(0, 5, 0, 5);
         style.addInnerStyle("selection", selectionStyle);
 
@@ -1903,24 +1831,24 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
         style.padding = new Indents(5, 5, 5, 5);
 
         Style cursorStyle = new Style();
         cursorStyle.background = new Color(60, 60, 60);
         cursorStyle.width = 2;
-        cursorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        cursorStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         cursorStyle.isVisible = false;
         style.addInnerStyle("cursor", cursorStyle);
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(111, 181, 255);
-        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        selectionStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         selectionStyle.alignment = new LinkedList<ItemAlignment>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+                Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         style.addInnerStyle("selection", selectionStyle);
 
         return style;
@@ -1939,25 +1867,25 @@ public class Style implements Cloneable {
         style.background = new Color(210, 210, 210);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style textStyle = getTextBlockStyle();
         style.addInnerStyle("textedit", textStyle);
 
         Style vsbStyle = getVerticalScrollBarStyle();
-        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.Top));
         style.addInnerStyle("vscrollbar", vsbStyle);
 
         Style hsbStyle = getHorizontalScrollBarStyle();
-        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Bottom));
         style.addInnerStyle("hscrollbar", hsbStyle);
 
         Style menuStyle = new Style();
         menuStyle.background = new Color(50, 50, 50);
-        menuStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menuStyle.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        menuStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        menuStyle.setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
         style.addInnerStyle("menu", menuStyle);
 
         return style;
@@ -1976,14 +1904,14 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(16);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
         style.setPadding(5, 5, 5, 5);
 
         Style selectionStyle = new Style();
         selectionStyle.background = new Color(255, 255, 255, 40);
-        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        selectionStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         style.addInnerStyle("selection", selectionStyle);
 
         return style;
@@ -2002,29 +1930,28 @@ public class Style implements Cloneable {
         style.background = new Color(45, 45, 45, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(14);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Bottom, ItemAlignment.Right));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         style.setSize(300, 70);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
         style.padding = new Indents(5, 5, 5, 5);
         style.margin = new Indents(10, 10, 10, 10);
-        style.setShadow(new Shadow(10, 3, 3, new Color(0, 0, 0, 140)));
-        style.isShadowDrop = true;
+        style.setShadow(new Shadow(10, new Position(3, 3), new Color(0, 0, 0, 140)));
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 3);
-        style.addItemState(ItemStateType.HOVERED, hovered);
+        style.addItemState(ItemStateType.Hovered, hovered);
 
         Style closeStyle = getButtonCoreStyle();
         closeStyle.background = new Color(100, 100, 100);
         closeStyle.foreground = new Color(210, 210, 210);
         closeStyle.setSize(10, 10);
-        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
+        closeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.Right));
         closeStyle.margin = new Indents(0, 5, 0, 5);
         ItemState close_hovered = new ItemState();
         close_hovered.background = new Color(255, 255, 255, 60);
-        closeStyle.addItemState(ItemStateType.HOVERED, close_hovered);
+        closeStyle.addItemState(ItemStateType.Hovered, close_hovered);
         closeStyle.shape = GraphicsMathService.getCross(10, 10, 3, 45);
         closeStyle.isFixedShape = false;
         style.addInnerStyle("closebutton", closeStyle);
@@ -2047,15 +1974,15 @@ public class Style implements Cloneable {
         style.background = new Color(70, 70, 70);
         style.foreground = new Color(0, 0, 0);
         style.height = 20;
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
 
         Style pgbarStyle = new Style();
         pgbarStyle.background = new Color(0, 191, 255);
-        pgbarStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        pgbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        pgbarStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        pgbarStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
         style.addInnerStyle("progressbar", pgbarStyle);
 
         return style;
@@ -2077,19 +2004,19 @@ public class Style implements Cloneable {
         style.foreground = new Color(70, 70, 70);
 
         style.height = 30;
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.Fixed;
+        style.heightPolicy = SizePolicy.Fixed;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         style.padding = new Indents(5, 5, 5, 5);
-        style.borderRadius = new CornerRadius(4);
+        style.border.setRadius(new CornerRadius(4));
 
         Style textStyle = new Style();
         textStyle.background = new Color(0, 0, 0, 0);
-        textStyle.widthPolicy = SizePolicy.EXPAND;
-        textStyle.heightPolicy = SizePolicy.EXPAND;
-        textStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        textStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        textStyle.widthPolicy = SizePolicy.Expand;
+        textStyle.heightPolicy = SizePolicy.Expand;
+        textStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.HCenter));
+        textStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.HCenter));
         style.addInnerStyle("text", textStyle);
 
         return style;
@@ -2110,10 +2037,10 @@ public class Style implements Cloneable {
         style.background = new Color(45, 45, 45);
         style.foreground = new Color(180, 180, 180);
         style.height = 30;
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         style.padding = new Indents(10, 0, 5, 0);
         style.spacing = new Spacing(5, 0);
 
@@ -2122,12 +2049,12 @@ public class Style implements Cloneable {
         closeStyle.background = new Color(100, 100, 100);
         closeStyle.foreground = new Color(0, 0, 0, 0);
         closeStyle.setSize(15, 15);
-        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        closeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Right));
+        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         ItemState closeHovered = new ItemState();
         closeHovered.background = new Color(186, 95, 97, 255);
-        closeStyle.addItemState(ItemStateType.HOVERED, closeHovered);
+        closeStyle.addItemState(ItemStateType.Hovered, closeHovered);
 
         closeStyle.shape = GraphicsMathService.getCross(15, 15, 2, 45);
         closeStyle.isFixedShape = true;
@@ -2138,14 +2065,14 @@ public class Style implements Cloneable {
         minimizeStyle.background = new Color(100, 100, 100);
         minimizeStyle.foreground = new Color(0, 0, 0, 0);
         minimizeStyle.setSize(12, 15);
-        minimizeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        minimizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        minimizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        minimizeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        minimizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Bottom, ItemAlignment.Right));
+        minimizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
         minimizeStyle.margin = new Indents(0, 0, 5, 9);
 
         ItemState minimizeHovered = new ItemState();
         minimizeHovered.background = new Color(255, 255, 255, 80);
-        minimizeStyle.addItemState(ItemStateType.HOVERED, minimizeHovered);
+        minimizeStyle.addItemState(ItemStateType.Hovered, minimizeHovered);
 
         minimizeStyle.shape = GraphicsMathService.getRectangle(15, 2, 0, 13);
         minimizeStyle.isFixedShape = true;
@@ -2155,22 +2082,22 @@ public class Style implements Cloneable {
         maximizeStyle.font = DefaultsService.getDefaultFont();
         maximizeStyle.background = new Color(0, 0, 0, 0);
 
-        maximizeStyle.borderThickness = 2;
-        maximizeStyle.borderFill = new Color(100, 100, 100);
+        maximizeStyle.border.setThickness(2);
+        maximizeStyle.border.setColor(new Color(100, 100, 100));
 
         maximizeStyle.foreground = new Color(0, 0, 0, 0);
         maximizeStyle.setSize(12, 12);
-        maximizeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        maximizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        maximizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        maximizeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        maximizeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Bottom, ItemAlignment.Right));
+        maximizeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         maximizeStyle.margin = new Indents(0, 0, 0, 9);
         maximizeStyle.padding = new Indents(0, 0, 0, 0);
 
         ItemState maximizeHovered = new ItemState();
         maximizeHovered.background = new Color(0, 0, 0, 0);
-        maximizeHovered.border.setFill(new Color(84, 124, 94));
+        maximizeHovered.border.setColor(new Color(84, 124, 94));
 
-        maximizeStyle.addItemState(ItemStateType.HOVERED, maximizeHovered);
+        maximizeStyle.addItemState(ItemStateType.Hovered, maximizeHovered);
         style.addInnerStyle("maximizebutton", maximizeStyle);
 
         Style titleStyle = new Style();
@@ -2206,46 +2133,46 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont();
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
         style.height = 25;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         style.spacing = new Spacing(5, 0);
         style.padding = new Indents(5, 0, 0, 0);
         style.margin = new Indents(0, 0, 0, 0);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 30);
-        style.addItemState(ItemStateType.HOVERED, hovered);
+        style.addItemState(ItemStateType.Hovered, hovered);
 
         Style indicatorStyle = new Style();
         indicatorStyle.background = new Color(32, 32, 32);
         indicatorStyle.foreground = new Color(210, 210, 210);
         indicatorStyle.font = DefaultsService.getDefaultFont();
         indicatorStyle.setSize(15, 15);
-        indicatorStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        indicatorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        indicatorStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        indicatorStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        indicatorStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.VCenter));
+        indicatorStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         indicatorStyle.shape = GraphicsMathService.getTriangle(10, 8, 0, 3, 90);
         indicatorStyle.isFixedShape = true;
         ItemState toggled = new ItemState();
         toggled.background = new Color(160, 160, 160);
         toggled.shape = new Figure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
-        indicatorStyle.addItemState(ItemStateType.TOGGLED, toggled);
+        indicatorStyle.addItemState(ItemStateType.Toggled, toggled);
         style.addInnerStyle("indicator", indicatorStyle);
 
         Style branchIconStyle = new Style();
         branchIconStyle.background = new Color(106, 185, 255);
         branchIconStyle.setSize(14, 9);
-        branchIconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        branchIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        branchIconStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        branchIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         branchIconStyle.shape = GraphicsMathService.getFolderIconShape(20, 15, 0, 0);
         style.addInnerStyle("branchicon", branchIconStyle);
 
         Style leafIconStyle = new Style();
         leafIconStyle.background = new Color(129, 187, 133);
         leafIconStyle.setSize(6, 6);
-        leafIconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        leafIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        leafIconStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        leafIconStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Left));
         leafIconStyle.shape = GraphicsMathService.getEllipse(3, 16);
         leafIconStyle.margin = new Indents(2, 0, 0, 0);
         style.addInnerStyle("leaficon", leafIconStyle);
@@ -2265,66 +2192,66 @@ public class Style implements Cloneable {
 
         Style style = new Style();
         style.background = new Color(210, 210, 210);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.FIXED;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Fixed;
         style.height = 30;
         style.minHeight = 10;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style uparrowButtonStyle = getButtonCoreStyle();
-        uparrowButtonStyle.widthPolicy = SizePolicy.EXPAND;
-        uparrowButtonStyle.heightPolicy = SizePolicy.EXPAND;
-        uparrowButtonStyle.background = new Color(255, 181, 111); //new Color(50, 50, 50, 255);
-        uparrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrowButtonStyle.widthPolicy = SizePolicy.Expand;
+        uparrowButtonStyle.heightPolicy = SizePolicy.Expand;
+        uparrowButtonStyle.background = new Color(255, 181, 111); // new Color(50, 50, 50, 255);
+        uparrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.HCenter));
         uparrowButtonStyle.isFixedShape = true;
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
-        uparrowButtonStyle.addItemState(ItemStateType.HOVERED, hovered);
+        uparrowButtonStyle.addItemState(ItemStateType.Hovered, hovered);
 
         style.addInnerStyle("uparrowbutton", uparrowButtonStyle);
-        
+
         Style upArrowStyle = new Style();
-        upArrowStyle.width = 14;
+        upArrowStyle.width = 10;
         upArrowStyle.height = 6;
-        upArrowStyle.widthPolicy = SizePolicy.FIXED;
-        upArrowStyle.heightPolicy = SizePolicy.FIXED;
-        upArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        upArrowStyle.widthPolicy = SizePolicy.Fixed;
+        upArrowStyle.heightPolicy = SizePolicy.Fixed;
+        upArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         upArrowStyle.background = new Color(50, 50, 50);
         upArrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 0);
         style.addInnerStyle("uparrow", upArrowStyle);
 
         Style downarrowButtonStyle = getButtonCoreStyle();
-        downarrowButtonStyle.widthPolicy = SizePolicy.EXPAND;
-        downarrowButtonStyle.heightPolicy = SizePolicy.EXPAND;
-        downarrowButtonStyle.background = new Color(255, 181, 111); //new Color(50, 50, 50, 255);
-        downarrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrowButtonStyle.widthPolicy = SizePolicy.Expand;
+        downarrowButtonStyle.heightPolicy = SizePolicy.Expand;
+        downarrowButtonStyle.background = new Color(255, 181, 111); // new Color(50, 50, 50, 255);
+        downarrowButtonStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Bottom, ItemAlignment.HCenter));
         downarrowButtonStyle.isFixedShape = true;
-        downarrowButtonStyle.addItemState(ItemStateType.HOVERED, hovered);
+        downarrowButtonStyle.addItemState(ItemStateType.Hovered, hovered);
         style.addInnerStyle("downarrowbutton", downarrowButtonStyle);
 
         Style downArrowStyle = new Style();
-        downArrowStyle.width = 14;
+        downArrowStyle.width = 10;
         downArrowStyle.height = 6;
-        downArrowStyle.widthPolicy = SizePolicy.FIXED;
-        downArrowStyle.heightPolicy = SizePolicy.FIXED;
-        downArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        downArrowStyle.widthPolicy = SizePolicy.Fixed;
+        downArrowStyle.heightPolicy = SizePolicy.Fixed;
+        downArrowStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCenter, ItemAlignment.VCenter));
         downArrowStyle.background = new Color(50, 50, 50);
         downArrowStyle.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
         style.addInnerStyle("downarrow", downArrowStyle);
 
         Style btnsArea = getVerticalStackStyle();
-        btnsArea.widthPolicy = SizePolicy.FIXED;
-        btnsArea.heightPolicy = SizePolicy.EXPAND;
+        btnsArea.widthPolicy = SizePolicy.Fixed;
+        btnsArea.heightPolicy = SizePolicy.Expand;
         btnsArea.width = 20;
         // btnsArea.background = new Color(210, 210, 210); //new Color(255, 181, 111);
-        btnsArea.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        btnsArea.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCenter, ItemAlignment.Right));
         style.addInnerStyle("buttonsarea", btnsArea);
 
         Style textInput = getTextFieldStyle();
         textInput.background = new Color(210, 210, 210);
-        textInput.heightPolicy = SizePolicy.EXPAND;
-        textInput.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
+        textInput.heightPolicy = SizePolicy.Expand;
+        textInput.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right));
         textInput.padding.right = 10;
         style.addInnerStyle("textedit", textInput);
 
@@ -2343,24 +2270,18 @@ public class Style implements Cloneable {
      */
     public static Style getDialogItemStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 150);
-        style.borderRadius = new CornerRadius(0);
-        style.padding = new Indents();
-        style.margin = new Indents();
-        style.spacing = new Spacing();
 
         Style windowStyle = getFrameStyle();
         windowStyle.setSize(300, 150);
         windowStyle.setMinSize(300, 150);
-        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        windowStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
         windowStyle.setPadding(2, 2, 2, 2);
         windowStyle.setBackground(45, 45, 45);
-        windowStyle.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
-        windowStyle.isShadowDrop = true;
-
+        windowStyle.setShadow(new Shadow(5, new Position(3, 3), new Color(0, 0, 0, 180)));
         style.addInnerStyle("window", windowStyle);
 
         return style;
@@ -2376,10 +2297,9 @@ public class Style implements Cloneable {
      */
     public static Style getMessageItemStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 150);
-        style.borderRadius = new CornerRadius();
         style.padding = new Indents();
         style.margin = new Indents();
         style.spacing = new Spacing();
@@ -2387,8 +2307,8 @@ public class Style implements Cloneable {
         Style windowStyle = getFrameStyle();
         windowStyle.setSize(300, 150);
         windowStyle.setMinSize(300, 150);
-        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        windowStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
         windowStyle.setPadding(2, 2, 2, 2);
         windowStyle.setBackground(45, 45, 45);
         style.addInnerStyle("window", windowStyle);
@@ -2396,31 +2316,30 @@ public class Style implements Cloneable {
         Style btnStyle = getButtonCoreStyle();
         btnStyle.setBackground(100, 255, 150);
         btnStyle.setSize(100, 30);
-        btnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-        btnStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
-        btnStyle.isShadowDrop = true;
+        btnStyle.setAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
+        btnStyle.setShadow(new Shadow(5, new Position(2, 2), new Color(0, 0, 0, 120)));
         style.addInnerStyle("button", btnStyle);
 
         Style toolbarStyle = getHorizontalStackStyle();
-        toolbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        toolbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbarStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+        toolbarStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         toolbarStyle.setSpacing(10, 0);
         toolbarStyle.setPadding(0, 0, 0, 0);
         toolbarStyle.setMargin(0, 0, 10, 0);
         style.addInnerStyle("toolbar", toolbarStyle);
 
         Style userbarStyle = getHorizontalStackStyle();
-        userbarStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
-        userbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        userbarStyle.setAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
+        userbarStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         userbarStyle.setSpacing(10, 0);
         userbarStyle.setPadding(0, 0, 0, 0);
         userbarStyle.setMargin(25, 0, 30, 0);
         style.addInnerStyle("userbar", userbarStyle);
 
         Style msgStyle = getLabelStyle();
-        msgStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        msgStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        msgStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        msgStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        msgStyle.setTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+        msgStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         msgStyle.setMargin(10, 0, 10, 40);
         style.addInnerStyle("message", msgStyle);
 
@@ -2444,10 +2363,10 @@ public class Style implements Cloneable {
 
         style.setBackground(45, 45, 45);
         style.setMinSize(200, 200);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
         style.setPadding(2, 2, 2, 2);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         return style;
     }
@@ -2463,18 +2382,18 @@ public class Style implements Cloneable {
     public static Style getFileSystemEntryStyle() {
         Style style = new Style();
         style.height = 25;
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
         style.setBackground(0, 0, 0, 0);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
+        style.setTextAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
         style.font = DefaultsService.getDefaultFont();
         style.setForeground(210, 210, 210);
         style.setPadding(10, 0, 0, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 30)));
+        style.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 30)));
 
         Style iconStyle = getFrameStyle();
-        iconStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        iconStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        iconStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        iconStyle.setAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
 
         style.addInnerStyle("icon", iconStyle);
 
@@ -2499,10 +2418,9 @@ public class Style implements Cloneable {
     public static Style getOpenEntryDialogStyle() {
         // common
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 150);
-        style.borderRadius = new CornerRadius(0);
         style.padding = new Indents();
         style.margin = new Indents();
         style.spacing = new Spacing();
@@ -2511,7 +2429,7 @@ public class Style implements Cloneable {
         Style windowStyle = getDialogItemStyle().getInnerStyle("window");
         windowStyle.setSize(500, 700);
         windowStyle.setMinSize(400, 400);
-        windowStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        windowStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         windowStyle.setMargin(150, 20, 150, 20);
         style.addInnerStyle("window", windowStyle);
         // layout
@@ -2523,7 +2441,7 @@ public class Style implements Cloneable {
         style.addInnerStyle("layout", layoutStyle);
         // toolbar
         Style toolbarStyle = getHorizontalStackStyle();
-        toolbarStyle.heightPolicy = SizePolicy.FIXED;
+        toolbarStyle.heightPolicy = SizePolicy.Fixed;
         toolbarStyle.height = 30;
         toolbarStyle.setBackground(40, 40, 40);
         toolbarStyle.setSpacing(3, 0);
@@ -2533,18 +2451,18 @@ public class Style implements Cloneable {
         Style toolbarbuttonStyle = Style.getButtonCoreStyle();
         toolbarbuttonStyle.setSize(24, 30);
         toolbarbuttonStyle.background = toolbarStyle.background;
-        toolbarbuttonStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
-        toolbarbuttonStyle.addItemState(ItemStateType.PRESSED, new ItemState(new Color(255, 255, 255, 30)));
-        toolbarbuttonStyle.borderRadius = new CornerRadius();
+        toolbarbuttonStyle.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 40)));
+        toolbarbuttonStyle.addItemState(ItemStateType.Pressed, new ItemState(new Color(255, 255, 255, 30)));
+
         toolbarbuttonStyle.setPadding(3, 6, 3, 6);
         style.addInnerStyle("toolbarbutton", toolbarbuttonStyle);
         // buttonhidden
         Style buttonhiddenStyle = getButtonToggleStyle();
         buttonhiddenStyle.setSize(24, 30);
-        buttonhiddenStyle.borderRadius = new CornerRadius();
         buttonhiddenStyle.background = toolbarStyle.background;
         buttonhiddenStyle.setPadding(4, 6, 4, 6);
-        buttonhiddenStyle.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
+        buttonhiddenStyle.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 40)));
+        buttonhiddenStyle.addItemState(ItemStateType.Toggled, new ItemState(new Color(30, 153, 91)));
         style.addInnerStyle("buttonhidden", buttonhiddenStyle);
         // addressline
         Style addresslineStyle = getTextEditStyle();
@@ -2569,7 +2487,7 @@ public class Style implements Cloneable {
         style.addInnerStyle("list", listStyle);
         // controlpanel
         Style controlpanelStyle = getFrameStyle();
-        controlpanelStyle.heightPolicy = SizePolicy.FIXED;
+        controlpanelStyle.heightPolicy = SizePolicy.Fixed;
         controlpanelStyle.height = 45;
         controlpanelStyle.setBackground(45, 45, 45);
         controlpanelStyle.setPadding(6, 6, 6, 6);
@@ -2577,17 +2495,15 @@ public class Style implements Cloneable {
         // button
         Style okbuttonStyle = getButtonCoreStyle();
         okbuttonStyle.setSize(100, 30);
-        okbuttonStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        okbuttonStyle.setAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
         okbuttonStyle.setMargin(0, 0, 110, 0);
-        okbuttonStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
-        okbuttonStyle.isShadowDrop = true;
+        okbuttonStyle.setShadow(new Shadow(5, new Position(2, 2), new Color(0, 0, 0, 180)));
         style.addInnerStyle("okbutton", okbuttonStyle);
 
         Style cancelbuttonStyle = getButtonCoreStyle();
         cancelbuttonStyle.setSize(100, 30);
-        cancelbuttonStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        cancelbuttonStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
-        cancelbuttonStyle.isShadowDrop = true;
+        cancelbuttonStyle.setAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+        cancelbuttonStyle.setShadow(new Shadow(5, new Position(2, 2), new Color(0, 0, 0, 180)));
         style.addInnerStyle("cancelbutton", cancelbuttonStyle);
 
         Style filterStyle = getButtonCoreStyle();
@@ -2595,11 +2511,13 @@ public class Style implements Cloneable {
         filterStyle.setBackground(35, 35, 35);
         filterStyle.setPadding(4, 6, 4, 6);
         filterStyle.setMargin(5, 0, 0, 0);
+        filterStyle.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 40)));
+        filterStyle.addItemState(ItemStateType.Pressed, new ItemState(new Color(255, 255, 255, 30)));
         style.addInnerStyle("filter", filterStyle);
 
         Style filtertextStyle = getLabelStyle();
-        filtertextStyle.widthPolicy = SizePolicy.FIXED;
-        filtertextStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        filtertextStyle.widthPolicy = SizePolicy.Fixed;
+        filtertextStyle.setTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
         filtertextStyle.setPadding(10, 2, 10, 0);
         filtertextStyle.setMargin(-3, 0, 0, 0);
         filtertextStyle.setBackground(55, 55, 55);
@@ -2607,7 +2525,7 @@ public class Style implements Cloneable {
         style.addInnerStyle("filtertext", filtertextStyle);
 
         Style dividerStyle = getFrameStyle();
-        dividerStyle.widthPolicy = SizePolicy.FIXED;
+        dividerStyle.widthPolicy = SizePolicy.Fixed;
         dividerStyle.width = 1;
         dividerStyle.setBackground(55, 55, 55);
         dividerStyle.setMargin(0, 3, 0, 3);
@@ -2626,10 +2544,9 @@ public class Style implements Cloneable {
      */
     public static Style getInputDialogStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 150);
-        style.borderRadius = new CornerRadius();
         style.padding = new Indents();
         style.margin = new Indents();
         style.spacing = new Spacing();
@@ -2637,8 +2554,8 @@ public class Style implements Cloneable {
         Style windowStyle = getFrameStyle();
         windowStyle.setSize(300, 150);
         windowStyle.setMinSize(300, 150);
-        windowStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        windowStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        windowStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        windowStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
         windowStyle.setPadding(2, 2, 2, 2);
         windowStyle.setBackground(45, 45, 45);
         style.addInnerStyle("window", windowStyle);
@@ -2647,18 +2564,16 @@ public class Style implements Cloneable {
         btnStyle.setBackground(100, 255, 150);
         btnStyle.foreground = Color.black;
         btnStyle.setSize(100, 30);
-        btnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        btnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        btnStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        btnStyle.setAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
         btnStyle.setMargin(0, 0, 0, 0);
-        btnStyle.borderRadius = new CornerRadius();
-        btnStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
-        btnStyle.isShadowDrop = true;
-        btnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+        btnStyle.setShadow(new Shadow(5, new Position(2, 2), new Color(0, 0, 0, 120)));
+        btnStyle.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 80)));
         style.addInnerStyle("button", btnStyle);
 
         Style textStyle = getTextEditStyle();
-        textStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
-        textStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        textStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.Top);
+        textStyle.setTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
         textStyle.setMargin(0, 15, 0, 0);
         style.addInnerStyle("textedit", textStyle);
 
@@ -2669,8 +2584,8 @@ public class Style implements Cloneable {
         style.addInnerStyle("layout", layoutStyle);
 
         Style toolbarStyle = getHorizontalStackStyle();
-        toolbarStyle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        toolbarStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbarStyle.setAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+        toolbarStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
         toolbarStyle.setSpacing(10, 0);
         style.addInnerStyle("toolbar", toolbarStyle);
 
@@ -2685,11 +2600,11 @@ public class Style implements Cloneable {
      */
     public static Style getSelectionItemStyle() {
         Style style = new Style();
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
         style.setBackground(0, 0, 0, 0);
         style.setPadding(0, 1, 0, 1);
-        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
+        style.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
+        style.addItemState(ItemStateType.Toggled, new ItemState(new Color(255, 255, 255, 50)));
         return style;
     }
 
@@ -2707,9 +2622,9 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(0, 0, 0, 0);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 5);
 
@@ -2733,16 +2648,16 @@ public class Style implements Cloneable {
         Style style = new Style();
 
         style.background = new Color(70, 70, 70);
-        style.widthPolicy = SizePolicy.EXPAND;
-        style.heightPolicy = SizePolicy.EXPAND;
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.widthPolicy = SizePolicy.Expand;
+        style.heightPolicy = SizePolicy.Expand;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Top));
 
         Style vsbStyle = getVerticalScrollBarStyle();
-        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        vsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.Top));
         style.addInnerStyle("vscrollbar", vsbStyle);
 
         Style hsbStyle = getHorizontalScrollBarStyle();
-        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        hsbStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Left, ItemAlignment.Bottom));
         style.addInnerStyle("hscrollbar", hsbStyle);
 
         Style areaStyle = getWrapAreaStyle();
@@ -2761,10 +2676,9 @@ public class Style implements Cloneable {
      */
     public static Style getSideAreaStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 130);
-        style.borderRadius = new CornerRadius(0);
         style.padding = new Indents();
         style.margin = new Indents();
         style.spacing = new Spacing();
@@ -2772,7 +2686,7 @@ public class Style implements Cloneable {
         Style windowStyle = getFrameStyle();
         windowStyle.setPadding(2, 2, 2, 2);
         windowStyle.setBackground(40, 40, 40);
-        windowStyle.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        windowStyle.setAlignment(ItemAlignment.Top, ItemAlignment.Left);
         style.addInnerStyle("window", windowStyle);
 
         Style closeStyle = new Style();
@@ -2781,12 +2695,12 @@ public class Style implements Cloneable {
         closeStyle.background = new Color(100, 100, 100);
         closeStyle.foreground = new Color(0, 0, 0, 0);
         closeStyle.setSize(15, 15);
-        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
-        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        closeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        closeStyle.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.Top, ItemAlignment.Right));
+        closeStyle.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.Right, ItemAlignment.Top));
         ItemState close_hovered = new ItemState();
         close_hovered.background = new Color(186, 95, 97, 255);
-        closeStyle.addItemState(ItemStateType.HOVERED, close_hovered);
+        closeStyle.addItemState(ItemStateType.Hovered, close_hovered);
 
         closeStyle.shape = GraphicsMathService.getCross(15, 15, 2, 45);
         closeStyle.isFixedShape = true;
@@ -2803,8 +2717,8 @@ public class Style implements Cloneable {
      */
     public static Style getImageItemStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 0);
         return style;
     }
@@ -2819,13 +2733,13 @@ public class Style implements Cloneable {
      */
     public static Style getLoadingScreenStyle() {
         Style style = new Style();
-        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+        style.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         style.setBackground(0, 0, 0, 150);
 
         Style textStyle = getLabelStyle();
-        textStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        textStyle.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        textStyle.setAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+        textStyle.setTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
         textStyle.font = DefaultsService.getDefaultFont(Font.BOLD, 14);
         style.addInnerStyle("text", textStyle);
 
@@ -2848,23 +2762,20 @@ public class Style implements Cloneable {
      */
     public static Style getTabStyle() {
         Style style = new Style();
-        style.borderRadius = new CornerRadius(3, 3, 0, 0);
+        style.border.setRadius(new CornerRadius(3, 3, 0, 0));
         style.font = DefaultsService.getDefaultFont(14);
         style.background = new Color(255, 255, 255, 10);
         // style.background = new Color(60, 60, 60);
         style.setForeground(210, 210, 210);
         style.minWidth = 30;
-        style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+        style.setTextAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
         style.padding = new Indents(0, 0, 0, 0);
         style.padding = new Indents(10, 2, 5, 2);
         style.spacing = new Spacing(5, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
-        // style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71,
-        // 71)));
-        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 25)));
-        style.setShadow(new Shadow(5, 0, 0, new Color(0, 0, 0, 150)));
-        style.isShadowDrop = false;
+        style.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 60)));
+        style.addItemState(ItemStateType.Toggled, new ItemState(new Color(255, 255, 255, 25)));
+        style.setShadow(new Shadow(5, new Color(0, 0, 0, 150)));
 
         Style textStyle = getLabelStyle();
         style.addInnerStyle("text", textStyle);
@@ -2872,15 +2783,15 @@ public class Style implements Cloneable {
         Style closeStyle = new Style();
         closeStyle.setBackground(100, 100, 100);
         closeStyle.setSize(10, 10);
-        closeStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        closeStyle.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        closeStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 162, 232)));
+        closeStyle.setSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+        closeStyle.setAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+        closeStyle.addItemState(ItemStateType.Hovered, new ItemState(new Color(0, 162, 232)));
         closeStyle.shape = GraphicsMathService.getCross(10, 10, 2, 45);
         closeStyle.isFixedShape = true;
         style.addInnerStyle("closebutton", closeStyle);
 
         Style viewStyle = new Style();
-        viewStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        viewStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         viewStyle.background = new Color(71, 71, 71);
         viewStyle.isVisible = false;
         viewStyle.padding = new Indents(2, 2, 2, 2);
@@ -2918,7 +2829,7 @@ public class Style implements Cloneable {
         style.background = new Color(50, 50, 50);
 
         Style tabBarStyle = getTabBarStyle();
-        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        tabBarStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
         tabBarStyle.height = 30;
         style.addInnerStyle("tabbar", tabBarStyle);
 

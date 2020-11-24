@@ -51,8 +51,8 @@ public class SpinItem extends Prototype {
         _downArrow = new CustomShape();
         
 
-        _horzStack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        _textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        _horzStack.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+        _textInput.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         
         upButton.isFocusable = false;
         upButton.eventMouseClick.add(this::onUpClick);

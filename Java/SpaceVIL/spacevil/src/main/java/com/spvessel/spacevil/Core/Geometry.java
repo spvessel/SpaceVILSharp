@@ -5,7 +5,7 @@ import com.spvessel.spacevil.*;
 /**
  * Class Geometry describes all geometry properties of the item.
  */
-public class Geometry implements InterfaceSize {
+public class Geometry implements ISize {
 
     public Geometry() {
 

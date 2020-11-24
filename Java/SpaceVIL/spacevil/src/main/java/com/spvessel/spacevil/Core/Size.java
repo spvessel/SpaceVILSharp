@@ -8,7 +8,14 @@ public class Size {
     int _h = 0;
 
     /**
+     * Default Size constructor with width and height equal to 0.
+     */
+    public Size() {
+    }
+
+    /**
      * Constructs Size with specified width and height.
+     * 
      * @param w Width of the object.
      * @param h Height of the object.
      */
@@ -19,6 +26,7 @@ public class Size {
 
     /**
      * Getting the width of the object.
+     * 
      * @return Width of the object.
      */
     public int getWidth() {
@@ -27,6 +35,7 @@ public class Size {
 
     /**
      * Setting the width of the object.
+     * 
      * @param value Width of the object.
      */
     public void setWidth(int value) {
@@ -35,6 +44,7 @@ public class Size {
 
     /**
      * Getting the height of the object.
+     * 
      * @return Height of the object.
      */
     public int getHeight() {
@@ -43,6 +53,7 @@ public class Size {
 
     /**
      * Setting the height of the object.
+     * 
      * @param value Height of the object.
      */
     public void setHeight(int value) {
@@ -51,6 +62,7 @@ public class Size {
 
     /**
      * Setting the size of the object.
+     * 
      * @param w Width of the object.
      * @param h Height of the object.
      */

@@ -10,7 +10,7 @@ import com.spvessel.spacevil.Flags.KeyMods;
 /**
  * A class that describes keyboard key input.
  */
-public final class KeyArgs implements InterfaceInputEventArgs {
+public final class KeyArgs implements IInputEventArgs {
     /**
      * Key code as com.spvessel.spacevil.Flags.KeyCode.
      */
@@ -35,10 +35,10 @@ public final class KeyArgs implements InterfaceInputEventArgs {
      * Clearing KeyArgs.
      */
     public void clear() {
-        key = KeyCode.UNKNOWN;
+        key = KeyCode.Unknown;
         scancode = -1;
-        state = InputState.RELEASE;
+        state = InputState.Release;
         mods = new LinkedList<>();
-        mods.add(KeyMods.NO);
+        mods.add(KeyMods.No);
     }
 }

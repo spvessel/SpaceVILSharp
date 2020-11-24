@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceImageItem;
+import com.spvessel.spacevil.Core.IImageItem;
 import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Flags.ImageQuality;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -16,7 +16,7 @@ import java.awt.image.WritableRaster;
  * <p>
  * Supports all events except drag and drop.
  */
-public class ImageItem extends Prototype implements InterfaceImageItem {
+public class ImageItem extends Prototype implements IImageItem {
 
     private Area area = new Area();
 
@@ -350,11 +350,11 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     private void UpdateHorizontalPosition() {
-        if (getAlignment().contains(ItemAlignment.LEFT)) {
+        if (getAlignment().contains(ItemAlignment.Left)) {
             area.setX(getX());
-        } else if (getAlignment().contains(ItemAlignment.RIGHT)) {
+        } else if (getAlignment().contains(ItemAlignment.Right)) {
             area.setX(getX() + getWidth() - area.getWidth());
-        } else if (getAlignment().contains(ItemAlignment.HCENTER)) {
+        } else if (getAlignment().contains(ItemAlignment.HCenter)) {
             int x = getX();
             int w = area.getWidth();
             area.setX((getWidth() - w) / 2 + x);
@@ -362,11 +362,11 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     private void UpdateVerticalPosition() {
-        if (getAlignment().contains(ItemAlignment.TOP)) {
+        if (getAlignment().contains(ItemAlignment.Top)) {
             area.setY(getY());
-        } else if (getAlignment().contains(ItemAlignment.BOTTOM)) {
+        } else if (getAlignment().contains(ItemAlignment.Bottom)) {
             area.setY(getY() + getHeight() - area.getHeight());
-        } else if (getAlignment().contains(ItemAlignment.VCENTER)) {
+        } else if (getAlignment().contains(ItemAlignment.VCenter)) {
             int y = getY();
             int h = area.getHeight();
             area.setY((getHeight() - h) / 2 + y);
@@ -392,7 +392,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
-    private ImageQuality _filter = ImageQuality.SMOOTH;
+    private ImageQuality _filter = ImageQuality.Smooth;
 
     /**
      * Getting an image filtering quality.

@@ -408,7 +408,7 @@ namespace SpaceVIL
                         _menu.Show(sender, args);
                 };
                 _menu.ActiveButton = MouseButton.ButtonLeft;
-                _menu.SetShadow(10, 0, 0, Color.Black);
+                Effects.AddEffect(_menu, new Shadow(10));
             }
 
             UpdateElements();

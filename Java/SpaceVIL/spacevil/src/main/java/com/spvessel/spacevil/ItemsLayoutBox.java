@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.LayoutType;
 
@@ -20,7 +20,7 @@ public class ItemsLayoutBox {
      * @param id UUID of the window.
      * @return The list of existing static items in specified window by its UUID.
      */
-    static public List<InterfaceBaseItem> getLayoutItems(UUID id) {
+    static public List<IBaseItem> getLayoutItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getItems();
     }
@@ -32,12 +32,12 @@ public class ItemsLayoutBox {
      * @param id UUID of the window.
      * @return The list of existing float items in specified window by its UUID.
      */
-    static public List<InterfaceBaseItem> getLayoutFloatItems(UUID id) {
+    static public List<IBaseItem> getLayoutFloatItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getFloatItems();
     }
 
-    static List<InterfaceBaseItem> getLayoutDialogItems(UUID id) {
+    static List<IBaseItem> getLayoutDialogItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getDialogItems();
     }
@@ -56,23 +56,23 @@ public class ItemsLayoutBox {
     /**
      * Adding an item to global item storage (ItemsLayoutBox). 
      * In usual situation you do not need to use this function only if you create your own 
-     * implementation of InterfaceBaseItem or create a new implementation of InterfaceFloatItem.
+     * implementation of IBaseItem or create a new implementation of IFloatItem.
      * @param layout Any CoreWindow instance.
-     * @param item Any InterfaceBaseItem instance.
+     * @param item Any IBaseItem instance.
      * @param type Type of an item: com.spvessel.spacevil.Flags.LayoutType.STATIC 
      * or com.spvessel.spacevil.Flags.LayoutType.FLOATING.
      */
-    static public void addItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
+    static public void addItem(CoreWindow layout, IBaseItem item, LayoutType type) {
         switch (type) {
-        case STATIC:
+        case Static:
             layouts.get(layout.getWindowGuid()).getItems().add(item);
             break;
-        case FLOATING: {
+        case Floating: {
             layouts.get(layout.getWindowGuid()).getFloatItems().add(item);
             item.setHandler(layout);
             break;
         }
-        case DIALOG:
+        case Dialog:
             layouts.get(layout.getWindowGuid()).getDialogItems().add(item);
             break;
         default:
@@ -84,27 +84,27 @@ public class ItemsLayoutBox {
     /**
      * Removing an item from global item storage (ItemsLayoutBox). 
      * In usual situation you do not need to use this function only if you create your own 
-     * implementation of InterfaceBaseItem or want to remove IFloatItem instance.
+     * implementation of IBaseItem or want to remove IFloatItem instance.
      * @param layout Any CoreWindow instance.
-     * @param item Any InterfaceBaseItem instance.
+     * @param item Any IBaseItem instance.
      * @param type Type of an item: com.spvessel.spacevil.Flags.LayoutType.STATIC 
      * or com.spvessel.spacevil.Flags.LayoutType.FLOATING.
      * @return True: if removal was successfull. False: if the specified item does not exist in the storage.
      */
-    static public boolean removeItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
+    static public boolean removeItem(CoreWindow layout, IBaseItem item, LayoutType type) {
         layout.freeVRAMResource(item);
 
         switch (type) {
-        case STATIC:
+        case Static:
             return layouts.get(layout.getWindowGuid()).getItems().remove(item);
         // break;
-        case FLOATING: {
-            unsubscribeWindowSizeMonitoring(item, GeometryEventType.RESIZE_WIDTH);
-            unsubscribeWindowSizeMonitoring(item, GeometryEventType.RESIZE_HEIGHT);
+        case Floating: {
+            unsubscribeWindowSizeMonitoring(item, GeometryEventType.ResizeWidth);
+            unsubscribeWindowSizeMonitoring(item, GeometryEventType.ResizeHeight);
             return layouts.get(layout.getWindowGuid()).getFloatItems().remove(item);
         }
         // break;
-        case DIALOG:
+        case Dialog:
             return layouts.get(layout.getWindowGuid()).getDialogItems().remove(item);
         // break;
         default:
@@ -113,13 +113,13 @@ public class ItemsLayoutBox {
         }
     }
 
-    static void subscribeWindowSizeMonitoring(InterfaceBaseItem item, GeometryEventType type) {
+    static void subscribeWindowSizeMonitoring(IBaseItem item, GeometryEventType type) {
         // подписка
         item.setParent(item.getHandler().getLayout().getContainer());
         item.getHandler().getLayout().getContainer().addEventListener(type, item);
     }
 
-    static void unsubscribeWindowSizeMonitoring(InterfaceBaseItem item, GeometryEventType type) {
+    static void unsubscribeWindowSizeMonitoring(IBaseItem item, GeometryEventType type) {
         // отписка
         item.setParent(null);
         item.getHandler().getLayout().getContainer().removeEventListener(type, item);

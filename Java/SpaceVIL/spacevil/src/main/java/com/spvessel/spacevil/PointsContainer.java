@@ -1,6 +1,6 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfacePoints;
+import com.spvessel.spacevil.Core.IPoints;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import java.awt.Color;
 /**
  * PointsContainer is class for rendering points in graph.
  */
-public class PointsContainer extends Primitive implements InterfacePoints {
+public class PointsContainer extends Primitive implements IPoints {
     private static int count = 0;
 
     /**
