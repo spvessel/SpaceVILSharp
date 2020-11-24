@@ -48,8 +48,10 @@ namespace Program
             // Containers con = new Containers();
             // PerformanceTest pt = new PerformanceTest();
             // EventTest et = new EventTest();
+            JsonTest jt = new JsonTest();
             WindowManager.StartWith(
-                mw
+                jt
+                // mw
                 // sets
                 // lt
                 // flow

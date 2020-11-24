@@ -3,11 +3,12 @@ using System.Reflection;
 using System.Text;
 using System.Collections.Generic;
 using System.Drawing;
+using SpaceVIL;
 using SpaceVIL.Decorations;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 
-namespace SpaceVIL {
+namespace View.json {
     public class JsonApplier {
         public void ApplyJson(string path, object item)
         {

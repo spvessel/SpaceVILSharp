@@ -16,7 +16,6 @@ import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Common.RenderService;
-import com.spvessel.spacevil.Common.NativeLibrary;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Decorations.*;
 import com.spvessel.spacevil.Flags.BenchmarkIndicator;
@@ -27,13 +26,14 @@ import com.spvessel.spacevil.Flags.RenderType;
 public class App {
     public static void main(String[] args) {
         // // NativeLibrary.extractEmbeddedLibrary();
-        // // System.load(Paths.get("").toAbsolutePath().toString() + File.separator + "wrapper.dll");
+        // // System.load(Paths.get("").toAbsolutePath().toString() + File.separator +
+        // "wrapper.dll");
         // // CommonService.initSpaceVILComponents();
 
         // // NativeLibraryManager.ExtractEmbeddedLibrary(Library.Glfw);
         // // System.load("C:\\glfw\\glfw3.dll");
         // // System.load("C:\\glfw\\glfwapi.dll");
-        
+
         // WindowManager.setRenderType(RenderType.Always);
         // WindowManager.enableVSync(0);
 
@@ -58,10 +58,13 @@ public class App {
         // WindowManager.appExit();
         // });
 
-        // RenderService.enableMonitoring(BenchmarkIndicator.Framerate, BenchmarkIndicator.Frametime);
-        // DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class, getTextEditStyle());
+        // RenderService.enableMonitoring(BenchmarkIndicator.Framerate,
+        // BenchmarkIndicator.Frametime);
+        // DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class,
+        // getTextEditStyle());
 
-        MainWindow mw = new MainWindow();
+        // MainWindow mw = new MainWindow();
+        JsonTest jt = new JsonTest();
         // // mw.show();
         // mw.setPosition(500, 500);
 
@@ -97,27 +100,29 @@ public class App {
         // DragWindow dw = new DragWindow();
 
         // Calendar tmpDate = Calendar.getInstance();
-        // System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
+        // System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + "
+        // " + tmpDate.get(Calendar.YEAR));
 
         // ApiTester api = new ApiTester();
         // api.show();
 
         WindowManager.startWith(
-        mw//,
-        // dw,
-        // mw2
-        // st
-        // im
-        // ft
-        // lt
-        // ct
-        // it
-        // tt
-        // con
-        // sat
-        // et
-        // pt
-        // oglt
+            jt
+            //mw// ,
+            // dw,
+            // mw2
+            // st
+            // im
+            // ft
+            // lt
+            // ct
+            // it
+            // tt
+            // con
+            // sat
+            // et
+            // pt
+            // oglt
         );
     }
 
@@ -125,26 +130,26 @@ public class App {
     // public static final Color KeyBindFocused = new Color(138, 220, 255);
 
     // private static Style getTextEditStyle() {
-    //     Style style = Style.getTextEditStyle();
-    //     Style text = style.getInnerStyle("text");
-    //     text.addItemState(ItemStateType.Hovered, new ItemState(Hover));
-    //     text.addItemState(ItemStateType.Focused, new ItemState(KeyBindFocused));
-    //     return style;
+    // Style style = Style.getTextEditStyle();
+    // Style text = style.getInnerStyle("text");
+    // text.addItemState(ItemStateType.Hovered, new ItemState(Hover));
+    // text.addItemState(ItemStateType.Focused, new ItemState(KeyBindFocused));
+    // return style;
     // }
 
     // public static Style getNewToolTipStyle() {
-    //     Style style = Style.getToolTipStyle();
-    //     style.border.setColor(new Color(210, 210, 210));
-    //     style.border.setRadius(new CornerRadius(4, 0, 0, 4));
-    //     style.border.setThickness(1);
-    //     style.background = new Color(40, 40, 40);
-    //     style.foreground = new Color(210, 210, 210);
-    //     style.setShadow(new Shadow(10, new Position(5, 5), new Color(255, 255, 0)));
-    //     Style textStyle = style.getInnerStyle("text");
-    //     if (textStyle != null) {
-    //         textStyle.setMargin(30, 0, 0, 0);
-    //         textStyle.setTextAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-    //     }
-    //     return style;
+    // Style style = Style.getToolTipStyle();
+    // style.border.setColor(new Color(210, 210, 210));
+    // style.border.setRadius(new CornerRadius(4, 0, 0, 4));
+    // style.border.setThickness(1);
+    // style.background = new Color(40, 40, 40);
+    // style.foreground = new Color(210, 210, 210);
+    // style.setShadow(new Shadow(10, new Position(5, 5), new Color(255, 255, 0)));
+    // Style textStyle = style.getInnerStyle("text");
+    // if (textStyle != null) {
+    // textStyle.setMargin(30, 0, 0, 0);
+    // textStyle.setTextAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+    // }
+    // return style;
     // }
 }

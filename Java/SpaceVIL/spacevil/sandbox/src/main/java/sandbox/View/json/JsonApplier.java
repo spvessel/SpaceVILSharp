@@ -1,8 +1,8 @@
-package com.spvessel.spacevil.View.json;
+package sandbox.View.json;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Spacing;
 import com.spvessel.spacevil.Decorations.Style;
@@ -30,8 +30,8 @@ public class JsonApplier {
 //        jsonReflection(jss, style);
         parseObjectInners(style, jss);
         
-        if (parentItem instanceof InterfaceBaseItem) {
-            ((InterfaceBaseItem) parentItem).setStyle(style);
+        if (parentItem instanceof IBaseItem) {
+            ((IBaseItem) parentItem).setStyle(style);
         } else if (parentItem instanceof Style) {
             ((Style) parentItem).addInnerStyle(jss.name, style);
         }
@@ -112,11 +112,11 @@ public class JsonApplier {
                 if (!isFound) {
                     currentObj = ItemsFactory.getObject(jss.name);
                     if (currentObj != null) {
-                        if (currentObj instanceof InterfaceBaseItem) {
+                        if (currentObj instanceof IBaseItem) {
                             if (item instanceof Prototype) {
-                                ((Prototype) item).addItem((InterfaceBaseItem)currentObj);
+                                ((Prototype) item).addItem((IBaseItem)currentObj);
                             } else if (item instanceof CoreWindow) {
-                                ((CoreWindow) item).addItem((InterfaceBaseItem)currentObj);
+                                ((CoreWindow) item).addItem((IBaseItem)currentObj);
                             } else {
                                 System.out.println("smth strange with adding an item");
                             }
@@ -139,11 +139,11 @@ public class JsonApplier {
                         // currentObj = ItemsFactory.getObject(only.getValue().name);
                         currentObj = ItemsFactory.getObject(jss.jsonObjects.get(0).name);
                         if (currentObj != null) {
-                            if (currentObj instanceof InterfaceBaseItem) {
+                            if (currentObj instanceof IBaseItem) {
                                 try {
                                     String methodName = "set" + jss.name;
-                                    Method method = item.getClass().getMethod(methodName, InterfaceBaseItem.class); //to check if method exists
-                                    applyMethod(UsedTypes.IBASEITEM, methodName, item, (InterfaceBaseItem) currentObj);
+                                    Method method = item.getClass().getMethod(methodName, IBaseItem.class); //to check if method exists
+                                    applyMethod(UsedTypes.IBASEITEM, methodName, item, (IBaseItem) currentObj);
                                     isFound = true;
                                 } catch (NoSuchMethodException e) {
                                     System.out.println("Problems with the Horizontal/VerticalSplitArea: " + jss.name + " " + e);
@@ -524,7 +524,7 @@ public class JsonApplier {
         return isSuccessful;
     }
 
-    private boolean setValue(UsedTypes type, Field field, Object item, InterfaceBaseItem val) {
+    private boolean setValue(UsedTypes type, Field field, Object item, IBaseItem val) {
         boolean isSuccessful = true;
         //dunno if it's necessary
         try {
@@ -591,7 +591,7 @@ public class JsonApplier {
             }
 
             //??? TODO totally not sure about the equaling the rest. Works so far
-            if (type.equals(InterfaceBaseItem.class)) {
+            if (type.equals(IBaseItem.class)) {
                 return UsedTypes.IBASEITEM;
             }
             if (type.equals(Color.class)) {
@@ -647,7 +647,7 @@ public class JsonApplier {
             case FONT:
                 return Font.class;
             case IBASEITEM:
-                return InterfaceBaseItem.class;
+                return IBaseItem.class;
             case INDENTS:
                 return Indents.class;
         }
@@ -700,7 +700,7 @@ public class JsonApplier {
                     }
                 }
                 case IBASEITEM: {
-                    return (InterfaceBaseItem) obj;
+                    return (IBaseItem) obj;
                 }
                 case FONT: {
                     return (Font) obj;

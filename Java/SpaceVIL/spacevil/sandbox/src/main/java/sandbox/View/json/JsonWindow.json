@@ -33,7 +33,7 @@
     "Label": {
       "Text": "0 lines  0 characters",
       "Height": 25,
-      "HeightPolicy": "FIXED",
+      "HeightPolicy": "Fixed",
       "Background": [
         13,
         176,
@@ -46,10 +46,10 @@
       ],
       "FontSize": 18,
       "FontStyle": 1,
-      "Alignment": "BOTTOM",
+      "Alignment": "Bottom",
       "TextAlignment": [
-        "HCENTER",
-        "BOTTOM"
+        "HCenter",
+        "Bottom"
       ],
       "Padding": {
         "left": 0,

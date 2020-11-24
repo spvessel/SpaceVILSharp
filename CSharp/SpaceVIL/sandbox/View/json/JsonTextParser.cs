@@ -4,7 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 
-namespace SpaceVIL {
+namespace View.json {
     public class JsonTextParser {
         internal JsonStruct ReadFile(string filename)
         {

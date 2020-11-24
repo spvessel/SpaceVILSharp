@@ -4,6 +4,7 @@ using SpaceVIL;
 using SpaceVIL.Core;
 using System.Collections.Generic;
 using System.Drawing;
+using View.json;
 
 namespace View
 {
@@ -13,7 +14,7 @@ namespace View
         {
             JsonApplier ja = new JsonApplier();
 //        ja.applyJson("F:\\spacevil\\Java\\SpaceVIL\\spacevil\\src\\main\\java\\com\\spvessel\\spacevil\\View\\json\\JsonStyle.json", bc2);
-            ja.ApplyJson("F:\\spacevil\\CSharp\\SpaceVIL\\SpaceVIL\\View\\json\\JsonWindow.json", this); //te);
+            ja.ApplyJson("D:/Source/GitHub/spacevil/CSharp/SpaceVIL/sandbox/View/json/JsonWindow.json", this); //te);
             // Console.WriteLine("fsdf " + (FontStyle)Enum.Parse(typeof(FontStyle), "Regular"));
 
             // Font font = new Font(new FontFamily("Arial"), 16, FontStyle.Regular);

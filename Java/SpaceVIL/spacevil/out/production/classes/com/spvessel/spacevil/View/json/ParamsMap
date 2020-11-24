@@ -67,7 +67,7 @@ shape List<float[]>
 
 isFixrdShape    boolean
 
-innerShapes List<InterfaceBaseItem>
+innerShapes List<IBaseItem>
 
 shadowRadius    int
 shadowXOffset   int

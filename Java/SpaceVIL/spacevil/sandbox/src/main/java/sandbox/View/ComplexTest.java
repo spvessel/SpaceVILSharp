@@ -124,7 +124,7 @@ public class ComplexTest extends ActiveWindow {
                 DefaultsService.getDefaultImage(EmbeddedImage.Import, EmbeddedImageSize.Size32x32), false);
         img.keepAspectRatio(true);
         img.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-        split_area.assignRightItem(wrap);
+        split_area.setRightItem(wrap);
 
         for (int i = 0; i < 5; i++) {
             wrap.addItem(getButton("Wrap" + count++, 100, 100, SizePolicy.Expand));

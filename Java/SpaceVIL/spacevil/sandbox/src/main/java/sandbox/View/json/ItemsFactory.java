@@ -1,7 +1,7 @@
-package com.spvessel.spacevil.View.json;
+package sandbox.View.json;
 
 import com.spvessel.spacevil.*;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
@@ -26,7 +26,7 @@ public class ItemsFactory {
                 } else if (name.equals("ComboBoxDropDown")) {
                     return getComboBoxDropDown();
                     // } else if (name.equals("ContextMenu")) {
-                    //     return getContextMenu();
+                    // return getContextMenu();
                 } else if (name.equals("CustomShape")) {
                     return getCustomShape();
                 }
@@ -40,9 +40,9 @@ public class ItemsFactory {
             }
             case 'F': {
                 // } else if (name.equals("FileSystemEntry")) {
-                //     return getFileSystemEntry();
+                // return getFileSystemEntry();
                 // } else if (name.equals("FloatItem")) {
-                //     return getFloatItem();
+                // return getFloatItem();
                 if (name.equals("Frame")) {
                     return getFrame();
                 } else if (name.equals("FreeArea")) {
@@ -76,9 +76,9 @@ public class ItemsFactory {
                 } else if (name.equals("Indicator")) {
                     return getIndicator();
                     // } else if (name.equals("InputBox")) {
-                    //     return getInputBox();
+                    // return getInputBox();
                     // } else if (name.equals("InputDialog")) {
-                    //     return getInputDialog();
+                    // return getInputDialog();
                 }
                 break;
             }
@@ -106,14 +106,14 @@ public class ItemsFactory {
                 }
                 break;
             }
-//            case 'O':  {
-//                if (name.equals("OpenEntryBox")) {
-//                    return getOpenEntryBox();
-//                } else if (name.equals("OpenEntryDialog")) {
-//                    return getOpenEntryDialog();
-//                }
-//                break;
-//            }
+            // case 'O': {
+            // if (name.equals("OpenEntryBox")) {
+            // return getOpenEntryBox();
+            // } else if (name.equals("OpenEntryDialog")) {
+            // return getOpenEntryDialog();
+            // }
+            // break;
+            // }
 
             case 'P': {
                 if (name.equals("PasswordLine")) {
@@ -121,7 +121,7 @@ public class ItemsFactory {
                 } else if (name.equals("PointsContainer")) {
                     return getPointsContainer();
                     // } else if (name.equals("PopUpMessage")) {
-                    //     return getPopUpMessage();
+                    // return getPopUpMessage();
                 } else if (name.equals("ProgressBar")) {
                     return getProgressBar();
                 }
@@ -141,14 +141,14 @@ public class ItemsFactory {
                 if (name.equals("ScrollHandler")) {
                     return getScrollHandler();
                     // } else if (name.equals("SelectionItem")) {
-                    //     return getSelectionItem();
+                    // return getSelectionItem();
                     // } else if (name.equals("SideArea")) {
-                    //     return getSideArea();
+                    // return getSideArea();
                 } else if (name.equals("SpinItem")) {
                     return getSpinItem();
                     // } else if (name.equals("SplitHolder")) {
-                    //     return getSplitHolder();
-                } else if (name.equals("Style") || name.equals("InnerStyle")) { //???
+                    // return getSplitHolder();
+                } else if (name.equals("Style") || name.equals("InnerStyle")) { // ???
                     return getStyle();
                 }
                 break;
@@ -167,7 +167,7 @@ public class ItemsFactory {
                 } else if (name.equals("TitleBar")) {
                     return getTitleBar();
                     // } else if (name.equals("TreeItem")) {
-                    //     return getTreeItem();
+                    // return getTreeItem();
                 } else if (name.equals("TreeView")) {
                     return getTreeView();
                 } else if (name.equals("Triangle")) {
@@ -187,13 +187,13 @@ public class ItemsFactory {
                 }
                 break;
 
-//            case 'W':
-//                if (name.equals("WrapArea")) {
-//                    return getWrapArea();
-//                } else if (name.equals("WrapGrid")) {
-//                    return getWrapGrid();
-//                }
-//                break;
+                // case 'W':
+                // if (name.equals("WrapArea")) {
+                // return getWrapArea();
+                // } else if (name.equals("WrapGrid")) {
+                // return getWrapGrid();
+                // }
+                // break;
             }
         }
 
@@ -224,27 +224,27 @@ public class ItemsFactory {
         return new ComboBoxDropDown();
     }
 
-    //TODO
+    // TODO
     public static ContextMenu getContextMenu(CoreWindow handler) {
         return new ContextMenu(handler);
     }
 
-    //???
+    // ???
     public static CustomShape getCustomShape() {
         return new CustomShape();
     }
 
-    //???
+    // ???
     public static Ellipse getEllipse() {
         return new Ellipse();
     }
 
-    //TODO
+    // TODO
     public static FileSystemEntry getFileSystemEntry(FileSystemEntryType type, String text) {
         return new FileSystemEntry(type, text);
     }
 
-    //TODO
+    // TODO
     public static FloatItem getFloatItem(CoreWindow handler) {
         return new FloatItem(handler);
     }
@@ -262,7 +262,7 @@ public class ItemsFactory {
     }
 
     public static Grid getGrid() {
-        return new Grid(1, 1); //assume, that I'll set row/colCount later
+        return new Grid(1, 1); // assume, that I'll set row/colCount later
     }
 
     public static HorizontalScrollBar getHorizontalScrollBar() {
@@ -289,12 +289,12 @@ public class ItemsFactory {
         return new Indicator();
     }
 
-    //TODO
+    // TODO
     public static InputBox getInputBox(String title, String actionName, String defaultText) {
         return new InputBox(title, actionName, defaultText);
     }
 
-    //TODO
+    // TODO
     public static InputDialog getInputDialog(String title, String actionName, String defaultText) {
         return new InputDialog(title, actionName, defaultText);
     }
@@ -331,13 +331,14 @@ public class ItemsFactory {
         return new MessageItem();
     }
 
-    //TODO
+    // TODO
     public static OpenEntryBox getOpenEntryBox(String title, FileSystemEntryType entryType, OpenDialogType dialogType) {
         return new OpenEntryBox(title, entryType, dialogType);
     }
 
-    //TODO
-    public static OpenEntryDialog getOpenEntryDialog(String title, FileSystemEntryType entryType, OpenDialogType dialogType) {
+    // TODO
+    public static OpenEntryDialog getOpenEntryDialog(String title, FileSystemEntryType entryType,
+            OpenDialogType dialogType) {
         return new OpenEntryDialog(title, entryType, dialogType);
     }
 
@@ -349,7 +350,7 @@ public class ItemsFactory {
         return new PointsContainer();
     }
 
-    //TODO
+    // TODO
     public static PopUpMessage getPopUpMessage(String message) {
         return new PopUpMessage(message);
     }
@@ -374,12 +375,12 @@ public class ItemsFactory {
         return new ScrollHandler();
     }
 
-    //TODO
-    public static SelectionItem getSelectionItem(InterfaceBaseItem content) {
+    // TODO
+    public static SelectionItem getSelectionItem(IBaseItem content) {
         return new SelectionItem(content);
     }
 
-    //TODO
+    // TODO
     public static SideArea getSideArea(CoreWindow handler, Side attachSide) {
         return new SideArea(handler, attachSide);
     }
@@ -388,7 +389,7 @@ public class ItemsFactory {
         return new SpinItem();
     }
 
-    //TODO
+    // TODO
     public static SplitHolder getSplitHolder(Orientation orientation) {
         return new SplitHolder(orientation);
     }
@@ -421,7 +422,7 @@ public class ItemsFactory {
         return new TitleBar();
     }
 
-    //TODO
+    // TODO
     public static TreeItem getTreeItem(TreeItemType type) {
         return new TreeItem(type);
     }
@@ -450,12 +451,12 @@ public class ItemsFactory {
         return new VerticalStack();
     }
 
-    //TODO
+    // TODO
     public static WrapArea getWrapArea(int cellWidth, int cellHeight, Orientation orientation) {
         return new WrapArea(cellWidth, cellHeight, orientation);
     }
 
-    //TODO
+    // TODO
     public static WrapGrid getWrapGrid(int cellWidth, int cellHeight, Orientation orientation) {
         return new WrapGrid(cellWidth, cellHeight, orientation);
     }

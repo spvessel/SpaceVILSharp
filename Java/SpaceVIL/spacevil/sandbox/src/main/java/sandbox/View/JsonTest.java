@@ -1,10 +1,10 @@
-package com.spvessel.spacevil.View;
+package sandbox.View;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Frame;
-import com.spvessel.spacevil.View.json.JsonApplier;
+import sandbox.View.json.JsonApplier;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -41,7 +41,7 @@ public class JsonTest extends ActiveWindow {
 
         JsonApplier ja = new JsonApplier();
 //        ja.applyJson("F:\\spacevil\\Java\\SpaceVIL\\spacevil\\src\\main\\java\\com\\spvessel\\spacevil\\View\\json\\JsonStyle.json", bc2);
-        ja.applyJson("F:\\spacevil\\Java\\SpaceVIL\\spacevil\\src\\main\\java\\com\\spvessel\\spacevil\\View\\json\\JsonWindow.json", this); //te);
+        ja.applyJson("D:/Source/GitHub/spacevil/Java/SpaceVIL/spacevil/sandbox/src/main/java/sandbox/View/json/JsonWindow.json", this); //te);
 
 
 //        System.out.println();

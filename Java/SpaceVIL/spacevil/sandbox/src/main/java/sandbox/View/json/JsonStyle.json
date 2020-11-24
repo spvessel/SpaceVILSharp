@@ -5,11 +5,11 @@
     "font": {
       "Size": 16
     },
-    "widthPolicy": "EXPAND",
-    "heightPolicy": "FIXED",
+    "widthPolicy": "Expand",
+    "heightPolicy": "Fixed",
     "width": 50,
     "height": 50,
-    "alignment": ["LEFT", "VCENTER"],
-    "textAlignment": ["HCENTER", "VCENTER"]
+    "alignment": ["Left", "VCenter"],
+    "textAlignment": ["HCenter", "VCenter"]
   }
 }

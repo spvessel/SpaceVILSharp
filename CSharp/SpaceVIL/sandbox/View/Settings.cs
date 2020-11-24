@@ -87,11 +87,11 @@ namespace View
             treeview = new TreeView();
             treeview.SetMinWidth(100);
             treeview.SetVScrollBarPolicy(VisibilityPolicy.AsNeeded);
-            splitarea.AssignLeftItem(treeview);
+            splitarea.SetLeftItem(treeview);
 
             WrapGrid wrap = new WrapGrid(100, 100, Orientation.Horizontal);
             wrap.SetStretch(true);
-            splitarea.AssignRightItem(wrap);
+            splitarea.SetRightItem(wrap);
 
             int count = 0;
             for (int i = 0; i < 5; i++)

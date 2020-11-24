@@ -1,7 +1,8 @@
+using SpaceVIL;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
-namespace SpaceVIL {
+namespace View.json {
     public class ItemsFactory {
         public static object GetObject(string name) {
             switch (name[0]) {

@@ -1,4 +1,4 @@
-package com.spvessel.spacevil.View.json;
+package sandbox.View.json;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
