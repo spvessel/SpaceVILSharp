@@ -118,7 +118,7 @@ public class ComplexTest extends ActiveWindow {
         split_area.setSplitPosition(300);
         addItem(split_area);
 
-        split_area.assignLeftItem(treeview);
+        split_area.setLeftItem(treeview);
 
         ImageItem img = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.Import, EmbeddedImageSize.Size32x32), false);

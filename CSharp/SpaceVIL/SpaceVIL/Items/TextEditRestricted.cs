@@ -69,7 +69,8 @@ namespace SpaceVIL
                     {
                         currentValue = minValue;
                     }
-                    else{
+                    else
+                    {
                         currentValue = maxValue;
                     }
                 }
@@ -92,20 +93,36 @@ namespace SpaceVIL
             {
                 case InputRestriction.IntNumbers:
                     if (numbers.Contains(str))
+                    {
                         isValid = true;
+                    }
                     else if (isFirst && str.Equals("-"))
+                    {
                         isValid = true;
-                    else isValid = false;
+                    }
+                    else
+                    {
+                        isValid = false;
+                    }
                     break;
 
                 case InputRestriction.DoubleNumbers:
                     if (numbers.Contains(str))
+                    {
                         isValid = true;
+                    }
                     else if (isFirst && str.Equals("-"))
+                    {
                         isValid = true;
+                    }
                     else if (!isFirst && !hasDot && (str.Equals(".") || str.Equals(",")))
+                    {
                         isValid = true;
-                    else isValid = false;
+                    }
+                    else
+                    {
+                        isValid = false;
+                    }
                     break;
 
                 default:
@@ -192,23 +209,36 @@ namespace SpaceVIL
             int i = 0;
             String[] splitter = (currentValue.ToString()).Split('.');
             if (splitter.Length > 1)
+            {
                 i = splitter[1].Length;
+            }
 
             splitter = (minValue.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
+            {
                 i = splitter[1].Length;
+            }
 
             splitter = (maxValue.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
+            {
                 i = splitter[1].Length;
+            }
 
             splitter = (step.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
+            {
                 i = splitter[1].Length;
+            }
             
             if (i < minSignsCount)
+            {
                 i = minSignsCount;
-            else if (i > maxSignsCount) i = maxSignsCount;
+            }
+            else if (i > maxSignsCount) 
+            {
+                i = maxSignsCount;
+            }
 
             signsCount = i;
             rou = "F" + (signsCount.ToString());
@@ -250,9 +280,13 @@ namespace SpaceVIL
         private void UpdateCurrentValue()
         {
             if (currentValue < minValue)
+            {
                 currentValue = minValue;
+            }
             if (currentValue > maxValue)
+            {
                 currentValue = maxValue;
+            }
 
             switch (inres)
             {

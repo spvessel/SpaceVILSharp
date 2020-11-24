@@ -14,7 +14,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a CustomSelector
         /// </summary>
-        public CustomSelector() : base(name: "CustomSelector_" + count)
+        internal CustomSelector() : base(name: "CustomSelector_" + count)
         {
             count++;
         }
@@ -22,7 +22,7 @@ namespace SpaceVIL
         /// <summary>
         /// Make CustomSelector's rectangles with left top and right bottom points
         /// </summary>
-        public void SetRectangles(List<SpaceVIL.Core.Point> points)
+        internal void SetRectangles(List<SpaceVIL.Core.Point> points)
         {
             List<float[]> triangles = new List<float[]>();
             int w1 = 0, w2 = 0;
@@ -59,7 +59,7 @@ namespace SpaceVIL
         /// <summary>
         /// Shift selector on Y direction
         /// </summary>
-        public void ShiftAreaY(int yShift) {
+        internal void ShiftAreaY(int yShift) {
             SetY(yShift);
             List<float[]> triangles = GetTriangles();
             if (triangles == null || triangles.Count == 0)
@@ -74,7 +74,7 @@ namespace SpaceVIL
         /// <summary>
         /// Shift selector on X direction
         /// </summary>
-        public void ShiftAreaX(int xShift)
+        internal void ShiftAreaX(int xShift)
         {
             SetX(xShift);
             List<float[]> triangles = GetTriangles();

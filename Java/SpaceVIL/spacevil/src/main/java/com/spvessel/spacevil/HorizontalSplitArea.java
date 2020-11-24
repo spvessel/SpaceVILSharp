@@ -101,7 +101,7 @@ public class HorizontalSplitArea extends Prototype implements IVLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void assignTopItem(IBaseItem item) {
+    public void setTopItem(IBaseItem item) {
         addItem(item);
         _topBlock = item;
         _tMin = _topBlock.getMinHeight();
@@ -113,7 +113,7 @@ public class HorizontalSplitArea extends Prototype implements IVLayout {
      * 
      * @param item Item as com.spvessel.spacevil.Core.IBaseItem.
      */
-    public void assignBottomItem(IBaseItem item) {
+    public void setBottomItem(IBaseItem item) {
         addItem(item);
         _bottomBlock = item;
         _bMin = _bottomBlock.getMinHeight();

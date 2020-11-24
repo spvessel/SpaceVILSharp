@@ -1,0 +1,15 @@
+{
+  "Style": {
+    "background": [13, 176, 255],
+    "foreground": [1, 132, 132],
+    "font": {
+      "Size": 16
+    },
+    "widthPolicy": "EXPAND",
+    "heightPolicy": "FIXED",
+    "width": 50,
+    "height": 50,
+    "alignment": ["LEFT", "VCENTER"],
+    "textAlignment": ["HCENTER", "VCENTER"]
+  }
+}

@@ -87,29 +87,31 @@ class TextEditRestricted extends TextEditStorage {
         String str = new String(input, Charset.forName("UTF-32"));
         boolean isValid = false;
         switch (inres) {
-        case INTNUMBERS:
-            if (numbers.contains(str))
-                isValid = true;
-            else if (isFirst && str.equals("-"))
-                isValid = true;
-            else
-                isValid = false;
-            break;
+            case INTNUMBERS:
+                if (numbers.contains(str)) {
+                    isValid = true;
+                } else if (isFirst && str.equals("-")) {
+                    isValid = true;
+                } else {
+                    isValid = false;
+                }
+                break;
 
-        case DOUBLENUMBERS:
-            if (numbers.contains(str))
-                isValid = true;
-            else if (isFirst && str.equals("-"))
-                isValid = true;
-            else if (!isFirst && !hasDot && (str.equals(".") || str.equals(",")))
-                isValid = true;
-            else
-                isValid = false;
-            break;
+            case DOUBLENUMBERS:
+                if (numbers.contains(str)) {
+                    isValid = true;
+                } else if (isFirst && str.equals("-")) {
+                    isValid = true;
+                } else if (!isFirst && !hasDot && (str.equals(".") || str.equals(","))) {
+                    isValid = true;
+                } else {
+                    isValid = false;
+                }
+                break;
 
-        default:
-            isValid = true;
-            break;
+            default:
+                isValid = true;
+                break;
         }
 
         if (isValid) {
@@ -177,25 +179,30 @@ class TextEditRestricted extends TextEditStorage {
 
         int i = 0;
         String[] splitter = String.valueOf(currentValue).split("\\.");
-        if (splitter.length > 1)
+        if (splitter.length > 1) {
             i = splitter[1].length();
+        }
 
         splitter = String.valueOf(minValue).split("\\.");
-        if (splitter.length > 1 && i < splitter[1].length())
+        if (splitter.length > 1 && i < splitter[1].length()) {
             i = splitter[1].length();
+        }
 
         splitter = String.valueOf(maxValue).split("\\.");
-        if (splitter.length > 1 && i < splitter[1].length())
+        if (splitter.length > 1 && i < splitter[1].length()) {
             i = splitter[1].length();
+        }
 
         splitter = String.valueOf(step).split("\\.");
-        if (splitter.length > 1 && i < splitter[1].length())
+        if (splitter.length > 1 && i < splitter[1].length()) {
             i = splitter[1].length();
+        }
 
-        if (i < minSignsCount)
+        if (i < minSignsCount) {
             i = minSignsCount;
-        else if (i > maxSignsCount)
+        } else if (i > maxSignsCount) {
             i = maxSignsCount;
+        }
         signsCount = i;
         rou = "%." + String.valueOf(signsCount) + "f";
     }
@@ -230,18 +237,20 @@ class TextEditRestricted extends TextEditStorage {
     }
 
     private void updateCurrentValue() {
-        if (currentValue < minValue)
+        if (currentValue < minValue) {
             currentValue = minValue;
-        if (currentValue > maxValue)
+        }
+        if (currentValue > maxValue) {
             currentValue = maxValue;
+        }
 
         switch (inres) {
-        case INTNUMBERS:
-            setText(Integer.toString((int) currentValue));
-            break;
-        default: //case DOUBLENUMBERS:
-            setText(String.format(Locale.ROOT, rou, currentValue));
-            break;
+            case INTNUMBERS:
+                setText(Integer.toString((int) currentValue));
+                break;
+            default: //case DOUBLENUMBERS:
+                setText(String.format(Locale.ROOT, rou, currentValue));
+                break;
         }
     }
 
