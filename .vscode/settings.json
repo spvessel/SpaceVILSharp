@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "**/.gradle": true,
+        "**/*.class": true,
+        "**/gradle": true
+    }
+}
