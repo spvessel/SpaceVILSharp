@@ -1,0 +1,153 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Platforms>AnyCPU</Platforms>
+        <!-- <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\spacevil.xml</DocumentationFile> -->
+
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+    <PropertyGroup>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Native\linux\libglfw3.so" />
+        <None Remove="Native\macos\libglfw3.dylib" />
+        <None Remove="Native\windows\glfw3.dll" />
+
+        <None Remove="Shaders\fs_primitive.glsl" />
+        <None Remove="Shaders\vs_primitive.glsl" />
+
+        <None Remove="Shaders\fs_blur.glsl" />
+        <None Remove="Shaders\vs_blur.glsl" />
+
+        <None Remove="Shaders\fs_char.glsl" />
+        <None Remove="Shaders\vs_char.glsl" />
+
+        <None Remove="Shaders\fs_texture.glsl" />
+        <None Remove="Shaders\vs_texture.glsl" />
+
+        <None Remove="Fonts\Ubuntu-Regular.ttf" />
+
+        <None Remove="Images\add32.png" />
+        <None Remove="Images\add64.png" />
+        <None Remove="Images\arrowleft32.png" />
+        <None Remove="Images\arrowleft64.png" />
+        <None Remove="Images\arrowup32.png" />
+        <None Remove="Images\arrowup64.png" />
+        <None Remove="Images\diskette32.png" />
+        <None Remove="Images\diskette64.png" />
+        <None Remove="Images\drive32.png" />
+        <None Remove="Images\drive64.png" />
+        <None Remove="Images\eraser32.png" />
+        <None Remove="Images\eraser64.png" />
+        <None Remove="Images\eye32.png" />
+        <None Remove="Images\eye64.png" />
+        <None Remove="Images\file32.png" />
+        <None Remove="Images\file64.png" />
+        <None Remove="Images\filter32.png" />
+        <None Remove="Images\filter64.png" />
+        <None Remove="Images\folder32.png" />
+        <None Remove="Images\folder64.png" />
+        <None Remove="Images\folderplus32.png" />
+        <None Remove="Images\folderplus64.png" />
+        <None Remove="Images\gear32.png" />
+        <None Remove="Images\gear64.png" />
+        <None Remove="Images\home32.png" />
+        <None Remove="Images\home64.png" />
+        <None Remove="Images\import32.png" />
+        <None Remove="Images\import64.png" />
+        <None Remove="Images\lines32.png" />
+        <None Remove="Images\lines64.png" />
+        <None Remove="Images\loupe32.png" />
+        <None Remove="Images\loupe64.png" />
+        <None Remove="Images\pencil32.png" />
+        <None Remove="Images\pencil64.png" />
+        <None Remove="Images\recyclebin32.png" />
+        <None Remove="Images\recyclebin64.png" />
+        <None Remove="Images\refresh32.png" />
+        <None Remove="Images\refresh64.png" />
+        <None Remove="Images\user32.png" />
+        <None Remove="Images\user64.png" />
+        <None Remove="Images\loadcircle32.png" />
+        <None Remove="Images\loadcircle64.png" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+
+        <EmbeddedResource Include="Native\linux\libglfw3.so" />
+        <EmbeddedResource Include="Native\macos\libglfw3.dylib" />
+        <EmbeddedResource Include="Native\windows\glfw3.dll" />
+
+        <EmbeddedResource Include="Shaders\fs_primitive.glsl" />
+        <EmbeddedResource Include="Shaders\vs_primitive.glsl" />
+
+        <EmbeddedResource Include="Shaders\fs_blur.glsl" />
+        <EmbeddedResource Include="Shaders\vs_blur.glsl" />
+
+        <EmbeddedResource Include="Shaders\fs_char.glsl" />
+        <EmbeddedResource Include="Shaders\vs_char.glsl" />
+
+        <EmbeddedResource Include="Shaders\fs_texture.glsl" />
+        <EmbeddedResource Include="Shaders\vs_texture.glsl" />
+
+        <EmbeddedResource Include="Fonts\Ubuntu-Regular.ttf" />
+
+        <EmbeddedResource Include="Images\add32.png" />
+        <EmbeddedResource Include="Images\add64.png" />
+        <EmbeddedResource Include="Images\arrowleft32.png" />
+        <EmbeddedResource Include="Images\arrowleft64.png" />
+        <EmbeddedResource Include="Images\arrowup32.png" />
+        <EmbeddedResource Include="Images\arrowup64.png" />
+        <EmbeddedResource Include="Images\diskette32.png" />
+        <EmbeddedResource Include="Images\diskette64.png" />
+        <EmbeddedResource Include="Images\drive32.png" />
+        <EmbeddedResource Include="Images\drive64.png" />
+        <EmbeddedResource Include="Images\eraser32.png" />
+        <EmbeddedResource Include="Images\eraser64.png" />
+        <EmbeddedResource Include="Images\eye32.png" />
+        <EmbeddedResource Include="Images\eye64.png" />
+        <EmbeddedResource Include="Images\file32.png" />
+        <EmbeddedResource Include="Images\file64.png" />
+        <EmbeddedResource Include="Images\filter32.png" />
+        <EmbeddedResource Include="Images\filter64.png" />
+        <EmbeddedResource Include="Images\folder32.png" />
+        <EmbeddedResource Include="Images\folder64.png" />
+        <EmbeddedResource Include="Images\folderplus32.png" />
+        <EmbeddedResource Include="Images\folderplus64.png" />
+        <EmbeddedResource Include="Images\gear32.png" />
+        <EmbeddedResource Include="Images\gear64.png" />
+        <EmbeddedResource Include="Images\home32.png" />
+        <EmbeddedResource Include="Images\home64.png" />
+        <EmbeddedResource Include="Images\import32.png" />
+        <EmbeddedResource Include="Images\import64.png" />
+        <EmbeddedResource Include="Images\lines32.png" />
+        <EmbeddedResource Include="Images\lines64.png" />
+        <EmbeddedResource Include="Images\loupe32.png" />
+        <EmbeddedResource Include="Images\loupe64.png" />
+        <EmbeddedResource Include="Images\pencil32.png" />
+        <EmbeddedResource Include="Images\pencil64.png" />
+        <EmbeddedResource Include="Images\recyclebin32.png" />
+        <EmbeddedResource Include="Images\recyclebin64.png" />
+        <EmbeddedResource Include="Images\refresh32.png" />
+        <EmbeddedResource Include="Images\refresh64.png" />
+        <EmbeddedResource Include="Images\user32.png" />
+        <EmbeddedResource Include="Images\user64.png" />
+        <EmbeddedResource Include="Images\loadcircle32.png" />
+        <EmbeddedResource Include="Images\loadcircle64.png" />
+
+    </ItemGroup>
+
+</Project>

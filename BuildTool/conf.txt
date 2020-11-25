@@ -1,0 +1,49 @@
+//version
+VerMajor:0
+VerMiddle:3
+VerMinor:1
+VerExtend:7
+VerPhase:0
+VerMonth:3
+
+//src
+SrcPathJVM:D:\BuildTool\src\java
+SrcPathNet:D:\BuildTool\src\net
+
+//template
+TemplatePathJVM:D:\BuildTool\template\java
+TemplatePathNetCore:D:\BuildTool\template\net_core
+TemplatePathNetStandard:D:\BuildTool\template\net_standard
+
+//obf
+ObfPathJVM:D:\BuildTool\obf\java
+ObfPathNet:D:\BuildTool\obf\net
+
+//release
+ReleasePathJVM:D:\BuildTool\release\jvm
+ReleasePathNetCore:D:\BuildTool\release\net_core
+ReleasePathNetStandard:D:\BuildTool\release\net_standard
+
+//verification
+VerificateJVM:D:\BuildTool\verification\jvm
+VerificateNetCore:D:\BuildTool\verification\net_core
+VerificateNetStandard:D:\BuildTool\verification\net_standard
+
+//zip
+ZipDir:D:\BuildTool\zip
+ZipJVM:spacevil_jvm.zip
+ZipNetCore:spacevil_dotnet_core.zip
+ZipNetStandard:spacevil_dotnet_standard.zip
+
+//exclude folders
+ExcludeDirs:View;Test;Tests;App;obj;bin;Properties
+
+//exclude files
+ExcludeFiles:Program.cs;fs_blur_moreOld.glsl;fs_blur_old.glsl;fs_fxaa.glsl;vs_fxaa.glsl;gs_points.glsl;vs_points.glsl
+
+//valuable extensions
+ValExtensions:cs;java;glsl;ttf;MF;png
+
+//assembly info
+AssemblyInfoNetStandard:Properties\AssemblyInfo.cs
+AssemblyInfoNetCore:obj\Release\netcoreapp2.1\SpaceVIL.AssemblyInfo.cs

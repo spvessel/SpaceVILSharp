@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+// version '0.3-alpha'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    testImplementation 'junit:junit:4.12'
+
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+mainClassName = 'com.spvessel.App'
+
+task createApp(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',  
+        	// 'Implementation-Version': version,
+        	'Main-Class': 'com.spvessel.App'
+    }
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
