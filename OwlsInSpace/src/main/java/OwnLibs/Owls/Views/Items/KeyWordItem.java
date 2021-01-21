@@ -10,16 +10,19 @@ import com.spvessel.spacevil.Label;
 import java.awt.*;
 
 public class KeyWordItem extends Label {
-    public KeyWordItem() {
+    private KeyWordItem() {
         super();
+
         setWidthPolicy(SizePolicy.FIXED);
         setBackground(0, 0, 0, 0);
         setForeground(20, 180, 255);
         setFontSize(15);
         setFontStyle(Font.BOLD);
+        setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+
         addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
         addItemState(ItemStateType.PRESSED, new ItemState(new Color(0x3F3F3F)));
-        setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+
         eventMousePress.add(this::linkIsVisited);
     }
 

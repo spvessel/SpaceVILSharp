@@ -10,6 +10,9 @@ obj
 *.jar
 *.iml
 *.exp
+*.exe
 SpaceVIL.dll
+Java/SpaceVIL/spacevil/out
 CSharp/SpaceVIL/sandbox/glfw3.dll
+CSharp/SpaceVIL/packages
 Java/SpaceVIL/spacevil/sandbox/wrapper

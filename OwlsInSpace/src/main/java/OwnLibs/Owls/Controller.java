@@ -16,7 +16,7 @@ import java.util.Map;
 public class Controller {
     private final String rootFolder;
     private MainWindow owlWindow;
-    private SettingsWindow setsWindow;
+//    private SettingsWindow setsWindow;
     private FileEntryTreeItem rootItem;
     private FileEntryTreeItem workItem;
     private FileEntryTreeItem workDirectory;
@@ -30,15 +30,21 @@ public class Controller {
         String userDir = System.getProperty("user.dir");
         rootFolder = userDir + File.separator + "workspace";
         this.owlWindow = owlWindow;
-        setsWindow = new SettingsWindow();
+        initSettingsWindow(); //setsWindow = new SettingsWindow();
         InterfaceSupport.controller = this;
-        tabToOwls = new HashMap<>();
+        tabToOwls = new HashMap<>(); //???
         historyStore = new History(this);
     }
 
     public void start() {
         initialize();
         owlWindow.show();
+    }
+
+    private void initSettingsWindow() {
+        SettingsWindow setsWindow = new SettingsWindow();
+        owlWindow.homePage.settingsLabel.eventMouseClick.add((sender, args) -> setsWindow.show());
+        owlWindow.settingsBtn.eventMouseClick.add((sender, args) -> setsWindow.show());
     }
 
     private void initialize() {
@@ -61,7 +67,7 @@ public class Controller {
                 treeNewFileOrFolder(args, workDirectory, "folder"));
 
         owlWindow.homePage.importFileLabel.eventMouseClick.add((sender, args) -> treeImportFile(workDirectory));
-        owlWindow.homePage.settingsLabel.eventMouseClick.add((sender, args) -> setsWindow.show());
+//        owlWindow.homePage.settingsLabel.eventMouseClick.add((sender, args) -> setsWindow.show());
         owlWindow.homePage.quickTipsLabel.eventMouseClick.add((sender, args) -> helpWnd.show());
 
         owlWindow.newFileBtn.eventMouseClick.add((sender, args) -> treeNewFileOrFolder(args, workDirectory, "file"));
@@ -98,7 +104,8 @@ public class Controller {
         });
 
         // Edit mode
-        owlWindow.editBtn.eventToggle.add((sender, args) -> onEditBtnPressed(owlWindow.editBtn.isToggled()));
+//        owlWindow.editBtn.eventToggle.add((sender, args) -> onEditBtnPressed(owlWindow.editBtn.isToggled()));
+        owlWindow.editBtn.eventMouseClick.add((sender, args) -> onEditBtnPressed(owlWindow.editBtn.isToggled()));
 
         // Back to the files tree from search results
         owlWindow.backBtn.eventMouseClick.add((sender, args) -> {
@@ -161,9 +168,9 @@ public class Controller {
             checkAndCloseWindow();
         });
 
-        owlWindow.settingsBtn.eventMouseClick.add((sender, args) -> setsWindow.show());
+//        owlWindow.settingsBtn.eventMouseClick.add((sender, args) -> setsWindow.show());
 
-        owlWindow.eventOnStart.add(() -> historyStore.deserialize());
+        owlWindow.eventOnStart.add(historyStore::deserialize);
 
         owlWindow.refreshBtn.eventMouseClick.add((sender, args) -> {
             owlWindow.filesTree.clear();
@@ -199,9 +206,9 @@ public class Controller {
                 boolean wrap = !current.isWrapText();
                 current.setWrapText(wrap);
                 if (wrap) {
-                    owlWindow.wrap.setText("Wrap text");
-                } else {
                     owlWindow.wrap.setText("Unwrap text");
+                } else {
+                    owlWindow.wrap.setText("Wrap text");
                 }
             }
         });
@@ -228,7 +235,8 @@ public class Controller {
                         saveFile();
                         break;
                     case E:
-                        owlWindow.editBtn.eventToggle.execute(owlWindow.editBtn, new MouseArgs());
+//                        owlWindow.editBtn.eventToggle.execute(owlWindow.editBtn, new MouseArgs());
+                        owlWindow.editBtn.eventMouseClick.execute(owlWindow.editBtn, new MouseArgs());
                         TextArea current = getCurrentTextArea();
                         if (current != null) {
                             current.setFocus();
@@ -273,8 +281,9 @@ public class Controller {
                                 // owlWindow.editBtn.eventToggle.execute(owlWindow.editBtn, new MouseArgs());
                             }
                             TextArea current = getCurrentTextArea();
-                            if (current != null)
+                            if (current != null) {
                                 current.setFocus();
+                            }
                             break;
                     }
                 } else if (args.mods.contains(KeyMods.ALT)) {
@@ -299,8 +308,9 @@ public class Controller {
                             tabs = owlWindow.workTabArea.getTabs();
                             index = tabs.indexOf(owlWindow.workTabArea.getSelectedTab());
                             index++;
-                            if (index >= tabs.size())
+                            if (index >= tabs.size()) {
                                 return;
+                            }
                             owlWindow.workTabArea.selectTab(tabs.get(index));
                             area = getCurrentTextArea();
                             if (area != null) {
@@ -330,8 +340,9 @@ public class Controller {
 
             alertDialog.onCloseDialog.add(() -> {
                 boolean res = fileUnsaved(selectedTab, alertDialog.getResult(), alertDialog.getUserButtonResult());
-                if (res)
+                if (res) {
                     checkAndCloseWindow();
+                }
             });
 
             alertDialog.show(owlWindow);
@@ -407,10 +418,11 @@ public class Controller {
         hri.eventMouseClick.add((sender, args) -> {
             if (args.button == MouseButton.BUTTON_LEFT) {
                 FileEntryTreeItem feti = InterfaceSupport.findFETIByAddress(path, rootItem);
-                if (feti == null)
+                if (feti == null) {
                     System.out.println("No such file");
-                else
+                } else {
                     loadFileLauncher(feti);
+                }
             }
         });
     }
@@ -547,8 +559,9 @@ public class Controller {
 
     // Save file
     private void saveFile() {
-        if (workItem == null)
+        if (workItem == null) {
             return;
+        }
 
         InterfaceSupport.saveOwlFile(workItem, getCurrentTextArea().getText());
         setItemEdited(workItem, false, getTabByOwlsTreeItem(workItem));
@@ -646,8 +659,9 @@ public class Controller {
     private void onEditBtnPressed(boolean state) {
         TextArea selectedTextArea = getCurrentTextArea();
 
-        if (selectedTextArea == null)
+        if (selectedTextArea == null) {
             return;
+        }
 
         selectedTextArea.setEditable(state);
     }
@@ -714,8 +728,9 @@ public class Controller {
     }
 
     private void treeImportFile(FileEntryTreeItem parentSti) {
-        if (parentSti == null)
+        if (parentSti == null) {
             return;
+        }
 
         if (InterfaceSupport.isDirectory(parentSti)) {
             workDirectory = parentSti;
@@ -750,8 +765,9 @@ public class Controller {
             return;
         }
         // TODO: Нужна проверка на то, что там вообще что-то есть
-        if (stitmp == null)
+        if (stitmp == null) {
             return;
+        }
 
         if (InterfaceSupport.isDirectory(stitmp)) {
             workDirectory = stitmp;
@@ -902,10 +918,11 @@ public class Controller {
         }
 
         String itemType;
-        if (renamedItem.isDirectory())
+        if (renamedItem.isDirectory()) {
             itemType = "directory";
-        else
+        } else {
             itemType = "file";
+        }
 
         callNameDialog("Rename the " + itemType, "rename", renamedItem.getText());
     }
@@ -925,7 +942,7 @@ public class Controller {
         setItemEdited(itemEdit, isEdited, getSelectedTab());
     }
 
-    void changeTabState(FileEntryTab tab, boolean state) {
+    private void changeTabState(FileEntryTab tab, boolean state) {
         tab.setUnsaved(state);
     }
 }

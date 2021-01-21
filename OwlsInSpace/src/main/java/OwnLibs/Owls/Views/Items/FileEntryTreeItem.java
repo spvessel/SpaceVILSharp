@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FileEntryTreeItem extends TreeItem {
@@ -19,9 +18,9 @@ public class FileEntryTreeItem extends TreeItem {
     private String keyWordsString = "";
     private List<String> keyWordsArr = new ArrayList<>();
 
-    public FileEntryTreeItem(TreeItemType type) {
-        super(type);
-    }
+//    public FileEntryTreeItem(TreeItemType type) {
+//        super(type);
+//    }
 
     public FileEntryTreeItem(TreeItemType type, String text) {
         super(type, text);
