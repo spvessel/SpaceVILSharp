@@ -8,7 +8,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 /**
  * An interface that describes visual effect which cuts specified shape from original item's shape.
  */
-public interface ISubtractFigure {
+public interface ISubtractFigure extends IEffect {
     /**
      * Method for setting shape for subtraction.
      * @param figure Figure for subtraction as com.spvessel.spacevil.Decorations.Figure.

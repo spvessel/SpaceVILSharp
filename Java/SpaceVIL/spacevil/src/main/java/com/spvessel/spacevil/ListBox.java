@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.KeyArgs;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
@@ -568,7 +567,7 @@ public class ListBox extends Prototype {
                     _menu.show(sender, args);
             });
             _menu.activeButton = MouseButton.ButtonLeft;
-            Effects.addEffect(_menu, new Shadow(10));
+            _menu.effects().add(new Shadow(10));
         }
     }
 

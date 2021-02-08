@@ -8,7 +8,7 @@ namespace SpaceVIL.Decorations
     /// Shadow is visual effect for applying to item's shape. Implements SpaceVIL.Core.IShadow and SpaceVIL.Core.IEffect.
     /// <para/> This visual effect drops shadow under item's shape.
     /// </summary>
-    public sealed class Shadow : IShadow, IEffect
+    public sealed class Shadow : IShadow
     {
         /// <summary>
         /// Getting the effect name. 
@@ -19,7 +19,7 @@ namespace SpaceVIL.Decorations
             return this.GetType().ToString();
         }
 
-        private int _radius = 0;
+        private int _radius = 5;
         private int _maxAvailableRadius = 10;
 
         /// <summary>
@@ -140,24 +140,24 @@ namespace SpaceVIL.Decorations
             return Color.FromArgb(_color.A, _color.R, _color.G, _color.B);
         }
 
-        private bool _isDrop;
+        private bool _isApplied;
 
         /// <summary>
-        /// Setting drop shadow flag.
+        /// Setting drop shadow status.
         /// </summary>
         /// <param name="value">True: allow shadow dropping. False: not allow shadow dropping.</param>
-        public void SetDrop(bool value)
+        public void SetApplied(bool value)
         {
-            _isDrop = value;
+            _isApplied = value;
         }
 
         /// <summary>
-        /// Getting shadow drop flag.
+        /// Getting shadow drop status.
         /// </summary>
         /// <returns>True: allow shadow dropping. False: not allow shadow dropping.</returns>
-        public bool IsDrop()
+        public bool IsApplied()
         {
-            return _isDrop;
+            return _isApplied;
         }
 
         private Core.Size _extension = new Core.Size();
@@ -176,7 +176,7 @@ namespace SpaceVIL.Decorations
         /// </summary>
         public Shadow()
         {
-            _isDrop = true;
+            _isApplied = true;
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace SpaceVIL.Decorations
                 new Core.Size(GetExtension().GetWidth(), GetExtension().GetHeight()),
                 Color.FromArgb(_color.ToArgb())
             );
-            clone.SetDrop(IsDrop());
+            clone.SetApplied(IsApplied());
 
             return clone;
         }

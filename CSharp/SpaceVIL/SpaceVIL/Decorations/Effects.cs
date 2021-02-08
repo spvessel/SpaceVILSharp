@@ -1,174 +1,89 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using SpaceVIL.Core;
 
-namespace SpaceVIL.Decorations
+namespace SpaceVIL
 {
-    /// <summary>
-    /// Effects is a static class for controlling the application of effects to a item's shape.
-    /// </summary>
-    public static class Effects
+    internal class Effects : IAppearanceExtension
     {
-        private static Object _lock = new Object();
+        private HashSet<IEffect> _subtract = new HashSet<IEffect>();
+        private List<IEffect> _shadow = new List<IEffect>();
+        private List<IEffect> _border = new List<IEffect>();
 
-        private static Dictionary<IBaseItem, HashSet<IEffect>> _subtractEffects = new Dictionary<IBaseItem, HashSet<IEffect>>();
-        private static Dictionary<IBaseItem, IEffect> _shadowEffects = new Dictionary<IBaseItem, IEffect>();
-        private static Dictionary<IBaseItem, IEffect> _borderEffects = new Dictionary<IBaseItem, IEffect>();
+        internal Effects() { }
 
-        /// <summary>
-        /// Adding effect to specified item.
-        /// </summary>
-        /// <param name="item">A item as SpaceVIL.Core.IBaseItem. </param>
-        /// <param name="effect">A effect as SpaceVIL.Core.IEffect. </param>
-        public static void AddEffect(IBaseItem item, IEffect effect)
+        public void Add(IEffect effect)
         {
-            Monitor.Enter(_lock);
-            try
+            if (effect is ISubtractFigure)
             {
-                if (effect is ISubtractFigure)
-                {
-                    if (_subtractEffects.ContainsKey(item))
-                    {
-                        _subtractEffects[item].Add(effect);
-                        return;
-                    }
-                    _subtractEffects.Add(item, new HashSet<IEffect>());
-                    _subtractEffects[item].Add(effect);
-                }
-                else if (effect is IShadow)
-                {
-                    _shadowEffects[item] = effect;
-                    return;
-                }
-                else if (effect is IBorder)
-                {
-                    _borderEffects[item] = effect;
-                    return;
-                }
+                _subtract.Add(effect);
+                return;
             }
-            finally
+            else if (effect is IShadow)
             {
-                Monitor.Exit(_lock);
+                _shadow.Add(effect);
+                return;
+            }
+            else if (effect is IBorder)
+            {
+                _border.Add(effect);
+                return;
             }
         }
 
-        /// <summary>
-        /// Removing specified effect form item.
-        /// </summary>
-        /// <param name="item">A item as SpaceVIL.Core.IBaseItem. </param>
-        /// <param name="effect">A effect as SpaceVIL.Core.IEffect. </param>
-        /// <returns>True: if such effect is presented and removed. False: if item has no such effect.</returns>
-        public static bool RemoveEffect(IBaseItem item, IEffect effect)
+        public void Remove(IEffect effect)
         {
-            Monitor.Enter(_lock);
-            try
+            if (effect is ISubtractFigure)
             {
-                if (effect is ISubtractFigure)
-                {
-                    if (_subtractEffects.ContainsKey(item))
-                    {
-                        return _subtractEffects[item].Remove(effect);
-                    }
-                }
-                else if (effect is IShadow)
-                {
-                    if (_shadowEffects.ContainsKey(item))
-                    {
-                        return _shadowEffects.Remove(item);
-                    }
-                }
-                else if (effect is IBorder)
-                {
-                    if (_borderEffects.ContainsKey(item))
-                    {
-                        return _borderEffects.Remove(item);
-                    }
-                }
-                return false;
+                _subtract.Remove(effect);
+                return;
             }
-            finally
+            else if (effect is IShadow)
             {
-                Monitor.Exit(_lock);
+                _shadow.Remove(effect);
+                return;
+            }
+            else if (effect is IBorder)
+            {
+                _border.Remove(effect);
+                return;
             }
         }
 
-        /// <summary>
-        /// Removing specified effect form item.
-        /// </summary>
-        /// <param name="item">An item as SpaceVIL.Core.IBaseItem. </param>
-        /// <param name="type">An effect type as SpaceVIL.Core.EffectType. </param>
-        public static void ClearEffects(IBaseItem item, EffectType type)
+        public List<IEffect> Get(EffectType type)
         {
-            Monitor.Enter(_lock);
-            try
+            switch (type)
             {
-                switch (type)
-                {
-                    case EffectType.Border:
-                        if (_borderEffects.ContainsKey(item))
-                        {
-                            _borderEffects.Remove(item);
-                        }
-                        break;
-                    case EffectType.Shadow:
-                        if (_shadowEffects.ContainsKey(item))
-                        {
-                            _shadowEffects.Remove(item);
-                        }
-                        break;
-                    case EffectType.Subtract:
-                        if (_subtractEffects.ContainsKey(item))
-                        {
-                            _subtractEffects[item].Clear();
-                        }
-                        break;
-                }
+                case EffectType.Border:
+                    return new List<IEffect>(_border);
+                case EffectType.Shadow:
+                    return new List<IEffect>(_shadow);
+                case EffectType.Subtract:
+                    return new List<IEffect>(_subtract);
             }
-            finally
+            return new List<IEffect>();
+        }
+
+        public void Clear(EffectType type)
+        {
+            switch (type)
             {
-                Monitor.Exit(_lock);
+                case EffectType.Border:
+                    _border.Clear();
+                    break;
+                case EffectType.Shadow:
+                    _shadow.Clear();
+                    break;
+                case EffectType.Subtract:
+                    _subtract.Clear();
+                    break;
             }
         }
 
-        /// <summary>
-        /// Getting list of applyed effects on specified item.
-        /// </summary>
-        /// <param name="item">An item as SpaceVIL.Core.IBaseItem.</param>
-        /// <param name="type">An effect type as SpaceVIL.Core.EffectType.</param>
-        /// <returns>List of effects of specified item as List&lt;SpaceVIL.Core.IEffect&gt;.</returns>
-        public static List<IEffect> GetEffects(IBaseItem item, EffectType type)
+        public void Clear()
         {
-            Monitor.Enter(_lock);
-            try
-            {
-                switch (type)
-                {
-                    case EffectType.Border:
-                        if (_borderEffects.ContainsKey(item))
-                        {
-                            return new List<IEffect>() { _borderEffects[item] };
-                        }
-                        break;
-                    case EffectType.Shadow:
-                        if (_shadowEffects.ContainsKey(item))
-                        {
-                            return new List<IEffect>() { _shadowEffects[item] };
-                        }
-                        break;
-                    case EffectType.Subtract:
-                        if (_subtractEffects.ContainsKey(item))
-                        {
-                            return new List<IEffect>(_subtractEffects[item]);
-                        }
-                        break;
-                }
-                return new List<IEffect>();
-            }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
+            _border.Clear();
+            _shadow.Clear();
+            _subtract.Clear();
         }
     }
 }

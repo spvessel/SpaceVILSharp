@@ -3,12 +3,10 @@ package com.spvessel.spacevil.Decorations;
 import java.awt.*;
 
 import com.spvessel.spacevil.Core.IBorder;
-import com.spvessel.spacevil.Core.IEffect;
-
 /**
  * Border is a class that decorates item's shape with border.
  */
-public class Border implements IBorder, IEffect {
+public class Border implements IBorder {
 
     /// <summary>
     /// Getting the effect name.
@@ -84,10 +82,26 @@ public class Border implements IBorder, IEffect {
         _thickness = value;
     }
 
+    private boolean _isApplied = true;
+
     /**
-     * Propery that defines if border is visible
+     * Getting the visibility status of a border.
+     * 
+     * @return True: if border is visible. False: if border is invisible.
      */
-    public boolean isVisible = false;
+    public boolean isApplied() {
+        return _isApplied;
+    }
+
+    /**
+     * Setting the visibility status of a border.
+     * 
+     * @param value True: if border should be visible. False: if border should be
+     *              invisible.
+     */
+    public void setApplied(boolean value) {
+        _isApplied = value;
+    }
 
     /**
      * Default Border constructor.
@@ -118,7 +132,10 @@ public class Border implements IBorder, IEffect {
      * @return Copy of current Border.
      */
     public Border clone() {
-        Border clone = new Border(new Color(_color.getRGB()), new CornerRadius(_radius), _thickness);
+        Border clone = new Border(
+            new Color(_color.getRed(), _color.getGreen(), _color.getBlue(), _color.getAlpha()),
+            new CornerRadius(_radius), _thickness
+        );
 
         return clone;
     }

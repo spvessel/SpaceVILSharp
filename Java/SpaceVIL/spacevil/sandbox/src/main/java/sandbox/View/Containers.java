@@ -16,7 +16,6 @@ import com.spvessel.spacevil.VerticalScrollBar;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
@@ -48,7 +47,7 @@ public class Containers extends ActiveWindow {
 
         title = new TitleBar("Containers");
         title.setIcon(iSmall, 10, 10);
-        Effects.addEffect(title, new Shadow(5, new Position(0, 3), new Color(0, 0, 0, 150)));
+        title.effects().add(new Shadow(5, new Position(0, 3), new Color(0, 0, 0, 150)));
         this.addItem(title);
 
         Frame cc = new Frame();
@@ -184,7 +183,7 @@ public class Containers extends ActiveWindow {
         btn.setSize(w, h);
         btn.setSizePolicy(policy, policy);
         btn.setItemName(name);
-        Effects.addEffect(btn, new Shadow(5, new Position(0, 3), new Color(0, 0, 0, 150)));
+        btn.effects().add(new Shadow(5, new Position(0, 3), new Color(0, 0, 0, 150)));
 
         return btn;
     }

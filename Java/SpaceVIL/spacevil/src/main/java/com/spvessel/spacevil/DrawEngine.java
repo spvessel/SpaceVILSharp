@@ -3,11 +3,8 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.nio.*;
-
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Flags.*;
 import com.spvessel.spacevil.internal.Wrapper.*;
 import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
@@ -116,10 +113,10 @@ final class DrawEngine {
     }
 
     GLWHandler glwHandler;
-    private Shader _primitive;
-    private Shader _texture;
-    private Shader _char;
-    private Shader _blur;
+    private Shader _shapeShader;
+    private Shader _textureShader;
+    private Shader _textShader;
+    private Shader _blurShader;
 
     private BufferedImage _iconSmall;
     private BufferedImage _iconBig;
@@ -196,10 +193,10 @@ final class DrawEngine {
     }
 
     private void initShaders() {
-        _primitive = ShaderFactory.getShader(ShaderFactory.PRIMITIVE);
-        _texture = ShaderFactory.getShader(ShaderFactory.TEXTURE);
-        _char = ShaderFactory.getShader(ShaderFactory.SYMBOL);
-        _blur = ShaderFactory.getShader(ShaderFactory.BLUR);
+        _shapeShader = ShaderFactory.getShader(ShaderFactory.PRIMITIVE);
+        _textureShader = ShaderFactory.getShader(ShaderFactory.TEXTURE);
+        _textShader = ShaderFactory.getShader(ShaderFactory.SYMBOL);
+        _blurShader = ShaderFactory.getShader(ShaderFactory.BLUR);
     }
 
     private void initProcessors() {
@@ -551,10 +548,10 @@ final class DrawEngine {
             _stop.stop();
             _stop = null;
         }
-        _primitive.deleteShader();
-        _texture.deleteShader();
-        _char.deleteShader();
-        _blur.deleteShader();
+        _shapeShader.deleteShader();
+        _textureShader.deleteShader();
+        _textShader.deleteShader();
+        _blurShader.deleteShader();
         _fboVertex.clear();
         _fboBlur.clear();
         _renderProcessor.clearResources();
@@ -653,7 +650,7 @@ final class DrawEngine {
 
         _benchmarkLabel.makeShape();
 
-        _renderProcessor.drawDirectVertex(_primitive, _benchmarkLabel.getTriangles(), getItemPyramidLevel(),
+        _renderProcessor.drawDirectVertex(_shapeShader, _benchmarkLabel.getTriangles(), getItemPyramidLevel(),
                 _benchmarkLabel.getX(), _benchmarkLabel.getY(), _commonProcessor.window.getWidth(),
                 _commonProcessor.window.getHeight(), _benchmarkLabel.getBackground(), GL_TRIANGLES);
 
@@ -766,7 +763,7 @@ final class DrawEngine {
             return;
         }
 
-        List<IEffect> shadows = Effects.getEffects(shell, EffectType.Shadow);
+        List<IEffect> shadows = shell.effects().get(EffectType.Shadow);
 
         boolean preEffect = drawPreprocessingEffects(shell);
         if (ItemsRefreshManager.isRefreshShape(shell)) {
@@ -778,14 +775,14 @@ final class DrawEngine {
 
             ItemsRefreshManager.removeShape(shell);
 
-            _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+            _renderProcessor.drawFreshVertex(_shapeShader, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), shell.getBackground(),
                     GL_TRIANGLES);
         } else {
             for (IEffect shadow : shadows) {
                 drawShadow(shell, (IShadow) shadow, stencil);
             }
-            _renderProcessor.drawStoredVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+            _renderProcessor.drawStoredVertex(_shapeShader, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), shell.getBackground(),
                     GL_TRIANGLES);
         }
@@ -803,7 +800,7 @@ final class DrawEngine {
                     .updateShape(GraphicsMathService.getRoundSquareBorder(vi.getBorderRadius(), vi.getWidth(),
                             vi.getHeight(), vi.getBorderThickness(), 0, 0), vi.getWidth(), vi.getHeight());
 
-            _renderProcessor.drawDirectVertex(_primitive, vertex, getItemPyramidLevel(), vi.getX(), vi.getY(),
+            _renderProcessor.drawDirectVertex(_shapeShader, vertex, getItemPyramidLevel(), vi.getX(), vi.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), vi.getBorderFill(),
                     GL_TRIANGLES);
         }
@@ -813,7 +810,7 @@ final class DrawEngine {
 
     private void drawShadow(IBaseItem shell, IShadow shadow, boolean stencil) {
 
-        if (!shadow.isDrop()) {
+        if (!shadow.isApplied()) {
             return;
         }
 
@@ -837,7 +834,7 @@ final class DrawEngine {
 
         int fboWidth = shell.getWidth() + extension.getWidth() + 2 * res;
         int fboHeight = shell.getHeight() + extension.getHeight() + 2 * res;
-        if (ItemsRefreshManager.isRefreshShape(shell) || _renderProcessor.shadowStorage.getResource(shell) == null) {
+        if (ItemsRefreshManager.isRefreshShape(shell) || _renderProcessor.shadowStorage.getResources(shell) == null) {
             if (stencil)
                 gl.Disable(GL_SCISSOR_TEST);
 
@@ -849,7 +846,7 @@ final class DrawEngine {
             List<float[]> vertex = BaseItemStatics.updateShape(shell.getTriangles(),
                     shell.getWidth() + extension.getWidth(), shell.getHeight() + extension.getHeight());
 
-            _renderProcessor.drawDirectVertex(_primitive, vertex, 0.0f, res, res, fboWidth, fboHeight,
+            _renderProcessor.drawDirectVertex(_shapeShader, vertex, 0.0f, res, res, fboWidth, fboHeight,
                     shadow.getColor(), GL_TRIANGLES);
 
             _fboVertex.unbindTexture();
@@ -862,8 +859,8 @@ final class DrawEngine {
 
             gl.Clear(GL_COLOR_BUFFER_BIT);
 
-            VramTexture store = _renderProcessor.drawDirectShadow(_blur, 0.0f, _weights, res, _fboVertex.texture, 0, 0,
-                    shell.getWidth() + extension.getWidth(), shell.getHeight() + extension.getHeight(), fboWidth,
+            VramTexture store = _renderProcessor.drawDirectShadow(_blurShader, 0.0f, _weights, res, _fboVertex.texture,
+                    0, 0, shell.getWidth() + extension.getWidth(), shell.getHeight() + extension.getHeight(), fboWidth,
                     fboHeight);
             store.clear();
 
@@ -874,7 +871,7 @@ final class DrawEngine {
                 gl.Enable(GL_SCISSOR_TEST);
             gl.Viewport(0, 0, _framebufferWidth, _framebufferHeight);
 
-            _renderProcessor.drawFreshShadow(_texture, shell, getItemPyramidLevel(), _fboBlur.texture,
+            _renderProcessor.drawFreshShadow(_textureShader, shell, shadow, getItemPyramidLevel(), _fboBlur.texture,
                     shell.getX() + shadow.getOffset().getX() - xAddidion - res,
                     shell.getY() + shadow.getOffset().getY() - yAddidion - res, fboWidth, fboHeight,
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
@@ -884,7 +881,7 @@ final class DrawEngine {
 
             gl.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         } else {
-            _renderProcessor.drawStoredShadow(_texture, shell, getItemPyramidLevel(),
+            _renderProcessor.drawStoredShadow(_textureShader, shell, shadow, getItemPyramidLevel(),
                     shell.getX() + shadow.getOffset().getX() - xAddidion - res,
                     shell.getY() + shadow.getOffset().getY() - yAddidion - res, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight());
@@ -915,10 +912,10 @@ final class DrawEngine {
 
         if (ItemsRefreshManager.isRefreshText(text)) {
             ItemsRefreshManager.removeText(text);
-            _renderProcessor.drawFreshText(_char, text, textImage, _scale, _commonProcessor.window.getWidth(),
+            _renderProcessor.drawFreshText(_textShader, text, textImage, _scale, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
         } else {
-            _renderProcessor.drawStoredText(_char, text, textImage, _commonProcessor.window.getWidth(),
+            _renderProcessor.drawStoredText(_textShader, text, textImage, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
         }
     }
@@ -954,11 +951,11 @@ final class DrawEngine {
                 }
                 skew += fig.size() * 2;
             }
-            _renderProcessor.drawFreshVertex(_primitive, shell, result, level, shell.getX(), shell.getY(),
+            _renderProcessor.drawFreshVertex(_shapeShader, shell, result, level, shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getPointColor(),
                     GL_TRIANGLES);
         } else {
-            _renderProcessor.drawStoredVertex(_primitive, shell, level, shell.getX(), shell.getY(),
+            _renderProcessor.drawStoredVertex(_shapeShader, shell, level, shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getPointColor(),
                     GL_TRIANGLES);
         }
@@ -977,11 +974,11 @@ final class DrawEngine {
             ItemsRefreshManager.removeShape(shell);
             shell.makeShape();
 
-            _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), item.getX(), item.getY(),
+            _renderProcessor.drawFreshVertex(_shapeShader, shell, getItemPyramidLevel(), item.getX(), item.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getLineColor(),
                     GL_LINE_STRIP);
         } else {
-            _renderProcessor.drawStoredVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+            _renderProcessor.drawStoredVertex(_shapeShader, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getLineColor(),
                     GL_LINE_STRIP);
         }
@@ -995,11 +992,11 @@ final class DrawEngine {
         Area area = image.getAreaBounds();
 
         if (ItemsRefreshManager.isRefreshImage(image)) {
-            _renderProcessor.drawFreshTexture(image, _texture, area.getX(), area.getY(), area.getWidth(),
+            _renderProcessor.drawFreshTexture(image, _textureShader, area.getX(), area.getY(), area.getWidth(),
                     area.getHeight(), w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                     getItemPyramidLevel());
         } else {
-            _renderProcessor.drawStoredTexture(image, _texture, area.getX(), area.getY(),
+            _renderProcessor.drawStoredTexture(image, _textureShader, area.getX(), area.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
         }
     }
@@ -1037,12 +1034,12 @@ final class DrawEngine {
 
         _tooltip.makeShape();
 
-        List<IEffect> shadows = Effects.getEffects(_tooltip, EffectType.Shadow);
+        List<IEffect> shadows = _tooltip.effects().get(EffectType.Shadow);
         for (IEffect shadow : shadows) {
             drawToolTipShadow((IShadow) shadow);
         }
 
-        _renderProcessor.drawDirectVertex(_primitive, _tooltip.getTriangles(), getItemPyramidLevel(), _tooltip.getX(),
+        _renderProcessor.drawDirectVertex(_shapeShader, _tooltip.getTriangles(), getItemPyramidLevel(), _tooltip.getX(),
                 _tooltip.getY(), _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                 _tooltip.getBackground(), GL_TRIANGLES);
 
@@ -1056,7 +1053,7 @@ final class DrawEngine {
     }
 
     private void drawToolTipShadow(IShadow shadow) {
-        if (!shadow.isDrop()) {
+        if (!shadow.isApplied()) {
             return;
         }
 
@@ -1089,7 +1086,7 @@ final class DrawEngine {
         List<float[]> vertex = BaseItemStatics.updateShape(_tooltip.getTriangles(),
                 _tooltip.getWidth() + extension.getWidth(), _tooltip.getHeight() + extension.getHeight());
 
-        _renderProcessor.drawDirectVertex(_primitive, vertex, 0.0f, res, res, fboWidth, fboHeight, shadow.getColor(),
+        _renderProcessor.drawDirectVertex(_shapeShader, vertex, 0.0f, res, res, fboWidth, fboHeight, shadow.getColor(),
                 GL_TRIANGLES);
 
         _fboVertex.unbindTexture();
@@ -1098,8 +1095,8 @@ final class DrawEngine {
         _fboBlur.genFboTexture(fboWidth, fboHeight);
         gl.Clear(GL_COLOR_BUFFER_BIT);
 
-        VramTexture store = _renderProcessor.drawDirectShadow(_blur, 0.0f, _weights, res, _fboVertex.texture, 0, 0,
-                _tooltip.getWidth() + extension.getWidth(), _tooltip.getHeight() + extension.getHeight(), fboWidth,
+        VramTexture store = _renderProcessor.drawDirectShadow(_blurShader, 0.0f, _weights, res, _fboVertex.texture, 0,
+                0, _tooltip.getWidth() + extension.getWidth(), _tooltip.getHeight() + extension.getHeight(), fboWidth,
                 fboHeight);
         store.clear();
 
@@ -1108,7 +1105,7 @@ final class DrawEngine {
 
         gl.Viewport(0, 0, _framebufferWidth, _framebufferHeight);
 
-        _renderProcessor.drawRawShadow(_texture, getItemPyramidLevel(), _fboBlur.texture,
+        _renderProcessor.drawRawShadow(_textureShader, getItemPyramidLevel(), _fboBlur.texture,
                 _tooltip.getX() + shadow.getOffset().getX() - xAddidion - res,
                 _tooltip.getY() + shadow.getOffset().getY() - yAddidion - res, fboWidth, fboHeight,
                 _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
@@ -1121,13 +1118,13 @@ final class DrawEngine {
         if (glwHandler.focusable)
             return;
 
-        _renderProcessor.drawScreenRectangle(_primitive, getItemPyramidLevel(), 0, 0,
+        _renderProcessor.drawScreenRectangle(_shapeShader, getItemPyramidLevel(), 0, 0,
                 _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                 glwHandler.getCoreWindow().getShadeColor(), GL_TRIANGLES);
     }
 
     private boolean drawPreprocessingEffects(IBaseItem item) {
-        List<IEffect> effects = Effects.getEffects(item, EffectType.Subtract);
+        List<IEffect> effects = item.effects().get(EffectType.Subtract);
         if (effects.isEmpty()) {
             return false;
         }
@@ -1139,6 +1136,9 @@ final class DrawEngine {
         gl.StencilFunc(GL_NEVER, 2, 0);
         gl.StencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
         for (IEffect effect : effects) {
+            if (!effect.isApplied()) {
+                continue;
+            }
             if (effect instanceof ISubtractFigure) {
                 ISubtractFigure subtractFigure = (ISubtractFigure) effect;
                 List<float[]> vertex = null;
@@ -1157,7 +1157,7 @@ final class DrawEngine {
                             subtractFigure.getXOffset(), subtractFigure.getYOffset());
                 }
 
-                _renderProcessor.drawDirectVertex(_primitive, vertex, 0, item.getX(), item.getY(),
+                _renderProcessor.drawDirectVertex(_shapeShader, vertex, 0, item.getX(), item.getY(),
                         _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), Color.white,
                         GL_TRIANGLES);
             }

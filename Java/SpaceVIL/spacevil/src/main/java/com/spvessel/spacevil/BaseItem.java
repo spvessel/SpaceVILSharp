@@ -1,10 +1,10 @@
 package com.spvessel.spacevil;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.List;
 
 import com.spvessel.spacevil.Core.Geometry;
+import com.spvessel.spacevil.Core.IAppearanceExtension;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.IFloating;
 import com.spvessel.spacevil.Core.IFreeLayout;
@@ -13,7 +13,6 @@ import com.spvessel.spacevil.Core.IVLayout;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Indents;
-import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -542,7 +541,7 @@ public abstract class BaseItem implements IBaseItem {
      * @param alignment Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignment) {
-        setAlignment(BaseItemStatics.composeFlags(alignment)); //Arrays.asList(alignment));
+        setAlignment(BaseItemStatics.composeFlags(alignment)); // Arrays.asList(alignment));
     }
 
     /**
@@ -779,5 +778,17 @@ public abstract class BaseItem implements IBaseItem {
      * Method to describe disposing item's resources if the item was removed.
      */
     public void release() {
+    }
+
+    private IAppearanceExtension _effects = new Effects();
+
+    /**
+     * Gettting access to manage visual effects of the item.
+     * 
+     * @return Implementation of an com.spvessel.spacevil.Core.IAppearanceExtension
+     *         interface.
+     */
+    public IAppearanceExtension effects() {
+        return _effects;
     }
 }

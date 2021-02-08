@@ -1,18 +1,17 @@
 package com.spvessel.spacevil.Core;
 
-import java.awt.Color;
-
 import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.Prototype;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 
 /**
- * The main interface of SpaceVIL environment. Contains all the necessary methods for rendering objects and interacting with them.
- * <p> Implementations: BaseItem, Prototype, Primitive.
+ * The main interface of SpaceVIL environment. Contains all the necessary
+ * methods for rendering objects and interacting with them.
+ * <p>
+ * Implementations: BaseItem, Prototype, Primitive.
  */
-public interface IBaseItem
-        extends IItem, ISize, IPosition, IEventUpdate, IBehavior {
+public interface IBaseItem extends IItem, ISize, IPosition, IEventUpdate, IBehavior {
 
     /**
      * Setting the window to which the item will belong.
@@ -35,7 +34,7 @@ public interface IBaseItem
      *               container and can contains children).
      */
     public void setParent(Prototype parent);
-    
+
     /**
      * Getting the parent of the item.
      * 
@@ -92,7 +91,8 @@ public interface IBaseItem
     public Indents getMargin();
 
     /**
-     * Initializing children if this BaseItem is container (com.spvessel.spacevil.Prototype).
+     * Initializing children if this BaseItem is container
+     * (com.spvessel.spacevil.Prototype).
      */
     public void initElements();
 
@@ -162,4 +162,12 @@ public interface IBaseItem
      * Method to describe disposing item's resources if the item was removed.
      */
     public void release();
+
+    /**
+     * Gettting access to manage visual effects of the item.
+     * 
+     * @return Implementation of an com.spvessel.spacevil.Core.IAppearanceExtension
+     *         interface.
+     */
+    public IAppearanceExtension effects();
 }

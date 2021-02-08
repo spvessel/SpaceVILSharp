@@ -128,7 +128,7 @@ namespace View
                     IBaseItem btn = GetButton(++index);
                     // btn.SetBackground(Color.FromArgb(100, 255, 255, 255));
                     btn.SetSize(14, 14);
-                    Effects.AddEffect(btn, new Shadow(5, new Position(3, 2), new SpaceVIL.Core.Size(10, 10), Color.Black));
+                    btn.Effects().Add(new Shadow(5, new Position(3, 2), new SpaceVIL.Core.Size(10, 10), Color.Black));
                     h.AddItem(btn);
                 }
             }

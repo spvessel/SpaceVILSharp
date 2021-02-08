@@ -4,7 +4,6 @@ using SpaceVIL.Core;
 using System.Threading;
 using System.Runtime.InteropServices;
 using SpaceVIL.Decorations;
-using System.Reflection;
 
 namespace SpaceVIL.Common
 {
@@ -174,7 +173,7 @@ namespace SpaceVIL.Common
                 }
                 return Glfw.GetClipboardString(id);
             }
-            catch (System.Exception ex)
+            catch
             {
                 return null;
             }

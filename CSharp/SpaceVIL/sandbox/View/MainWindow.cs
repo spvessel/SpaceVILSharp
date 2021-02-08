@@ -138,8 +138,7 @@ namespace View
             btn_layout.SetToolTip("Show window Layout.\nIn there you can test ListBox.");
             // btn_layout.SetCustomFigure(new CustomFigure(false, GraphicsMathService.GetRoundSquare(new CornerRadius(0, 50, 50, 0))));
             btn_layout.SetBackground(Color.FromArgb(255, 255, 151, 153));
-            Effects.AddEffect(btn_layout,
-               new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_layout.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
 
             ItemState state = new ItemState(Color.FromArgb(40, 255, 255, 255));
             state.Border.SetThickness(2);
@@ -169,8 +168,7 @@ namespace View
             ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             hovered.Border = new Border(Color.White, new CornerRadius(50, 0, 0, 50), 5);
             btn_settings.AddItemState(ItemStateType.Hovered, hovered);
-            Effects.AddEffect(btn_settings,
-               new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_settings.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
             grid.InsertItem(btn_settings, 0, 1);
 
             //Button Inputs
@@ -189,8 +187,7 @@ namespace View
             ItemState ellipseState = new ItemState(Color.FromArgb(10, 162, 232));
             ellipseState.Shape = new Figure(false, GraphicsMathService.GetEllipse(100, 32));
             btn_input.AddItemState(ItemStateType.Hovered, ellipseState);
-            Effects.AddEffect(btn_input,
-               new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_input.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
             grid.InsertItem(btn_input, 0, 2);
 
             //LabelTest
@@ -204,8 +201,7 @@ namespace View
             {
                 WindowsBox.GetWindowInstance("Containers")?.Show();
             };
-            Effects.AddEffect(btn_label,
-               new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_label.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
             grid.InsertItem(btn_label, 1, 0);
 
             //ImageTest
@@ -219,8 +215,7 @@ namespace View
             {
                 WindowsBox.GetWindowInstance("ImageTest")?.Show();
             };
-            Effects.AddEffect(btn_image,
-                new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_image.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
             grid.InsertItem(btn_image, 1, 1);
 
             //Flow
@@ -235,8 +230,7 @@ namespace View
                 Console.WriteLine("flow show");
                 WindowsBox.GetWindowInstance("FlowTest")?.Show();
             };
-            Effects.AddEffect(btn_flow,
-                new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
+            btn_flow.Effects().Add(new Shadow(5, new Position(), new SpaceVIL.Core.Size(6, 6), Color.FromArgb(180, 255, 0, 255)));
             grid.InsertItem(btn_flow, 1, 2);
 
             MenuItem mi1 = new MenuItem("Build Tool");
@@ -322,8 +316,8 @@ namespace View
             // WindowManager.EnableVSync(0);
             // WindowManager.SetRenderType(RenderType.Always);
 
-            ToolTip.SetStyle(this, Program.Program.GetNewToolTipStyle());
-            ToolTip.AddItems(this, GetDecor());
+            // ToolTip.SetStyle(this, Program.Program.GetNewToolTipStyle());
+            // ToolTip.AddItems(this, GetDecor());
 
 
             // Effects.AddEffect(btn_flow, GetStencilEffect(btn_flow));
@@ -332,14 +326,15 @@ namespace View
             // effect1.SetSizeScale(0.2f, 1f);
             effect1.SetPositionOffset(-10, 10);
             effect1.SetAlignment(ItemAlignment.Top | ItemAlignment.Right);
-
+            btn_flow.Effects().Add(effect1);
+            effect1.SetApplied(false);
             btn_flow.EventMouseHover += (sender, args) =>
             {
-                Effects.AddEffect(btn_flow, effect1);
+                effect1.SetApplied(true);
             };
             btn_flow.EventMouseLeave += (sender, args) =>
             {
-                Effects.RemoveEffect(btn_flow, effect1);
+                effect1.SetApplied(false);
             };
 
             // SubtractFigure effect2 = new SubtractFigure(
@@ -348,9 +343,9 @@ namespace View
             // effect2.SetPositionOffset(btn_flow.GetHeight() / 2 + 5, 0);
             // effect2.SetAlignment(ItemAlignment.Right, ItemAlignment.VCenter);
             // Effects.AddEffect(btn_flow, effect2);
-            foreach(var effect in Effects.GetEffects(btn_flow, EffectType.Shadow))
+            foreach(var effect in btn_flow.Effects().Get(EffectType.Shadow))
             {
-                (effect as IShadow).SetDrop(false);
+                (effect as Shadow).SetApplied(false);
             }
 
             EventOnStart += () =>

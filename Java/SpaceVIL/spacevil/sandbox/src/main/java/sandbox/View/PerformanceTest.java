@@ -20,7 +20,6 @@ import com.spvessel.spacevil.WrapGrid;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
@@ -142,7 +141,7 @@ public class PerformanceTest extends ActiveWindow {
                 IBaseItem btn = getButton(++index);
                 btn.setSize(14, 14);
                 // ((ButtonCore) btn).setBorderRadius(3);
-                Effects.addEffect(btn, new Shadow(5, new Position(3, 2), new Size(10, 10), Color.black));
+                btn.effects().add(new Shadow(5, new Position(3, 2), new Size(10, 10), Color.black));
                 h.addItem(btn);
             }
         }
@@ -150,7 +149,7 @@ public class PerformanceTest extends ActiveWindow {
 
     private void shadowTest() {
         setBackground(200, 200, 200);
-        VerticalStack v = v = new VerticalStack();
+        VerticalStack v = new VerticalStack();
         v.setSpacing(0, 0);
         addItems(v);
         int index = 0;
@@ -166,7 +165,7 @@ public class PerformanceTest extends ActiveWindow {
 
                 //set size & shadow
                 btn.setSize(14, 14);
-                Effects.addEffect(btn, new Shadow(5, new Position(3, 2), new Size(10, 10), Color.black));
+                btn.effects().add(new Shadow(5, new Position(3, 2), new Size(10, 10), Color.black));
 
                 h.addItem(btn);
             }

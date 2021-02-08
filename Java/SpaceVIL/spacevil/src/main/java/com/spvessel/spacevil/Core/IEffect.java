@@ -9,4 +9,10 @@ public interface IEffect {
      * @return Name of the visual effect as java.lang.String.
      */
     public String getEffectName();
+
+    /**
+     * Returns True if the effect is applied, False otherwise.
+     * @return True: if effect is applied. False: if effect is not applied.
+     */
+    public boolean isApplied();
 }

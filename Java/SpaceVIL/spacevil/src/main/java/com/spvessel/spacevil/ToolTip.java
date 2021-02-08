@@ -6,7 +6,6 @@ import java.awt.Font;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.IEffect;
 import com.spvessel.spacevil.Decorations.Border;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EffectType;
@@ -152,7 +151,7 @@ public final class ToolTip {
             return;
         }
         ToolTipItem toolTip = getToolTip(window);
-        Effects.addEffect(toolTip, shadow.clone());
+        toolTip.effects().add(shadow.clone());
     }
 
     /**
@@ -170,9 +169,9 @@ public final class ToolTip {
             return;
         }
         ToolTipItem toolTip = getToolTip(window);
-        for (IEffect effect : Effects.getEffects(toolTip, EffectType.Shadow))
+        for (IEffect effect : toolTip.effects().get(EffectType.Shadow))
         {
-            ((Shadow)effect).setDrop(value);
+            ((Shadow)effect).setApplied(value);
         }
     }
 

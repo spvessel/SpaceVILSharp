@@ -1254,5 +1254,14 @@ namespace SpaceVIL
         {
             _cursor = new CursorImage(bitmap, width, height);
         }
+
+        /// <summary>
+        /// Gettting access to manage visual effects of the item.
+        /// </summary>
+        /// <returns>Implementation of an SpaceVIL.Core.IAppearanceExtension interface.</returns>
+        public IAppearanceExtension Effects()
+        {
+            return _core.Effects();
+        }
     }
 }

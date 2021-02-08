@@ -5,7 +5,7 @@ namespace SpaceVIL.Core
     /// <summary>
     /// An interface that describes visual effect which cuts specified shape from original item's shape.
     /// </summary>
-    public interface ISubtractFigure
+    public interface ISubtractFigure : IEffect
     {
         /// <summary>
         /// Method for setting shape for subtraction.

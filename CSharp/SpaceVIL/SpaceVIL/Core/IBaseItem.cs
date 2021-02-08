@@ -1,5 +1,3 @@
-using System;
-using System.Drawing;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL.Core
@@ -136,5 +134,11 @@ namespace SpaceVIL.Core
         /// Method to describe disposing item's resources if the item was removed.
         /// </summary>
         void Release();
+
+        /// <summary>
+        /// Gettting access to manage visual effects of the item.
+        /// </summary>
+        /// <returns>Implementation of an SpaceVIL.Core.IAppearanceExtension interface.</returns>
+        IAppearanceExtension Effects();
     }
 }

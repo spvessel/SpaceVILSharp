@@ -7,7 +7,7 @@ namespace SpaceVIL.Decorations
     /// SubtractFigure is visual effect for applying to item's shape. Implements SpaceVIL.Core.ISubtractFigure and SpaceVIL.Core.IEffect.
     /// <para/> This visual effect cuts specified shape from original item's shape.
     /// </summary>
-    public class SubtractFigure : ISubtractFigure, IEffect
+    public class SubtractFigure : ISubtractFigure
     {
         /// <summary>
         /// Constructs subtract effect with specified shape.
@@ -101,7 +101,7 @@ namespace SpaceVIL.Decorations
         {
             return _widthScale;
         }
-        
+
         /// <summary>
         /// Getting height scaling.
         /// </summary>
@@ -121,7 +121,7 @@ namespace SpaceVIL.Decorations
         {
             return _alignment;
         }
-        
+
         /// <summary>
         /// Setting shape's allignment within the item.
         /// </summary>
@@ -134,26 +134,51 @@ namespace SpaceVIL.Decorations
                 alignment |= alignments[i];
             }
 
-            if (alignment.HasFlag(ItemAlignment.Left) && alignment.HasFlag(ItemAlignment.Right)) {
+            if (alignment.HasFlag(ItemAlignment.Left) && alignment.HasFlag(ItemAlignment.Right))
+            {
                 alignment &= ~ItemAlignment.Right;
             }
-            if (alignment.HasFlag(ItemAlignment.Top) && alignment.HasFlag(ItemAlignment.Bottom)) {
+            if (alignment.HasFlag(ItemAlignment.Top) && alignment.HasFlag(ItemAlignment.Bottom))
+            {
                 alignment &= ~ItemAlignment.Bottom;
             }
 
             if (alignment.HasFlag(ItemAlignment.HCenter))
             {
-                if (alignment.HasFlag(ItemAlignment.Left) || alignment.HasFlag(ItemAlignment.Right)) {
+                if (alignment.HasFlag(ItemAlignment.Left) || alignment.HasFlag(ItemAlignment.Right))
+                {
                     alignment &= ~(ItemAlignment.Left | ItemAlignment.Right);
                 }
             }
             if (alignment.HasFlag(ItemAlignment.VCenter))
             {
-                if (alignment.HasFlag(ItemAlignment.Top) || alignment.HasFlag(ItemAlignment.Bottom)) {
+                if (alignment.HasFlag(ItemAlignment.Top) || alignment.HasFlag(ItemAlignment.Bottom))
+                {
                     alignment &= ~(ItemAlignment.Top | ItemAlignment.Bottom);
                 }
             }
             _alignment = alignment;
+        }
+
+        private bool _isApplied = true;
+
+        /// <summary>
+        /// Returns True if the effect is applied, false otherwise.
+        /// </summary>
+        /// <returns>True: if effect is applied. False: if shadow is not applied.</returns>
+        public bool IsApplied()
+        {
+            return _isApplied;
+        }
+
+        /// <summary>
+        /// Determines whether the effect should be applied or not.
+        /// </summary>
+        /// <param name="value">True: if the effect is to be applied. 
+        /// False: if effect is not to be applied.</param>
+        public void SetApplied(bool value)
+        {
+            _isApplied = value;
         }
     }
 }

@@ -3,6 +3,7 @@ package sandbox.View;
 import com.spvessel.spacevil.ActiveWindow;
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.ContextMenu;
+import com.spvessel.spacevil.Ellipse;
 import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.Grid;
 import com.spvessel.spacevil.ImageItem;
@@ -14,11 +15,12 @@ import com.spvessel.spacevil.WindowManager;
 import com.spvessel.spacevil.WindowsBox;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
+import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
@@ -92,7 +94,7 @@ public class MainWindow extends ActiveWindow {
         layout.setBackground(70, 70, 70);
         layout.setBorderRadius(10);
         layout.setPadding(0, 5, 0, 0);
-        Effects.addEffect(layout, new Shadow(5, new Size(10, 10), new Color(255, 80, 80, 255)));
+        layout.effects().add(new Shadow(5, new Size(10, 10), new Color(255, 80, 80, 255)));
         addItem(layout);
 
         // TitleBar title = new TitleBar("Main King Window - JAVA");
@@ -126,7 +128,7 @@ public class MainWindow extends ActiveWindow {
         ButtonCore btn_layout = new ButtonCore("Layout");
         // btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
         btn_layout.setItemName("LayoutButton");
-        Effects.addEffect(btn_layout, new Shadow(5, new Size(4, 4), new Color(255, 0, 255, 255)));
+        btn_layout.effects().add(new Shadow(5, new Size(4, 4), new Color(255, 0, 255, 255)));
         btn_layout.setFont(font);
         btn_layout.setToolTip("Show Layout window.\nIn there you can test ListBox.");
         btn_layout.setBackground(211, 120, 134);
@@ -134,7 +136,7 @@ public class MainWindow extends ActiveWindow {
         btn_layout.setBorderRadius(new CornerRadius(6));
         ItemState state = new ItemState(new Color(255, 255, 255, 80));
         state.border.setThickness(2);
-        state.border.setColor(new Color(255, 255, 255, 150));
+        state.border.setColor(new Color(255, 255, 255, 255));
         state.border.setRadius(new CornerRadius(30, 12, 6, 6));
         btn_layout.addItemState(ItemStateType.Hovered, state);
         IMouseMethodState layout_click = (sender, args) -> WindowsBox.tryShow("LayoutsTest");
@@ -144,7 +146,7 @@ public class MainWindow extends ActiveWindow {
         btn_settings.setFont(font);
         btn_settings.setToolTip("Show Settings window.");
         btn_settings.setBackground(255, 181, 111);
-        Effects.addEffect(btn_settings, new Shadow(5, new Size(4, 4), new Color(255, 111, 111, 180)));
+        btn_settings.effects().add(new Shadow(5, new Size(4, 4), new Color(255, 111, 111, 180)));
         btn_settings.setBorderRadius(6);
         btn_settings.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         IMouseMethodState settings_click = (sender, args) -> WindowsBox.tryShow("SettingsTest");
@@ -156,7 +158,7 @@ public class MainWindow extends ActiveWindow {
         btn_label.setToolTip("Show Label window.");
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        Effects.addEffect(btn_label, new Shadow(5, new Size(4, 4), new Color(0, 181, 255, 180)));
+        btn_label.effects().add(new Shadow(5, new Size(4, 4), new Color(0, 181, 255, 180)));
         btn_label.setBorderRadius(6);
         // IMouseMethodState btn_action_click = (sender, args) -> {
         // setShadeColor(new Color(100, 100, 100, 125));
@@ -185,7 +187,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
         btn_flow.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        Effects.addEffect(btn_flow, new Shadow(5, new Size(4, 4), new Color(193, 142, 221, 180)));
+        btn_flow.effects().add(new Shadow(5, new Size(4, 4), new Color(193, 142, 221, 180)));
         btn_flow.setBorderRadius(6);
         // btn_flow.setCursor(EmbeddedCursor.HAND);
         btn_flow.setCursor(iS, 64, 64);
@@ -197,7 +199,7 @@ public class MainWindow extends ActiveWindow {
         btn_complex.setToolTip("Show Complex window.");
         btn_complex.setBackground(114, 153, 211);
         btn_complex.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        Effects.addEffect(btn_complex, new Shadow(5, new Size(4, 4), new Color(114, 153, 211, 180)));
+        btn_complex.effects().add(new Shadow(5, new Size(4, 4), new Color(114, 153, 211, 180)));
         btn_complex.setBorderRadius(6);
         IMouseMethodState complex_click = (sender, args) -> WindowsBox.tryShow("ComplexTest");
         btn_complex.eventMouseClick.add(complex_click);
@@ -207,7 +209,7 @@ public class MainWindow extends ActiveWindow {
         btn_image.setToolTip("Show Image window.");
         btn_image.setBackground(238, 174, 128);
         btn_image.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        Effects.addEffect(btn_image, new Shadow(5, new Size(4, 4), new Color(238, 174, 128, 180)));
+        btn_image.effects().add(new Shadow(5, new Size(4, 4), new Color(238, 174, 128, 180)));
         btn_image.setBorderRadius(6);
         IMouseMethodState img_click = (sender, args) -> WindowsBox.tryShow("ImageTest");
         btn_image.eventMouseClick.add(img_click);
@@ -217,7 +219,7 @@ public class MainWindow extends ActiveWindow {
         btn_input.setToolTip("Show Input window.");
         btn_input.setBackground(121, 223, 152);
         btn_input.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        Effects.addEffect(btn_input, new Shadow(5, new Size(4, 4), new Color(121, 223, 152, 180)));
+        btn_input.effects().add(new Shadow(5, new Size(4, 4), new Color(121, 223, 152, 180)));
         btn_input.setBorderRadius(6);
         btn_input.eventMouseClick.add((sender, args) -> {
             // System.out.println(WindowLayoutBox.getListOfWindows().length);

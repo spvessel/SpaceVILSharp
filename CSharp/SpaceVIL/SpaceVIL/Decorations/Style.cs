@@ -2348,6 +2348,8 @@ namespace SpaceVIL.Decorations
             addresslineStyle.Font = DefaultsService.GetDefaultFont(12);
             addresslineStyle.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
             addresslineStyle.GetInnerStyle("text").SetForeground(210, 210, 210);
+            addresslineStyle.GetInnerStyle("text").GetInnerStyle("cursor").SetBackground(10, 132, 232);
+            addresslineStyle.GetInnerStyle("text").GetInnerStyle("selection").SetBackground(0, 162, 232, 60);
             addresslineStyle.SetBackground(50, 50, 50);
             addresslineStyle.Height = 24;
             addresslineStyle.SetMargin(0, 5, 0, 0);
@@ -2357,6 +2359,8 @@ namespace SpaceVIL.Decorations
             filenamelineStyle.Font = DefaultsService.GetDefaultFont(12);
             filenamelineStyle.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
             filenamelineStyle.GetInnerStyle("text").SetForeground(210, 210, 210);
+            filenamelineStyle.GetInnerStyle("text").GetInnerStyle("cursor").SetBackground(10, 132, 232);
+            filenamelineStyle.GetInnerStyle("text").GetInnerStyle("selection").SetBackground(0, 162, 232, 60);
             filenamelineStyle.SetBackground(50, 50, 50);
             filenamelineStyle.Height = 24;
             filenamelineStyle.SetMargin(0, 2, 0, 0);
@@ -2648,7 +2652,7 @@ namespace SpaceVIL.Decorations
                 Background = Color.FromArgb(25, 255, 255, 255)
             });
             style.SetShadow(new Shadow(5, new Position(0, 0), Color.FromArgb(150, 0, 0, 0)));
-            style.Shadow.SetDrop(false);
+            style.Shadow.SetApplied(false);
 
             Style textStyle = GetLabelStyle();
             style.AddInnerStyle("text", textStyle);

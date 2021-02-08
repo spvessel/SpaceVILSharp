@@ -12,5 +12,11 @@ namespace SpaceVIL.Core
         /// </summary>
         /// <returns>Name of the visual effect as System.String.</returns>
         String GetEffectName();
+
+        /// <summary>
+        /// Returns True if the effect is applied, False otherwise.
+        /// </summary>
+        /// <returns>True: if effect is applied. False: if effect is not applied.</returns>
+        bool IsApplied();
     }
 }

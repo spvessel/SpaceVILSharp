@@ -10,7 +10,6 @@ import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.InputEventType;
@@ -65,7 +64,7 @@ public class EventTest extends ActiveWindow {
         // isTransparent = true;
 
         TitleBar title = new TitleBar("EventTest");
-        Effects.addEffect(title, new Shadow(5, new Position(0, 30), new Color(0, 0, 0, 255)));
+        title.effects().add(new Shadow(5, new Position(0, 30), new Color(0, 0, 0, 255)));
         
         Frame cc = new Frame();
         cc.setMargin(0, title.getHeight(), 0, 0);

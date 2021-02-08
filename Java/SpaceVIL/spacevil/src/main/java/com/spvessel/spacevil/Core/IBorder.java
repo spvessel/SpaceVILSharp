@@ -7,7 +7,7 @@ import com.spvessel.spacevil.Decorations.CornerRadius;
  * IBorder is an interface for creating classes that decorates item's shape with
  * border.
  */
-public interface IBorder {
+public interface IBorder extends IEffect {
     /**
      * Getting border radiuses.
      * 

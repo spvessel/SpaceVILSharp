@@ -66,7 +66,7 @@ namespace SpaceVIL
             Window.IsXResizable = false;
             Window.IsYResizable = false;
             Window.ClearExcludedSides();
-            Effects.ClearEffects(Window, EffectType.Shadow);
+            Window.Effects().Clear(EffectType.Shadow);
             
             switch (_attachSide)
             {
@@ -76,7 +76,7 @@ namespace SpaceVIL
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Left, Side.Bottom, Side.Top);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Effects.AddEffect(Window, _shadowLeftArea);
+                    Window.Effects().Add(_shadowLeftArea);
                     break;
 
                 case Side.Top:
@@ -85,7 +85,7 @@ namespace SpaceVIL
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Top);
                     Window.SetAlignment(ItemAlignment.Top);
-                    Effects.AddEffect(Window, _shadowTopArea);
+                    Window.Effects().Add(_shadowTopArea);
                     break;
 
                 case Side.Right:
@@ -94,7 +94,7 @@ namespace SpaceVIL
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Right, Side.Bottom, Side.Top);
                     Window.SetAlignment(ItemAlignment.Right);
-                    Effects.AddEffect(Window, _shadowRightArea);
+                    Window.Effects().Add(_shadowRightArea);
                     break;
 
                 case Side.Bottom:
@@ -103,13 +103,13 @@ namespace SpaceVIL
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Bottom);
                     Window.SetAlignment(ItemAlignment.Bottom);
-                    Effects.AddEffect(Window, _shadowBottomArea);
+                    Window.Effects().Add(_shadowBottomArea);
                     break;
 
                 default:
                     Window.SetWidth(_size);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Effects.AddEffect(Window, _shadowLeftArea);
+                    Window.Effects().Add(_shadowLeftArea);
                     break;
             }
         }

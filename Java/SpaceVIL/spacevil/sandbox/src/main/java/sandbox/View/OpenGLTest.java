@@ -111,7 +111,7 @@
 //       slider.setSize(150, 30);
 //       slider.setAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
 //       slider.setMargin(40, 0, 40, 0);
-//       Effects.addEffect(slider.handler, new Shadow(5, new Position(0, 2), Color.black));
+//       EffectsDeprecated.addEffect(slider.handler, new Shadow(5, new Position(0, 2), Color.black));
 //       return slider;
 //    }
 
@@ -137,7 +137,7 @@
 //          setSize(30, 30);
 //          setAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
 //          setPadding(5, 5, 5, 5);
-//          Effects.addEffect(this, new Shadow(5, new Position(0, 2), Color.black));
+//          EffectsDeprecated.addEffect(this, new Shadow(5, new Position(0, 2), Color.black));
 //          isFocusable = false;
 
 //          _image = new ImageItem(image, false);

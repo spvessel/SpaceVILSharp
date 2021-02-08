@@ -9,15 +9,16 @@ namespace SpaceVIL
     {
         internal Dictionary<TKey, TValue> ResourceStorage = new Dictionary<TKey, TValue>();
         internal List<TKey> FlushList = new List<TKey>();
+        internal Object StorageLocker = new Object();
 
-        internal bool FlushResource(TKey resource)
+        internal bool AddForFlushing(TKey item)
         {
             Monitor.Enter(StorageLocker);
             try
             {
-                if (!FlushList.Contains(resource))
+                if (!FlushList.Contains(item))
                 {
-                    FlushList.Add(resource);
+                    FlushList.Add(item);
                     return true;
                 }
                 return false;
@@ -33,29 +34,21 @@ namespace SpaceVIL
             Monitor.Enter(StorageLocker);
             try
             {
-                FlushStorage(FlushList, ResourceStorage);
+                foreach (TKey item in FlushList)
+                {
+                    if (ResourceStorage.ContainsKey(item))
+                    {
+                        ResourceStorage[item].Clear();
+                        ResourceStorage.Remove(item);
+                    }
+                }
+                FlushList.Clear();
             }
             finally
             {
                 Monitor.Exit(StorageLocker);
             }
         }
-
-        private void FlushStorage<T, F>(List<T> flushList, Dictionary<T, F> storage)
-            where F : IVramResource
-        {
-            foreach (T item in flushList)
-            {
-                if (storage.ContainsKey(item))
-                {
-                    storage[item].Clear();
-                    storage.Remove(item);
-                }
-            }
-            flushList.Clear();
-        }
-
-        internal Object StorageLocker = new Object();
 
         internal TValue GetResource(TKey resource)
         {

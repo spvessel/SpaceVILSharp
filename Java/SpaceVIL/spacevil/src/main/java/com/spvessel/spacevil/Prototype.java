@@ -9,8 +9,8 @@ import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.EventInputTextMethodState;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
+import com.spvessel.spacevil.Core.IAppearanceExtension;
 import com.spvessel.spacevil.Core.IBaseItem;
-import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
@@ -1404,5 +1404,15 @@ abstract public class Prototype implements IBaseItem {
      */
     public void setCursor(BufferedImage bitmap, int width, int height) {
         _cursor = new CursorImage(bitmap, width, height);
+    }
+
+    /**
+     * Gettting access to manage visual effects of the item.
+     * 
+     * @return Implementation of an com.spvessel.spacevil.Core.IAppearanceExtension
+     *         interface.
+     */
+    public IAppearanceExtension effects() {
+        return _core.effects();
     }
 }

@@ -1774,11 +1774,11 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.Fixed;
 
         Style textStyle = new Style();
-        textStyle.height = 30; //here
-        textStyle.background = new Color(210, 210, 210); //here
+        // textStyle.height = 30; //here
+        textStyle.background = new Color(0, 0, 0, 0); //here
         textStyle.foreground = new Color(70, 70, 70);
         textStyle.font = DefaultsService.getDefaultFont(16);
-        textStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Fixed); //here
+        textStyle.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand); //here
         textStyle.setAlignment(ItemAlignment.Left, ItemAlignment.Top);
         textStyle.setTextAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
         textStyle.padding = new Indents(5, 0, 5, 0);
@@ -2495,6 +2495,8 @@ public class Style implements Cloneable {
         addresslineStyle.font = DefaultsService.getDefaultFont(12);
         addresslineStyle.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
         addresslineStyle.getInnerStyle("text").setForeground(210, 210, 210);
+        addresslineStyle.getInnerStyle("text").getInnerStyle("cursor").setBackground(10, 132, 232);
+        addresslineStyle.getInnerStyle("text").getInnerStyle("selection").setBackground(0, 162, 232, 60);
         addresslineStyle.setBackground(50, 50, 50);
         addresslineStyle.height = 24;
         addresslineStyle.setMargin(0, 5, 0, 0);
@@ -2504,6 +2506,8 @@ public class Style implements Cloneable {
         filenamelineStyle.font = DefaultsService.getDefaultFont(12);
         filenamelineStyle.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
         filenamelineStyle.getInnerStyle("text").setForeground(210, 210, 210);
+        filenamelineStyle.getInnerStyle("text").getInnerStyle("cursor").setBackground(10, 132, 232);
+        filenamelineStyle.getInnerStyle("text").getInnerStyle("selection").setBackground(0, 162, 232, 60);
         filenamelineStyle.setBackground(50, 50, 50);
         filenamelineStyle.height = 24;
         filenamelineStyle.setMargin(0, 2, 0, 0);
@@ -2802,6 +2806,7 @@ public class Style implements Cloneable {
         style.addItemState(ItemStateType.Hovered, new ItemState(new Color(255, 255, 255, 60)));
         style.addItemState(ItemStateType.Toggled, new ItemState(new Color(255, 255, 255, 25)));
         style.setShadow(new Shadow(5, new Color(0, 0, 0, 150)));
+        style.shadow.setApplied(false);
 
         Style textStyle = getLabelStyle();
         style.addInnerStyle("text", textStyle);

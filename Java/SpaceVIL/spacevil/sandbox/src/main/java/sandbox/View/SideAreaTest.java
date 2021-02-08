@@ -11,7 +11,6 @@ import com.spvessel.spacevil.SideArea;
 import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.Triangle;
 import com.spvessel.spacevil.Core.Size;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -59,7 +58,7 @@ public class SideAreaTest extends ActiveWindow {
         e.setAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
         e.setBackground(52, 190, 124);
         e.setSize(200, 200);
-        Effects.addEffect(e, new Shadow(8, new Size(10, 0), Color.BLACK));
+        e.effects().add(new Shadow(8, new Size(10, 0), Color.BLACK));
 
         // adding
         addItems(title, layout);
@@ -70,7 +69,7 @@ public class SideAreaTest extends ActiveWindow {
         ButtonCore btn = new ButtonCore();
 
         btn.setAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
-        Effects.addEffect(btn, new Shadow(8, new Size(4, 4), Color.BLACK));
+        btn.effects().add(new Shadow(8, new Size(4, 4), Color.BLACK));
         btn.getState(ItemStateType.Hovered).background = new Color(255, 255, 255, 100);
         int offset = 100;
         int s1 = 100;
@@ -121,7 +120,7 @@ public class SideAreaTest extends ActiveWindow {
         Triangle t = new Triangle();
         t.setBackground(1, 140, 232);
         t.setAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
-        Effects.addEffect(t, new Shadow(8, new Size(4, 4), Color.BLACK));
+        t.effects().add(new Shadow(8, new Size(4, 4), Color.BLACK));
         int offset = 25;
         int s1 = 70;
         int s2 = 40;

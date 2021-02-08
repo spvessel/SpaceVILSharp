@@ -5,7 +5,6 @@ import java.awt.Color;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Core.IMouseMethodState;
 import com.spvessel.spacevil.Core.Position;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
@@ -32,7 +31,7 @@ public class VisualContact extends Prototype {
         addItemState(ItemStateType.Hovered, hover);
         setPadding(10, 0, 5, 0);
         setMargin(1, 1, 1, 1);
-        Effects.addEffect(this, new Shadow(10, new Position(3, 3), new Color(0, 0, 0, 160)));
+        effects().add(new Shadow(10, new Position(3, 3), new Color(0, 0, 0, 160)));
         _count++;
     }
 
@@ -89,7 +88,7 @@ public class VisualContact extends Prototype {
 
         // _array = new Integer[1024 * 1024 * 128];
         // for (int i = 0; i < _array.length; i++) {
-        //     _array[i] = 12;
+        // _array[i] = 12;
         // }
     }
 

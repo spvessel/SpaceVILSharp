@@ -6,7 +6,6 @@ import java.awt.Font;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -22,7 +21,7 @@ class StopMenu extends VerticalStack {
         setAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
         setPadding(0, 50, 0, 0);
         setSpacing(0, 50);
-        Effects.addEffect(this, new Shadow(10, Color.black));
+        effects().add(new Shadow(10, Color.black));
     }
 
     @Override

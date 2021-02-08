@@ -8,7 +8,6 @@ import com.spvessel.spacevil.Core.IFloating;
 import com.spvessel.spacevil.Core.IItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.Position;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EffectType;
@@ -88,7 +87,7 @@ public class SideArea extends Prototype implements IFloating {
         window.isXResizable = false;
         window.isYResizable = false;
         window.clearExcludedSides();
-        Effects.clearEffects(window, EffectType.Shadow);
+        window.effects().clear(EffectType.Shadow);
 
         switch (_attachSide) {
             case Left:
@@ -97,7 +96,7 @@ public class SideArea extends Prototype implements IFloating {
                 window.setWidth(_size);
                 window.excludeSides(Side.Left, Side.Bottom, Side.Top);
                 window.setAlignment(ItemAlignment.Left);
-                Effects.addEffect(window, _shadowLeftArea);
+                window.effects().add(_shadowLeftArea);
                 break;
 
             case Top:
@@ -106,7 +105,7 @@ public class SideArea extends Prototype implements IFloating {
                 window.setHeight(_size);
                 window.excludeSides(Side.Left, Side.Right, Side.Top);
                 window.setAlignment(ItemAlignment.Top);
-                Effects.addEffect(window, _shadowTopArea);
+                window.effects().add(_shadowTopArea);
                 break;
 
             case Right:
@@ -114,7 +113,7 @@ public class SideArea extends Prototype implements IFloating {
                 window.setWidthPolicy(SizePolicy.Fixed);
                 window.setWidth(_size);
                 window.excludeSides(Side.Right, Side.Bottom, Side.Top);
-                Effects.addEffect(window, _shadowRightArea);
+                window.effects().add(_shadowRightArea);
                 break;
 
             case Bottom:
@@ -123,13 +122,13 @@ public class SideArea extends Prototype implements IFloating {
                 window.setHeight(_size);
                 window.excludeSides(Side.Left, Side.Right, Side.Bottom);
                 window.setAlignment(ItemAlignment.Bottom);
-                Effects.addEffect(window, _shadowBottomArea);
+                window.effects().add(_shadowBottomArea);
                 break;
 
             default:
                 window.setWidth(_size);
                 window.setAlignment(ItemAlignment.Left);
-                Effects.addEffect(window, _shadowLeftArea);
+                window.effects().add(_shadowLeftArea);
                 break;
         }
     }

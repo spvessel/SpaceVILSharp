@@ -81,6 +81,14 @@ JNIEXPORT void JNICALL Java_com_spvessel_spacevil_internal_Wrapper_GlfwWrapper_P
 
 /*
  * Class:     com_spvessel_spacevil_internal_Wrapper_GlfwWrapper
+ * Method:    SetInputMode
+ * Signature: (JII)V
+ */
+JNIEXPORT void JNICALL Java_com_spvessel_spacevil_internal_Wrapper_GlfwWrapper_SetInputMode
+  (JNIEnv *, jobject, jlong, jint, jint);
+
+/*
+ * Class:     com_spvessel_spacevil_internal_Wrapper_GlfwWrapper
  * Method:    SetCursorPosCallback
  * Signature: (JLcom/spvessel/spacevil/internal/Wrapper/GLFWCursorPosCallback;)V
  */

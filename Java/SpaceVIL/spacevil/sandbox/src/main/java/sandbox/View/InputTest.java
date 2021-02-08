@@ -14,7 +14,6 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.IBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Figure;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
@@ -257,20 +256,20 @@ public class InputTest extends ActiveWindow {
         //     }
         // });
 
-        // Effects.addEffect(bc2, getStencilEffect(bc2));
+        // EffectsDeprecated.addEffect(bc2, getStencilEffect(bc2));
         // SubtractFigure effect1 = new SubtractFigure(
         //         new CustomFigure(true, GraphicsMathService.getEllipse(bc2.getHeight() + 10, bc2.getHeight() + 10, 0, 0, 32)));
         // effect1.setSizeScale(0.2f, 1f);
         // effect1.setPositionOffset(-bc2.getHeight() / 2, 0);
         // effect1.setAlignment(ItemAlignment.VCENTER);
-        // Effects.addEffect(bc2, effect1);
+        // EffectsDeprecated.addEffect(bc2, effect1);
 
         // SubtractFigure effect2 = new SubtractFigure(
         //         new CustomFigure(true, GraphicsMathService.getEllipse(bc2.getHeight() + 10, bc2.getHeight() + 10, 0, 0, 32)));
         // effect2.setSizeScale(0.2f, 1f);
         // effect2.setPositionOffset(bc2.getHeight() / 2, 0);
         // effect2.setAlignment(ItemAlignment.RIGHT, ItemAlignment.VCENTER);
-        // Effects.addEffect(bc2, effect2);
+        // EffectsDeprecated.addEffect(bc2, effect2);
 
         tb.eventKeyPress.add((sender, args) -> {
             if (args.mods.contains(KeyMods.Control) && args.mods.size() == 1 && args.key == KeyCode.Equal) {

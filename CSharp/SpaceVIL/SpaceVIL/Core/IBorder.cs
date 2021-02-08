@@ -6,7 +6,7 @@ namespace SpaceVIL.Core
     /// <summary>
     /// IBorder is an interface for creating classes that decorates item's shape with border.
     /// </summary>
-    public interface IBorder
+    public interface IBorder : IEffect
     {
         /// <summary>
         /// Getting border radiuses.

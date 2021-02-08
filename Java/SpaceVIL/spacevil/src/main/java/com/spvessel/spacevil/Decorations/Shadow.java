@@ -3,7 +3,6 @@ package com.spvessel.spacevil.Decorations;
 import java.awt.Color;
 
 import com.spvessel.spacevil.GraphicsMathService;
-import com.spvessel.spacevil.Core.IEffect;
 import com.spvessel.spacevil.Core.IShadow;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
@@ -14,7 +13,7 @@ import com.spvessel.spacevil.Core.Size;
  * <p>
  * This visual effect drops shadow under item's shape.
  */
-public final class Shadow implements IShadow, IEffect {
+public final class Shadow implements IShadow {
 
     /**
      * Getting the effect name.
@@ -25,7 +24,7 @@ public final class Shadow implements IShadow, IEffect {
         return this.getClass().getName();
     }
 
-    private int _radius = 0;
+    private int _radius = 5;
     private int _maxAvailableRadius = 10;
 
     /**
@@ -70,8 +69,6 @@ public final class Shadow implements IShadow, IEffect {
     public int getXOffset() {
         return _offset.getX();
     }
-
-    private int _y = 0;
 
     /**
      * Setting Y shift of the shadow.
@@ -157,32 +154,28 @@ public final class Shadow implements IShadow, IEffect {
         return new Color(_color.getRed(), _color.getGreen(), _color.getBlue(), _color.getAlpha());
     }
 
-    private boolean _isDrop;
+    private boolean _isApplied;
 
     /**
-     * Setting drop shadow flag.
+     * Setting drop shadow status.
      * 
      * @param value True: allow shadow dropping. False: not allow shadow dropping.
      */
-    public void setDrop(boolean value) {
-        _isDrop = value;
+    public void setApplied(boolean value) {
+        _isApplied = value;
     }
 
     /**
-     * Getting shadow drop flag.
+     * Getting shadow drop status.
      * 
      * @return True: allow shadow dropping. False: not allow shadow dropping.
      */
-    public boolean isDrop() {
-        return _isDrop;
+    public boolean isApplied() {
+        return _isApplied;
     }
 
     private Size _extension = new Size();
 
-    /// <summary>
-    /// Getting the values of shadow extensions in pixels.
-    /// </summary>
-    /// <returns>The values of shadow extensions as SpaceVIL.Core.Size</returns>
     /**
      * Getting the values of shadow extensions in pixels.
      * 
@@ -196,7 +189,7 @@ public final class Shadow implements IShadow, IEffect {
      * Default Shadow class constructor. Allow shadow dropping.
      */
     public Shadow() {
-        _isDrop = true;
+        _isApplied = true;
     }
 
     /**
@@ -275,10 +268,13 @@ public final class Shadow implements IShadow, IEffect {
      * @return Copy of current Shadow.
      */
     public Shadow clone() {
-        Shadow clone = new Shadow(getRadius(), new Position(getOffset().getX(), getOffset().getY()),
-                new Size(getExtension().getWidth(), getExtension().getHeight()), new Color(_color.getRGB()));
+        Shadow clone = new Shadow(
+            getRadius(),
+            new Position(getOffset().getX(), getOffset().getY()),
+            new Size(getExtension().getWidth(), getExtension().getHeight()),
+            new Color(_color.getRed(), _color.getGreen(), _color.getBlue(), _color.getAlpha()));
 
-        clone.setDrop(isDrop());
+        clone.setApplied(isApplied());
 
         return clone;
     }

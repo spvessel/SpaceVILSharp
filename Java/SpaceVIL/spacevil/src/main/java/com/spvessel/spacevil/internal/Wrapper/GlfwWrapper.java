@@ -36,6 +36,8 @@ public final class GlfwWrapper {
 
     public native void PollEvents();
 
+    public native void SetInputMode(long window, int mode, int value);
+
     // glfw: callbacks
     public native void SetCursorPosCallback(long window, GLFWCursorPosCallback callback);
 

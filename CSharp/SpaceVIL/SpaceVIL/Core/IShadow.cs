@@ -5,7 +5,7 @@ namespace SpaceVIL.Core
     /// <summary>
     /// IShadow is an interface for creating classes that decorates item's shape with shadow.
     /// </summary>
-    public interface IShadow
+    public interface IShadow : IEffect
     {
         /// <summary>
         /// Getting the shadow blur raduis.
@@ -24,18 +24,6 @@ namespace SpaceVIL.Core
         /// </summary>
         /// <returns>Returns the shadow color as System.Drawing.Color.</returns>
         Color GetColor();
-
-        /// <summary>
-        /// Getting shadow drop flag.
-        /// </summary>
-        /// <returns>True: allow shadow dropping. False: not allow shadow dropping.</returns>
-        bool IsDrop();
-
-        /// <summary>
-        /// Setting shadow drop flag.
-        /// </summary>
-        /// <returns>True: allow shadow dropping. False: not allow shadow dropping.</returns>
-        void SetDrop(bool value);
 
         /// <summary>
         /// Getting the values of shadow extensions in pixels.

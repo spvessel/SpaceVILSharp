@@ -697,9 +697,21 @@ namespace SpaceVIL
         {
             return new int[] { _confinesX0, _confinesX1, _confinesY0, _confinesY1 };
         }
+
         /// <summary>
         /// Method to describe disposing item's resources if the item was removed.
         /// </summary>
         public virtual void Release() { }
+
+        private IAppearanceExtension _effects = new Effects();
+
+        /// <summary>
+        /// Gettting access to manage visual effects of the item.
+        /// </summary>
+        /// <returns>Implementation of an SpaceVIL.Core.IAppearanceExtension interface.</returns>
+        public IAppearanceExtension Effects()
+        {
+            return _effects;
+        }
     }
 }

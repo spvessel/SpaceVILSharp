@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.spvessel.spacevil.Decorations.Border;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
@@ -22,7 +21,6 @@ final class VisualItemStatics {
         ItemState currentState = item.getState(item.getCurrentStateType());
         
         item.setBackgroundDirect(currentState.background);
-        // item.getState(ItemStateType.BASE).background = currentState.background;
 
         if (currentState.shape != null) {
             if (item.isCustomFigure() != currentState.shape)
@@ -185,7 +183,7 @@ final class VisualItemStatics {
         item.setMaxSize(style.maxWidth, style.maxHeight);
         item.setBackground(style.background);
         item.setBorder(style.border);
-        Effects.addEffect(item.prototype, style.shadow);
+        item.effects().add(style.shadow);
         item.setVisible(style.isVisible);
         item.removeAllItemStates();
 

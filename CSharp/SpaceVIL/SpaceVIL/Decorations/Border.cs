@@ -6,7 +6,7 @@ namespace SpaceVIL.Decorations
     /// <summary>
     /// Border is a class that decorates item's shape with border.
     /// </summary>
-    public class Border : IBorder, IEffect
+    public class Border : IBorder
     {
         /// <summary>
         /// Getting the effect name. 
@@ -77,10 +77,26 @@ namespace SpaceVIL.Decorations
             _thickness = thickness;
         }
 
+        private bool _isApplied = true;
+
         /// <summary>
-        /// Propery that defines if border is visible
+        /// Getting the visibility status of a border.
         /// </summary>
-        public bool IsVisible = false;
+        /// <returns>True: if border is visible. False: if border is invisible.</returns>
+        public bool IsApplied()
+        {
+            return _isApplied;
+        }
+
+        /// <summary>
+        /// Setting the visibility status of a border.
+        /// </summary>
+        /// <param name="value">True: if border should be visible. 
+        /// False: if border should be invisible.</param>
+        public void SetApplied(bool value)
+        {
+            _isApplied = value;
+        }
 
         /// <summary>
         /// Default Border constructor.

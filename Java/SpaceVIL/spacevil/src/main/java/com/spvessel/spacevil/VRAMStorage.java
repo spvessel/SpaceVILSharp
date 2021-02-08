@@ -11,12 +11,13 @@ final class VramStorage<TKey, TValue extends IVramResource> {
 
     Map<TKey, TValue> resourceStorage = new HashMap<>();
     List<TKey> flushList = new LinkedList<>();
+    Lock storageLocker = new ReentrantLock();
 
-    boolean flushResource(TKey resource) {
+    boolean addForFlushing(TKey item) {
         storageLocker.lock();
         try {
-            if (!flushList.contains(resource)) {
-                flushList.add(resource);
+            if (!flushList.contains(item)) {
+                flushList.add(item);
                 return true;
             }
             return false;
@@ -28,23 +29,17 @@ final class VramStorage<TKey, TValue extends IVramResource> {
     void flush() {
         storageLocker.lock();
         try {
-            flushStorage(flushList, resourceStorage);
+            for (TKey item : flushList) {
+                if (resourceStorage.containsKey(item)) {
+                    resourceStorage.get(item).clear();
+                    resourceStorage.remove(item);
+                }
+            }
+            flushList.clear();
         } finally {
             storageLocker.unlock();
         }
     }
-
-    private <T, F extends IVramResource> void flushStorage(List<T> flushList, Map<T, F> storage) {
-        for (T resource : flushList) {
-            if (storage.containsKey(resource)) {
-                storage.get(resource).clear();
-                storage.remove(resource);
-            }
-        }
-        flushList.clear();
-    }
-
-    Lock storageLocker = new ReentrantLock();
 
     TValue getResource(TKey resource) {
         if (resourceStorage.containsKey(resource))

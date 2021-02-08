@@ -29,7 +29,7 @@ namespace View
 
             SetPadding(2, 2, 2, 2);
             SetBackground(Color.FromArgb(255, 45, 45, 45));
-            IsBorderHidden = true;
+            // IsBorderHidden = true;
             IsCentered = true;
             // IsAlwaysOnTop = true;
 
@@ -79,7 +79,7 @@ namespace View
             // btn1.SetShadow(15, 5, 5, Color.Black);
 
             // Effects.AddEffect(btn1, new Shadow(10, new SpaceVIL.Core.Size(30, 30), Color.Yellow));
-            Effects.AddEffect(btn1, new Shadow(10, new Position(5, 5), Color.Black));
+            btn1.Effects().Add(new Shadow(10, new Position(5, 5), Color.Black));
             btn1.SetBackground(13, 176, 255);
             btn1.SetItemName(nameof(btn1));
             btn1.SetBorderRadius(new CornerRadius(6));
@@ -181,12 +181,12 @@ namespace View
                 // ib.Show();
 
                 //4.4
-                // InputDialog ib = new InputDialog("Enter password", "Enter");
-                // ib.OnCloseDialog += () =>
-                // {
-                //     Console.WriteLine(ib.GetResult());
-                // };
-                // ib.Show(this);
+                InputDialog ib = new InputDialog("Enter password", "Enter");
+                ib.OnCloseDialog += () =>
+                {
+                    Console.WriteLine(ib.GetResult());
+                };
+                ib.Show(this);
 
                 //5.
                 // MessageBox msg = new MessageBox("Message", "Message");
@@ -245,7 +245,7 @@ namespace View
                         frame.SetBackground(100, 100, 100);
                         frame.SetSize(200, 200);
                         frame.SetPosition(10 + i * 210, 10 + j * 210);
-                        Effects.AddEffect(frame, new Shadow(10, new Position(100, 100), Color.FromArgb(0, 255, 0)));
+                        frame.Effects().Add(new Shadow(10, new Position(100, 100), Color.FromArgb(0, 255, 0)));
                         // frame.SetShadow(10, 5, 5, Color.Red);
                         flow.AddItem(frame);
 

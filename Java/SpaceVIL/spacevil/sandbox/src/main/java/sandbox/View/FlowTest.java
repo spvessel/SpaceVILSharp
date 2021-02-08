@@ -4,7 +4,6 @@ import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Figure;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.SubtractFigure;
@@ -374,14 +373,14 @@ public class FlowTest extends ActiveWindow {
         // // add items to window
         // addItems(cGreen, cRed, cBlue);
 
-        // Effects.addEffect(cRed, getCircleEffect(cRed, cBlue));
-        // Effects.addEffect(cRed, getCircleCenterEffect(cRed));
+        // EffectsDeprecated.addEffect(cRed, getCircleEffect(cRed, cBlue));
+        // EffectsDeprecated.addEffect(cRed, getCircleCenterEffect(cRed));
 
-        // Effects.addEffect(cGreen, getCircleEffect(cGreen, cRed));
-        // Effects.addEffect(cGreen, getCircleCenterEffect(cGreen));
+        // EffectsDeprecated.addEffect(cGreen, getCircleEffect(cGreen, cRed));
+        // EffectsDeprecated.addEffect(cGreen, getCircleCenterEffect(cGreen));
 
-        // Effects.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
-        // Effects.addEffect(cBlue, getCircleCenterEffect(cBlue));
+        // EffectsDeprecated.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
+        // EffectsDeprecated.addEffect(cBlue, getCircleCenterEffect(cBlue));
     }
 
     public static IBaseItem getCircle(int diameter, Color color) {
@@ -389,7 +388,7 @@ public class FlowTest extends ActiveWindow {
         circle.setSize(diameter, diameter);
         circle.setBackground(color);
         circle.setAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-        Effects.addEffect(circle, new Shadow(5, new Size(2, 2), Color.black));
+        circle.effects().add(new Shadow(5, new Size(2, 2), Color.black));
         return circle;
     }
 

@@ -8,27 +8,31 @@ namespace SpaceVIL
 {
     internal sealed class RenderProcessor
     {
-        private Object _locker = new Object();
-
-        internal RenderProcessor()
-        {
-            ScreenSquare = new VramVertex();
-        }
-
-        internal VramVertex ScreenSquare;
-
-        internal VramStorage<IImageItem, VramTexture> TextureStorage = new VramStorage<IImageItem, VramTexture>();
-        internal VramStorage<ITextContainer, VramTexture> TextStorage = new VramStorage<ITextContainer, VramTexture>();
-        internal VramStorage<IBaseItem, VramVertex> VertexStorage = new VramStorage<IBaseItem, VramVertex>();
-        internal VramStorage<IBaseItem, VramTexture> ShadowStorage = new VramStorage<IBaseItem, VramTexture>();
-
         private readonly float _intervalVeryLow = 1.0f;
         private readonly float _intervalLow = 1.0f / 10.0f;
         private readonly float _intervalMedium = 1.0f / 30.0f;
         private readonly float _intervalHigh = 1.0f / 60.0f;
         private readonly float _intervalUltra = 1.0f / 120.0f;
         private float _intervalAssigned = 1.0f / 15.0f;
+
         private RedrawFrequency _frequency = RedrawFrequency.Low;
+
+        private Object _locker = new Object();
+
+        internal VramVertex ScreenSquare;
+
+        internal VramStorage<IImageItem, VramTexture> TextureStorage = new VramStorage<IImageItem, VramTexture>();
+        internal VramStorage<ITextContainer, VramTexture> TextStorage = new VramStorage<ITextContainer, VramTexture>();
+        internal VramStorage<IBaseItem, VramVertex> VertexStorage = new VramStorage<IBaseItem, VramVertex>();
+
+        internal VramEffectsStorage<IBaseItem, IEffect, VramTexture> BorderStorage = new VramEffectsStorage<IBaseItem, IEffect, VramTexture>();
+        internal VramEffectsStorage<IBaseItem, IEffect, VramTexture> SubtractStorage = new VramEffectsStorage<IBaseItem, IEffect, VramTexture>();
+        internal VramEffectsStorage<IBaseItem, IEffect, VramTexture> ShadowStorage = new VramEffectsStorage<IBaseItem, IEffect, VramTexture>();
+
+        internal RenderProcessor()
+        {
+            ScreenSquare = new VramVertex();
+        }
 
         internal void SetFrequency(RedrawFrequency value)
         {
@@ -286,17 +290,17 @@ namespace SpaceVIL
         }
 
         internal void DrawFreshShadow(
-            Shader shader, IBaseItem item, float level, uint[] fboTexture,
+            Shader shader, IBaseItem item, IShadow shadow, float level, uint[] fboTexture,
             float x, float y, float w, float h, int width, int height)
         {
-            ShadowStorage.DeleteResource(item);
+            ShadowStorage.DeleteResource(item, shadow);
 
             VramTexture store = new VramTexture();
             store.GenBuffers(0, w, 0, h);
             store.Texture[0] = fboTexture[0];
             store.Bind(fboTexture);
 
-            ShadowStorage.AddResource(item, store);
+            ShadowStorage.AddResource(item, shadow, store);
 
             shader.UseShader();
             store.SendUniformSample2D(shader, "tex");
@@ -316,12 +320,14 @@ namespace SpaceVIL
             store.Unbind();
         }
 
-        internal void DrawStoredShadow(Shader shader, IBaseItem item, float level,
+        internal void DrawStoredShadow(Shader shader, IBaseItem item, IShadow shadow, float level,
             float x, float y, int width, int height)
         {
-            VramTexture store = ShadowStorage.GetResource(item);
+            VramTexture store = ShadowStorage.GetResources(item)[shadow];
             if (store == null)
+            {
                 return;
+            }
 
             shader.UseShader();
             store.BindVboIbo();
@@ -475,7 +481,10 @@ namespace SpaceVIL
             TextStorage.Flush();
             TextureStorage.Flush();
             VertexStorage.Flush();
+
+            BorderStorage.Flush();
             ShadowStorage.Flush();
+            SubtractStorage.Flush();
         }
 
         internal void ClearResources()
@@ -483,7 +492,11 @@ namespace SpaceVIL
             TextStorage.Clear();
             TextureStorage.Clear();
             VertexStorage.Clear();
+
+            BorderStorage.Clear();
             ShadowStorage.Clear();
+            SubtractStorage.Clear();
+
             ScreenSquare.Clear();
         }
 
@@ -493,22 +506,26 @@ namespace SpaceVIL
             if (text != null)
             {
                 ItemsRefreshManager.RemoveText(text);
-                TextStorage.FlushResource(text);
+                TextStorage.AddForFlushing(text);
             }
 
             IImageItem image = resource as IImageItem;
             if (image != null)
             {
                 ItemsRefreshManager.RemoveImage(image);
-                TextureStorage.FlushResource(image);
+                TextureStorage.AddForFlushing(image);
             }
 
             IBaseItem item = resource as IBaseItem;
             if (item != null)
             {
                 ItemsRefreshManager.RemoveShape(item);
-                VertexStorage.FlushResource(item);
-                ShadowStorage.FlushResource(item);
+
+                VertexStorage.AddForFlushing(item);
+
+                BorderStorage.AddForFlushing(item);
+                ShadowStorage.AddForFlushing(item);
+                SubtractStorage.AddForFlushing(item);
             }
         }
     }

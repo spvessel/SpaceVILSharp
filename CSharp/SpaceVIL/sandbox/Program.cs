@@ -16,9 +16,9 @@ namespace Program
         {
             Console.WriteLine(SpaceVIL.Common.CommonService.GetSpaceVILInfo());
 
-            WindowManager.SetRenderType(RenderType.Always);
-            // WindowManager.SetRenderFrequency(RedrawFrequency.Ultra);
-            WindowManager.EnableVSync(0);
+            WindowManager.SetRenderType(RenderType.IfNeeded);
+            // // WindowManager.SetRenderFrequency(RedrawFrequency.Ultra);
+            // WindowManager.EnableVSync(0);
 
             // DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonCore)).BorderRadius = new CornerRadius(8);
             // DefaultsService.GetDefaultTheme().ReplaceDefaultItemStyle(typeof(SpaceVIL.ToolTipItem), GetNewToolTipStyle());
@@ -33,35 +33,39 @@ namespace Program
             //     WindowManager.AppExit();
             // };
             // DefaultsService.GetDefaultTheme().ReplaceDefaultItemStyle(typeof(TextEdit), GetTextEditStyle());
-            RenderService.EnableMonitoring(BenchmarkIndicator.Framerate | BenchmarkIndicator.Frametime);
+            // RenderService.EnableMonitoring(BenchmarkIndicator.Framerate | BenchmarkIndicator.Frametime);
 
             MainWindow mw = new MainWindow();
-            // mw.SetPosition(500, 500);
-            Settings sets = new Settings();
-            LayoutsTest lt = new LayoutsTest();
-            // SplitAreaTest sa = new SplitAreaTest();
-            FlowTest flow = new FlowTest();
-            // // FlowTest flow2 = new FlowTest();
-            ImageTest im = new ImageTest();
-            InputTest it = new InputTest();
-            // OpenGLTest ogllt = new OpenGLTest();
-            // Containers con = new Containers();
-            // PerformanceTest pt = new PerformanceTest();
-            // EventTest et = new EventTest();
-            JsonTest jt = new JsonTest();
-            WindowManager.StartWith(
-                jt
-                // mw
-                // sets
-                // lt
-                // flow
-                // im
-                // it
-                // con
-                // pt
-                // ogllt
-                // et
-                );
+            mw.Show();
+            // // mw.SetPosition(500, 500);
+            // Settings sets = new Settings();
+            // LayoutsTest lt = new LayoutsTest();
+            // // SplitAreaTest sa = new SplitAreaTest();
+            // FlowTest flow = new FlowTest();
+            // flow.Show();
+            // // // FlowTest flow2 = new FlowTest();
+            // ImageTest im = new ImageTest();
+            // InputTest it = new InputTest();
+            // // OpenGLTest ogllt = new OpenGLTest();
+            // // Containers con = new Containers();
+            // // PerformanceTest pt = new PerformanceTest();
+            // // EventTest et = new EventTest();
+            // JsonTest jt = new JsonTest();
+            // WindowManager.StartWith(
+            //     // jt
+            //     mw
+            //     // sets
+            //     // lt
+            //     // flow
+            //     // im
+            //     // it
+            //     // con
+            //     // pt
+            //     // ogllt
+            //     // et
+            //     );
+
+            // new Simple().Show();
         }
         public static readonly Color Hover = Color.FromArgb(100, 255, 255, 255);
         public static readonly Color KeyBindFocused = Color.FromArgb(138, 220, 255);

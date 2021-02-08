@@ -196,7 +196,7 @@ namespace SpaceVIL
             item.SetMaxSize(style.MaxWidth, style.MaxHeight);
             item.SetBackground(style.Background);
             item.SetBorder(style.Border);
-            Effects.AddEffect(item.prototype, style.Shadow);
+            item.Effects().Add(style.Shadow);
             item.SetVisible(style.IsVisible);
             item.RemoveAllItemStates();
 

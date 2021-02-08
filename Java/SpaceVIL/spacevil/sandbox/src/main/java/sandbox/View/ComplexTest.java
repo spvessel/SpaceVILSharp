@@ -1,7 +1,6 @@
 package sandbox.View;
 
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Flags.*;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -164,10 +163,10 @@ public class ComplexTest extends ActiveWindow {
             }
         });
         Shadow shadow = new Shadow(5, new Size(10, 10), Color.black);
-        shadow.setDrop(false);
-        Effects.addEffect(b5, shadow);
+        shadow.setApplied(false);
+        b5.effects().add(shadow);
         b5.eventMouseClick.add((sender, args) -> {
-            shadow.setDrop(!shadow.isDrop());
+            shadow.setApplied(!shadow.isApplied());
         });
     }
 

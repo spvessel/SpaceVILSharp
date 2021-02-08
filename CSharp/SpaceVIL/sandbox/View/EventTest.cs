@@ -55,7 +55,7 @@ namespace View
 
 
             TitleBar title = new TitleBar("EventTest");
-            Effects.AddEffect(title, new Shadow(5, new Position(0, 3), Color.FromArgb(150, 0, 0, 0)));
+            title.Effects().Add(new Shadow(5, new Position(0, 3), Color.FromArgb(150, 0, 0, 0)));
             AddItem(title);
 
             Frame cc = new Frame();

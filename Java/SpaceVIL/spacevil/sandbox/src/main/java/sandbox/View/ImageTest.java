@@ -30,7 +30,6 @@ import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Figure;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
@@ -174,7 +173,7 @@ public class ImageTest extends ActiveWindow {
             btn_action.setMargin(new Indents(30, 0, 30, 0));
             btn_action.setBorderRadius(10);
             btn_action.setTextMargin(new Indents(0, 45, 0, 0));
-            Effects.addEffect(btn_action, new Shadow(8, new Size(4, 4), new Color(0, 0, 0, 180)));
+            btn_action.effects().add(new Shadow(8, new Size(4, 4), new Color(0, 0, 0, 180)));
             IMouseMethodState btn_action_click = (sender, args) -> {
                 // MessageBox ms = new MessageBox("Send result?", "Message:");
                 // ms.show();
@@ -197,7 +196,7 @@ public class ImageTest extends ActiveWindow {
             ItemAlignment.HCenter
             );
             effect.setPositionOffset(0, 0);
-            Effects.addEffect(btn_action, effect);
+            btn_action.effects().add(effect);
 
             // Image img1 = Image.FromFile("icon.png");
             // Image img1 = Image.FromFile("battery_full.png");

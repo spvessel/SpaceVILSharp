@@ -78,6 +78,11 @@ JNIEXPORT void JNICALL Java_com_spvessel_spacevil_internal_Wrapper_GlfwWrapper_P
     glfwPollEvents();
 }
 
+JNIEXPORT void JNICALL Java_com_spvessel_spacevil_internal_Wrapper_GlfwWrapper_SetInputMode(JNIEnv *env, jobject sender, jlong window, jint mode, jint value)
+{
+    glfwSetInputMode((GLFWwindow *)window, mode, value);
+}
+
 //// CursorPosFunc(GLFWwindow *window, double xpos, double ypos)
 void CursorPosCallback(GLFWwindow *window, double xpos, double ypos)
 {

@@ -1,11 +1,7 @@
 package com.spvessel.spacevil;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-
 import com.spvessel.spacevil.Flags.ImageQuality;
-
-import com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper;
 import static com.spvessel.spacevil.internal.Wrapper.OpenGLWrapper.*;
 
 final class VramTexture extends AbstractVramResource {

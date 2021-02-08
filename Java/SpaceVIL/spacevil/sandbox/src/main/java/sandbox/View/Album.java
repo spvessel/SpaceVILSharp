@@ -6,7 +6,6 @@ import java.awt.Font;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
-import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Flags.*;
@@ -40,7 +39,7 @@ public class Album extends Prototype {
         setSpacing(0, 10);
         setMargin(3, 5, 3, 5);
         setBackground(new Color(0, 0, 0, 0));
-        Effects.addEffect(this, new Shadow(5, new Color(0, 0, 0, 200)));
+        effects().add(new Shadow(5, new Color(0, 0, 0, 200)));
 
         _expand = new ButtonToggle();
         name = new Label();

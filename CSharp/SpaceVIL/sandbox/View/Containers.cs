@@ -522,7 +522,7 @@ namespace View
             btn.SetSize(w, h);
             btn.SetSizePolicy(policy, policy);
             btn.SetItemName(name);
-            Effects.AddEffect(btn, new Shadow(5, new Position(0, 3), Color.FromArgb(150, 0, 0, 0)));
+            btn.Effects().Add(new Shadow(5, new Position(0, 3), Color.FromArgb(150, 0, 0, 0)));
 
             btn.EventMouseLeave += (sender, ags) =>
             {

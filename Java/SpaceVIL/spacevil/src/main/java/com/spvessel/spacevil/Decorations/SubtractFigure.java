@@ -4,19 +4,22 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.spvessel.spacevil.Core.IEffect;
 import com.spvessel.spacevil.Core.ISubtractFigure;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 /**
- * SubtractFigure is visual effect for applying to item's shape. 
- * Implements com.spvessel.spacevil.Core.ISubtractFigure and com.spvessel.spacevil.Core.IEffect.
- * <p> This visual effect cuts specified shape from original item's shape.
+ * SubtractFigure is visual effect for applying to item's shape. Implements
+ * com.spvessel.spacevil.Core.ISubtractFigure and
+ * com.spvessel.spacevil.Core.IEffect.
+ * <p>
+ * This visual effect cuts specified shape from original item's shape.
  */
-public class SubtractFigure implements ISubtractFigure, IEffect {
+public class SubtractFigure implements ISubtractFigure {
     /**
      * Constructs subtract effect with specified shape.
-     * @param figure Figure for subtraction as com.spvessel.spacevil.Decorations.Figure.
+     * 
+     * @param figure Figure for subtraction as
+     *               com.spvessel.spacevil.Decorations.Figure.
      */
     public SubtractFigure(Figure figure) {
         setSubtractFigure(figure);
@@ -26,7 +29,9 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Setting shape for subtraction.
-     * @param figure Figure for subtraction as com.spvessel.spacevil.Decorations.Figure.
+     * 
+     * @param figure Figure for subtraction as
+     *               com.spvessel.spacevil.Decorations.Figure.
      */
     public void setSubtractFigure(Figure figure) {
         _figure = figure;
@@ -34,6 +39,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting the current figure for subtraction.
+     * 
      * @return Figure for subtraction as com.spvessel.spacevil.Decorations.Figure.
      */
     public Figure getSubtractFigure() {
@@ -41,7 +47,8 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
     }
 
     /**
-     * Getting the effect name. 
+     * Getting the effect name.
+     * 
      * @return Returns name SubtractEffect as java.lang.String.
      */
     public String getEffectName() {
@@ -53,6 +60,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Setting shape's shift by X, Y axis.
+     * 
      * @param x X axis shift.
      * @param y Y axis shift.
      */
@@ -66,6 +74,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Setting shape's scaling factors for width and height.
+     * 
      * @param wScale Scaling factor for width.
      * @param hScale Scaling factor for height.
      */
@@ -76,6 +85,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting shape's shift by X-axis.
+     * 
      * @return X axis shift.
      */
     public int getXOffset() {
@@ -84,6 +94,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting shape's shift by Y-axis.
+     * 
      * @return Y axis shift.
      */
     public int getYOffset() {
@@ -92,6 +103,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting width scaling.
+     * 
      * @return Width scaling.
      */
     public float getWidthScale() {
@@ -100,6 +112,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting height scaling.
+     * 
      * @return Height scaling.
      */
     public float getHeightScale() {
@@ -110,6 +123,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Getting shape's allignment within the item.
+     * 
      * @return Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public List<ItemAlignment> getAlignment() {
@@ -118,6 +132,7 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
 
     /**
      * Setting shape's allignment within the item.
+     * 
      * @param alignments Alignment as com.spvessel.spacevil.Flags.ItemAlignment.
      */
     public void setAlignment(ItemAlignment... alignments) {
@@ -167,18 +182,39 @@ public class SubtractFigure implements ISubtractFigure, IEffect {
             alignmentList.remove(ItemAlignment.Bottom);
         }
         if (_hcenter != null) {
-//            if (alignmentList.contains(ItemAlignment.LEFT))
-                alignmentList.remove(ItemAlignment.Left);
-//            if (alignmentList.contains(ItemAlignment.RIGHT))
-                alignmentList.remove(ItemAlignment.Right);
+            // if (alignmentList.contains(ItemAlignment.LEFT))
+            alignmentList.remove(ItemAlignment.Left);
+            // if (alignmentList.contains(ItemAlignment.RIGHT))
+            alignmentList.remove(ItemAlignment.Right);
         }
         if (_vcenter != null) {
-//            if (alignmentList.contains(ItemAlignment.TOP))
-                alignmentList.remove(ItemAlignment.Top);
-//            if (alignmentList.contains(ItemAlignment.BOTTOM))
-                alignmentList.remove(ItemAlignment.Bottom);
+            // if (alignmentList.contains(ItemAlignment.TOP))
+            alignmentList.remove(ItemAlignment.Top);
+            // if (alignmentList.contains(ItemAlignment.BOTTOM))
+            alignmentList.remove(ItemAlignment.Bottom);
         }
 
         _alignment = alignmentList;
+    }
+
+    private boolean _isApplied = true;
+
+    /**
+     * Returns True if the effect is applied, false otherwise.
+     * 
+     * @return True: if effect is applied. False: if shadow is not applied.
+     */
+    public boolean isApplied() {
+        return _isApplied;
+    }
+
+    /**
+     * Determines whether the effect should be applied or not.
+     * 
+     * @param value True: if the effect is to be applied. False: if effect is not to
+     *              be applied.
+     */
+    public void setApplied(boolean value) {
+        _isApplied = value;
     }
 }

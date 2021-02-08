@@ -6,7 +6,7 @@ import java.awt.Color;
  * IShadow is an interface for creating classes that decorates item's shape with
  * shadow.
  */
-public interface IShadow {
+public interface IShadow extends IEffect {
     /**
      * Getting the shadow blur raduis.
      * 
@@ -27,20 +27,6 @@ public interface IShadow {
      * @return Returns the shadow color as java.awt.Color.
      */
     Color getColor();
-
-    /**
-     * Getting shadow drop flag.
-     * 
-     * @return True: allow shadow dropping. False: not allow shadow dropping.
-     */
-    boolean isDrop();
-
-    /**
-     * Setting shadow drop flag.
-     * 
-     * @param value True: allow shadow dropping. False: not allow shadow dropping.
-     */
-    void setDrop(boolean value);
 
     /**
      * Getting the values of shadow extensions in pixels.

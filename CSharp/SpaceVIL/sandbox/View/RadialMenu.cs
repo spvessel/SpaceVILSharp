@@ -42,7 +42,7 @@ namespace RadialMenu
             RadialMenuButton.SetBackground(121, 223, 152);
             RadialMenuButton.SetSize(80, 80);
             RadialMenuButton.SetBorderRadius(40);
-            Effects.AddEffect(RadialMenuButton, new Shadow(5, new Position(2, 2), Color.FromArgb(150, 0, 0, 0)));
+            RadialMenuButton.Effects().Add(new Shadow(5, new Position(2, 2), Color.FromArgb(150, 0, 0, 0)));
 
             //Adding
             base.AddItem(RadialMenuButton);
@@ -109,7 +109,7 @@ namespace RadialMenu
             {
                 btn.SetSize(ItemRadius * 2, ItemRadius * 2);
                 btn.SetBorderRadius(ItemRadius);
-                Effects.AddEffect(btn, new Shadow(8, new Position(2, 3), Color.FromArgb(150, 0, 0, 0)));
+                btn.Effects().Add(new Shadow(8, new Position(2, 3), Color.FromArgb(150, 0, 0, 0)));
                 btn.EventMouseClick += (sender, args) =>
                 {
                     Console.WriteLine(btn.GetItemName());

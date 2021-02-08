@@ -8,7 +8,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.spvessel.spacevil.Core.IBaseItem;
+import com.spvessel.spacevil.Core.IEffect;
 import com.spvessel.spacevil.Core.IImageItem;
+import com.spvessel.spacevil.Core.IShadow;
 import com.spvessel.spacevil.Core.ITextContainer;
 import com.spvessel.spacevil.Core.ITextImage;
 import com.spvessel.spacevil.Core.Scale;
@@ -32,7 +34,10 @@ final class RenderProcessor {
     VramStorage<IImageItem, VramTexture> textureStorage = new VramStorage<>();
     VramStorage<ITextContainer, VramTexture> textStorage = new VramStorage<>();
     VramStorage<IBaseItem, VramVertex> vertexStorage = new VramStorage<>();
-    VramStorage<IBaseItem, VramTexture> shadowStorage = new VramStorage<>();
+
+    VramEffectsStorage<IBaseItem, IEffect, VramTexture> borderStorage = new VramEffectsStorage<>();
+    VramEffectsStorage<IBaseItem, IEffect, VramTexture> shadowStorage = new VramEffectsStorage<>();
+    VramEffectsStorage<IBaseItem, IEffect, VramTexture> subtractStorage = new VramEffectsStorage<>();
 
     RenderProcessor() {
         screenSquare = new VramVertex();
@@ -158,7 +163,7 @@ final class RenderProcessor {
             Color color, int type) {
         vertexStorage.deleteResource(item);
 
-        if (vertex == null  || vertex.length == 0)
+        if (vertex == null || vertex.length == 0)
             return;
 
         shader.useShader();
@@ -175,8 +180,8 @@ final class RenderProcessor {
         vertexStorage.addResource(item, store);
     }
 
-    void drawFreshText(Shader shader, ITextContainer item, ITextImage printer, Scale scale, float w,
-            float h, float level, float[] color) {
+    void drawFreshText(Shader shader, ITextContainer item, ITextImage printer, Scale scale, float w, float h,
+            float level, float[] color) {
 
         textStorage.deleteResource(item);
 
@@ -197,8 +202,8 @@ final class RenderProcessor {
         store.unbind();
     }
 
-    void drawStoredText(Shader shader, ITextContainer item, ITextImage printer, float w, int h,
-            float level, float[] color) {
+    void drawStoredText(Shader shader, ITextContainer item, ITextImage printer, float w, int h, float level,
+            float[] color) {
 
         VramTexture store = textStorage.getResource(item);
         if (store == null) {
@@ -254,18 +259,17 @@ final class RenderProcessor {
         store.clear();
     }
 
-    void drawFreshShadow(Shader shader, IBaseItem item, float level, int fboTexture, float x, float y, float w,
-            float h, int width, int height) {
+    void drawFreshShadow(Shader shader, IBaseItem item, IShadow shadow, float level, int fboTexture, float x, float y,
+            float w, float h, int width, int height) {
 
-        shadowStorage.deleteResource(item);
+        shadowStorage.deleteResource(item, shadow);
 
         VramTexture store = new VramTexture();
         store.genBuffers(0, w, 0, h);
         store.texture = fboTexture;
         store.bind(fboTexture);
 
-        shadowStorage.addResource(item, store);
-        // System.out.println(shadowStorage.resourceStorage.size());
+        shadowStorage.addResource(item, shadow, store);
 
         shader.useShader();
         store.sendUniformSample2D(shader, "tex");
@@ -285,11 +289,13 @@ final class RenderProcessor {
         // store.clear();
     }
 
-    void drawStoredShadow(Shader shader, IBaseItem item, float level, float x, float y, int width, int height) {
+    void drawStoredShadow(Shader shader, IBaseItem item, IShadow shadow, float level, float x, float y, int width,
+            int height) {
 
-        VramTexture store = shadowStorage.getResource(item);
-        if (store == null)
+        VramTexture store = shadowStorage.getResources(item).get(shadow);
+        if (store == null) {
             return;
+        }
 
         shader.useShader();
         store.bindVboIbo();
@@ -311,8 +317,8 @@ final class RenderProcessor {
         store.unbind();
     }
 
-    void drawTextureAsIs(Shader shader, IImageItem image, float ax, float ay, float aw, float ah, int iw,
-            int ih, int width, int height, float level) {
+    void drawTextureAsIs(Shader shader, IImageItem image, float ax, float ay, float aw, float ah, int iw, int ih,
+            int width, int height, float level) {
 
         BufferedImage bmp = image.getImage();
         if (bmp == null)
@@ -341,8 +347,8 @@ final class RenderProcessor {
         store.clear();
     }
 
-    void drawFreshTexture(IImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw,
-            int ih, int width, int height, float level) {
+    void drawFreshTexture(IImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw, int ih,
+            int width, int height, float level) {
 
         textureStorage.deleteResource(image);
         BufferedImage bmp = image.getImage();
@@ -380,8 +386,7 @@ final class RenderProcessor {
         tex.unbind();
     }
 
-    void drawStoredTexture(IImageItem image, Shader shader, float ax, float ay, int width, int height,
-            float level) {
+    void drawStoredTexture(IImageItem image, Shader shader, float ax, float ay, int width, int height, float level) {
         VramTexture tex = textureStorage.getResource(image);
         if (tex == null) {
             ItemsRefreshManager.setRefreshImage(image);
@@ -430,14 +435,20 @@ final class RenderProcessor {
         textureStorage.flush();
         textStorage.flush();
         vertexStorage.flush();
+
+        borderStorage.flush();
         shadowStorage.flush();
+        subtractStorage.flush();
     }
 
     void clearResources() {
         vertexStorage.clear();
         textureStorage.clear();
         textStorage.clear();
+
+        borderStorage.clear();
         shadowStorage.clear();
+        subtractStorage.clear();
         //
         screenSquare.clear();
     }
@@ -446,19 +457,22 @@ final class RenderProcessor {
         if (resource instanceof ITextContainer) {
             ITextContainer text = (ITextContainer) resource;
             ItemsRefreshManager.removeText(text);
-            textStorage.flushResource(text);
+            textStorage.addForFlushing(text);
         }
         if (resource instanceof IImageItem) {
             IImageItem image = (IImageItem) resource;
             ItemsRefreshManager.removeImage(image);
-            textureStorage.flushResource(image);
+            textureStorage.addForFlushing(image);
         }
         if (resource instanceof IBaseItem) {
             IBaseItem item = (IBaseItem) resource;
             ItemsRefreshManager.removeShape(item);
 
-            vertexStorage.flushResource(item);
-            shadowStorage.flushResource(item);
+            vertexStorage.addForFlushing(item);
+
+            borderStorage.addForFlushing(item);
+            shadowStorage.addForFlushing(item);
+            subtractStorage.addForFlushing(item);
         }
     }
 }

@@ -141,7 +141,7 @@ namespace SpaceVIL
                 return;
             }
             ToolTipItem toolTip = GetToolTip(window);
-            Effects.AddEffect(toolTip, shadow.Clone());
+            toolTip.Effects().Add(shadow.Clone());
         }
 
         /// <summary>
@@ -159,9 +159,9 @@ namespace SpaceVIL
                 return;
             }
             ToolTipItem toolTip = GetToolTip(window);
-            foreach (var effect in Effects.GetEffects(toolTip, EffectType.Shadow))
+            foreach (var effect in toolTip.Effects().Get(EffectType.Shadow))
             {
-                (effect as Shadow).SetDrop(value);
+                (effect as Shadow).SetApplied(value);
             }
         }
 

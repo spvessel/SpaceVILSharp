@@ -34,7 +34,7 @@ public class App {
         // // System.load("C:\\glfw\\glfw3.dll");
         // // System.load("C:\\glfw\\glfwapi.dll");
 
-        // WindowManager.setRenderType(RenderType.Always);
+        WindowManager.setRenderType(RenderType.IfNeeded);
         // WindowManager.enableVSync(0);
 
         // BufferedImage cursor = null;
@@ -63,18 +63,21 @@ public class App {
         // DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class,
         // getTextEditStyle());
 
-        // MainWindow mw = new MainWindow();
-        JsonTest jt = new JsonTest();
-        // // mw.show();
-        // mw.setPosition(500, 500);
+        MainWindow mw = new MainWindow();
+        mw.show();
+        // // JsonTest jt = new JsonTest();
+        // // // mw.show();
+        // // mw.setPosition(500, 500);
 
         // // SettingsTest st = new SettingsTest();
         // ImageTest im = new ImageTest();
+        // im.show();
         // FlowTest ft = new FlowTest();
+        // ft.show();
         // LayoutsTest lt = new LayoutsTest();
         // ComplexTest ct = new ComplexTest();
         // InputTest it = new InputTest();
-        // it.show();
+        // // it.show();
         // TextTest tt = new TextTest();
         // Containers con = new Containers();
         // SideAreaTest sat = new SideAreaTest();
@@ -105,25 +108,25 @@ public class App {
 
         // ApiTester api = new ApiTester();
         // api.show();
-
-        WindowManager.startWith(
-            jt
-            //mw// ,
-            // dw,
-            // mw2
-            // st
-            // im
-            // ft
-            // lt
-            // ct
-            // it
-            // tt
-            // con
-            // sat
-            // et
-            // pt
-            // oglt
-        );
+        // new Simple().show();
+        // WindowManager.startWith(
+        // // jt
+        // mw// ,
+        // // dw,
+        // // mw2
+        // // st
+        // // im
+        // // ft
+        // // lt
+        // // ct
+        // // it
+        // // tt
+        // // con
+        // // sat
+        // // et
+        // // pt
+        // // oglt
+        // );
     }
 
     // public static final Color Hover = new Color(255, 255, 255, 100);

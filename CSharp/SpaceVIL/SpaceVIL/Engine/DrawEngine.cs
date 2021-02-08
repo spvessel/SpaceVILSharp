@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using Glfw3;
-using System.Threading;
 using System.Diagnostics;
 using System.Drawing;
 using SpaceVIL.Core;
@@ -10,7 +9,6 @@ using Position = SpaceVIL.Core.Position;
 using SpaceVIL.Common;
 using static OpenGL.OpenGLConstants;
 using static OpenGL.OpenGLWrapper;
-using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -60,7 +58,6 @@ namespace SpaceVIL
                 return;
             _renderProcessor.FreeResource(resource);
         }
-
 
         private CommonProcessor _commonProcessor;
         private TextInputProcessor _textInputProcessor;
@@ -133,10 +130,10 @@ namespace SpaceVIL
         }
 
         internal GLWHandler GLWHandler;
-        private Shader _primitive;
-        private Shader _texture;
-        private Shader _char;
-        private Shader _blur;
+        private Shader _shapeShader;
+        private Shader _textureShader;
+        private Shader _textShader;
+        private Shader _blurShader;
 
         internal DrawEngine(CoreWindow handler)
         {
@@ -208,10 +205,10 @@ namespace SpaceVIL
 
         private void InitShaders()
         {
-            _primitive = ShaderFactory.GetShader(ShaderFactory.Primitive);
-            _texture = ShaderFactory.GetShader(ShaderFactory.Texture);
-            _char = ShaderFactory.GetShader(ShaderFactory.Symbol);
-            _blur = ShaderFactory.GetShader(ShaderFactory.Blur);
+            _shapeShader = ShaderFactory.GetShader(ShaderFactory.Primitive);
+            _textureShader = ShaderFactory.GetShader(ShaderFactory.Texture);
+            _textShader = ShaderFactory.GetShader(ShaderFactory.Symbol);
+            _blurShader = ShaderFactory.GetShader(ShaderFactory.Blur);
         }
 
         private void InitProcessors()
@@ -558,10 +555,10 @@ namespace SpaceVIL
                 _stop.Stop();
                 _stop = null;
             }
-            _primitive.DeleteShader();
-            _texture.DeleteShader();
-            _char.DeleteShader();
-            _blur.DeleteShader();
+            _shapeShader.DeleteShader();
+            _textureShader.DeleteShader();
+            _textShader.DeleteShader();
+            _blurShader.DeleteShader();
             _fboVertex.Clear();
             _fboBlur.Clear();
             _renderProcessor.ClearResources();
@@ -680,7 +677,7 @@ namespace SpaceVIL
 
             _benchmarkLabel.MakeShape();
 
-            _renderProcessor.DrawDirectVertex(_primitive, _benchmarkLabel.GetTriangles(), GetItemPyramidLevel(),
+            _renderProcessor.DrawDirectVertex(_shapeShader, _benchmarkLabel.GetTriangles(), GetItemPyramidLevel(),
                     _benchmarkLabel.GetX(), _benchmarkLabel.GetY(), _commonProcessor.Window.GetWidth(),
                     _commonProcessor.Window.GetHeight(), _benchmarkLabel.GetBackground(), GL_TRIANGLES);
 
@@ -822,7 +819,7 @@ namespace SpaceVIL
                 return;
             }
 
-            var shadows = Effects.GetEffects(shell, EffectType.Shadow);
+            var shadows = shell.Effects().Get(EffectType.Shadow);
 
             bool preEffect = DrawPreprocessingEffects(shell);
             if (ItemsRefreshManager.IsRefreshShape(shell))
@@ -836,7 +833,7 @@ namespace SpaceVIL
                 ItemsRefreshManager.RemoveShape(shell);
 
                 _renderProcessor.DrawFreshVertex(
-                    _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
+                    _shapeShader, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     shell.GetBackground(), GL_TRIANGLES);
             }
@@ -847,7 +844,7 @@ namespace SpaceVIL
                     DrawShadow(shell, shadow as IShadow, stencil);
                 }
                 _renderProcessor.DrawStoredVertex(
-                    _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
+                    _shapeShader, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     shell.GetBackground(), GL_TRIANGLES);
             }
@@ -875,7 +872,7 @@ namespace SpaceVIL
                         vi.GetWidth(),
                         vi.GetHeight());
                 _renderProcessor.DrawDirectVertex(
-                    _primitive, vertex, GetItemPyramidLevel(), vi.GetX(), vi.GetY(),
+                    _shapeShader, vertex, GetItemPyramidLevel(), vi.GetX(), vi.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     vi.GetBorderFill(), GL_TRIANGLES);
             }
@@ -885,7 +882,7 @@ namespace SpaceVIL
 
         void DrawShadow(IBaseItem shell, IShadow shadow, bool stencil)
         {
-            if (!shadow.IsDrop())
+            if (!shadow.IsApplied())
             {
                 return;
             }
@@ -912,7 +909,7 @@ namespace SpaceVIL
 
             int fboWidth = shell.GetWidth() + extension.GetWidth() + 2 * res;
             int fboHeight = shell.GetHeight() + extension.GetHeight() + 2 * res;
-            if (ItemsRefreshManager.IsRefreshShape(shell) || _renderProcessor.ShadowStorage.GetResource(shell) == null)
+            if (ItemsRefreshManager.IsRefreshShape(shell) || _renderProcessor.ShadowStorage.GetResources(shell) == null)
             {
                 if (stencil)
                     glDisable(GL_SCISSOR_TEST);
@@ -926,7 +923,7 @@ namespace SpaceVIL
                     shell.GetTriangles(), shell.GetWidth() + extension.GetWidth(),
                     shell.GetHeight() + extension.GetHeight());
 
-                _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
+                _renderProcessor.DrawDirectVertex(_shapeShader, vertex, 0.0f, res, res,
                     fboWidth, fboHeight, shadow.GetColor(), GL_TRIANGLES);
 
                 _fboVertex.UnbindTexture();
@@ -943,7 +940,7 @@ namespace SpaceVIL
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 VramTexture store = _renderProcessor.DrawDirectShadow(
-                    _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
+                    _blurShader, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
                     shell.GetWidth() + extension.GetWidth(), shell.GetHeight() + extension.GetHeight(),
                     fboWidth, fboHeight);
                 store.Clear();
@@ -955,7 +952,7 @@ namespace SpaceVIL
                     glEnable(GL_SCISSOR_TEST);
                 glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
-                _renderProcessor.DrawFreshShadow(_texture, shell, GetItemPyramidLevel(), _fboBlur.Texture,
+                _renderProcessor.DrawFreshShadow(_textureShader, shell, shadow, GetItemPyramidLevel(), _fboBlur.Texture,
                     shell.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
                     shell.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                     fboWidth, fboHeight, _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
@@ -967,7 +964,7 @@ namespace SpaceVIL
             }
             else
             {
-                _renderProcessor.DrawStoredShadow(_texture, shell, GetItemPyramidLevel(),
+                _renderProcessor.DrawStoredShadow(_textureShader, shell, shadow, GetItemPyramidLevel(),
                     shell.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
                     shell.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
@@ -1001,7 +998,7 @@ namespace SpaceVIL
             if (ItemsRefreshManager.IsRefreshText(text))
             {
                 ItemsRefreshManager.RemoveText(text);
-                _renderProcessor.DrawFreshText(_char, text, textImage,
+                _renderProcessor.DrawFreshText(_textShader, text, textImage,
                     _scale,
                     _commonProcessor.Window.GetWidth(),
                     _commonProcessor.Window.GetHeight(),
@@ -1009,7 +1006,7 @@ namespace SpaceVIL
             }
             else
             {
-                _renderProcessor.DrawStoredText(_char, text, textImage,
+                _renderProcessor.DrawStoredText(_textShader, text, textImage,
                     _commonProcessor.Window.GetWidth(),
                     _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel(), argb);
@@ -1052,14 +1049,14 @@ namespace SpaceVIL
                     skew += fig.Count * 2;
                 }
                 _renderProcessor.DrawFreshVertex(
-                    _primitive, shell, result, level, shell.GetX(), shell.GetY(),
+                    _shapeShader, shell, result, level, shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     item.GetPointColor(), GL_TRIANGLES);
             }
             else
             {
                 _renderProcessor.DrawStoredVertex(
-                    _primitive, shell, level, shell.GetX(), shell.GetY(),
+                    _shapeShader, shell, level, shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     item.GetPointColor(), GL_TRIANGLES);
             }
@@ -1082,14 +1079,14 @@ namespace SpaceVIL
                 shell.MakeShape();
 
                 _renderProcessor.DrawFreshVertex(
-                    _primitive, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
+                    _shapeShader, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     item.GetLineColor(), GL_LINE_STRIP);
             }
             else
             {
                 _renderProcessor.DrawStoredVertex(
-                    _primitive, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
+                    _shapeShader, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     item.GetLineColor(), GL_LINE_STRIP);
             }
@@ -1105,7 +1102,7 @@ namespace SpaceVIL
             if (ItemsRefreshManager.IsRefreshImage(image))
             {
                 _renderProcessor.DrawFreshTexture(
-                    image, _texture,
+                    image, _textureShader,
                     area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
                     w, h,
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
@@ -1114,7 +1111,7 @@ namespace SpaceVIL
             else
             {
                 _renderProcessor.DrawStoredTexture(
-                    image, _texture, area.GetX(), area.GetY(),
+                    image, _textureShader, area.GetX(), area.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel());
             }
@@ -1150,7 +1147,7 @@ namespace SpaceVIL
 
             _tooltip.MakeShape();
 
-            var shadows = Effects.GetEffects(_tooltip, EffectType.Shadow);
+            var shadows = _tooltip.Effects().Get(EffectType.Shadow);
 
             foreach (var shadow in shadows)
             {
@@ -1158,7 +1155,7 @@ namespace SpaceVIL
             }
 
             _renderProcessor.DrawDirectVertex(
-                _primitive, _tooltip.GetTriangles(), GetItemPyramidLevel(), _tooltip.GetX(), _tooltip.GetY(),
+                _shapeShader, _tooltip.GetTriangles(), GetItemPyramidLevel(), _tooltip.GetX(), _tooltip.GetY(),
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(), _tooltip.GetBackground(),
                 GL_TRIANGLES);
 
@@ -1173,7 +1170,7 @@ namespace SpaceVIL
 
         private void DrawToolTipShadow(IShadow shadow)
         {
-            if (!shadow.IsDrop())
+            if (!shadow.IsApplied())
             {
                 return;
             }
@@ -1209,7 +1206,7 @@ namespace SpaceVIL
                 _tooltip.GetTriangles(), _tooltip.GetWidth() + extension.GetWidth(),
                 _tooltip.GetHeight() + extension.GetHeight());
 
-            _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
+            _renderProcessor.DrawDirectVertex(_shapeShader, vertex, 0.0f, res, res,
                 fboWidth, fboHeight, shadow.GetColor(), GL_TRIANGLES);
 
             _fboVertex.UnbindTexture();
@@ -1219,7 +1216,7 @@ namespace SpaceVIL
             glClear(GL_COLOR_BUFFER_BIT);
 
             VramTexture store = _renderProcessor.DrawDirectShadow(
-                _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
+                _blurShader, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
                 _tooltip.GetWidth() + extension.GetWidth(), _tooltip.GetHeight() + extension.GetHeight(),
                 fboWidth, fboHeight);
             store.Clear();
@@ -1229,7 +1226,7 @@ namespace SpaceVIL
 
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
-            _renderProcessor.DrawRawShadow(_texture, GetItemPyramidLevel(), _fboBlur.Texture,
+            _renderProcessor.DrawRawShadow(_textureShader, GetItemPyramidLevel(), _fboBlur.Texture,
                 _tooltip.GetX() + shadow.GetOffset().GetX() - xAddidion - res,
                 _tooltip.GetY() + shadow.GetOffset().GetY() - yAddidion - res,
                 fboWidth, fboHeight,
@@ -1245,14 +1242,14 @@ namespace SpaceVIL
                 return;
 
             _renderProcessor.DrawScreenRectangle(
-                _primitive, GetItemPyramidLevel(), 0, 0,
+                _shapeShader, GetItemPyramidLevel(), 0, 0,
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                 GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
         }
 
         private bool DrawPreprocessingEffects(IBaseItem item)
         {
-            List<IEffect> effects = Effects.GetEffects(item, EffectType.Subtract);
+            List<IEffect> effects = item.Effects().Get(EffectType.Subtract);
             if (effects.Count == 0)
             {
                 return false;
@@ -1266,6 +1263,10 @@ namespace SpaceVIL
             glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
             foreach (IEffect effect in effects)
             {
+                if (!effect.IsApplied())
+                {
+                    continue;
+                }
                 if (effect is ISubtractFigure)
                 {
                     ISubtractFigure subtractFigure = (ISubtractFigure)effect;
@@ -1291,7 +1292,7 @@ namespace SpaceVIL
                                 subtractFigure.GetXOffset(), subtractFigure.GetYOffset());
                     }
 
-                    _renderProcessor.DrawDirectVertex(_primitive, vertex, 0, item.GetX(), item.GetY(),
+                    _renderProcessor.DrawDirectVertex(_shapeShader, vertex, 0, item.GetX(), item.GetY(),
                             _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(), Color.White,
                             GL_TRIANGLES);
 
@@ -1302,4 +1303,3 @@ namespace SpaceVIL
         }
     }
 }
-
