@@ -17,6 +17,5 @@ SpaceVIL.dll
 wrapper.dll
 glfwwrapper.h
 openglwrapper.h
-Java/SpaceVIL/spacevil/out
-CSharp/SpaceVIL/sandbox/glfw3.dll
-CSharp/SpaceVIL/packages
+sandbox/glfw3.dll
+SpaceVIL/packages
