@@ -35,24 +35,40 @@ public class ElementsFactory {
         return treeItem;
     }
 
-    public static Prototype getFunctionalButton(boolean isToggle) {
-        Prototype button;
-        if (isToggle)
-            button = new ToggledItem();
-        else
-            button = new ButtonCore();
+//    public static Prototype getFunctionalButton(boolean isToggle) {
+//        Prototype button;
+//        if (isToggle)
+//            button = new ToggledItem();
+//        else
+//            button = new ButtonCore();
+//
+//        Style funcBtnStyle = Style.getButtonCoreStyle();
+//        funcBtnStyle.borderRadius = new CornerRadius();
+//        funcBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+//        funcBtnStyle.width = 30;
+//        funcBtnStyle.setBackground(0, 0, 0, 0);
+//        // funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
+//        funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
+//        funcBtnStyle.setPadding(2, 2, 2, 2);
+//
+//        button.setStyle(funcBtnStyle);
+//        return button;
+//    }
 
-        Style funcBtnStyle = Style.getButtonCoreStyle();
-        funcBtnStyle.borderRadius = new CornerRadius();
-        funcBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        funcBtnStyle.width = 30;
-        funcBtnStyle.setBackground(0, 0, 0, 0);
-        // funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
-        funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
-        funcBtnStyle.setPadding(2, 2, 2, 2);
+    private static Style funcBtnStyle = null;
+    public static Style getFunctionalButtonStyle() {
+        if (funcBtnStyle == null) {
+            funcBtnStyle = Style.getButtonCoreStyle();
+            funcBtnStyle.borderRadius = new CornerRadius();
+            funcBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+            funcBtnStyle.width = 30;
+            funcBtnStyle.setBackground(0, 0, 0, 0);
+            // funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
+            funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
+            funcBtnStyle.setPadding(2, 2, 2, 2);
+        }
 
-        button.setStyle(funcBtnStyle);
-        return button;
+        return funcBtnStyle;
     }
 
     public static Prototype setButtonImage(Prototype button, String imgPath) {
@@ -69,49 +85,49 @@ public class ElementsFactory {
         return button;
     }
 
-    public static Prototype setButtonImage(Prototype button, BufferedImage img) {
-        ImageItem imgFile = new ImageItem(img, false);
-        imgFile.setMargin(4, 4, 4, 4);
-        imgFile.keepAspectRatio(true);
-        button.addItem(imgFile);
-        
-        if (button instanceof ButtonToggle) {
-            imgFile.setColorOverlay(new Color(209, 108, 108));
-            button.setShadow(5, 0, 0, Color.black);
-            button.setBackground(55, 55, 55);
-            button.setShadowDrop(false);
-        }
-        return button;
-    }
+//    public static Prototype setButtonImage(Prototype button, BufferedImage img) {
+//        ImageItem imgFile = new ImageItem(img, false);
+//        imgFile.setMargin(4, 4, 4, 4);
+//        imgFile.keepAspectRatio(true);
+//        button.addItem(imgFile);
+//
+//        if (button instanceof ButtonToggle) {
+//            imgFile.setColorOverlay(new Color(209, 108, 108));
+//            button.setShadow(5, 0, 0, Color.black);
+//            button.setBackground(55, 55, 55);
+//            button.setShadowDrop(false);
+//        }
+//        return button;
+//    }
 
-    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img) {
-        // Style imgBtnStyle = Style.getImageItemStyle();
-        // imgBtnStyle.background = new Color(0, 0, 0, 0);
-        // imgBtnStyle.setSize(16, 16);
-        // imgBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        // imgBtnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-
-        ImageItem imgFile = new ImageItem(img, false);
-        imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        imgFile.setSize(16, 16);
-        imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-        imgFile.keepAspectRatio(true);
-        // imgFile.setStyle(imgBtnStyle);
-        menuItem.addItem(imgFile);
-        return menuItem;
-    }
-
-    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img, Color overlay) {
-
-        ImageItem imgFile = new ImageItem(img, false);
-        imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        imgFile.setSize(16, 16);
-        imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-        imgFile.keepAspectRatio(true);
-        imgFile.setColorOverlay(overlay);
-        menuItem.addItem(imgFile);
-        return menuItem;
-    }
+//    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img) {
+//        // Style imgBtnStyle = Style.getImageItemStyle();
+//        // imgBtnStyle.background = new Color(0, 0, 0, 0);
+//        // imgBtnStyle.setSize(16, 16);
+//        // imgBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+//        // imgBtnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+//
+//        ImageItem imgFile = new ImageItem(img, false);
+//        imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+//        imgFile.setSize(16, 16);
+//        imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+//        imgFile.keepAspectRatio(true);
+//        // imgFile.setStyle(imgBtnStyle);
+//        menuItem.addItem(imgFile);
+//        return menuItem;
+//    }
+//
+//    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img, Color overlay) {
+//
+//        ImageItem imgFile = new ImageItem(img, false);
+//        imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+//        imgFile.setSize(16, 16);
+//        imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+//        imgFile.keepAspectRatio(true);
+//        imgFile.setColorOverlay(overlay);
+//        menuItem.addItem(imgFile);
+//        return menuItem;
+//    }
 
     public static KeyWordItem getKeyWord(String word) {
         KeyWordItem kwItem = new KeyWordItem(word);
