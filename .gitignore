@@ -6,6 +6,7 @@
 **/build
 **/bin
 **/obj
+**/spacevil/internal/Wrapper/*.h
 *.class
 *.jar
 *.iml
@@ -13,6 +14,8 @@
 *.exe
 SpaceVIL.dll
 wrapper.dll
+glfwwrapper.h
+openglwrapper.h
 Java/SpaceVIL/spacevil/out
 CSharp/SpaceVIL/sandbox/glfw3.dll
 CSharp/SpaceVIL/packages
