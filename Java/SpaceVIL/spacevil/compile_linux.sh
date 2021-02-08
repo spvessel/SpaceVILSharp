@@ -28,3 +28,4 @@ cd ../../../../
 pwd
 cp src/main/native/linux/build/libwrapper.so src/main/resources/native/linux
 gradle build
+cp build\libs\spacevil.jar ..\sandbox\libs

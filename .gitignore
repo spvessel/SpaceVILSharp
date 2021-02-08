@@ -6,6 +6,7 @@
 **/build
 **/bin
 **/obj
+**/sandbox/wrapper
 **/spacevil/internal/Wrapper/*.h
 *.class
 *.jar
@@ -19,4 +20,3 @@ openglwrapper.h
 Java/SpaceVIL/spacevil/out
 CSharp/SpaceVIL/sandbox/glfw3.dll
 CSharp/SpaceVIL/packages
-Java/SpaceVIL/spacevil/sandbox/wrapper

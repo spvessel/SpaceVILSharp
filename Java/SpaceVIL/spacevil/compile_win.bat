@@ -26,4 +26,4 @@ call build.bat
 cd ../../../../..
 copy .\src\main\native\windows\build\Release\wrapper.dll .\src\main\resources\native\windows\
 call ./gradlew build
-copy build\libs\spacevil.jar sandbox\libs
+copy build\libs\spacevil.jar ..\sandbox\libs
