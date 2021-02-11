@@ -1,40 +1,38 @@
 namespace Glfw3
 {
-    using System;
-
     internal static partial class Glfw
     {
         internal enum ClientApi
         {
-            None      = 0,
-            OpenGL    = 0x00030001,
-            OpenGLES  = 0x00030002
+            None = 0,
+            OpenGL = 0x00030001,
+            OpenGLES = 0x00030002
         }
-        
+
         internal enum ConnectionEvent
         {
-            Connected    = 0x00040001,
+            Connected = 0x00040001,
             Disconnected = 0x00040002
         }
 
         internal enum ContextApi
         {
-            Native     = 0x00036001,
-            EGL        = 0x00036002
+            Native = 0x00036001,
+            EGL = 0x00036002
         }
 
         internal enum ContextReleaseBehavior
         {
-            Any        = 0,
-            Flush      = 0x00035001,
-            None       = 0x00035002
+            Any = 0,
+            Flush = 0x00035001,
+            None = 0x00035002
         }
 
         internal enum ContextRobustness
         {
-            None                 = 0,
-            NoResetNotification  = 0x00031001,
-            LoseContextOnReset   = 0x00031002
+            None = 0,
+            NoResetNotification = 0x00031001,
+            LoseContextOnReset = 0x00031002
         }
 
         internal enum CursorMode
@@ -42,7 +40,7 @@ namespace Glfw3
             Normal = 0x00034001,
             Hidden = 0x00034002,
             Disabled = 0x00034003
-        } 
+        }
 
         internal enum ErrorCode
         {
@@ -101,9 +99,9 @@ namespace Glfw3
 
         internal enum OpenGLProfile
         {
-            Any     = 0,
-            Core    = 0x00032001,
-            Compat  = 0x00032002
+            Any = 0,
+            Core = 0x00032001,
+            Compat = 0x00032002
         }
 
         internal enum WindowAttrib

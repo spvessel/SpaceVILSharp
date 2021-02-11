@@ -1,9 +1,9 @@
+using System;
+using System.Runtime.InteropServices;
+using SpaceVIL.Core;
+
 namespace Glfw3
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using SpaceVIL.Core;
-
     internal static partial class Glfw
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -25,7 +25,7 @@ namespace Glfw3
         internal delegate void ErrorFunc(ErrorCode error, string description);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void FramebufferSizeFunc(Int64 window, int width, int height);        
+        internal delegate void FramebufferSizeFunc(Int64 window, int width, int height);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void KeyFunc(Int64 window, KeyCode key, int scancode, InputState state, KeyMods mods);

@@ -1,8 +1,8 @@
+using System;
+using System.Runtime.InteropServices;
+
 namespace Glfw3
 {
-    using System;
-    using System.Runtime.InteropServices;
-
     internal static partial class Glfw
     {
         [StructLayout(LayoutKind.Sequential)]
