@@ -6,8 +6,8 @@ namespace SpaceVIL
 {
     internal class WindowPair
     {
-        public Guid GUID;
-        public CoreWindow WINDOW;
+        internal Guid GUID;
+        internal CoreWindow WINDOW;
     }
 
     /// <summary>
