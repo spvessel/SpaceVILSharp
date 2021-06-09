@@ -75,8 +75,11 @@ namespace SpaceVIL
             tab.View.SetItemName(tab.GetItemName() + "_view");
             tab.EventMousePress += (sender, args) =>
             {
-                OnTop(tab);
-                UnselectOthers(tab, args);
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    OnTop(tab);
+                    UnselectOthers(tab, args);
+                }
             };
             tab.EventTabRemove += () =>
             {
@@ -84,11 +87,17 @@ namespace SpaceVIL
             };
             tab.EventMouseDrop += (sender, args) =>
             {
-                OnTabDrop(tab, args);
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    OnTabDrop(tab, args);
+                }
             };
             tab.EventMouseDrag += (sender, args) =>
             {
-                OnTabDrag(tab, args);
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    OnTabDrag(tab, args);
+                }
             };
         }
 
