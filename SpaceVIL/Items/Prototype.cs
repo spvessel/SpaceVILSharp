@@ -950,7 +950,7 @@ namespace SpaceVIL
         /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
         /// <returns>True: if this item pass on the specified type of input events.
         /// False: If this item do not pass the specified type of input events.</returns>
-        public bool IsPassEvents(InputEventType e)
+        public virtual bool IsPassEvents(InputEventType e)
         {
             return _core.IsPassEvents(e);
         }
@@ -958,7 +958,7 @@ namespace SpaceVIL
         /// Getting all allowed input events.
         /// </summary>
         /// <returns>Allowed input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
-        public List<InputEventType> GetPassEvents()
+        public virtual List<InputEventType> GetPassEvents()
         {
             return _core.GetPassEvents();
         }
@@ -966,7 +966,7 @@ namespace SpaceVIL
         /// Getting all blocked input events.
         /// </summary>
         /// <returns>Blocked input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
-        public List<InputEventType> GetBlockedEvents()
+        public virtual List<InputEventType> GetBlockedEvents()
         {
             return _core.GetBlockedEvents();
         }
@@ -977,7 +977,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="value">True: if you want that this item may to pass on any input events.
         /// False: if you want that this item cannot to pass on any input events.</param>
-        public void SetPassEvents(bool value)
+        public virtual void SetPassEvents(bool value)
         {
             _core.SetPassEvents(value);
         }
@@ -989,7 +989,7 @@ namespace SpaceVIL
         /// <param name="value">True: if you want this item can pass further the specified type of input events.
         /// False: if you want this item connot pass further the specified type of input events.</param>
         /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
-        public void SetPassEvents(bool value, InputEventType e)
+        public virtual void SetPassEvents(bool value, InputEventType e)
         {
             _core.SetPassEvents(value, e);
         }
@@ -1000,7 +1000,7 @@ namespace SpaceVIL
         /// <param name="value">True: if you want this item can pass further the specified types of input events.
         /// False: if you want this item connot pass further the specified types of input events.</param>
         /// <param name="events">Sequence of input event types as SpaceVIL.Core.InputEventType.</param>
-        public void SetPassEvents(bool value, params InputEventType[] events)
+        public virtual void SetPassEvents(bool value, params InputEventType[] events)
         {
             _core.SetPassEvents(value, events);
         }

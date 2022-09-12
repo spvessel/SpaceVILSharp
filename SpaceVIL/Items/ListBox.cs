@@ -477,10 +477,10 @@ namespace SpaceVIL
             {
                 return base.RemoveItem(item);
             }
-            bool b = _area.RemoveItem(item);
+            bool result = _area.RemoveItem(item);
             UpdateElements();
             _area.SetFocus();
-            return b;
+            return result;
         }
         /// <summary>
         /// Removing all items from the list area of ListBox.

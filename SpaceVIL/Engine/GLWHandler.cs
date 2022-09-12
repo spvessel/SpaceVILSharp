@@ -85,7 +85,6 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focused);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
-            // Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, Transparent);
             Glfw.WindowHint(Glfw.Hint.Visible, false);
 
@@ -93,7 +92,6 @@ namespace SpaceVIL
 
             if (_window == 0)
             {
-                // LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
                 throw new SpaceVILException("Create window fail - " + GetCoreWindow().GetWindowTitle());
             }
 
@@ -102,8 +100,6 @@ namespace SpaceVIL
             float xScale, yScale;
             Glfw.GetWindowContentScale(_window, out xScale, out yScale);
             _coreWindow.SetWindowScale(xScale, yScale);
-
-            // Console.WriteLine(_coreWindow.GetDpiScale());
 
             int actualWndWidth = _coreWindow.GetWidth();
             int actualWndHeight = _coreWindow.GetHeight();
@@ -144,10 +140,14 @@ namespace SpaceVIL
                 (int)(_coreWindow.GetMaxHeight() * yActualScale));
 
             if (_coreWindow.IsKeepAspectRatio)
+            {
                 Glfw.SetWindowAspectRatio(_window, _coreWindow.RatioW, _coreWindow.RatioH);
+            }
 
             if (Visible)
+            {
                 Glfw.ShowWindow(_window);
+            }
         }
 
         internal void SwitchContext()

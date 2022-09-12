@@ -1,6 +1,6 @@
 {
-  "WindowName": "JsonTest",
-  "WindowTitle": "JsonTest",
+  "WindowName": "JsonView",
+  "WindowTitle": "JsonView",
   "Size": [
     800,
     800
@@ -31,7 +31,7 @@
       "bottom": 2
     },
     "Label": {
-      "Text": "0 lines  0 characters",
+      "Text": "JSON Layout",
       "Height": 25,
       "HeightPolicy": "Fixed",
       "Background": [
@@ -45,7 +45,7 @@
         210
       ],
       "FontSize": 18,
-      "FontStyle": "Italic",
+      "FontStyle": 1,
       "Alignment": "Bottom",
       "TextAlignment": [
         "HCenter",
@@ -65,7 +65,7 @@
       "Text": "Write123 4:5678 90-= qwert yu\" iop [] asdfghj kl;' zxcv bnm,./"
     },
     "TextEdit": {
-      "Text": "Write123 4:5678 90-= "
+      "Text": "Write123 4:5678 90-= qwer zxcv bnm,./"
     },
     "TextArea": {
       "WrapText": true

@@ -8,7 +8,7 @@
 -doc:spacevil.xml ^
 /r:System.Drawing.dll ^
 -appconfig:App.config ^
--out:SpaceVIL.dll ^
+-out:com.spvessel.spacevil-1.0-net-dev.dll ^
 -res:Native\linux\libglfw3.so,SpaceVIL.Native.linux.libglfw3.so ^
 -res:Native\macos\libglfw3.dylib,SpaceVIL.Native.macos.libglfw3.dylib ^
 -res:Native\windows\glfw3.dll,SpaceVIL.Native.windows.glfw3.dll ^

@@ -356,6 +356,11 @@ namespace SpaceVIL
         /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
+            List<IBaseItem> list = GetItems();
+            if (list.Contains(item))
+            {
+                return base.RemoveItem(item);
+            }
             return DropDownArea.RemoveItem(item);
         }
 

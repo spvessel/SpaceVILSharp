@@ -8,14 +8,13 @@
 **/obj
 **/sandbox/wrapper
 **/spacevil/internal/Wrapper/*.h
+**/com.spvessel.spacevil/
 *.class
 *.jar
 *.iml
 *.exp
 *.exe
 SpaceVIL.dll
-wrapper.dll
-glfwwrapper.h
 openglwrapper.h
 sandbox/glfw3.dll
 SpaceVIL/packages

@@ -955,7 +955,7 @@ namespace SpaceVIL.Decorations
             style.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(200, 200, 200)));
+            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(30, 255, 255, 255)));
 
             Style textStyle = new Style();
             textStyle.SetMargin(0, 0, 0, 0);
@@ -2484,7 +2484,7 @@ namespace SpaceVIL.Decorations
             style.SetPadding(0, 1, 0, 1);
             style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
             style.SetBackground(0, 0, 0, 0);
-            style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
+            style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 255, 255, 255)));
             return style;
         }
 

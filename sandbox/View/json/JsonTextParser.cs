@@ -138,10 +138,6 @@ namespace View.json {
             return rootObj;
         }
 
-        // private bool IsBrace(char token) {
-        //     return (IsOpenBrace(token) || IsCloseBrace(token));
-        // }
-
         private bool IsOpenBrace(char token)
         {
             return ((token == _leftBrace) || (token == _leftSquare));
@@ -205,29 +201,22 @@ namespace View.json {
                 value = RemoveQuotes(value);
             }
 
-            // if (value.Length == 0) {
-            //     //TODO something wrong with syntax mayve need some checking
-            //     System.out.println("something wrong with syntax -> " + currentLine);
-            // }
-
             char checkingToken = value[0];
             if (IsOpenBrace(checkingToken))
             {
                 //brace-first cases
                 int lineInd = FindObjectsEnd(lines, fromInd + 1, checkingToken);
                 if (checkingToken == _leftBrace)
-                { //object
+                {
+                    //object
                     JsonStruct newObj = new JsonStruct(false);
-                    newObj.name = name; //new String(name);
                     ParseObject(lines, fromInd + 1, lineInd - 1, newObj);
-
-                    // parent.jsonObjects.Add(name, newObj);
                     newObj.type = name;
                     parent.jsonObjects.Add(newObj);
                 }
                 else if (checkingToken == _leftSquare)
-                { //array
-                    // parent.jsonArrays.Add(name, ParseArray(lines, fromInd + 1, lineInd - 1));
+                {
+                    //array
                     parent.jsonArrays.Add(ParseArray(name, lines, fromInd + 1, lineInd - 1));
                 }
                 fromInd = lineInd + 1;
@@ -335,16 +324,14 @@ namespace View.json {
                 string currentLine = lines[lineNum].Trim();
                 currentLine = RemoveComma(currentLine);
 
-                if (IsOpenBrace(currentLine[0])) // && currentLine.length() == 1) {
+                if (IsOpenBrace(currentLine[0])) 
                 {
                     char checkingToken = currentLine[0];
-                    //1. {, [
                     int lineInd = FindObjectsEnd(lines, lineNum + 1, checkingToken);
 
                     if (checkingToken == _leftBrace)
                     { //object
                         JsonStruct newObj = new JsonStruct(false);
-                        // newObj.name = name; //new String(name);
                         ParseObject(lines, lineNum + 1, lineInd - 1, newObj); //???
 
                         newObj.type = type;
@@ -353,9 +340,6 @@ namespace View.json {
                     else if (checkingToken == _leftSquare)
                     { //array
                         JsonStruct newObj = new JsonStruct(false);
-
-                        // newObj.jsonArrays.Add("", ParseArray(lines, lineNum + 1, lineInd - 1));
-                        // utterily strange
                         newObj.jsonArrays.Add(ParseArray("", lines, lineNum + 1, lineInd - 1));
 
                         newObj.type = type;
@@ -385,20 +369,18 @@ namespace View.json {
         internal string name;
         internal string value;
         internal bool isSimple;
-        // internal LinkedDictionary<string, JsonStruct> jsonObjects;
         internal List<JsonStruct> jsonObjects;
-        // internal LinkedDictionary<string, List<JsonStruct>> jsonArrays;
         internal List<List<JsonStruct>> jsonArrays;
 
         internal JsonStruct(bool isSimple) {
             this.isSimple = isSimple;
             this.name = "";
             this.value = "";
-            this.type = ""; //???
+            this.type = "";
             if (!isSimple)
             {
-                jsonObjects = new List<JsonStruct>(); //new LinkedDictionary<string, JsonStruct>();
-                jsonArrays = new List<List<JsonStruct>>(); //new LinkedDictionary<string, List<JsonStruct>>();
+                jsonObjects = new List<JsonStruct>();
+                jsonArrays = new List<List<JsonStruct>>();
             }
         }
     }

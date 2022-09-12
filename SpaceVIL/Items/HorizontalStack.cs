@@ -130,7 +130,7 @@ namespace SpaceVIL
                     if (child.GetWidthPolicy() == SizePolicy.Fixed)
                     {
                         fixed_count++;
-                        free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);//
+                        free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);
                     }
                     else
                     {

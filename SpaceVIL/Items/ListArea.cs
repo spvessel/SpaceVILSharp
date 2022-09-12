@@ -296,7 +296,7 @@ namespace SpaceVIL
             bool restore = false;
             SelectionItem currentSelection = null;
 
-            bool b;
+            bool result;
             SelectionItem tmp = item as SelectionItem;
             if (tmp != null)
             {
@@ -308,7 +308,7 @@ namespace SpaceVIL
                 Unselect();
                 _mapContent.Remove(tmp.GetContent());
                 tmp.ClearContent();
-                b = base.RemoveItem(tmp);
+                result = base.RemoveItem(tmp);
             }
             else
             {
@@ -321,7 +321,7 @@ namespace SpaceVIL
                 tmp = _mapContent[item];
                 _mapContent.Remove(item);
                 tmp.ClearContent();
-                b = base.RemoveItem(tmp);
+                result = base.RemoveItem(tmp);
             }
 
             UpdateLayout();
@@ -331,7 +331,7 @@ namespace SpaceVIL
 
 
             ItemListChanged?.Invoke();
-            return b;
+            return result;
         }
         /// <summary>
         /// Removing all items from the ListArea.

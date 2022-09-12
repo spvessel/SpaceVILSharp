@@ -94,23 +94,18 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            //connect events
+            // events
             _indicator.GetIndicatorMarker().EventToggle = null;
-            EventMouseClick += (sender, args) => TryToSelect(sender);
+            EventMouseClick += (sender, args) => {
+                if (_indicator.GetIndicatorMarker().IsToggled())
+                {
+                    return;
+                }
+                SetChecked(!IsChecked());
+            };
 
-            //adding
+            // adding
             AddItems(_indicator, _textObject);
-        }
-
-        private void TryToSelect(object sender)
-        {
-            if (_indicator.GetIndicatorMarker().IsToggled())
-            {
-                return;
-            }
-
-            _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());            
-            UncheckOthers(sender);
         }
 
         /// <summary>
@@ -127,12 +122,17 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="value">True: if you want RadioButton to be checked. 
         /// False: if you want RadioButton to be unchecked.</param>
-        public void SetChecked()
+        public void SetChecked(bool value)
         {
-            TryToSelect(this);
+            var isToggled = IsChecked();
+            _indicator.GetIndicatorMarker().SetToggled(value);
+            if (value && !isToggled)
+            {
+                UncheckOthers();
+            }
         }
 
-        private void UncheckOthers(object sender)
+        private void UncheckOthers()
         {
             List<IBaseItem> items = GetParent().GetItems();
             foreach (var item in items)

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp6.0</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Platforms>AnyCPU</Platforms>
         <!-- <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\spacevil.xml</DocumentationFile> -->
@@ -16,9 +16,16 @@
     <PropertyGroup>
         <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>com.spvessel.spacevil</PackageId>
+        <Version>0.0.0-dev</Version>
+        <Authors>Roman Sedaikin, Valeriya Sedaikina</Authors>
+        <Company>Space Vessel</Company>
+    </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>

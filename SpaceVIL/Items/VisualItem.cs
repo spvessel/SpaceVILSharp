@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
@@ -542,9 +541,9 @@ namespace SpaceVIL
             }
         }
 
-        internal void SetPassEvents(bool value, params InputEventType[] e)
+        internal void SetPassEvents(bool value, params InputEventType[] events)
         {
-            foreach (var item in e)
+            foreach (var item in events)
             {
                 SetPassEvents(value, item);
             }

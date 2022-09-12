@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -256,6 +257,7 @@ namespace SpaceVIL
             eye.SetColorOverlay(eyeBtnShadeColor);
             _showPwdBtn.AddItem(eye);
 
+            _textEncrypt.SetPassEvents(false);
             _showPwdBtn.SetPassEvents(false);
             _showPwdBtn.EventMousePress += (sender, args) =>
             {
@@ -272,6 +274,80 @@ namespace SpaceVIL
                 ShowPassword(false);
                 eye.SetColorOverlay(eyeBtnShadeColor);
             };
+        }
+
+        /// <summary>
+        /// Getting boolean value to know if this item can pass further 
+        /// any input events (mouse, keyboard and etc.).
+        /// <para/> Tip: Need for filtering input events.
+        /// </summary>
+        /// <returns>True: if this item pass on any input events.
+        /// False: If this item do not pass any input events.</returns>
+        override public bool IsPassEvents()
+        {
+            return _textEncrypt.IsPassEvents();
+        }
+
+        /// <summary>
+        /// Getting boolean value to know if this item can pass further 
+        /// the specified type of input events (mouse, keyboard and etc.).
+        /// </summary>
+        /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
+        /// <returns>True: if this item pass on the specified type of input events.
+        /// False: If this item do not pass the specified type of input events.</returns>
+        override public bool IsPassEvents(InputEventType e)
+        {
+            return _textEncrypt.IsPassEvents(e);
+        }
+        /// <summary>
+        /// Getting all allowed input events.
+        /// </summary>
+        /// <returns>Allowed input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
+        override public List<InputEventType> GetPassEvents()
+        {
+            return _textEncrypt.GetPassEvents();
+        }
+        /// <summary>
+        /// Getting all blocked input events.
+        /// </summary>
+        /// <returns>Blocked input events as List&lt;SpaceVIL.Core.InputEventType&gt;</returns>
+        override public List<InputEventType> GetBlockedEvents()
+        {
+            return _textEncrypt.GetBlockedEvents();
+        }
+
+        /// <summary>
+        /// Setting on or off so that this item can pass further 
+        /// any input events (mouse, keyboard and etc.).
+        /// </summary>
+        /// <param name="value">True: if you want that this item may to pass on any input events.
+        /// False: if you want that this item cannot to pass on any input events.</param>
+        override public void SetPassEvents(bool value)
+        {
+            _textEncrypt.SetPassEvents(value);
+        }
+
+        /// <summary>
+        /// Setting on or off so that this item can pass further 
+        /// the specified type of input events (mouse, keyboard and etc.).
+        /// </summary>
+        /// <param name="value">True: if you want this item can pass further the specified type of input events.
+        /// False: if you want this item connot pass further the specified type of input events.</param>
+        /// <param name="e">Type of input events as SpaceVIL.Core.InputEventType.</param>
+        override public void SetPassEvents(bool value, InputEventType e)
+        {
+            _textEncrypt.SetPassEvents(value, e);
+        }
+        /// <summary>
+        /// Setting on or off so that this item can pass further 
+        /// the specified types of input events (mouse, keyboard and etc.).
+        /// </summary>
+        /// <param name="value">True: if you want this item can pass further the specified types of input events.
+        /// False: if you want this item connot pass further the specified types of input events.</param>
+        /// <param name="events">Sequence of input event types as SpaceVIL.Core.InputEventType.</param>
+        override public void SetPassEvents(bool value, params InputEventType[] events)
+        {
+            _textEncrypt.SetPassEvents(value, events);
         }
 
         /// <summary>

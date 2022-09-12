@@ -266,12 +266,12 @@ namespace SpaceVIL
             SetText(text.ToString());
         }
 
-        internal int GetTextWidth()
+        public int GetTextWidth()
         {
             return _textureStorage.GetWidth();
         }
 
-        internal int GetTextHeight()
+        public int GetTextHeight()
         {
             return _textureStorage.GetTextHeight();
         }

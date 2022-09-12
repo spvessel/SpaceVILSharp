@@ -4,7 +4,8 @@ using SpaceVIL.Decorations;
 
 namespace View.json {
     public class ItemsFactory {
-        public static object GetObject(string name) {
+        public static object GetObject(string name)
+        {
             switch (name[0]) {
                 case 'B':
                 {
@@ -35,8 +36,6 @@ namespace View.json {
                     else if (name.Equals("ComboBoxDropDown"))
                     {
                         return GetComboBoxDropDown();
-                        // } else if (name.Equals("ContextMenu")) {
-                        //     return GetContextMenu();
                     }
                     else if (name.Equals("CustomShape"))
                     {
@@ -54,10 +53,6 @@ namespace View.json {
                 }
                 case 'F':
                 {
-                    // } else if (name.Equals("FileSystemEntry")) {
-                    //     return GetFileSystemEntry();
-                    // } else if (name.Equals("FloatItem")) {
-                    //     return GetFloatItem();
                     if (name.Equals("Frame"))
                     {
                         return GetFrame();
@@ -109,10 +104,6 @@ namespace View.json {
                     else if (name.Equals("Indicator"))
                     {
                         return GetIndicator();
-                        // } else if (name.Equals("InputBox")) {
-                        //     return GetInputBox();
-                        // } else if (name.Equals("InputDialog")) {
-                        //     return GetInputDialog();
                     }
                     break;
                 }
@@ -156,14 +147,6 @@ namespace View.json {
                     }
                     break;
                 }
-    //            case 'O':  {
-    //                if (name.Equals("OpenEntryBox")) {
-    //                    return GetOpenEntryBox();
-    //                } else if (name.Equals("OpenEntryDialog")) {
-    //                    return GetOpenEntryDialog();
-    //                }
-    //                break;
-    //            }
 
                 case 'P':
                 {
@@ -174,8 +157,6 @@ namespace View.json {
                     else if (name.Equals("PointsContainer"))
                     {
                         return GetPointsContainer();
-                        // } else if (name.Equals("PopUpMessage")) {
-                        //     return GetPopUpMessage();
                     }
                     else if (name.Equals("ProgressBar"))
                     {
@@ -204,16 +185,10 @@ namespace View.json {
                     if (name.Equals("ScrollHandler"))
                     {
                         return GetScrollHandler();
-                        // } else if (name.Equals("SelectionItem")) {
-                        //     return GetSelectionItem();
-                        // } else if (name.Equals("SideArea")) {
-                        //     return GetSideArea();
                     }
                     else if (name.Equals("SpinItem"))
                     {
                         return GetSpinItem();
-                        // } else if (name.Equals("SplitHolder")) {
-                        //     return GetSplitHolder();
                     }
                     else if (name.Equals("Style") || name.Equals("InnerStyle")) //???
                     {
@@ -246,8 +221,6 @@ namespace View.json {
                     else if (name.Equals("TitleBar"))
                     {
                         return GetTitleBar();
-                        // } else if (name.Equals("TreeItem")) {
-                        //     return GetTreeItem();
                     }
                     else if (name.Equals("TreeView"))
                     {
@@ -278,14 +251,6 @@ namespace View.json {
                         return GetVerticalStack();
                     }
                     break;
-
-            //    case 'W':
-            //        if (name.Equals("WrapArea")) {
-            //            return GetWrapArea();
-            //        } else if (name.Equals("WrapGrid")) {
-            //            return GetWrapGrid();
-            //        }
-            //        break;
                 }
             }
             return null;

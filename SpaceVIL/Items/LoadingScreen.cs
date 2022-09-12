@@ -86,7 +86,7 @@ namespace SpaceVIL
         /// Setting the progress value of the unfinished task.
         /// </summary>
         /// <param name="value">Progress value of the unfinished task.</param>
-        public void SetCurrentValue(int value)
+        public void SetValue(int value)
         {
             if (value == _percent)
                 return;
@@ -149,6 +149,7 @@ namespace SpaceVIL
                 Monitor.Exit(_locker);
             }
         }
+
         /// <summary>
         /// Shows LoadingScreen and attaches it to the specified window 
         /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
@@ -159,26 +160,29 @@ namespace SpaceVIL
             _handler = handler;
             _handler.AddItem(this);
             _handler.SetFocusedItem(this);
-            RedrawFrequency tmp = _handler.GetRenderFrequency();
-            if (tmp != RedrawFrequency.High)
+            RedrawFrequency savedRenderFrequency = _handler.GetRenderFrequency();
+            if (savedRenderFrequency != RedrawFrequency.High)
                 _handler.SetRenderFrequency(RedrawFrequency.High);
             Task thread = new Task(() =>
             {
-                int alpha = 360;
+                int alpha = 0;
                 while (!IsOnClose())
                 {
                     _loadIcon.SetRotationAngle(alpha);
-                    alpha--;
+                    alpha++;
                     if (alpha == 0)
+                    {
                         alpha = 360;
-                    Thread.Sleep(2);
+                    }
+                    Task.Delay(2).Wait();
                 }
                 Close();
-                if (tmp != RedrawFrequency.High)
-                    _handler.SetRenderFrequency(tmp);
+                if (savedRenderFrequency != RedrawFrequency.High)
+                    _handler.SetRenderFrequency(savedRenderFrequency);
             });
             thread.Start();
         }
+
         /// <summary>
         /// Closes LoadingScreen.
         /// </summary>

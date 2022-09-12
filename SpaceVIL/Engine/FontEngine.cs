@@ -44,9 +44,6 @@ namespace SpaceVIL
 
         internal static FontDimensions GetFontDims(Font font)
         {
-            // if (font == null)
-            //     return new int[] { 0, 0, 0 };
-
             if (!fonts.ContainsKey(font))
             {
                 Monitor.Enter(fontLock);
@@ -61,7 +58,7 @@ namespace SpaceVIL
                 }
             }
             Alphabet a = fonts[font];
-            return a.fontDims; //new int[] { a.lineSpacer, a.alphMinY, a.alphHeight };
+            return a.fontDims;
         }
 
         internal static bool SavePreloadFont(Font font)

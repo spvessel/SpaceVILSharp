@@ -14,13 +14,11 @@ namespace View.json {
         {
             JsonTextParser jtp = new JsonTextParser();
             JsonStruct jss = jtp.ReadFile(path);
-            // LogJsonChecker(jss, 0);
             JsonReflection(jss, item);
         }
 
         private void ParseStyle(JsonStruct jss, Style style, object parentItem)
         {
-            // JsonReflection(jss, style);
             ParseObjectInners(style, jss);
 
             if (parentItem is IBaseItem)
@@ -41,37 +39,21 @@ namespace View.json {
                 sb.Append("    ");
             }
             Console.WriteLine(sb.ToString() + "name: " + jss.name + ", value: " + jss.value + ", is simple: " + jss.isSimple);
-            // foreach (KeyValuePair<String, JsonStruct> pair in jss.jsonObjects)
             if (jss.jsonObjects != null && jss.jsonObjects.Count != 0)
             {
-                // IEnumerator<KeyValuePair<String, JsonStruct>> objEnum = jss.jsonObjects.GetEnumerator();
-                // objEnum.Reset();
-                // do
-                // {
                 foreach (JsonStruct pair in jss.jsonObjects)
                 {
-                    // KeyValuePair<String, JsonStruct> pair = objEnum.Current;
-                    // Console.WriteLine(sb.ToString() + pair.Key + " -> {");
                     Console.WriteLine(sb.ToString() + pair.type + " -> {");
-                    // LogJsonChecker(pair.Value, tab + 1);
                     LogJsonChecker(pair, tab + 1);
                     Console.WriteLine(sb.ToString() + "} <-");
                 }
-                // } while (objEnum.MoveNext());
             }
             // foreach (KeyValuePair<String, List<JsonStruct>> pair in jss.jsonArrays)
             if (jss.jsonArrays != null && jss.jsonArrays.Count != 0)
             {
-                // IEnumerator<KeyValuePair<String, List<JsonStruct>>> arrEnum = jss.jsonArrays.GetEnumerator();
-                // arrEnum.Reset();
-                // do
-                // {
                 foreach (List<JsonStruct> pair in jss.jsonArrays)
                 {
-                    // KeyValuePair<String, List<JsonStruct>> pair = arrEnum.Current;
-                    // Console.WriteLine(sb.ToString() + "array: " + pair.Key + " -> [");
                     Console.WriteLine(sb.ToString() + "array: " + pair[0].type + " -> [");
-                    // foreach (JsonStruct val in pair.Value)
                     foreach (JsonStruct val in pair)
                     {
                         LogJsonChecker(val, tab + 1);
@@ -79,7 +61,6 @@ namespace View.json {
                     }
                     Console.WriteLine(sb.ToString() + "] <-");
                 }
-                // } while (arrEnum.MoveNext());
             }
         }
 
@@ -210,8 +191,6 @@ namespace View.json {
                                 ((item is VerticalSplitArea) && (jss.name.Equals("LeftItem") || jss.name.Equals("RightItem"))))
                         {
                             //assume that there is only one item inside
-                            // JsonStruct onlyVal = jss.jsonObjects.PeekFirst();
-                            // currentObj = ItemsFactory.GetObject(onlyVal.name);
                             currentObj = ItemsFactory.GetObject(jss.jsonObjects[0].name);
                             if (currentObj != null)
                             {
@@ -252,7 +231,6 @@ namespace View.json {
                         Indents indents = new Indents();
                         
                         object parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Left", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Left", "0"));
                         if (parseObj != null)
                         {
@@ -260,7 +238,6 @@ namespace View.json {
                         }
 
                         parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Right", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Right", "0"));
                         if (parseObj != null)
                         {
@@ -268,7 +245,6 @@ namespace View.json {
                         }
                         
                         parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Top", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Top", "0"));
                         if (parseObj != null)
                         {
@@ -276,7 +252,6 @@ namespace View.json {
                         }
 
                         parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Bottom", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Bottom", "0"));
                         if (parseObj != null)
                         {
@@ -294,7 +269,6 @@ namespace View.json {
                         Spacing spacing = new Spacing();
 
                         object parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Vertical", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Vertical", "0"));
                         if (parseObj != null)
                         {
@@ -302,7 +276,6 @@ namespace View.json {
                         }
 
                         parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Horizontal", "0"));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Horizontal", "0"));
                         if (parseObj != null)
                         {
@@ -321,7 +294,6 @@ namespace View.json {
                         
                         int fontSize = (int)font.Size;
                         object parseObj = null;
-                        // parseObj = ParseValue(typeof(int), GetFromMapIfExist(jss.jsonObjects, "Size", ((int)font.Size).ToString()));
                         parseObj = ParseValue(typeof(int), GetFromListIfExists(jss.jsonObjects, "Size", ((int)font.Size).ToString()));
                         if (parseObj != null)
                         {
@@ -330,7 +302,6 @@ namespace View.json {
 
                         FontStyle fontStyle = font.Style;
                         parseObj = null;
-                        // parseObj = ParseValue(typeof(FontStyle), GetFromMapIfExist(jss.jsonObjects, "Style", font.Style.ToString()));
                         parseObj = ParseValue(typeof(FontStyle), GetFromListIfExists(jss.jsonObjects, "Style", font.Style.ToString()));
                         if (parseObj != null)
                         {
@@ -340,7 +311,6 @@ namespace View.json {
                         FontFamily fontFamily = font.FontFamily;
                         try
                         {
-                            // fontFamily = new FontFamily(GetFromMapIfExist(jss.jsonObjects, "Family", font.FontFamily.Name));
                             fontFamily = new FontFamily(GetFromListIfExists(jss.jsonObjects, "Family", font.FontFamily.Name));
                         }
                         catch(Exception) {}
@@ -358,39 +328,18 @@ namespace View.json {
                         if (!(currentObj is Style))
                         {
                             //assume that I have just an empty item and will look inside
-                            // foreach (KeyValuePair<String, JsonStruct> pair in jss.jsonObjects)
                             if (jss.jsonObjects != null && jss.jsonObjects.Count != 0)
                             {
                                 foreach (JsonStruct pair in jss.jsonObjects)
-                                // IEnumerator<KeyValuePair<String, JsonStruct>> objEnum = jss.jsonObjects.GetEnumerator();
-                                // objEnum.Reset();
-                                // do
                                 {
-                                //     KeyValuePair<String, JsonStruct> pair = objEnum.Current;
-                                //     JsonReflection(pair.Value, item);
                                     JsonReflection(pair, item);
-                                } // while (objEnum.MoveNext());
+                                } 
                             }
                         }
                     }
                 }
             }
         }
-
-        // private string GetFromMapIfExist(LinkedDictionary<String, JsonStruct> map, string key, string defVal)
-        // {
-        //     string lowKey = LowFirstChar(key);
-        //     if (map.ContainsKey(lowKey))
-        //     {
-        //         return map[lowKey].value;
-        //     }
-        //     string upKey = UpFirstChar(key);
-        //     if (map.ContainsKey(upKey))
-        //     {
-        //         return map[upKey].value;
-        //     }
-        //     return defVal;
-        // }
 
         private string GetFromListIfExists(List<JsonStruct> list, string key, string defVal)
         {
@@ -546,28 +495,17 @@ namespace View.json {
 
         private void ParseObjectInners(object innerItem, JsonStruct jss)
         {
-            // Object innerItem = currentObj; //(Prototype)
-            // foreach (KeyValuePair<string, JsonStruct> pair in jss.jsonObjects)
             if (jss.jsonObjects != null && jss.jsonObjects.Count != 0)
             {
                 foreach (JsonStruct pair in jss.jsonObjects)
-                // IEnumerator<KeyValuePair<String, JsonStruct>> objEnum = jss.jsonObjects.GetEnumerator();
-                // objEnum.Reset();
-                // do
                 {
-                //     KeyValuePair<String, JsonStruct> pair = objEnum.Current;
-                //     JsonReflection(pair.Value, innerItem); //presumably, the name in the object is equal to the key value
                     JsonReflection(pair, innerItem); //presumably, the name in the object is equal to the key value
-                } // while (objEnum.MoveNext());
+                }
             }
 
-            // foreach (KeyValuePair<string, List<JsonStruct>> pair in jss.jsonArrays)
             if (jss.jsonArrays != null && jss.jsonArrays.Count != 0)
             {
                 foreach (List<JsonStruct> pair in jss.jsonArrays)
-                // IEnumerator<KeyValuePair<String, List<JsonStruct>>> arrEnum = jss.jsonArrays.GetEnumerator();
-                // arrEnum.Reset();
-                // do
             {
                 // KeyValuePair<String, List<JsonStruct>> pair = arrEnum.Current;
                 string pairKey = pair[0].type;
@@ -620,7 +558,7 @@ namespace View.json {
                         color = GraphicsMathService.ColorTransform(rgbColor[0], rgbColor[1], rgbColor[2], rgbColor[3]);
                     }
                     else
-                    { //??? Don't really like it
+                    { // Don't really like it
                         color = GraphicsMathService.ColorTransform(rgbColor[0], rgbColor[1], rgbColor[2]);
                     }
 
@@ -628,17 +566,13 @@ namespace View.json {
                     bool isFound = SetItIfYouCan(pairKey, innerItem, color, typeof(Color));
                     if (!isFound)
                     {
-                        // Console.WriteLine(pair.Key + " color setter is not good");
                         Console.WriteLine(pairKey + " color setter is not good");
                     }
                 }
-                // else if (pair.Key.ToLower().Contains("alignment")) //contains("Alignment")) {
-                else if (pairKey.ToLower().Contains("alignment")) //contains("Alignment")) {
+                else if (pairKey.ToLower().Contains("alignment"))
                 {
-                    //List<ItemAlignment> and that's all for now
                     ItemAlignment align = 0;
                     object parseObj;
-                    // foreach (JsonStruct val in pair.Value)
                     foreach (JsonStruct val in pair)
                     {
                         parseObj = null;
@@ -653,18 +587,14 @@ namespace View.json {
                     bool isFound = SetItIfYouCan(pairKey, innerItem, align, typeof(ItemAlignment)); //in java it is list
                     if (!isFound)
                     {
-                        // Console.WriteLine(pair.Key + " alignment setter is not good");
                         Console.WriteLine(pairKey + " alignment setter is not good");
                     }
                 }
-                // else if (pair.Key.ToLower().Contains("size")) //.contains("Size"))
                 else if (pairKey.ToLower().Contains("size")) //.contains("Size"))
                 {
                     //Block for methods with two parameters. Not good so far
-                    // if (!pair.Key.ToLower().Contains("font")) //.contains("Font"))
                     if (!pairKey.ToLower().Contains("font")) //.contains("Font"))
                     {
-                        // if (pair.Key.ToLower().Contains("policy")) //.contains("Policy"))
                         if (pairKey.ToLower().Contains("policy")) //.contains("Policy"))
                         {
                             List<SizePolicy> size = new List<SizePolicy>();
@@ -685,7 +615,6 @@ namespace View.json {
                                         new Type[]{typeof(SizePolicy), typeof(SizePolicy)});
                             if (!res)
                             {
-                                // Console.WriteLine(pair.Key + " size policy setter is not good");
                                 Console.WriteLine(pairKey + " size policy setter is not good");
                             }
                         }
@@ -751,7 +680,6 @@ namespace View.json {
         {
             //TODO comparison with case ignoring
             string tmpName = fieldName.ToLower();
-            // return (fieldName.Contains("Color") || fieldName.Contains("Background") || fieldName.Contains("Foreground") || fieldName.Contains("borderFill"));
             return (tmpName.Contains("color") || tmpName.Contains("background") || tmpName.Contains("foreground") || tmpName.Contains("borderfill"));
         }
 
