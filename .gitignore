@@ -18,3 +18,4 @@ SpaceVIL.dll
 openglwrapper.h
 sandbox/glfw3.dll
 SpaceVIL/packages
+sandbox/libglfw3.dylib
