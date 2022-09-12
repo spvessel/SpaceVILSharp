@@ -5,7 +5,12 @@
     <TargetFramework>netcoreapp6.0</TargetFramework>
     <NoWarn>40059,42024,NU1701</NoWarn>
     <WarningLevel>1</WarningLevel>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
+
+  <ItemGroup Condition=" $(DefineConstants.Contains(MAC)) ">
+    <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="6.0.5.128" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="com.spvessel.spacevil" Version="0.0.0-dev" />
