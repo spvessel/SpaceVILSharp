@@ -12,8 +12,10 @@ namespace SpaceVIL.Common
         internal static void ExtractEmbeddedLibrary()
         {
             String glfw = GetNativeLibraryName("glfw3");
+            String libraryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
+                Path.DirectorySeparatorChar;
 
-            if (File.Exists(glfw))
+            if (File.Exists(libraryPath + glfw))
             {
                 return;
             }
@@ -29,7 +31,7 @@ namespace SpaceVIL.Common
 
             var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Native." + prefix + glfw);
 
-            using (FileStream outputFileStream = new FileStream(glfw, FileMode.Create))
+            using (FileStream outputFileStream = new FileStream(libraryPath + glfw, FileMode.Create))
             {
                 resource.CopyTo(outputFileStream);
             }
