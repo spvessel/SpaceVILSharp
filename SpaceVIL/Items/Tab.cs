@@ -124,8 +124,12 @@ namespace SpaceVIL
             {
                 return;
             }
-            _xClick = args.Position.GetX();
-            _xDiff = args.Position.GetX() - GetX();
+
+            if (args.Button == MouseButton.ButtonLeft)
+            {
+                _xClick = args.Position.GetX();
+                _xDiff = args.Position.GetX() - GetX();
+            }
         }
 
         private void OnDragging(IItem sender, MouseArgs args)
@@ -134,28 +138,32 @@ namespace SpaceVIL
             {
                 return;
             }
-            if (Dragging)
+
+            if (args.Button == MouseButton.ButtonLeft)
             {
-                Prototype parent = GetParent();
-                int offset = args.Position.GetX() - parent.GetX() - _xDiff;
-                int x = offset + parent.GetX();
-                if (x <= parent.GetX())
+                if (Dragging)
                 {
-                    x = parent.GetX();
+                    Prototype parent = GetParent();
+                    int offset = args.Position.GetX() - parent.GetX() - _xDiff;
+                    int x = offset + parent.GetX();
+                    if (x <= parent.GetX())
+                    {
+                        x = parent.GetX();
+                    }
+                    if (x >= parent.GetX() + parent.GetWidth() - GetWidth())
+                    {
+                        x = parent.GetX() + parent.GetWidth() - GetWidth();
+                    }
+                    SetX(x);
                 }
-                if (x >= parent.GetX() + parent.GetWidth() - GetWidth())
+                else
                 {
-                    x = parent.GetX() + parent.GetWidth() - GetWidth();
+                    if (Math.Abs(_xClick - args.Position.GetX()) <= 20)
+                    {
+                        return;
+                    }
+                    Dragging = true;
                 }
-                SetX(x);
-            }
-            else
-            {
-                if (Math.Abs(_xClick - args.Position.GetX()) <= 20)
-                {
-                    return;
-                }
-                Dragging = true;
             }
         }
 
