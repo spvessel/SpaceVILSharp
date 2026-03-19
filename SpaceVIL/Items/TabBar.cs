@@ -83,6 +83,10 @@ namespace SpaceVIL
             };
             tab.EventTabRemove += () =>
             {
+                if (_selectedTab != tab)
+                {
+                    SelectTab(tab);
+                }
                 SelectBestRightoverTab();
             };
             tab.EventMouseDrop += (sender, args) =>
